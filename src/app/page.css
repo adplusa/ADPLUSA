@@ -200,7 +200,7 @@
   line-height: 9rem;
   font-weight: 900;
   -webkit-text-stroke: 0.1rem #e5e5e5;
-  -webkit-text-fill-color: #ffffff;
+  -webkit-text-fill-color: transparent;
   font-family: "Geist";
   width: 100%;
 }
@@ -333,7 +333,7 @@
   text-align: center;
   font-size: 11rem;
   -webkit-text-stroke: 0.1rem #e5e5e5;
-  -webkit-text-fill-color: #fff;
+  -webkit-text-fill-color: transparent;
   font-family: Geist;
   position: absolute;
   top: -51%;
