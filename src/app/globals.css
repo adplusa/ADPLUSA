@@ -1,14 +1,48 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --borderColor: #000;
+  --bg-image-banner-one: url("/banner-1.jpg");
 }
 
-@media (prefers-color-scheme: dark) {
+.dark-mode {
+  --background: #000;
+  --foreground: #fff;
+  --borderColor: #fff;
+  --bg-image-banner-one: url("/banner-2.jpg");
+}
+
+@font-face {
+  font-family: "Lato-light";
+  src: url("/Lato/Lato-Light.ttf");
+  font-weight: light;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Lato-bold";
+  src: url("/Lato/Lato-Black.ttf");
+  font-weight: bolder;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Lato-regular";
+  src: url("/Lato/Lato-Regular.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family: "Lato-regular";
+}
+
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 html,
 body {
@@ -19,9 +53,12 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
+  border-color: var(--borderColor);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: all 0.3s ease-in;
+  padding-bottom: 35%;
 }
 
 * {
