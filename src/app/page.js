@@ -135,7 +135,91 @@ export default function Home() {
       <div className="hero-banner">
         <div className="overlay"></div>
       </div>
+      <div className="about-us">
+        <h2>
+          who <br />
+          we are?
+        </h2>
+        <div className="about-us-top">
+          <div className="about-us-top-left">
+            <h1>Allow us to introduce ourselves</h1>
+          </div>
+          <div className="about-us-top-right">
+            <h1>
+              <span className="asked">Welcome</span> to ADPL Consulting LLC
+            </h1>
+            <p>
+              ADPL CONSULTING LLC works as a leading Architectural and
+              Engineering outsource fraternity across India and the United
+              States of America.
+            </p>
+            <p>
+              We are a group of professionals with profound proficiency in the
+              field of architecture, engineering, designing, interiors, and
+              management. Having an established track record of serving more
+              than 150 clients in 535+ projects, our strict adherence to
+              international standards and global experience makes us the
+              paramount service provider in the market.
+            </p>
+            <span>
+              <div className="key-benefit">
+                <span>
+                  <ul>
+                    <li>Experienced Team</li>
+                    <li>Outsourcing</li>
+                    <li>Affordable Prices</li>
+                    <li>Best Quality</li>
+                  </ul>
+                </span>
+                <span>
+                  <ul>
+                    <li>Unique/Iconic Designs</li>
+                    <li>Strict Timelines</li>
+                    <li>Proficency with SketchUp Pro</li>
+                    <li>Excellence in Revit & BIM</li>
+                  </ul>
+                </span>
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div className="about-us-video-image">
+        <div className="about-us-img">
+          <Image
+            id="pawel"
+            src={"Pawel.avif"}
+            alt="about-us image"
+            width={0}
+            height={0}
+            unoptimized
+          ></Image>
 
+          <video muted autoPlay loop>
+            <source src="/architect2.mp4" type="video/mp4" />
+          </video>
+
+          <Image
+            id="vladimir"
+            src={"Vladimir.avif"}
+            alt="about-us image"
+            width={0}
+            height={0}
+            unoptimized
+          ></Image>
+        </div>
+        <div className="about-us-video-text">
+          <h1>Adplusa</h1>
+        </div>
+        <div className="who-we-are-btn">
+          <Link href="#">
+            <button>
+              <span>Who we are</span>
+            </button>
+          </Link>
+        </div>
+      </div>
+      '
       <div className="trust-icons-container">
         <h3 className="section-title">Our Achievements in Architecture</h3>
         <div className="achievement-grid">
@@ -178,6 +262,28 @@ export default function Home() {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
+                  d="M12 2L14.09 8.26L21 9.27L15.5 13.97L16.82 21L12 17.77L7.18 21L8.5 13.97L3 9.27L9.91 8.26L12 2Z"
+                  stroke="#222"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            <h2 id="target-three">22</h2>
+            <p>Awards Won</p>
+          </div>
+
+          <div className="achievement-card">
+            <div className="icon-wrapper">
+              <svg
+                width="30px"
+                height="64px"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
                   d="M3 21V5L12 2L21 5V21H3Z"
                   stroke="#222"
                   strokeWidth="2"
@@ -203,109 +309,11 @@ export default function Home() {
             <h2 id="target-two">224</h2>
             <p>Projects Completed</p>
           </div>
-
-          <div className="achievement-card">
-            <div className="icon-wrapper">
-              <svg
-                width="30px"
-                height="64px"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 2L14.09 8.26L21 9.27L15.5 13.97L16.82 21L12 17.77L7.18 21L8.5 13.97L3 9.27L9.91 8.26L12 2Z"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <h2 id="target-three">22</h2>
-            <p>Awards Won</p>
-          </div>
         </div>
       </div>
-
-      <div className="about-us">
-        <h2>
-          who <br />
-          we are?
-        </h2>
-        <div className="about-us-top">
-          <div className="about-us-top-left">
-            <h1>Allow us to introduce ourselves</h1>
-          </div>
-          <div className="about-us-top-right">
-            <h1>Professional Architectural 3D Visualization Studio</h1>
-            <p>
-              Welcome to Drowart Studio, where your architectural ideas come to
-              life. We specialize in creating photorealistic 3D visualizations
-              tailored to your vision, designed to captivate your audience and
-              elevate your projects. With our services, you can count on
-              breathtaking quality, delivered on time, every time.
-            </p>
-            <span>
-              <h3>Key Benefits:</h3>
-              <ul>
-                <li>
-                  <b> For Architects → </b>Showcase your designs with
-                  photorealistic accuracy.
-                </li>
-                <li>
-                  <b>For Developers → </b>Sell faster with visuals that
-                  captivate buyers.
-                </li>
-                <li>
-                  <b>For Interior Designers →</b> Test and perfect your spaces
-                  before they’re built.
-                </li>
-              </ul>
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div className="about-us-video-image">
-        <div className="about-us-img">
-          <Image
-            id="pawel"
-            src={"Pawel.avif"}
-            alt="about-us image"
-            width={0}
-            height={0}
-            unoptimized
-          ></Image>
-
-          <video muted autoPlay loop>
-            <source src="/architect2.mp4" type="video/mp4" />
-          </video>
-
-          <Image
-            id="vladimir"
-            src={"Vladimir.avif"}
-            alt="about-us image"
-            width={0}
-            height={0}
-            unoptimized
-          ></Image>
-        </div>
-        <div className="about-us-video-text">
-          <h1>Adplusa</h1>
-        </div>
-        <div className="who-we-are-btn">
-          <Link href="#">
-            <button>
-              <span>Who we are</span>
-            </button>
-          </Link>
-        </div>
-      </div>
-
       <div className="what-we-offer">
         <div className="what-we-offer-text">
-          <h1>What we offer</h1>
+          <h1>Get Quote</h1>
         </div>
 
         <div className="what-we-offer-images">
@@ -319,11 +327,10 @@ export default function Home() {
               unoptimized
             ></Image>
             <div className="what-we-offer-content">
-              <h1>
-                Interior <br /> Visualization
-              </h1>
+              <h1>Get Quote: CAD Services</h1>
               <p>
-                Transform interior spaces into lifelike experiences that inspire{" "}
+                Permit Drawings / Documentation - MEP Services - Fire Fighting
+                Drawings - PDF to CAD
               </p>
               <div className="what-we-offer-content-btn">
                 <span>
@@ -342,7 +349,7 @@ export default function Home() {
                   </svg>
                 </span>
 
-                <button>Learn More</button>
+                <button>Get a Quote</button>
               </div>
             </div>
           </div>
@@ -357,11 +364,10 @@ export default function Home() {
               unoptimized
             ></Image>
             <div className="what-we-offer-content">
-              <h1>
-                Exterior <br /> Visualization
-              </h1>
+              <h1>Get Quote: BIM Services</h1>
               <p>
-                Transform interior spaces into lifelike experiences that inspire{" "}
+                BIM Services - Building information Modulation - Cost & Estimate
+                - BOQ - Energy Analysis
               </p>
               <div className="what-we-offer-content-btn">
                 <span>
@@ -380,7 +386,7 @@ export default function Home() {
                   </svg>
                 </span>
 
-                <button>Learn More</button>
+                <button>Get a Quote</button>
               </div>
             </div>
           </div>
@@ -391,11 +397,10 @@ export default function Home() {
               <source src="/PORTFOLIO-3.mp4" type="video/mp4" />
             </video>
             <div className="what-we-offer-content">
-              <h1>
-                Architectural <br /> Animation
-              </h1>
+              <h1>2D & 3D Rendering</h1>
               <p>
-                Transform interior spaces into lifelike experiences that inspire{" "}
+                2D Presentation Drawings - Visualization - 3D Visualization - 3D
+                Modeling & rendering - Walkthrough
               </p>
               <div className="what-we-offer-content-btn">
                 <span>
@@ -414,13 +419,91 @@ export default function Home() {
                   </svg>
                 </span>
 
-                <button>Learn More</button>
+                <button>Get a Quote</button>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <div className="expertise">
+        <h1>Our Services</h1>
+        <ul>
+          <li className="right-side-li" id="first-service">
+            <div className="link-wrapper" id="first-wrapper">
+              <a href="#">BIM.</a>
+              <p className="link-para">
+                Our BIM team delivers holistic solutions with
+                <br /> architects, engineers, and designers.
+              </p>
+            </div>
+          </li>
 
+          <li className="left-side-li" id="second-service">
+            <div className="link-wrapper" id="left-wrapper">
+              <a href="#">CAD.</a>
+              <p className="link-para">
+                We offer architectural and structural design services
+                <br /> for all project stages.
+              </p>
+            </div>
+          </li>
+
+          <li id="service-three">
+            <div className="link-wrapper" id="third-wrapper">
+              <a href="#">Permit Drawing.</a>
+              <p className="link-para">
+                Contact us to simplify authority approvals.
+              </p>
+            </div>
+          </li>
+
+          <li className="left-side-li" id="service-four">
+            <div className="link-wrapper" id="four-wrapper">
+              <a href="#">3D Visualization.</a>
+              <p className="link-para">
+                Experience your building in 3D with our expert team.
+              </p>
+            </div>
+          </li>
+
+          <li id="service-five">
+            <div className="link-wrapper" id="five-wrapper">
+              <a href="#">Prsentation.</a>
+              <p className="link-para">
+                We provide cost-effective, compelling research data.
+              </p>
+            </div>
+          </li>
+
+          <li className="left-side-li" id="six-service">
+            <div className="link-wrapper" id="left-wrapper">
+              <a href="#">MEP.</a>
+              <p className="link-para">
+                We offer reliable structural, mechanical, and
+                <br /> electrical engineering solutions.
+              </p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div className="faqs">
+        <div className="faq-accordion">
+          <h2>
+            Frequently <span className="asked">asked</span> questions
+          </h2>
+          {faqs.map((faq, index) => (
+            <div key={index} className="faq-item">
+              <div className="faq-question" onClick={() => toggle(index)}>
+                {faq.question}
+                <span className="icon">{open === index ? "-" : "+"}</span>
+              </div>
+              <div className={`faq-answer ${open === index ? "open" : ""}`}>
+                {faq.answer}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
       <div className="reviews-section">
         <div ref={sliderRef} className="keen-slider">
           <div className="keen-slider__slide number-slide1">
@@ -454,6 +537,7 @@ export default function Home() {
                   height={400}
                   className="team-img"
                 />
+                <div className="white-box"></div>
               </div>
             </div>
           </div>
@@ -496,138 +580,168 @@ export default function Home() {
           <div className="keen-slider__slide number-slide5">5</div>
           <div className="keen-slider__slide number-slide6">6</div>
         </div>
-
-        <div className="trust-icons">
-          <div className="trust-icons-df">
-            <div className="slider">
-              <div className="slide-track">
-                <div className="slide">
-                  <img
-                    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/2.png"
-                    height="100"
-                    width="250"
-                    alt=""
-                  />
-                </div>
-                <div className="slide">
-                  <img
-                    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/3.png"
-                    height="100"
-                    width="250"
-                    alt=""
-                  />
-                </div>
-                <div className="slide">
-                  <img
-                    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/4.png"
-                    height="100"
-                    width="250"
-                    alt=""
-                  />
-                </div>
-                <div className="slide">
-                  <img
-                    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/5.png"
-                    height="100"
-                    width="250"
-                    alt=""
-                  />
-                </div>
-                <div className="slide">
-                  <img
-                    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/6.png"
-                    height="100"
-                    width="250"
-                    alt=""
-                  />
-                </div>
-                <div className="slide">
-                  <img
-                    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/7.png"
-                    height="100"
-                    width="250"
-                    alt=""
-                  />
-                </div>
-                <div className="slide">
-                  <img
-                    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/1.png"
-                    height="100"
-                    width="250"
-                    alt=""
-                  />
-                </div>
-                <div className="slide">
-                  <img
-                    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/2.png"
-                    height="100"
-                    width="250"
-                    alt=""
-                  />
-                </div>
-                <div className="slide">
-                  <img
-                    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/3.png"
-                    height="100"
-                    width="250"
-                    alt=""
-                  />
-                </div>
-                <div className="slide">
-                  <img
-                    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/4.png"
-                    height="100"
-                    width="250"
-                    alt=""
-                  />
-                </div>
-                <div className="slide">
-                  <img
-                    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/5.png"
-                    height="100"
-                    width="250"
-                    alt=""
-                  />
-                </div>
-                <div className="slide">
-                  <img
-                    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/6.png"
-                    height="100"
-                    width="250"
-                    alt=""
-                  />
-                </div>
-                <div className="slide">
-                  <img
-                    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/7.png"
-                    height="100"
-                    width="250"
-                    alt=""
-                  />
-                </div>
+      </div>
+      <div className="trust-icons">
+        <div className="trust-icons-df">
+          <div className="slider">
+            <div className="slide-track">
+              <div className="slide">
+                <img
+                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/2.png"
+                  height="100"
+                  width="250"
+                  alt=""
+                />
+              </div>
+              <div className="slide">
+                <img
+                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/3.png"
+                  height="100"
+                  width="250"
+                  alt=""
+                />
+              </div>
+              <div className="slide">
+                <img
+                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/4.png"
+                  height="100"
+                  width="250"
+                  alt=""
+                />
+              </div>
+              <div className="slide">
+                <img
+                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/5.png"
+                  height="100"
+                  width="250"
+                  alt=""
+                />
+              </div>
+              <div className="slide">
+                <img
+                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/6.png"
+                  height="100"
+                  width="250"
+                  alt=""
+                />
+              </div>
+              <div className="slide">
+                <img
+                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/7.png"
+                  height="100"
+                  width="250"
+                  alt=""
+                />
+              </div>
+              <div className="slide">
+                <img
+                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/1.png"
+                  height="100"
+                  width="250"
+                  alt=""
+                />
+              </div>
+              <div className="slide">
+                <img
+                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/2.png"
+                  height="100"
+                  width="250"
+                  alt=""
+                />
+              </div>
+              <div className="slide">
+                <img
+                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/3.png"
+                  height="100"
+                  width="250"
+                  alt=""
+                />
+              </div>
+              <div className="slide">
+                <img
+                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/4.png"
+                  height="100"
+                  width="250"
+                  alt=""
+                />
+              </div>
+              <div className="slide">
+                <img
+                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/5.png"
+                  height="100"
+                  width="250"
+                  alt=""
+                />
+              </div>
+              <div className="slide">
+                <img
+                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/6.png"
+                  height="100"
+                  width="250"
+                  alt=""
+                />
+              </div>
+              <div className="slide">
+                <img
+                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/7.png"
+                  height="100"
+                  width="250"
+                  alt=""
+                />
               </div>
             </div>
           </div>
         </div>
-
-        <div className="faqs">
-          <div className="faq-accordion">
-            <h2>
-              Frequently <span className="asked">asked</span> questions
-            </h2>
-            {faqs.map((faq, index) => (
-              <div key={index} className="faq-item">
-                <div className="faq-question" onClick={() => toggle(index)}>
-                  {faq.question}
-                  <span className="icon">{open === index ? "-" : "+"}</span>
-                </div>
-                <div className={`faq-answer ${open === index ? "open" : ""}`}>
-                  {faq.answer}
-                </div>
-              </div>
-            ))}
-          </div>
+      </div>
+      <div className="footer">
+        <div className="footer-logo">
+          {/* <Image
+            alt="Footer-logo"
+            id="footer-logo"
+            src={"/Business-Card.png"}
+            width={0}
+            height={0}
+            unoptimized
+          ></Image> */}
+          <h2>Logo</h2>
+          <p>
+            ADPL CONSULTING LLC works as a leading Architectural and Engineering
+            <br />
+            outsource fraternity across India and the United States of America.
+          </p>
         </div>
+        <div className="footer-nav">
+          <ul>
+            <li>
+              <a href="#">Home</a>
+            </li>
+            <li>
+              <a href="#">About us</a>
+            </li>
+            <li>
+              <a href="#">Portfolio</a>
+            </li>
+            <li>
+              <a href="#">Get a Quote</a>
+            </li>
+            <li>
+              <a href="#">Competition: Contact-Less Restroom</a>
+            </li>
+          </ul>
+        </div>
+
+        <div className="social-media">
+          <span className="blue-back">Dr</span>
+          <span className="blue-back">Be</span>
+          <span className="blue-back">Ig</span>
+          <span className="blue-back">Tw</span>
+        </div>
+
+        <span id="blue-border-div">
+          <hr className="blue-border" />
+        </span>
+
+        <p id="copyright">Copyright Adplusa</p>
       </div>
     </>
   );
