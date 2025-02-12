@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "./page.css";
 import Header from "./Components/Header/page";
 import { CountUp } from "countup.js";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
@@ -12,6 +12,9 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import { gsap } from "gsap";
+import SplitType from "split-type";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const faqs = [
   {
@@ -47,6 +50,7 @@ const faqs = [
 ];
 
 export default function Home() {
+  const textRefs = useRef([]);
   const [open, setOpen] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [sliderRef] = useKeenSlider(
@@ -128,6 +132,27 @@ export default function Home() {
 
     return () => clearInterval(interval); // Cleanup on component unmount
   }, [icons.length]);
+
+  useEffect(() => {
+    textRefs.current.forEach((el, index) => {
+      if (el) {
+        const splitText = new SplitType(el, { type: "chars" });
+
+        gsap.from(splitText.chars, {
+          opacity: 0,
+          yPercent: 100,
+          duration: 0.2,
+          ease: "power2.out",
+          stagger: 0.05, // Adds a delay between each character
+          scrollTrigger: {
+            trigger: el,
+            start: "top 80%", // Adjust for when it should start
+            toggleActions: "play none none none",
+          },
+        });
+      }
+    });
+  }, []);
 
   return (
     <>
@@ -219,7 +244,107 @@ export default function Home() {
           </Link>
         </div>
       </div>
-      '
+
+      {/* <div className="feature-section">
+        <h1>
+          Our <span className="asked">Features</span>
+        </h1>
+        <div className="feature-grid">
+          <span>
+            <Image
+              src={"/features-1.png"}
+              width={50}
+              height={50}
+              alt="Our feature"
+              unoptimized
+              priority
+            ></Image>
+            <h2>Maintenance Support</h2>
+          </span>
+          <span>
+            <Image
+              src={"/features-1.png"}
+              width={50}
+              height={50}
+              alt="Our feature"
+              unoptimized
+              priority
+            ></Image>
+            <h2>Maintenance Support</h2>
+          </span>
+          <span>
+            <Image
+              src={"/features-1.png"}
+              width={50}
+              height={50}
+              alt="Our feature"
+              unoptimized
+              priority
+            ></Image>
+            <h2>Maintenance Support</h2>
+          </span>
+          <span>
+            <Image
+              src={"/features-1.png"}
+              width={50}
+              height={50}
+              alt="Our feature"
+              unoptimized
+              priority
+            ></Image>
+            <h2>Maintenance Support</h2>
+          </span>
+          <span>
+            <Image
+              src={"/features-1.png"}
+              width={50}
+              height={50}
+              alt="Our feature"
+              unoptimized
+              priority
+            ></Image>
+            <h2>Maintenance Support</h2>
+          </span>
+          <span>
+            <Image
+              src={"/features-1.png"}
+              width={50}
+              height={50}
+              alt="Our feature"
+              unoptimized
+              priority
+            ></Image>
+            <h2>Maintenance Support</h2>
+          </span>
+        </div>
+      </div> */}
+
+      <div className="feature-section">
+        <h1>
+          Our <span className="highlight">Features</span>
+        </h1>
+        <div className="feature-grid">
+          {Array(6)
+            .fill("")
+            .map((_, index) => (
+              <div key={index} className="feature-card">
+                <Image
+                  src={`/features-1.png`}
+                  // src={`/features-${index + 1}.png`}
+                  width={60}
+                  height={60}
+                  alt="Feature Icon"
+                  unoptimized
+                  priority
+                />
+                <h2 ref={(el) => (textRefs.current[index] = el)}>
+                  Maintenance Support
+                </h2>
+              </div>
+            ))}
+        </div>
+      </div>
+
       <div className="trust-icons-container">
         <h3 className="section-title">Our Achievements in Architecture</h3>
         <div className="achievement-grid">

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./header.css";
 
 const Header = () => {
@@ -15,6 +15,7 @@ const Header = () => {
       div.style.marginLeft = "40px";
     }
   };
+
   return (
     <>
       <div className="header">

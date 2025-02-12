@@ -100,9 +100,8 @@
 }
 
 .icon-wrapper svg path {
-  stroke: rgb(255, 100, 44);
+  stroke: #902b2c;
 }
-
 /* Hover Effects */
 .achievement-card:hover {
   transform: translateY(-5px);
@@ -1007,4 +1006,71 @@ li#six-service {
   font-size: 18px;
   margin-top: 25px;
   padding-bottom: 2%;
+}
+/* 
+.feature-section h1 {
+  text-align: center;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+
+.feature-grid span {
+  margin-top: 13%;
+  padding: 10px;
+}
+
+.feature-grid h2 {
+  margin-top: 3%;
+}
+
+.feature-section {
+  padding: 7% 5%;
+} */
+
+.feature-section {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #fbfbfb;
+  margin: 5% 0;
+}
+
+.feature-section h1 {
+  font-size: 2.4rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.highlight {
+  color: #902b2c; /* Theme color */
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 50px;
+  max-width: 1000px;
+  margin: 4% auto;
+}
+
+.feature-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.feature-card h2 {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  color: #333;
 }
