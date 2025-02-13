@@ -69,7 +69,7 @@ export default function Home() {
           if (mouseOver) return;
           timeout = setTimeout(() => {
             slider.next();
-          }, 2000000);
+          }, 100000000);
         }
         slider.on("created", () => {
           slider.container.addEventListener("mouseover", () => {
@@ -159,6 +159,95 @@ export default function Home() {
       <Header />
       <div className="hero-banner">
         <div className="overlay"></div>
+      </div>
+      <div className="feature-section">
+        <h1>Our Features</h1>
+        <div className="feature-grid">
+          {/* {Array(6)
+            .fill("")
+            .map((_, index) => (
+              <div key={index} className="feature-card">
+                <Image
+                  src={`/features-1.png`}
+                  // src={`/features-${index + 1}.png`}
+                  width={60}
+                  height={60}
+                  alt="Feature Icon"
+                  unoptimized
+                  priority
+                />
+                <h2 ref={(el) => (textRefs.current[index] = el)}>
+                  Maintenance Support
+                </h2>
+              </div>
+            ))} */}
+          <div className="feature-card">
+            <Image
+              src={"/1.png"}
+              width={60}
+              height={60}
+              alt="Feature Icon"
+              unoptimized
+              priority
+            />
+            <h2>Maintenance Support</h2>
+          </div>
+          <div className="feature-card">
+            <Image
+              src={"/2.png"}
+              width={60}
+              height={60}
+              alt="Feature Icon"
+              unoptimized
+              priority
+            />
+            <h2>Cost-Effective</h2>
+          </div>
+          <div className="feature-card">
+            <Image
+              src={"/6.png"}
+              width={60}
+              height={60}
+              alt="Feature Icon"
+              unoptimized
+              priority
+            />
+            <h2>Swift Deliverance</h2>
+          </div>
+          <div className="feature-card">
+            <Image
+              src={"/4.png"}
+              width={60}
+              height={60}
+              alt="Feature Icon"
+              unoptimized
+              priority
+            />
+            <h2>Software Expertise</h2>
+          </div>
+          <div className="feature-card">
+            <Image
+              src={"/5.png"}
+              width={60}
+              height={60}
+              alt="Feature Icon"
+              unoptimized
+              priority
+            />
+            <h2>Newest Technology</h2>
+          </div>
+          <div className="feature-card">
+            <Image
+              src={"/3.png"}
+              width={60}
+              height={60}
+              alt="Feature Icon"
+              unoptimized
+              priority
+            />
+            <h2>23+ years of experience</h2>
+          </div>
+        </div>
       </div>
       <div className="about-us">
         <h2>
@@ -319,33 +408,7 @@ export default function Home() {
         </div>
       </div> */}
 
-      <div className="feature-section">
-        <h1>
-          Our <span className="highlight">Features</span>
-        </h1>
-        <div className="feature-grid">
-          {Array(6)
-            .fill("")
-            .map((_, index) => (
-              <div key={index} className="feature-card">
-                <Image
-                  src={`/features-1.png`}
-                  // src={`/features-${index + 1}.png`}
-                  width={60}
-                  height={60}
-                  alt="Feature Icon"
-                  unoptimized
-                  priority
-                />
-                <h2 ref={(el) => (textRefs.current[index] = el)}>
-                  Maintenance Support
-                </h2>
-              </div>
-            ))}
-        </div>
-      </div>
-
-      <div className="trust-icons-container">
+      {/* <div className="trust-icons-container">
         <h3 className="section-title">Our Achievements in Architecture</h3>
         <div className="achievement-grid">
           <div className="achievement-card">
@@ -435,7 +498,7 @@ export default function Home() {
             <p>Projects Completed</p>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="what-we-offer">
         <div className="what-we-offer-text">
           <h1>Get Quote</h1>
@@ -611,7 +674,7 @@ export default function Home() {
           </li>
         </ul>
       </div>
-      <div className="faqs">
+      {/* <div className="faqs">
         <div className="faq-accordion">
           <h2>
             Frequently <span className="asked">asked</span> questions
@@ -628,37 +691,387 @@ export default function Home() {
             </div>
           ))}
         </div>
+      </div> */}
+      <div className="service-two">
+        <div className="service-two-top">
+          <div className="service-two-top-left">
+            <h5>Company Services</h5>
+            <h1>We specialize in these fields.</h1>
+          </div>
+          <div className="service-two-top-right">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus
+              iste ut fugit adipisci dolorum nesciunt eum commodi possimus eaque
+              minima harum sit quas assumenda praesentium, beatae, vitae aliquid
+              ab incidunt?
+            </p>
+          </div>
+        </div>
+        <div className="service-two-bottom">
+          <div className="service-two-bottom-left">
+            <div className="service-two-bottom-box" id="service-two-box-one">
+              <div className="service-two-bottom-box-top">
+                <span className="service-two-bottom-box-logo">
+                  <Image
+                    src={"/icon.png"}
+                    width={60}
+                    height={60}
+                    unoptimized
+                    alt="icon-image"
+                  ></Image>
+                </span>
+                <h3>BIM services</h3>
+              </div>
+              <div className="service-two-bottom-box-bottom">
+                <p>
+                  Our BIM team consists of architects, engineers and designers
+                  offering holistic solutions.
+                </p>
+              </div>
+            </div>
+            <div className="service-two-bottom-box" id="service-two-box-one">
+              <div className="service-two-bottom-box-top">
+                <span className="service-two-bottom-box-logo">
+                  <Image
+                    src={"/icon.png"}
+                    width={60}
+                    height={60}
+                    unoptimized
+                    alt="icon-image"
+                  ></Image>
+                </span>
+                <h3>CAD services</h3>
+              </div>
+              <div className="service-two-bottom-box-bottom">
+                <p>
+                  Providing extended architectural and structural design and
+                  drafting services for all stages of your project
+                </p>
+              </div>
+            </div>
+            <div className="service-two-bottom-box" id="service-two-box-one">
+              <div className="service-two-bottom-box-top">
+                <span className="service-two-bottom-box-logo">
+                  <Image
+                    src={"/icon.png"}
+                    width={60}
+                    height={60}
+                    unoptimized
+                    alt="icon-image"
+                  ></Image>
+                </span>
+                <h3>Permit Drawings & Documentation</h3>
+              </div>
+              <div className="service-two-bottom-box-bottom">
+                <p>
+                  Contact us and save the cumbersome job of authority approvals.
+                </p>
+              </div>
+            </div>
+            <div className="service-two-bottom-box" id="service-two-box-one">
+              <div className="service-two-bottom-box-top">
+                <span className="service-two-bottom-box-logo">
+                  <Image
+                    src={"/icon.png"}
+                    width={60}
+                    height={60}
+                    unoptimized
+                    alt="icon-image"
+                  ></Image>
+                </span>
+                <h3>3d Visualization</h3>
+              </div>
+              <div className="service-two-bottom-box-bottom">
+                <p>
+                  Get the full experience of your building before hand by our 3D
+                  experts.
+                </p>
+              </div>
+            </div>
+            <div className="service-two-bottom-box" id="service-two-box-one">
+              <div className="service-two-bottom-box-top">
+                <span className="service-two-bottom-box-logo">
+                  <Image
+                    src={"/icon.png"}
+                    width={60}
+                    height={60}
+                    unoptimized
+                    alt="icon-image"
+                  ></Image>
+                </span>
+                <h3>Presentation Drawings</h3>
+              </div>
+              <div className="service-two-bottom-box-bottom">
+                <p>
+                  We provide comprehensive research data which captivate our
+                  clients, at the lowest possible cost.
+                </p>
+              </div>
+            </div>
+            <div className="service-two-bottom-box" id="service-two-box-one">
+              <div className="service-two-bottom-box-top">
+                <span className="service-two-bottom-box-logo">
+                  <Image
+                    src={"/icon.png"}
+                    width={60}
+                    height={60}
+                    unoptimized
+                    alt="icon-image"
+                  ></Image>
+                </span>
+                <h3>MEP Services</h3>
+              </div>
+              <div className="service-two-bottom-box-bottom">
+                <p>
+                  We strive to provide high-quality and reliable structural,
+                  mechanical and electrical engineering solutions.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="service-two-bottom-right">
+            <video muted autoPlay loop>
+              <source src="/service-video.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+        <div className="achievement-grid">
+          <div className="achievement-card">
+            <div className="icon-wrapper">
+              <svg
+                width="30px"
+                height="64px"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3 21V3H21V21H16V17H8V21H3Z"
+                  stroke="#222"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M8 7H16M8 11H16M8 15H16"
+                  stroke="#222"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            <h2 id="target-one">4+</h2>
+            <p>Years of Excellence</p>
+          </div>
+
+          <div className="achievement-card">
+            <div className="icon-wrapper">
+              <svg
+                width="30px"
+                height="64px"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 2L14.09 8.26L21 9.27L15.5 13.97L16.82 21L12 17.77L7.18 21L8.5 13.97L3 9.27L9.91 8.26L12 2Z"
+                  stroke="#222"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            <h2 id="target-three">22</h2>
+            <p>Awards Won</p>
+          </div>
+
+          <div className="achievement-card">
+            <div className="icon-wrapper">
+              <svg
+                width="30px"
+                height="64px"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3 21V5L12 2L21 5V21H3Z"
+                  stroke="#222"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M12 2V12"
+                  stroke="#222"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M9 21V14H15V21"
+                  stroke="#222"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            <h2 id="target-two">224</h2>
+            <p>Projects Completed</p>
+          </div>
+        </div>
       </div>
+      <div className="faqs">
+        <div className="faq-accordion">
+          <h2>
+            Frequently <span className="asked">asked</span> questions
+          </h2>
+          {faqs.map((faq, index) => (
+            <div
+              key={index}
+              className={`faq-item ${open === index ? "active" : ""}`}
+            >
+              <div className="faq-question" onClick={() => toggle(index)}>
+                {faq.question}
+                <span className="icon">{open === index ? "-" : "+"}</span>
+              </div>
+              <div className={`faq-answer ${open === index ? "open" : ""}`}>
+                {faq.answer}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div className="reviews-section">
         <div ref={sliderRef} className="keen-slider">
           <div className="keen-slider__slide number-slide1">
             <div className="testimonial-container">
               <div className="testimonial-box">
-                <p className="quote">
-                  “We believe that the harmony of the environment is the harmony
-                  of the mind, and that courage and strength lie in the form of
-                  simplicity. Together with Drowart, hand in hand, we create our
-                  visions come true.”
+                <h2>Our Founder & Principal Architect</h2>
+                <p>
+                  “An Indian, living in the capital city of India; Delhi, is an
+                  award-winning architect, who incorporated a company with a
+                  clear intent to foster an egalitarian organizational ethos
+                  where distinctive architectural talent finds self-expression
+                  and can contribute in a democratic and collaborative work
+                  environment.”
+                </p>
+                <p>
+                  Focused on core competencies in the field of Architecture,
+                  Interior Designing, Consulting Engineering, and other Allied
+                  Services and having an experience of 22+ Yrs.
                 </p>
                 <div className="author">
                   <Image
-                    src="/review-one.webp"
+                    src="/founder.jpg"
                     alt="Sylwia Gieruszyńska"
                     width={50}
                     height={50}
                     className="profile-img"
                   />
                   <div>
-                    <h4 className="name">Sylwia Gieruszyńska</h4>
-                    <p className="designation">CEO & Co-Founder at HUS</p>
+                    <h4 className="name">Abhishek Aggarwal</h4>
+                    <p className="designation">Founder</p>
                   </div>
                 </div>
+                {/* <div className="achievement-grid">
+                  <div className="achievement-card">
+                    <div className="icon-wrapper">
+                      <svg
+                        width="30px"
+                        height="64px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M3 21V3H21V21H16V17H8V21H3Z"
+                          stroke="#222"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M8 7H16M8 11H16M8 15H16"
+                          stroke="#222"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <h2 id="target-one">4+</h2>
+                    <p>Years of Excellence</p>
+                  </div>
+
+                  <div className="achievement-card">
+                    <div className="icon-wrapper">
+                      <svg
+                        width="30px"
+                        height="64px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 2L14.09 8.26L21 9.27L15.5 13.97L16.82 21L12 17.77L7.18 21L8.5 13.97L3 9.27L9.91 8.26L12 2Z"
+                          stroke="#222"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <h2 id="target-three">22</h2>
+                    <p>Awards Won</p>
+                  </div>
+
+                  <div className="achievement-card">
+                    <div className="icon-wrapper">
+                      <svg
+                        width="30px"
+                        height="64px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M3 21V5L12 2L21 5V21H3Z"
+                          stroke="#222"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M12 2V12"
+                          stroke="#222"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M9 21V14H15V21"
+                          stroke="#222"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <h2 id="target-two">224</h2>
+                    <p>Projects Completed</p>
+                  </div>
+                </div> */}
               </div>
               <div className="testimonial-image">
                 <Image
-                  src="/review-one.webp"
+                  src="/founder.jpg"
                   alt="Team"
-                  width={600}
+                  width={400}
                   height={400}
                   className="team-img"
                 />
@@ -669,44 +1082,49 @@ export default function Home() {
           <div className="keen-slider__slide number-slide2">
             <div className="testimonial-container">
               <div className="testimonial-box">
-                <p className="quote">
-                  “We believe that the harmony of the environment is the harmony
-                  of the mind, and that courage and strength lie in the form of
-                  simplicity. Together with Drowart, hand in hand, we create our
-                  visions come true.”
+                <h2>Our Founder & Principal Architect</h2>
+                <p>
+                  “An Indian, living in the capital city of India; Delhi, is an
+                  award-winning architect, who incorporated a company with a
+                  clear intent to foster an egalitarian organizational ethos
+                  where distinctive architectural talent finds self-expression
+                  and can contribute in a democratic and collaborative work
+                  environment.”
+                </p>
+                <p>
+                  Focused on core competencies in the field of Architecture,
+                  Interior Designing, Consulting Engineering, and other Allied
+                  Services and having an experience of 22+ Yrs.
                 </p>
                 <div className="author">
                   <Image
-                    src="/review-one.webp"
+                    src="/founder.jpg"
                     alt="Sylwia Gieruszyńska"
                     width={50}
                     height={50}
                     className="profile-img"
                   />
                   <div>
-                    <h4 className="name">Sylwia Gieruszyńska</h4>
-                    <p className="designation">CEO & Co-Founder at HUS</p>
+                    <h4 className="name">Abhishek Aggarwal</h4>
+                    <p className="designation">Founder</p>
                   </div>
                 </div>
               </div>
               <div className="testimonial-image">
                 <Image
-                  src="/review-one.webp"
+                  src="/founder.jpg"
                   alt="Team"
-                  width={600}
+                  width={400}
                   height={400}
                   className="team-img"
                 />
+                <div className="white-box"></div>
               </div>
             </div>
           </div>
-          <div className="keen-slider__slide number-slide3">3</div>
-          <div className="keen-slider__slide number-slide4">4</div>
-          <div className="keen-slider__slide number-slide5">5</div>
-          <div className="keen-slider__slide number-slide6">6</div>
         </div>
       </div>
-      <div className="trust-icons">
+      {/* <div className="trust-icons">
         <div className="trust-icons-df">
           <div className="slider">
             <div className="slide-track">
@@ -817,18 +1235,18 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
+
       <div className="footer">
         <div className="footer-logo">
-          {/* <Image
+          <Image
+            src={"/red-logo.png"}
             alt="Footer-logo"
             id="footer-logo"
-            src={"/Business-Card.png"}
             width={0}
             height={0}
             unoptimized
-          ></Image> */}
-          <h2>Logo</h2>
+          ></Image>
           <p>
             ADPL CONSULTING LLC works as a leading Architectural and Engineering
             <br />
