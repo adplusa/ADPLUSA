@@ -160,95 +160,7 @@ export default function Home() {
       <div className="hero-banner">
         <div className="overlay"></div>
       </div>
-      <div className="feature-section">
-        <h1>Our Features</h1>
-        <div className="feature-grid">
-          {/* {Array(6)
-            .fill("")
-            .map((_, index) => (
-              <div key={index} className="feature-card">
-                <Image
-                  src={`/features-1.png`}
-                  // src={`/features-${index + 1}.png`}
-                  width={60}
-                  height={60}
-                  alt="Feature Icon"
-                  unoptimized
-                  priority
-                />
-                <h2 ref={(el) => (textRefs.current[index] = el)}>
-                  Maintenance Support
-                </h2>
-              </div>
-            ))} */}
-          <div className="feature-card">
-            <Image
-              src={"/1.png"}
-              width={60}
-              height={60}
-              alt="Feature Icon"
-              unoptimized
-              priority
-            />
-            <h2>Maintenance Support</h2>
-          </div>
-          <div className="feature-card">
-            <Image
-              src={"/2.png"}
-              width={60}
-              height={60}
-              alt="Feature Icon"
-              unoptimized
-              priority
-            />
-            <h2>Cost-Effective</h2>
-          </div>
-          <div className="feature-card">
-            <Image
-              src={"/6.png"}
-              width={60}
-              height={60}
-              alt="Feature Icon"
-              unoptimized
-              priority
-            />
-            <h2>Swift Deliverance</h2>
-          </div>
-          <div className="feature-card">
-            <Image
-              src={"/4.png"}
-              width={60}
-              height={60}
-              alt="Feature Icon"
-              unoptimized
-              priority
-            />
-            <h2>Software Expertise</h2>
-          </div>
-          <div className="feature-card">
-            <Image
-              src={"/5.png"}
-              width={60}
-              height={60}
-              alt="Feature Icon"
-              unoptimized
-              priority
-            />
-            <h2>Newest Technology</h2>
-          </div>
-          <div className="feature-card">
-            <Image
-              src={"/3.png"}
-              width={60}
-              height={60}
-              alt="Feature Icon"
-              unoptimized
-              priority
-            />
-            <h2>23+ years of experience</h2>
-          </div>
-        </div>
-      </div>
+
       <div className="about-us">
         <h2>
           who <br />
@@ -1236,6 +1148,78 @@ export default function Home() {
           </div>
         </div>
       </div> */}
+
+      <div className="feature-section">
+        <h1>Our Features</h1>
+        <div className="feature-grid">
+          <div className="feature-card">
+            <Image
+              src={"/1.png"}
+              width={60}
+              height={60}
+              alt="Feature Icon"
+              unoptimized
+              priority
+            />
+            <h2>Maintenance Support</h2>
+          </div>
+          <div className="feature-card">
+            <Image
+              src={"/2.png"}
+              width={60}
+              height={60}
+              alt="Feature Icon"
+              unoptimized
+              priority
+            />
+            <h2>Cost-Effective</h2>
+          </div>
+          <div className="feature-card">
+            <Image
+              src={"/6.png"}
+              width={60}
+              height={60}
+              alt="Feature Icon"
+              unoptimized
+              priority
+            />
+            <h2>Swift Deliverance</h2>
+          </div>
+          <div className="feature-card">
+            <Image
+              src={"/4.png"}
+              width={60}
+              height={60}
+              alt="Feature Icon"
+              unoptimized
+              priority
+            />
+            <h2>Software Expertise</h2>
+          </div>
+          <div className="feature-card">
+            <Image
+              src={"/5.png"}
+              width={60}
+              height={60}
+              alt="Feature Icon"
+              unoptimized
+              priority
+            />
+            <h2>Newest Technology</h2>
+          </div>
+          <div className="feature-card">
+            <Image
+              src={"/3.png"}
+              width={60}
+              height={60}
+              alt="Feature Icon"
+              unoptimized
+              priority
+            />
+            <h2>23+ years of experience</h2>
+          </div>
+        </div>
+      </div>
 
       <div className="footer">
         <div className="footer-logo">
