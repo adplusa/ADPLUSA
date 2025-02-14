@@ -255,7 +255,7 @@ export default function Home() {
           <h1>Optimize building space and material use</h1>
           <p>
             Erat volutpat. Ut wisi enim nostrud exerci ullam co nisl ut aliquip
-            ex commo do consquatErat volutpat.
+            ex commo do consquatErat volutpats.
           </p>
           <div className="features-paras">
             <ul>
