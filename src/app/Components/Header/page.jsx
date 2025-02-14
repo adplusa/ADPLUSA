@@ -1,10 +1,11 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./header.css";
 import gsap from "gsap";
 import Image from "next/image";
 
 const Header = () => {
+  const [logo, setLogo] = useState("/red-logo.png");
   const colorChangerHandle = () => {
     let element = document.body;
     element.classList.toggle("dark-mode");
@@ -20,17 +21,37 @@ const Header = () => {
     }
   };
 
+  useEffect(() => {
+    const updateLogo = () => {
+      setLogo(
+        document.body.classList.contains("dark-mode")
+          ? "/white-logo.png"
+          : "/red-logo.png"
+      );
+    };
+
+    // Run on mount
+    updateLogo();
+
+    // Observe for changes
+    const observer = new MutationObserver(() => {
+      updateLogo();
+    });
+
+    observer.observe(document.body, { attributes: true });
+
+    return () => observer.disconnect(); // Cleanup observer
+  }, []);
+
   return (
     <>
       <div className="header">
         <div className="header-df">
           <div className="logo">
-            {/* <span>Consulting LLC</span> */}
-            {/* <h1>ADPL</h1> */}
             <Image
-              src={"/red-logo.png"}
-              alt="Footer-logo"
-              id="footer-logo"
+              src={logo}
+              alt="logo"
+              id="logo"
               width={0}
               height={0}
               unoptimized

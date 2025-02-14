@@ -15,6 +15,7 @@ import "swiper/css/scrollbar";
 import { gsap } from "gsap";
 import SplitType from "split-type";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ProgressBar from "@ramonak/react-progress-bar";
 
 const faqs = [
   {
@@ -48,6 +49,8 @@ const faqs = [
       "You can pay through various methods, including bank transfers, credit/debit cards, or digital payment services like PayPal.",
   },
 ];
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const textRefs = useRef([]);
@@ -94,26 +97,26 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const count = new CountUp("target-one", 4);
-    if (count.error) {
-      console.error(error);
-    } else {
-      count.start();
-    }
+    const counters = [
+      { id: "target-one", value: 4 },
+      { id: "target-two", value: 224 },
+      { id: "target-three", value: 22 },
+      { id: "target-four", value: 75 },
+      { id: "target-five", value: 80 },
+      { id: "target-six", value: 84 },
+      { id: "target-seven", value: 84 },
+      { id: "target-eight", value: 75 },
+      { id: "target-nine", value: 90 },
+    ];
 
-    const countTwo = new CountUp("target-two", 224);
-    if (countTwo.error) {
-      console.error(error);
-    } else {
-      countTwo.start();
-    }
-
-    const countThree = new CountUp("target-three", 22);
-    if (countThree.error) {
-      console.error(error);
-    } else {
-      countThree.start();
-    }
+    counters.forEach(({ id, value }) => {
+      const countUp = new CountUp(id, value, { suffix: "%" });
+      if (!countUp.error) {
+        countUp.start();
+      } else {
+        console.error(countUp.error);
+      }
+    });
   }, []);
 
   const icons = [
@@ -246,171 +249,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* <div className="feature-section">
-        <h1>
-          Our <span className="asked">Features</span>
-        </h1>
-        <div className="feature-grid">
-          <span>
-            <Image
-              src={"/features-1.png"}
-              width={50}
-              height={50}
-              alt="Our feature"
-              unoptimized
-              priority
-            ></Image>
-            <h2>Maintenance Support</h2>
-          </span>
-          <span>
-            <Image
-              src={"/features-1.png"}
-              width={50}
-              height={50}
-              alt="Our feature"
-              unoptimized
-              priority
-            ></Image>
-            <h2>Maintenance Support</h2>
-          </span>
-          <span>
-            <Image
-              src={"/features-1.png"}
-              width={50}
-              height={50}
-              alt="Our feature"
-              unoptimized
-              priority
-            ></Image>
-            <h2>Maintenance Support</h2>
-          </span>
-          <span>
-            <Image
-              src={"/features-1.png"}
-              width={50}
-              height={50}
-              alt="Our feature"
-              unoptimized
-              priority
-            ></Image>
-            <h2>Maintenance Support</h2>
-          </span>
-          <span>
-            <Image
-              src={"/features-1.png"}
-              width={50}
-              height={50}
-              alt="Our feature"
-              unoptimized
-              priority
-            ></Image>
-            <h2>Maintenance Support</h2>
-          </span>
-          <span>
-            <Image
-              src={"/features-1.png"}
-              width={50}
-              height={50}
-              alt="Our feature"
-              unoptimized
-              priority
-            ></Image>
-            <h2>Maintenance Support</h2>
-          </span>
-        </div>
-      </div> */}
-
-      {/* <div className="trust-icons-container">
-        <h3 className="section-title">Our Achievements in Architecture</h3>
-        <div className="achievement-grid">
-          <div className="achievement-card">
-            <div className="icon-wrapper">
-              <svg
-                width="30px"
-                height="64px"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M3 21V3H21V21H16V17H8V21H3Z"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M8 7H16M8 11H16M8 15H16"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <h2 id="target-one">4+</h2>
-            <p>Years of Excellence</p>
-          </div>
-
-          <div className="achievement-card">
-            <div className="icon-wrapper">
-              <svg
-                width="30px"
-                height="64px"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 2L14.09 8.26L21 9.27L15.5 13.97L16.82 21L12 17.77L7.18 21L8.5 13.97L3 9.27L9.91 8.26L12 2Z"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <h2 id="target-three">22</h2>
-            <p>Awards Won</p>
-          </div>
-
-          <div className="achievement-card">
-            <div className="icon-wrapper">
-              <svg
-                width="30px"
-                height="64px"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M3 21V5L12 2L21 5V21H3Z"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M12 2V12"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M9 21V14H15V21"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <h2 id="target-two">224</h2>
-            <p>Projects Completed</p>
-          </div>
-        </div>
-      </div> */}
       <div className="what-we-offer">
         <div className="what-we-offer-text">
           <h1>Get Quote</h1>
@@ -746,6 +584,7 @@ export default function Home() {
               <source src="/service-video.mp4" type="video/mp4" />
             </video>
           </div>
+          <div className="services-one_circle-color"></div>
         </div>
         <div className="achievement-grid">
           <div className="achievement-card">
@@ -1036,188 +875,205 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/* <div className="trust-icons">
-        <div className="trust-icons-df">
-          <div className="slider">
-            <div className="slide-track">
-              <div className="slide">
-                <img
-                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/2.png"
-                  height="100"
-                  width="250"
-                  alt=""
-                />
-              </div>
-              <div className="slide">
-                <img
-                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/3.png"
-                  height="100"
-                  width="250"
-                  alt=""
-                />
-              </div>
-              <div className="slide">
-                <img
-                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/4.png"
-                  height="100"
-                  width="250"
-                  alt=""
-                />
-              </div>
-              <div className="slide">
-                <img
-                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/5.png"
-                  height="100"
-                  width="250"
-                  alt=""
-                />
-              </div>
-              <div className="slide">
-                <img
-                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/6.png"
-                  height="100"
-                  width="250"
-                  alt=""
-                />
-              </div>
-              <div className="slide">
-                <img
-                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/7.png"
-                  height="100"
-                  width="250"
-                  alt=""
-                />
-              </div>
-              <div className="slide">
-                <img
-                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/1.png"
-                  height="100"
-                  width="250"
-                  alt=""
-                />
-              </div>
-              <div className="slide">
-                <img
-                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/2.png"
-                  height="100"
-                  width="250"
-                  alt=""
-                />
-              </div>
-              <div className="slide">
-                <img
-                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/3.png"
-                  height="100"
-                  width="250"
-                  alt=""
-                />
-              </div>
-              <div className="slide">
-                <img
-                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/4.png"
-                  height="100"
-                  width="250"
-                  alt=""
-                />
-              </div>
-              <div className="slide">
-                <img
-                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/5.png"
-                  height="100"
-                  width="250"
-                  alt=""
-                />
-              </div>
-              <div className="slide">
-                <img
-                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/6.png"
-                  height="100"
-                  width="250"
-                  alt=""
-                />
-              </div>
-              <div className="slide">
-                <img
-                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/7.png"
-                  height="100"
-                  width="250"
-                  alt=""
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
 
       <div className="feature-section">
-        <h1>Our Features</h1>
-        <div className="feature-grid">
-          <div className="feature-card">
-            <Image
-              src={"/1.png"}
-              width={60}
-              height={60}
-              alt="Feature Icon"
-              unoptimized
-              priority
-            />
-            <h2>Maintenance Support</h2>
+        <div className="feature-left">
+          <h4>overall building progress</h4>
+          <h1>Optimize building space and material use</h1>
+          <p>
+            Erat volutpat. Ut wisi enim nostrud exerci ullam co nisl ut aliquip
+            ex commo do consquatErat volutpat.
+          </p>
+          <div className="features-paras">
+            <ul>
+              <li>
+                <span>
+                  <h5>Maintenance Support</h5>
+                </span>
+                <span>
+                  <div className="">
+                    <h2 id="target-four">0%</h2>
+                  </div>
+                  <div className="progress">
+                    <ProgressBar
+                      completed={75}
+                      bgColor="goldenrod"
+                      width="250px"
+                      height="10px"
+                      baseBgColor="transparent"
+                      isLabelVisible={false}
+                      borderRadius="0px"
+                      labelColor="white"
+                      customLabel="80%"
+                      style={{
+                        border: "1px solid goldenrod",
+                        position: "relative",
+                      }}
+                    />
+                  </div>
+                </span>
+              </li>
+
+              <li>
+                <span>
+                  <h5>Cost-Effective</h5>
+                </span>
+                <span>
+                  <div className="">
+                    <h2 id="target-five">0%</h2>
+                  </div>
+                  <div className="progress">
+                    <ProgressBar
+                      completed={75}
+                      bgColor="goldenrod"
+                      width="250px"
+                      height="10px"
+                      baseBgColor="transparent"
+                      isLabelVisible={false}
+                      borderRadius="0px"
+                      labelColor="white"
+                      customLabel="80%"
+                      style={{
+                        border: "1px solid goldenrod",
+                        position: "relative",
+                      }}
+                    />
+                  </div>
+                </span>
+              </li>
+
+              <li>
+                <span>
+                  <h5>Swift Deliverance</h5>
+                </span>
+                <span>
+                  <div className="">
+                    <h2 id="target-six">0%</h2>
+                  </div>
+                  <div className="progress">
+                    <ProgressBar
+                      completed={82}
+                      bgColor="goldenrod"
+                      width="250px"
+                      height="10px"
+                      baseBgColor="transparent"
+                      isLabelVisible={false}
+                      borderRadius="0px"
+                      labelColor="white"
+                      customLabel="80%"
+                      style={{
+                        border: "1px solid goldenrod",
+                        position: "relative",
+                      }}
+                    />
+                  </div>
+                </span>
+              </li>
+            </ul>
+
+            <ul>
+              <li>
+                <span>
+                  <h5>Software Expertise</h5>
+                </span>
+                <span>
+                  <div className="">
+                    <h2 id="target-seven">84%</h2>
+                  </div>
+                  <div className="progress">
+                    <ProgressBar
+                      completed={80}
+                      bgColor="goldenrod"
+                      width="250px"
+                      height="10px"
+                      baseBgColor="transparent"
+                      isLabelVisible={false}
+                      borderRadius="0px"
+                      labelColor="white"
+                      customLabel="80%"
+                      style={{
+                        border: "1px solid goldenrod",
+                        position: "relative",
+                      }}
+                    />
+                  </div>
+                </span>
+              </li>
+              <li>
+                <span>
+                  <h5>Newest Technology</h5>
+                </span>
+                <span>
+                  <div className="">
+                    <h2 id="target-eight">80%</h2>
+                  </div>
+                  <div className="progress">
+                    <ProgressBar
+                      completed={75}
+                      bgColor="goldenrod"
+                      width="250px"
+                      height="10px"
+                      baseBgColor="transparent"
+                      isLabelVisible={false}
+                      borderRadius="0px"
+                      labelColor="white"
+                      customLabel="80%"
+                      style={{
+                        border: "1px solid goldenrod",
+                        position: "relative",
+                      }}
+                    />
+                  </div>
+                </span>
+              </li>
+              <li>
+                <span>
+                  <h5>23+ years of experience</h5>
+                </span>
+                <span>
+                  <div className="">
+                    <h2 id="target-nine">80%</h2>
+                  </div>
+                  <div className="progress">
+                    <ProgressBar
+                      completed={90}
+                      bgColor="goldenrod"
+                      width="250px"
+                      height="10px"
+                      baseBgColor="transparent"
+                      isLabelVisible={false}
+                      borderRadius="0px"
+                      labelColor="white"
+                      customLabel="80%"
+                      style={{
+                        border: "1px solid goldenrod",
+                        position: "relative",
+                      }}
+                    />
+                  </div>
+                </span>
+              </li>
+            </ul>
           </div>
-          <div className="feature-card">
-            <Image
-              src={"/2.png"}
-              width={60}
-              height={60}
-              alt="Feature Icon"
-              unoptimized
-              priority
-            />
-            <h2>Cost-Effective</h2>
-          </div>
-          <div className="feature-card">
-            <Image
-              src={"/6.png"}
-              width={60}
-              height={60}
-              alt="Feature Icon"
-              unoptimized
-              priority
-            />
-            <h2>Swift Deliverance</h2>
-          </div>
-          <div className="feature-card">
-            <Image
-              src={"/4.png"}
-              width={60}
-              height={60}
-              alt="Feature Icon"
-              unoptimized
-              priority
-            />
-            <h2>Software Expertise</h2>
-          </div>
-          <div className="feature-card">
-            <Image
-              src={"/5.png"}
-              width={60}
-              height={60}
-              alt="Feature Icon"
-              unoptimized
-              priority
-            />
-            <h2>Newest Technology</h2>
-          </div>
-          <div className="feature-card">
-            <Image
-              src={"/3.png"}
-              width={60}
-              height={60}
-              alt="Feature Icon"
-              unoptimized
-              priority
-            />
-            <h2>23+ years of experience</h2>
-          </div>
+        </div>
+
+        <div className="feature-right">
+          <Image
+            src={"/feature-img1.jpg"}
+            alt="feature-img"
+            width={0}
+            height={0}
+            unoptimized
+            priority
+          ></Image>
+          <Image
+            src={"/feature-img3.jpg"}
+            alt="feature-img"
+            width={0}
+            height={0}
+            unoptimized
+            priority
+          ></Image>
         </div>
       </div>
 
