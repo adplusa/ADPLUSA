@@ -249,6 +249,207 @@ export default function Home() {
         </div>
       </div>
 
+      <div className="feature-section">
+        <div className="feature-left">
+          <h4>overall building progress</h4>
+          <h1>Optimize building space and material use</h1>
+          <p>
+            Erat volutpat. Ut wisi enim nostrud exerci ullam co nisl ut aliquip
+            ex commo do consquatErat volutpat.
+          </p>
+          <div className="features-paras">
+            <ul>
+              <li>
+                <span>
+                  <h5>Maintenance Support</h5>
+                </span>
+                <span>
+                  <div className="">
+                    <h2 id="target-four">0%</h2>
+                  </div>
+                  <div className="progress">
+                    <ProgressBar
+                      completed={75}
+                      bgColor="#ca4c4d"
+                      width="250px"
+                      height="10px"
+                      baseBgColor="transparent"
+                      isLabelVisible={false}
+                      borderRadius="0px"
+                      labelColor="white"
+                      customLabel="80%"
+                      style={{
+                        border: "1px solid goldenrod",
+                        position: "relative",
+                      }}
+                    />
+                  </div>
+                </span>
+              </li>
+
+              <li>
+                <span>
+                  <h5>Cost-Effective</h5>
+                </span>
+                <span>
+                  <div className="">
+                    <h2 id="target-five">0%</h2>
+                  </div>
+                  <div className="progress">
+                    <ProgressBar
+                      completed={75}
+                      bgColor="#ca4c4d"
+                      width="250px"
+                      height="10px"
+                      baseBgColor="transparent"
+                      isLabelVisible={false}
+                      borderRadius="0px"
+                      labelColor="white"
+                      customLabel="80%"
+                      style={{
+                        border: "1px solid goldenrod",
+                        position: "relative",
+                      }}
+                    />
+                  </div>
+                </span>
+              </li>
+
+              <li>
+                <span>
+                  <h5>Swift Deliverance</h5>
+                </span>
+                <span>
+                  <div className="">
+                    <h2 id="target-six">0%</h2>
+                  </div>
+                  <div className="progress">
+                    <ProgressBar
+                      completed={82}
+                      bgColor="#ca4c4d"
+                      width="250px"
+                      height="10px"
+                      baseBgColor="transparent"
+                      isLabelVisible={false}
+                      borderRadius="0px"
+                      labelColor="white"
+                      customLabel="80%"
+                      style={{
+                        border: "1px solid goldenrod",
+                        position: "relative",
+                      }}
+                    />
+                  </div>
+                </span>
+              </li>
+            </ul>
+
+            <ul>
+              <li>
+                <span>
+                  <h5>Software Expertise</h5>
+                </span>
+                <span>
+                  <div className="">
+                    <h2 id="target-seven">84%</h2>
+                  </div>
+                  <div className="progress">
+                    <ProgressBar
+                      completed={80}
+                      bgColor="#ca4c4d"
+                      width="250px"
+                      height="10px"
+                      baseBgColor="transparent"
+                      isLabelVisible={false}
+                      borderRadius="0px"
+                      labelColor="white"
+                      customLabel="80%"
+                      style={{
+                        border: "1px solid goldenrod",
+                        position: "relative",
+                      }}
+                    />
+                  </div>
+                </span>
+              </li>
+              <li>
+                <span>
+                  <h5>Newest Technology</h5>
+                </span>
+                <span>
+                  <div className="">
+                    <h2 id="target-eight">80%</h2>
+                  </div>
+                  <div className="progress">
+                    <ProgressBar
+                      completed={75}
+                      bgColor="#ca4c4d"
+                      width="250px"
+                      height="10px"
+                      baseBgColor="transparent"
+                      isLabelVisible={false}
+                      borderRadius="0px"
+                      labelColor="white"
+                      customLabel="80%"
+                      style={{
+                        border: "1px solid goldenrod",
+                        position: "relative",
+                      }}
+                    />
+                  </div>
+                </span>
+              </li>
+              <li>
+                <span>
+                  <h5>23+ years of experience</h5>
+                </span>
+                <span>
+                  <div className="">
+                    <h2 id="target-nine">80%</h2>
+                  </div>
+                  <div className="progress">
+                    <ProgressBar
+                      completed={90}
+                      bgColor="#ca4c4d"
+                      width="250px"
+                      height="10px"
+                      baseBgColor="transparent"
+                      isLabelVisible={false}
+                      borderRadius="0px"
+                      labelColor="white"
+                      customLabel="80%"
+                      style={{
+                        border: "1px solid goldenrod",
+                        position: "relative",
+                      }}
+                    />
+                  </div>
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="feature-right">
+          <Image
+            src={"/feature-img1.jpg"}
+            alt="feature-img"
+            width={0}
+            height={0}
+            unoptimized
+            priority
+          ></Image>
+          <Image
+            src={"/feature-img3.jpg"}
+            alt="feature-img"
+            width={0}
+            height={0}
+            unoptimized
+            priority
+          ></Image>
+        </div>
+      </div>
+
       <div className="what-we-offer">
         <div className="what-we-offer-text">
           <h1>Get Quote</h1>
@@ -873,207 +1074,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div className="feature-section">
-        <div className="feature-left">
-          <h4>overall building progress</h4>
-          <h1>Optimize building space and material use</h1>
-          <p>
-            Erat volutpat. Ut wisi enim nostrud exerci ullam co nisl ut aliquip
-            ex commo do consquatErat volutpat.
-          </p>
-          <div className="features-paras">
-            <ul>
-              <li>
-                <span>
-                  <h5>Maintenance Support</h5>
-                </span>
-                <span>
-                  <div className="">
-                    <h2 id="target-four">0%</h2>
-                  </div>
-                  <div className="progress">
-                    <ProgressBar
-                      completed={75}
-                      bgColor="goldenrod"
-                      width="250px"
-                      height="10px"
-                      baseBgColor="transparent"
-                      isLabelVisible={false}
-                      borderRadius="0px"
-                      labelColor="white"
-                      customLabel="80%"
-                      style={{
-                        border: "1px solid goldenrod",
-                        position: "relative",
-                      }}
-                    />
-                  </div>
-                </span>
-              </li>
-
-              <li>
-                <span>
-                  <h5>Cost-Effective</h5>
-                </span>
-                <span>
-                  <div className="">
-                    <h2 id="target-five">0%</h2>
-                  </div>
-                  <div className="progress">
-                    <ProgressBar
-                      completed={75}
-                      bgColor="goldenrod"
-                      width="250px"
-                      height="10px"
-                      baseBgColor="transparent"
-                      isLabelVisible={false}
-                      borderRadius="0px"
-                      labelColor="white"
-                      customLabel="80%"
-                      style={{
-                        border: "1px solid goldenrod",
-                        position: "relative",
-                      }}
-                    />
-                  </div>
-                </span>
-              </li>
-
-              <li>
-                <span>
-                  <h5>Swift Deliverance</h5>
-                </span>
-                <span>
-                  <div className="">
-                    <h2 id="target-six">0%</h2>
-                  </div>
-                  <div className="progress">
-                    <ProgressBar
-                      completed={82}
-                      bgColor="goldenrod"
-                      width="250px"
-                      height="10px"
-                      baseBgColor="transparent"
-                      isLabelVisible={false}
-                      borderRadius="0px"
-                      labelColor="white"
-                      customLabel="80%"
-                      style={{
-                        border: "1px solid goldenrod",
-                        position: "relative",
-                      }}
-                    />
-                  </div>
-                </span>
-              </li>
-            </ul>
-
-            <ul>
-              <li>
-                <span>
-                  <h5>Software Expertise</h5>
-                </span>
-                <span>
-                  <div className="">
-                    <h2 id="target-seven">84%</h2>
-                  </div>
-                  <div className="progress">
-                    <ProgressBar
-                      completed={80}
-                      bgColor="goldenrod"
-                      width="250px"
-                      height="10px"
-                      baseBgColor="transparent"
-                      isLabelVisible={false}
-                      borderRadius="0px"
-                      labelColor="white"
-                      customLabel="80%"
-                      style={{
-                        border: "1px solid goldenrod",
-                        position: "relative",
-                      }}
-                    />
-                  </div>
-                </span>
-              </li>
-              <li>
-                <span>
-                  <h5>Newest Technology</h5>
-                </span>
-                <span>
-                  <div className="">
-                    <h2 id="target-eight">80%</h2>
-                  </div>
-                  <div className="progress">
-                    <ProgressBar
-                      completed={75}
-                      bgColor="goldenrod"
-                      width="250px"
-                      height="10px"
-                      baseBgColor="transparent"
-                      isLabelVisible={false}
-                      borderRadius="0px"
-                      labelColor="white"
-                      customLabel="80%"
-                      style={{
-                        border: "1px solid goldenrod",
-                        position: "relative",
-                      }}
-                    />
-                  </div>
-                </span>
-              </li>
-              <li>
-                <span>
-                  <h5>23+ years of experience</h5>
-                </span>
-                <span>
-                  <div className="">
-                    <h2 id="target-nine">80%</h2>
-                  </div>
-                  <div className="progress">
-                    <ProgressBar
-                      completed={90}
-                      bgColor="goldenrod"
-                      width="250px"
-                      height="10px"
-                      baseBgColor="transparent"
-                      isLabelVisible={false}
-                      borderRadius="0px"
-                      labelColor="white"
-                      customLabel="80%"
-                      style={{
-                        border: "1px solid goldenrod",
-                        position: "relative",
-                      }}
-                    />
-                  </div>
-                </span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="feature-right">
-          <Image
-            src={"/feature-img1.jpg"}
-            alt="feature-img"
-            width={0}
-            height={0}
-            unoptimized
-            priority
-          ></Image>
-          <Image
-            src={"/feature-img3.jpg"}
-            alt="feature-img"
-            width={0}
-            height={0}
-            unoptimized
-            priority
-          ></Image>
         </div>
       </div>
 
