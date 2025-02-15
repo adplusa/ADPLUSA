@@ -1144,7 +1144,7 @@ span.service-two-bottom-box-logo {
 .features-paras {
   display: flex;
   margin-top: 5%;
-  gap: 3%;
+  gap: 7%;
   align-items: center;
 }
 
@@ -1225,4 +1225,38 @@ span.service-two-bottom-box-logo {
   left: 125px;
   top: 27%;
   height: 500px;
+}
+
+/* progress.css */
+.progress-container {
+  padding: 20px;
+  max-width: 400px;
+}
+
+.progress-item {
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0;
+  background-color: #e96301; /* Your theme color */
+  transition: width 0.5s ease-in-out;
+}
+
+.features-paras ul {
+  width: 250px;
+}
+
+.progress-item p:first-of-type {
+  font-weight: bolder;
 }

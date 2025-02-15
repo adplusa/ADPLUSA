@@ -7,15 +7,10 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
 import { gsap } from "gsap";
 import SplitType from "split-type";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import ProgressBar from "@ramonak/react-progress-bar";
+import { ProgressBar } from "@progress/kendo-react-progressbars";
 
 const faqs = [
   {
@@ -53,6 +48,12 @@ const faqs = [
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
+  const [valueOne, setValueOne] = useState(0);
+  const [valueTwo, setValueTwo] = useState(0);
+  const [valueThree, setValueThree] = useState(0);
+  const [valueFour, setValueFour] = useState(0);
+  const [valueFive, setValueFive] = useState(0);
+  const [valueSix, setValueSix] = useState(0);
   const textRefs = useRef([]);
   const [open, setOpen] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -97,27 +98,60 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const counters = [
-      { id: "target-one", value: 4 },
-      { id: "target-two", value: 224 },
-      { id: "target-three", value: 22 },
-      { id: "target-four", value: 75 },
-      { id: "target-five", value: 80 },
-      { id: "target-six", value: 84 },
-      { id: "target-seven", value: 84 },
-      { id: "target-eight", value: 75 },
-      { id: "target-nine", value: 90 },
-    ];
+    const intervalOne = setInterval(() => {
+      setValueOne((prev) => (prev < 50 ? prev + 1 : 50));
+    }, 20);
 
-    counters.forEach(({ id, value }) => {
-      const countUp = new CountUp(id, value, { suffix: "%" });
-      if (!countUp.error) {
-        countUp.start();
-      } else {
-        console.error(countUp.error);
-      }
-    });
+    const intervalTwo = setInterval(() => {
+      setValueTwo((prev) => (prev < 75 ? prev + 1 : 75));
+    }, 20);
+
+    const intervalThree = setInterval(() => {
+      setValueThree((prev) => (prev < 90 ? prev + 1 : 90));
+    }, 20);
+
+    const intervalFour = setInterval(() => {
+      setValueFour((prev) => (prev < 80 ? prev + 1 : 80));
+    }, 20);
+    const intervalFive = setInterval(() => {
+      setValueFive((prev) => (prev < 80 ? prev + 1 : 80));
+    }, 20);
+    const intervalSix = setInterval(() => {
+      setValueSix((prev) => (prev < 80 ? prev + 1 : 80));
+    }, 20);
+
+    return () => {
+      clearInterval(intervalOne);
+      clearInterval(intervalTwo);
+      clearInterval(intervalThree);
+      clearInterval(intervalFour);
+      clearInterval(intervalFive);
+      clearInterval(intervalSix);
+    };
   }, []);
+
+  // useEffect(() => {
+  //   const counters = [
+  //     { id: "target-one", value: 4 },
+  //     { id: "target-two", value: 224 },
+  //     { id: "target-three", value: 22 },
+  //     { id: "target-four", value: 75 },
+  //     { id: "target-five", value: 80 },
+  //     { id: "target-six", value: 84 },
+  //     { id: "target-seven", value: 84 },
+  //     { id: "target-eight", value: 75 },
+  //     { id: "target-nine", value: 90 },
+  //   ];
+
+  //   counters.forEach(({ id, value }) => {
+  //     const countUp = new CountUp(id, value, { suffix: "%" });
+  //     if (!countUp.error) {
+  //       countUp.start();
+  //     } else {
+  //       console.error(countUp.error);
+  //     }
+  //   });
+  // }, []);
 
   const icons = [
     "/HUSLOGO_WHITE.AVIF",
@@ -259,173 +293,71 @@ export default function Home() {
           </p>
           <div className="features-paras">
             <ul>
-              <li>
-                <span>
-                  <h5>Maintenance Support</h5>
-                </span>
-                <span>
-                  <div className="">
-                    <h2 id="target-four">0%</h2>
-                  </div>
-                  <div className="progress">
-                    <ProgressBar
-                      completed={75}
-                      bgColor="#ca4c4d"
-                      width="250px"
-                      height="10px"
-                      baseBgColor="transparent"
-                      isLabelVisible={false}
-                      borderRadius="0px"
-                      labelColor="white"
-                      customLabel="80%"
-                      style={{
-                        border: "1px solid goldenrod",
-                        position: "relative",
-                      }}
-                    />
-                  </div>
-                </span>
-              </li>
+              <div className="progress-item">
+                <p>Maintenance Support</p>
+                <p>{valueOne}%</p>
+                <div className="progress-bar">
+                  <div
+                    className="progress-fill"
+                    style={{ width: `${valueOne}%` }}
+                  ></div>
+                </div>
+              </div>
 
-              <li>
-                <span>
-                  <h5>Cost-Effective</h5>
-                </span>
-                <span>
-                  <div className="">
-                    <h2 id="target-five">0%</h2>
-                  </div>
-                  <div className="progress">
-                    <ProgressBar
-                      completed={75}
-                      bgColor="#ca4c4d"
-                      width="250px"
-                      height="10px"
-                      baseBgColor="transparent"
-                      isLabelVisible={false}
-                      borderRadius="0px"
-                      labelColor="white"
-                      customLabel="80%"
-                      style={{
-                        border: "1px solid goldenrod",
-                        position: "relative",
-                      }}
-                    />
-                  </div>
-                </span>
-              </li>
+              <div className="progress-item">
+                <p>Cost-Effective</p>
+                <p>{valueTwo}%</p>
+                <div className="progress-bar">
+                  <div
+                    className="progress-fill"
+                    style={{ width: `${valueTwo}%` }}
+                  ></div>
+                </div>
+              </div>
 
-              <li>
-                <span>
-                  <h5>Swift Deliverance</h5>
-                </span>
-                <span>
-                  <div className="">
-                    <h2 id="target-six">0%</h2>
-                  </div>
-                  <div className="progress">
-                    <ProgressBar
-                      completed={82}
-                      bgColor="#ca4c4d"
-                      width="250px"
-                      height="10px"
-                      baseBgColor="transparent"
-                      isLabelVisible={false}
-                      borderRadius="0px"
-                      labelColor="white"
-                      customLabel="80%"
-                      style={{
-                        border: "1px solid goldenrod",
-                        position: "relative",
-                      }}
-                    />
-                  </div>
-                </span>
-              </li>
+              <div className="progress-item">
+                <p>Swift Deliverance</p>
+                <p>{valueThree}%</p>
+                <div className="progress-bar">
+                  <div
+                    className="progress-fill"
+                    style={{ width: `${valueThree}%` }}
+                  ></div>
+                </div>
+              </div>
             </ul>
 
             <ul>
-              <li>
-                <span>
-                  <h5>Software Expertise</h5>
-                </span>
-                <span>
-                  <div className="">
-                    <h2 id="target-seven">84%</h2>
-                  </div>
-                  <div className="progress">
-                    <ProgressBar
-                      completed={80}
-                      bgColor="#ca4c4d"
-                      width="250px"
-                      height="10px"
-                      baseBgColor="transparent"
-                      isLabelVisible={false}
-                      borderRadius="0px"
-                      labelColor="white"
-                      customLabel="80%"
-                      style={{
-                        border: "1px solid goldenrod",
-                        position: "relative",
-                      }}
-                    />
-                  </div>
-                </span>
-              </li>
-              <li>
-                <span>
-                  <h5>Newest Technology</h5>
-                </span>
-                <span>
-                  <div className="">
-                    <h2 id="target-eight">80%</h2>
-                  </div>
-                  <div className="progress">
-                    <ProgressBar
-                      completed={75}
-                      bgColor="#ca4c4d"
-                      width="250px"
-                      height="10px"
-                      baseBgColor="transparent"
-                      isLabelVisible={false}
-                      borderRadius="0px"
-                      labelColor="white"
-                      customLabel="80%"
-                      style={{
-                        border: "1px solid goldenrod",
-                        position: "relative",
-                      }}
-                    />
-                  </div>
-                </span>
-              </li>
-              <li>
-                <span>
-                  <h5>23+ years of experience</h5>
-                </span>
-                <span>
-                  <div className="">
-                    <h2 id="target-nine">80%</h2>
-                  </div>
-                  <div className="progress">
-                    <ProgressBar
-                      completed={90}
-                      bgColor="#ca4c4d"
-                      width="250px"
-                      height="10px"
-                      baseBgColor="transparent"
-                      isLabelVisible={false}
-                      borderRadius="0px"
-                      labelColor="white"
-                      customLabel="80%"
-                      style={{
-                        border: "1px solid goldenrod",
-                        position: "relative",
-                      }}
-                    />
-                  </div>
-                </span>
-              </li>
+              <div className="progress-item">
+                <p>Software Expertise</p>
+                <p>{valueFour}%</p>
+                <div className="progress-bar">
+                  <div
+                    className="progress-fill"
+                    style={{ width: `${valueFour}%` }}
+                  ></div>
+                </div>
+              </div>
+              <div className="progress-item">
+                <p>Newest Technology</p>
+                <p>{valueFive}%</p>
+                <div className="progress-bar">
+                  <div
+                    className="progress-fill"
+                    style={{ width: `${valueFive}%` }}
+                  ></div>
+                </div>
+              </div>
+              <div className="progress-item">
+                <p>23+ years of experience</p>
+                <p>{valueSix}%</p>
+                <div className="progress-bar">
+                  <div
+                    className="progress-fill"
+                    style={{ width: `${valueSix}%` }}
+                  ></div>
+                </div>
+              </div>
             </ul>
           </div>
         </div>
