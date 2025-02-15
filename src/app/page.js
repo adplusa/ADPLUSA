@@ -48,6 +48,9 @@ const faqs = [
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
+  const [logo, setLogo] = useState("/red-logo.png");
+  const textRef = useRef(null);
+
   const [valueOne, setValueOne] = useState(0);
   const [valueTwo, setValueTwo] = useState(0);
   const [valueThree, setValueThree] = useState(0);
@@ -130,29 +133,6 @@ export default function Home() {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const counters = [
-  //     { id: "target-one", value: 4 },
-  //     { id: "target-two", value: 224 },
-  //     { id: "target-three", value: 22 },
-  //     { id: "target-four", value: 75 },
-  //     { id: "target-five", value: 80 },
-  //     { id: "target-six", value: 84 },
-  //     { id: "target-seven", value: 84 },
-  //     { id: "target-eight", value: 75 },
-  //     { id: "target-nine", value: 90 },
-  //   ];
-
-  //   counters.forEach(({ id, value }) => {
-  //     const countUp = new CountUp(id, value, { suffix: "%" });
-  //     if (!countUp.error) {
-  //       countUp.start();
-  //     } else {
-  //       console.error(countUp.error);
-  //     }
-  //   });
-  // }, []);
-
   const icons = [
     "/HUSLOGO_WHITE.AVIF",
     "/HUSLOGO_WHITE.AVIF",
@@ -188,6 +168,38 @@ export default function Home() {
           },
         });
       }
+    });
+  }, []);
+
+  useEffect(() => {
+    const updateLogo = () => {
+      setLogo(
+        document.body.classList.contains("dark-mode")
+          ? "/white-logo.png"
+          : "/red-logo.png"
+      );
+    };
+
+    // Run on mount
+    updateLogo();
+
+    // Observe for changes
+    const observer = new MutationObserver(() => {
+      updateLogo();
+    });
+
+    observer.observe(document.body, { attributes: true });
+
+    return () => observer.disconnect(); // Cleanup observer
+  }, []);
+
+  useEffect(() => {
+    gsap.to(textRef.current, {
+      rotation: 360,
+      transformOrigin: "center",
+      repeat: -1,
+      duration: 8,
+      ease: "linear",
     });
   }, []);
 
@@ -246,6 +258,32 @@ export default function Home() {
             </span>
           </div>
         </div>
+
+        <div className="circle-container">
+          {/* Centered Image */}
+          <Image
+            src={logo}
+            alt="logo"
+            className="center-image"
+            width={120}
+            height={120}
+          />
+
+          {/* Rotating Circular Text */}
+          <svg viewBox="0 0 250 250" className="circle-text" ref={textRef}>
+            <defs>
+              <path
+                id="circlePath"
+                d="M 125, 125 m -100, 0 a 100,100 0 1,1 200,0 a 100,100 0 1,1 -200,0"
+              />
+            </defs>
+            <text fontSize="20" fontWeight="bold" letterSpacing="3">
+              <textPath href="#circlePath" startOffset="0%">
+                🔹 ADPL CONSULTING LLC 🔹 ARCHITECTURAL & ENGINEERING 🔹
+              </textPath>
+            </text>
+          </svg>
+        </div>
       </div>
       <div className="about-us-video-image">
         <div className="about-us-img">
@@ -280,6 +318,15 @@ export default function Home() {
               <span>Who we are</span>
             </button>
           </Link>
+        </div>
+      </div>
+
+      <div className="strip-text">
+        <div className="marquee">
+          <p>
+            ADPL CONSULTING LLC works as a leading Architectural and Engineering
+            outsource fraternity across India and the United States of America.
+          </p>
         </div>
       </div>
 

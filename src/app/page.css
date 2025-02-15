@@ -1261,3 +1261,61 @@ span.service-two-bottom-box-logo {
 .progress-item p:first-of-type {
   font-weight: bolder;
 }
+
+.marquee {
+  background-color: #ffffff;
+  overflow: hidden;
+  position: relative;
+  height: 50px;
+  width: 100%;
+  white-space: nowrap;
+  margin-top: 5%;
+}
+
+.marquee p {
+  font-size: 36px;
+  position: absolute;
+  width: auto;
+  height: 100%;
+  margin: 0;
+  line-height: 50px;
+  text-align: center;
+  transform: translateX(100%);
+  animation: scroll-left 30s linear infinite;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+.circle-container {
+  position: relative;
+  width: 250px; /* Bigger for better spacing */
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-image {
+  width: 120px; /* Large image */
+  height: 120px;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 10;
+  background-color: white; /* Ensures visibility */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Soft glow effect */
+}
+
+.circle-text {
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  fill: black;
+  position: absolute;
+}
