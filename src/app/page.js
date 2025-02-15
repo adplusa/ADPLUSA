@@ -260,7 +260,6 @@ export default function Home() {
         </div>
 
         <div className="circle-container">
-          {/* Centered Image */}
           <Image
             src={logo}
             alt="logo"
@@ -277,7 +276,12 @@ export default function Home() {
                 d="M 125, 125 m -100, 0 a 100,100 0 1,1 200,0 a 100,100 0 1,1 -200,0"
               />
             </defs>
-            <text fontSize="20" fontWeight="bold" letterSpacing="3">
+            <text
+              fontSize="20"
+              fontWeight="bold"
+              letterSpacing="3"
+              fill="#c94446"
+            >
               <textPath href="#circlePath" startOffset="0%">
                 🔹 ADPL CONSULTING LLC 🔹 ARCHITECTURAL & ENGINEERING 🔹
               </textPath>

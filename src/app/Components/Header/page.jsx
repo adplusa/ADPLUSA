@@ -58,6 +58,51 @@ const Header = () => {
             ></Image>
           </div>
 
+          {/* <div className="flip-logo">
+            <span>
+              <Image
+                id="flip-two"
+                src={"/flip-two.png"}
+                alt="logo"
+                width={0}
+                height={0}
+                unoptimized
+              ></Image>
+            </span>
+            <span>
+              <Image
+                id="flip-one"
+                src={"/flip-one.png"}
+                alt="logo"
+                width={0}
+                height={0}
+                unoptimized
+              ></Image>
+            </span>
+          </div> */}
+          <div className="flip-logo">
+            <span className="flip-container">
+              <Image
+                id="flip-one"
+                className="flip-front"
+                src={"/flip-one.png"}
+                alt="logo"
+                width={100}
+                height={100}
+                unoptimized
+              />
+              <Image
+                id="flip-two"
+                className="flip-back"
+                src={"/flip-two.png"}
+                alt="logo"
+                width={100}
+                height={100}
+                unoptimized
+              />
+            </span>
+          </div>
+
           <div className="menu-color">
             <div className="menu">
               <svg

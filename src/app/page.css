@@ -1273,7 +1273,10 @@ span.service-two-bottom-box-logo {
 }
 
 .marquee p {
+  text-transform: capitalize;
+  word-spacing: 3px;
   font-size: 36px;
+  font-family: "Lato-bold";
   position: absolute;
   width: auto;
   height: 100%;
@@ -1281,12 +1284,12 @@ span.service-two-bottom-box-logo {
   line-height: 50px;
   text-align: center;
   transform: translateX(100%);
-  animation: scroll-left 30s linear infinite;
+  animation: 30s linear infinite scroll-left;
 }
 
 @keyframes scroll-left {
   0% {
-    transform: translateX(100%);
+    transform: translateX(10%);
   }
 
   100% {
@@ -1295,21 +1298,23 @@ span.service-two-bottom-box-logo {
 }
 .circle-container {
   position: relative;
-  width: 250px; /* Bigger for better spacing */
+  width: 250px;
   height: 250px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: -12%;
+  margin-left: 7%;
 }
 
 .center-image {
-  width: 120px; /* Large image */
-  height: 120px;
+  object-fit: contain;
+  width: 163px;
+  height: 155px;
   border-radius: 50%;
   position: absolute;
   z-index: 10;
-  background-color: white; /* Ensures visibility */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Soft glow effect */
+  background-color: white;
 }
 
 .circle-text {
