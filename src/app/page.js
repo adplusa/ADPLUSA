@@ -285,11 +285,11 @@ export default function Home() {
 
       <div className="feature-section">
         <div className="feature-left">
-          <h4>overall building progress</h4>
-          <h1>Optimize building space and material use</h1>
+          <h4>overall progress</h4>
+          <h1>Our Features</h1>
           <p>
-            Erat volutpat. Ut wisi enim nostrud exerci ullam co nisl ut aliquip
-            ex commo do consquatErat volutpats.
+            Showcasing cutting-edge designs and innovative solutions tailored
+            for modern architecture and interiors.
           </p>
           <div className="features-paras">
             <ul>

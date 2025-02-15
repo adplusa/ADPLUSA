@@ -1177,6 +1177,7 @@ span.service-two-bottom-box-logo {
   font-size: 19px;
   margin-top: 4%;
   max-width: 71%;
+  line-height: 1.4;
 }
 
 .feature-right img {
@@ -1239,7 +1240,7 @@ span.service-two-bottom-box-logo {
 
 .progress-bar {
   width: 100%;
-  height: 10px;
+  height: 5px;
   background-color: #e0e0e0;
   border-radius: 5px;
   overflow: hidden;
@@ -1249,7 +1250,7 @@ span.service-two-bottom-box-logo {
 .progress-fill {
   height: 100%;
   width: 0;
-  background-color: #e96301; /* Your theme color */
+  background-color: #cb484b; /* Your theme color */
   transition: width 0.5s ease-in-out;
 }
 
