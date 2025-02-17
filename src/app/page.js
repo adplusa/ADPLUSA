@@ -11,6 +11,10 @@ import { gsap } from "gsap";
 import SplitType from "split-type";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ProgressBar } from "@progress/kendo-react-progressbars";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 
 const faqs = [
   {
@@ -1012,29 +1016,6 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="faqs">
-        <div className="faq-accordion">
-          <h2>
-            Frequently <span className="asked">asked</span> questions
-          </h2>
-          {faqs.map((faq, index) => (
-            <div
-              key={index}
-              className={`faq-item ${open === index ? "active" : ""}`}
-            >
-              <div className="faq-question" onClick={() => toggle(index)}>
-                {faq.question}
-                <span className="icon">{open === index ? "-" : "+"}</span>
-              </div>
-              <div className={`faq-answer ${open === index ? "open" : ""}`}>
-                {faq.answer}
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="faq-sketch"></div>
-      </div>
-
       <div className="process-steps">
         <h1 id="process-heading">
           Our <span>Working Process</span>
@@ -1058,6 +1039,53 @@ export default function Home() {
           ))}
         </div>
       </div>
+
+      <div className="faqs">
+        <div className="faq-accordion">
+          <h2>
+            Frequently <span className="asked">asked</span> questions
+          </h2>
+          {faqs.map((faq, index) => (
+            <div
+              key={index}
+              className={`faq-item ${open === index ? "active" : ""}`}
+            >
+              <div className="faq-question" onClick={() => toggle(index)}>
+                {faq.question}
+                <span className="icon">{open === index ? "-" : "+"}</span>
+              </div>
+              <div className={`faq-answer ${open === index ? "open" : ""}`}>
+                {faq.answer}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="faq-sketch"></div>
+      </div>
+
+      <section class="testimonial-section">
+        <div class="testimonial-header">
+          <h2>What Our Clients Say</h2>
+          <p>See how we've helped businesses achieve their goals.</p>
+        </div>
+
+        <div class="testimonial-slider">
+          <div class="testimonial-slide">
+            <div class="testimonial-card">
+              <img
+                src="image1.jpg"
+                alt="Client Name"
+                class="testimonial-image-two"
+              />
+              <p class="testimonial-feedback">
+                "Great service, highly recommend!"
+              </p>
+              <h4 class="testimonial-name">Client Name</h4>
+              <span class="testimonial-role">CEO, Company</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <div className="reviews-section">
         <div ref={sliderRef} className="keen-slider">

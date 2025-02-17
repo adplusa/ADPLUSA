@@ -313,7 +313,7 @@
 .who-we-are-btn button:hover {
   border-color: white;
 }
-
+/* 
 .what-we-offer-images {
   display: flex;
   justify-content: center;
@@ -366,7 +366,7 @@
   height: 100%;
   background-color: #000;
   opacity: 0.5;
-  transition: opacity 0.3s ease; /* Adjusted for smoother transition */
+  transition: opacity 0.3s ease; 
 }
 
 .what-we-offer-content {
@@ -375,7 +375,7 @@
   top: 32%;
   color: #fff;
   padding: 2% 18%;
-  transition: transform 0.3s ease, opacity 0.3s ease; /* Added opacity transition */
+  transition: transform 0.3s ease, opacity 0.3s ease; 
 }
 
 .what-we-offer-content p {
@@ -384,7 +384,7 @@
   position: absolute;
   z-index: -1;
   opacity: 1;
-  transition: opacity 0.3s ease, transform 0.3s ease; /* Ensure opacity hides smoothly */
+  transition: opacity 0.3s ease, transform 0.3s ease; 
 }
 
 .what-we-offer-content-btn {
@@ -399,7 +399,7 @@
   background-color: transparent;
   border: navajowhite;
   font-size: 17px;
-  transition: background-color 0.3s ease; /* Background color transition */
+  transition: background-color 0.3s ease; 
 }
 
 .what-we-offer-content-btn span {
@@ -444,7 +444,7 @@
 .what-we-offer-img:not(:hover) .what-we-offer-content-btn {
   margin-top: 30px;
   transform: translateY(0);
-}
+} */
 
 [class^="number-slide"],
 [class*=" number-slide"] {
@@ -730,7 +730,7 @@ svg.bi.bi-chat-quote-fill path {
   width: 120px;
   height: 2px;
 }
-
+/* 
 .expertise ul li {
   perspective: 500px;
   text-align: center;
@@ -942,7 +942,7 @@ li#six-service {
 
 #first-service:hover #first-wrapper {
   transform: rotateY(1deg);
-}
+} */
 
 #footer-logo {
   width: 100px;
@@ -1587,4 +1587,83 @@ span.service-two-bottom-box-logo {
   .process-steps-box:last-child::before {
     display: none;
   }
+}
+/* Testimonial Section */
+.testimonial-section {
+  padding: 4rem 1.5rem;
+  background-color: #f9fafb;
+  text-align: center;
+}
+
+.testimonial-header h2 {
+  font-size: 2.25rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+}
+
+.testimonial-header p {
+  font-size: 1.125rem;
+  color: #4b5563;
+  margin-bottom: 2.5rem;
+}
+
+/* Testimonial Slider */
+.testimonial-slider {
+  max-width: 56rem;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+}
+
+.testimonial-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+/* Testimonial Card */
+.testimonial-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Testimonial Image */
+.testimonial-image-two {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  border: 4px solid #e96301;
+  margin-bottom: 1rem;
+}
+
+/* Testimonial Feedback */
+.testimonial-feedback {
+  font-size: 1.125rem;
+  color: #4b5563;
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+/* Name and Role */
+.testimonial-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.testimonial-role {
+  font-size: 0.875rem;
+  color: #e96301;
+  font-weight: 500;
 }
