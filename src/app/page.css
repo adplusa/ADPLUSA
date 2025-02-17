@@ -53,12 +53,11 @@
   justify-content: center;
   gap: 5%;
   flex-wrap: wrap;
-  margin-top: 10%; /* Reduced spacing for subtle placement */
+  margin-top: 5%;
 }
 
-/* Smaller and Softer Cards */
 .achievement-card {
-  width: 120px; /* Smaller size */
+  width: 120px;
   height: 120px;
   background: #ffffffa1;
   backdrop-filter: blur(10px);
@@ -96,7 +95,7 @@
 }
 
 .icon-wrapper svg {
-  width: 24px; /* Smaller icon */
+  width: 24px;
   height: 24px;
   stroke: white;
 }
@@ -105,15 +104,14 @@
   stroke: #fff;
 }
 
-/* Smaller Text & Numbers */
 .achievement-card h2 {
-  font-size: 20px; /* Reduced size */
+  font-size: 20px;
   font-weight: 700;
   color: #b40505;
 }
 
 .achievement-card p {
-  font-size: 12px; /* Subtle text */
+  font-size: 12px;
   font-weight: 500;
   color: #333;
 }
@@ -320,6 +318,7 @@
   display: flex;
   justify-content: center;
   gap: 3%;
+  display: none;
 }
 
 .what-we-offer-img img {
@@ -637,6 +636,22 @@ svg.bi.bi-chat-quote-fill path {
 
 .faqs {
   margin-top: 3%;
+  position: relative;
+  z-index: 1;
+  padding-bottom: 3%;
+}
+
+.faq-sketch {
+  position: absolute;
+  top: 0;
+  background-image: url("/sketch.png");
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.1;
+  z-index: -1;
 }
 
 .faq-accordion {
@@ -826,6 +841,7 @@ img.service-img {
 
 .expertise {
   position: relative;
+  display: none;
 }
 
 .expertise h1 {
@@ -937,7 +953,7 @@ li#six-service {
   margin-top: 6%;
   border-top: 2px solid #ca4c4d;
   padding-top: 5%;
-  background-color: #efefef;
+  background-color: #f9f9f9;
   color: var(--foreground);
 }
 
@@ -1022,8 +1038,6 @@ li#six-service {
 
 .service-two {
   padding: 5% 3%;
-  margin: 5% 0;
-  margin-top: 59%;
 }
 
 .service-two-top {
@@ -1072,6 +1086,13 @@ li#six-service {
 
 .service-two-top-right {
   max-width: 39%;
+}
+.service-two-top-right p {
+  font-size: 14px;
+  font-family: "Lato-regular";
+  word-spacing: 2px;
+  letter-spacing: 0px;
+  line-height: 1.3;
 }
 
 .service-two-bottom-box-top h3 {
@@ -1148,12 +1169,16 @@ span.service-two-bottom-box-logo {
   align-items: center;
 }
 
+.feature-section-df {
+  display: flex;
+  padding-bottom: 8%;
+}
+
 .feature-section {
+  margin-top: 5%;
+
   padding: 5%;
   background-color: #f9f9f9;
-  display: flex;
-  margin-top: 5%;
-  padding-bottom: 8%;
 }
 
 .feature-right {
@@ -1234,6 +1259,13 @@ span.service-two-bottom-box-logo {
   max-width: 400px;
 }
 
+.progress-item-df {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+
 .progress-item {
   margin-bottom: 20px;
 }
@@ -1245,6 +1277,7 @@ span.service-two-bottom-box-logo {
   border-radius: 5px;
   overflow: hidden;
   position: relative;
+  margin-top: 15px;
 }
 
 .progress-fill {
@@ -1323,4 +1356,235 @@ span.service-two-bottom-box-logo {
   text-transform: uppercase;
   fill: black;
   position: absolute;
+}
+/* 
+#process-step {
+  font-size: 2.4rem;
+  color: grey;
+}
+
+.process-steps {
+  margin-top: 3%;
+  padding: 3% 5%;
+  position: relative;
+}
+
+#process-heading {
+  text-align: center;
+  font-size: 2.4rem;
+}
+
+.process-steps p {
+  max-width: 60%;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.process-steps-df {
+  display: flex;
+  margin-top: 5%;
+}
+
+.process-steps-box h1 {
+  font-size: 5rem;
+  opacity: 0.1;
+  color: #a5a5a5;
+}
+
+.process-steps-box h3 {
+  opacity: 0.4;
+}
+
+.process-steps-box p {
+  margin-top: 20px;
+  line-height: 1.4;
+  color: rgb(87, 87, 87);
+  opacity: 0;
+}
+
+.process-steps-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 3%;
+  position: relative;
+}
+
+.process-steps-dot {
+  position: absolute;
+  top: 19%;
+  right: 47%;
+  background-color: #902b2c;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+} */
+
+.process-steps {
+  text-align: center;
+  padding: 50px;
+  position: relative;
+  overflow: hidden;
+  margin-top: 3%;
+}
+
+/* Updated Heading */
+#process-heading {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+#process-heading span {
+  color: #ca4c4d;
+}
+
+/* Add the Background Shape */
+.process-steps::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(255, 2, 2, 0.1), #e963011a);
+  clip-path: polygon(100% 0, 0 100%, 100% 100%);
+  z-index: -1;
+}
+
+/* Steps Layout */
+.process-steps-df {
+  display: flex;
+  justify-content: center;
+  gap: 10%;
+  margin-top: 30px;
+  position: relative;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Connecting Line */
+.process-steps-box {
+  width: 300px;
+  text-align: center;
+  cursor: pointer;
+  padding: 20px;
+  position: relative;
+  transition: all 0.4s ease-in-out;
+}
+
+.process-steps-box::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: 10%;
+  height: 2px;
+  background-color: #e96301;
+  transform: translateY(-50%);
+}
+
+.process-steps-box:last-child::before {
+  display: none; /* Remove line for the last step */
+}
+
+/* Step Styling */
+.process-steps-box h1 {
+  font-size: 5rem;
+  opacity: 0.1;
+  color: #b0b0b0;
+  transition: opacity 0.4s ease;
+}
+
+.process-steps-box h3 {
+  color: #000;
+  font-weight: 600;
+  transition: color 0.4s ease;
+}
+
+.process-steps-box p {
+  font-size: 14px;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.4s ease, max-height 0.4s ease;
+}
+
+/* Pulsating Dot */
+.process-steps-dot {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  background-color: #ca4c4d;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(233, 99, 1, 0.6);
+  transition: opacity 0.4s ease, transform 0.3s ease;
+}
+
+/* Active State */
+.process-steps-box.active h1 {
+  opacity: 0.2;
+}
+
+.process-steps-box.active h3 {
+  color: #000;
+  font-size: 2rem;
+}
+
+.process-steps-box.active p {
+  opacity: 1;
+  max-height: 100px;
+  font-weight: bold;
+  font-size: 17px;
+  margin-top: 15px;
+  line-height: 1.4;
+  font-family: sans-serif;
+  color: rgb(80, 80, 80);
+}
+
+.process-steps-box.active .process-steps-dot {
+  opacity: 1;
+  transform: translateX(-50%) scale(1.5);
+  animation: pulse 1.5s infinite;
+}
+
+/* Pulsating Animation */
+@keyframes pulse {
+  0% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.7);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .process-steps-df {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .process-steps-box::before {
+    width: 2px;
+    height: 50px;
+    left: 50%;
+    top: 100%;
+  }
+
+  .process-steps-box:last-child::before {
+    display: none;
+  }
 }

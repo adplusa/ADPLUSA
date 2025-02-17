@@ -45,9 +45,32 @@ const faqs = [
   },
 ];
 
+const steps = [
+  {
+    id: "01",
+    title: "Meet Customers",
+    description:
+      "We introduce and present ourselves. Our priority is to listen and understand the client’s vision for clearer insight about the project.",
+  },
+  {
+    id: "02",
+    title: "Planning & Research",
+    description:
+      "With the help of research and critical analysis, we prepare the first set of the drawings taking into account the requirements of the clients.",
+  },
+  {
+    id: "03",
+    title: "Finalize the Design",
+    description:
+      "The feedback of the client is solicited and integrated. The changes are incorporated and the final set of completed drawings are prepared.",
+  },
+];
+
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
+  const [activeStep, setActiveStep] = useState(steps[0].id);
+
   const [logo, setLogo] = useState("/red-logo.png");
   const textRef = useRef(null);
 
@@ -95,6 +118,10 @@ export default function Home() {
       },
     ]
   );
+
+  const handleClick = () => {
+    setActive(!active);
+  };
 
   const toggle = (index) => {
     setOpen(open === index ? null : index);
@@ -210,422 +237,6 @@ export default function Home() {
         <div className="overlay"></div>
       </div>
 
-      <div className="about-us">
-        <h2>
-          who <br />
-          we are?
-        </h2>
-        <div className="about-us-top">
-          <div className="about-us-top-left">
-            <h1>Allow us to introduce ourselves</h1>
-          </div>
-          <div className="about-us-top-right">
-            <h1>
-              <span className="asked">Welcome</span> to ADPL Consulting LLC
-            </h1>
-            <p>
-              ADPL CONSULTING LLC works as a leading Architectural and
-              Engineering outsource fraternity across India and the United
-              States of America.
-            </p>
-            <p>
-              We are a group of professionals with profound proficiency in the
-              field of architecture, engineering, designing, interiors, and
-              management. Having an established track record of serving more
-              than 150 clients in 535+ projects, our strict adherence to
-              international standards and global experience makes us the
-              paramount service provider in the market.
-            </p>
-            <span>
-              <div className="key-benefit">
-                <span>
-                  <ul>
-                    <li>Experienced Team</li>
-                    <li>Outsourcing</li>
-                    <li>Affordable Prices</li>
-                    <li>Best Quality</li>
-                  </ul>
-                </span>
-                <span>
-                  <ul>
-                    <li>Unique/Iconic Designs</li>
-                    <li>Strict Timelines</li>
-                    <li>Proficency with SketchUp Pro</li>
-                    <li>Excellence in Revit & BIM</li>
-                  </ul>
-                </span>
-              </div>
-            </span>
-          </div>
-        </div>
-
-        <div className="circle-container">
-          <Image
-            src={logo}
-            alt="logo"
-            className="center-image"
-            width={120}
-            height={120}
-          />
-
-          {/* Rotating Circular Text */}
-          <svg viewBox="0 0 250 250" className="circle-text" ref={textRef}>
-            <defs>
-              <path
-                id="circlePath"
-                d="M 125, 125 m -100, 0 a 100,100 0 1,1 200,0 a 100,100 0 1,1 -200,0"
-              />
-            </defs>
-            <text
-              fontSize="20"
-              fontWeight="bold"
-              letterSpacing="3"
-              fill="#c94446"
-            >
-              <textPath href="#circlePath" startOffset="0%">
-                🔹 ADPL CONSULTING LLC 🔹 ARCHITECTURAL & ENGINEERING 🔹
-              </textPath>
-            </text>
-          </svg>
-        </div>
-      </div>
-      <div className="about-us-video-image">
-        <div className="about-us-img">
-          <Image
-            id="pawel"
-            src={"Pawel.avif"}
-            alt="about-us image"
-            width={0}
-            height={0}
-            unoptimized
-          ></Image>
-
-          <video muted autoPlay loop>
-            <source src="/architect2.mp4" type="video/mp4" />
-          </video>
-
-          <Image
-            id="vladimir"
-            src={"Vladimir.avif"}
-            alt="about-us image"
-            width={0}
-            height={0}
-            unoptimized
-          ></Image>
-        </div>
-        <div className="about-us-video-text">
-          <h1>Adplusa</h1>
-        </div>
-        <div className="who-we-are-btn">
-          <Link href="#">
-            <button>
-              <span>Who we are</span>
-            </button>
-          </Link>
-        </div>
-      </div>
-
-      <div className="strip-text">
-        <div className="marquee">
-          <p>
-            ADPL CONSULTING LLC works as a leading Architectural and Engineering
-            outsource fraternity across India and the United States of America.
-          </p>
-        </div>
-      </div>
-
-      <div className="feature-section">
-        <div className="feature-left">
-          <h4>overall progress</h4>
-          <h1>Our Features</h1>
-          <p>
-            Showcasing cutting-edge designs and innovative solutions tailored
-            for modern architecture and interiors.
-          </p>
-          <div className="features-paras">
-            <ul>
-              <div className="progress-item">
-                <p>Maintenance Support</p>
-                <p>{valueOne}%</p>
-                <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{ width: `${valueOne}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="progress-item">
-                <p>Cost-Effective</p>
-                <p>{valueTwo}%</p>
-                <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{ width: `${valueTwo}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="progress-item">
-                <p>Swift Deliverance</p>
-                <p>{valueThree}%</p>
-                <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{ width: `${valueThree}%` }}
-                  ></div>
-                </div>
-              </div>
-            </ul>
-
-            <ul>
-              <div className="progress-item">
-                <p>Software Expertise</p>
-                <p>{valueFour}%</p>
-                <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{ width: `${valueFour}%` }}
-                  ></div>
-                </div>
-              </div>
-              <div className="progress-item">
-                <p>Newest Technology</p>
-                <p>{valueFive}%</p>
-                <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{ width: `${valueFive}%` }}
-                  ></div>
-                </div>
-              </div>
-              <div className="progress-item">
-                <p>23+ years of experience</p>
-                <p>{valueSix}%</p>
-                <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{ width: `${valueSix}%` }}
-                  ></div>
-                </div>
-              </div>
-            </ul>
-          </div>
-        </div>
-
-        <div className="feature-right">
-          <Image
-            src={"/feature-img1.jpg"}
-            alt="feature-img"
-            width={0}
-            height={0}
-            unoptimized
-            priority
-          ></Image>
-          <Image
-            src={"/feature-img3.jpg"}
-            alt="feature-img"
-            width={0}
-            height={0}
-            unoptimized
-            priority
-          ></Image>
-        </div>
-      </div>
-
-      <div className="what-we-offer">
-        <div className="what-we-offer-text">
-          <h1>Get Quote</h1>
-        </div>
-
-        <div className="what-we-offer-images">
-          <div className="what-we-offer-img" id="what-we-offer-img-one">
-            <div className="what-we-offer-overlay"></div>
-            <Image
-              src={"/PORTFOLIO-1.avif"}
-              width={0}
-              height={0}
-              alt="Offer Image"
-              unoptimized
-            ></Image>
-            <div className="what-we-offer-content">
-              <h1>Get Quote: CAD Services</h1>
-              <p>
-                Permit Drawings / Documentation - MEP Services - Fire Fighting
-                Drawings - PDF to CAD
-              </p>
-              <div className="what-we-offer-content-btn">
-                <span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-arrow-right"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-                    />
-                  </svg>
-                </span>
-
-                <button>Get a Quote</button>
-              </div>
-            </div>
-          </div>
-          <div className="what-we-offer-img" id="what-we-offer-img-one">
-            <div className="what-we-offer-overlay"></div>
-
-            <Image
-              src={"/PORTFOLIO-2.avif"}
-              width={0}
-              height={0}
-              alt="Offer Image"
-              unoptimized
-            ></Image>
-            <div className="what-we-offer-content">
-              <h1>Get Quote: BIM Services</h1>
-              <p>
-                BIM Services - Building information Modulation - Cost & Estimate
-                - BOQ - Energy Analysis
-              </p>
-              <div className="what-we-offer-content-btn">
-                <span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-arrow-right"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-                    />
-                  </svg>
-                </span>
-
-                <button>Get a Quote</button>
-              </div>
-            </div>
-          </div>
-          <div className="what-we-offer-img" id="what-we-offer-img-one">
-            <div className="what-we-offer-overlay"></div>
-
-            <video muted autoPlay loop>
-              <source src="/PORTFOLIO-3.mp4" type="video/mp4" />
-            </video>
-            <div className="what-we-offer-content">
-              <h1>2D & 3D Rendering</h1>
-              <p>
-                2D Presentation Drawings - Visualization - 3D Visualization - 3D
-                Modeling & rendering - Walkthrough
-              </p>
-              <div className="what-we-offer-content-btn">
-                <span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-arrow-right"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-                    />
-                  </svg>
-                </span>
-
-                <button>Get a Quote</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="expertise">
-        <h1>Our Services</h1>
-        <ul>
-          <li className="right-side-li" id="first-service">
-            <div className="link-wrapper" id="first-wrapper">
-              <a href="#">BIM.</a>
-              <p className="link-para">
-                Our BIM team delivers holistic solutions with
-                <br /> architects, engineers, and designers.
-              </p>
-            </div>
-          </li>
-
-          <li className="left-side-li" id="second-service">
-            <div className="link-wrapper" id="left-wrapper">
-              <a href="#">CAD.</a>
-              <p className="link-para">
-                We offer architectural and structural design services
-                <br /> for all project stages.
-              </p>
-            </div>
-          </li>
-
-          <li id="service-three">
-            <div className="link-wrapper" id="third-wrapper">
-              <a href="#">Permit Drawing.</a>
-              <p className="link-para">
-                Contact us to simplify authority approvals.
-              </p>
-            </div>
-          </li>
-
-          <li className="left-side-li" id="service-four">
-            <div className="link-wrapper" id="four-wrapper">
-              <a href="#">3D Visualization.</a>
-              <p className="link-para">
-                Experience your building in 3D with our expert team.
-              </p>
-            </div>
-          </li>
-
-          <li id="service-five">
-            <div className="link-wrapper" id="five-wrapper">
-              <a href="#">Prsentation.</a>
-              <p className="link-para">
-                We provide cost-effective, compelling research data.
-              </p>
-            </div>
-          </li>
-
-          <li className="left-side-li" id="six-service">
-            <div className="link-wrapper" id="left-wrapper">
-              <a href="#">MEP.</a>
-              <p className="link-para">
-                We offer reliable structural, mechanical, and
-                <br /> electrical engineering solutions.
-              </p>
-            </div>
-          </li>
-        </ul>
-      </div>
-      {/* <div className="faqs">
-        <div className="faq-accordion">
-          <h2>
-            Frequently <span className="asked">asked</span> questions
-          </h2>
-          {faqs.map((faq, index) => (
-            <div key={index} className="faq-item">
-              <div className="faq-question" onClick={() => toggle(index)}>
-                {faq.question}
-                <span className="icon">{open === index ? "-" : "+"}</span>
-              </div>
-              <div className={`faq-answer ${open === index ? "open" : ""}`}>
-                {faq.answer}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div> */}
       <div className="service-two">
         <div className="service-two-top">
           <div className="service-two-top-left">
@@ -634,10 +245,12 @@ export default function Home() {
           </div>
           <div className="service-two-top-right">
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus
-              iste ut fugit adipisci dolorum nesciunt eum commodi possimus eaque
-              minima harum sit quas assumenda praesentium, beatae, vitae aliquid
-              ab incidunt?
+              We offer a comprehensive range of services tailored to the steel
+              industry. Our expertise includes BIM services, CAD services, and
+              Permit Drawings & Documentation. We also provide advanced 3D
+              Visualization and high-quality Presentation Drawings.
+              Additionally, our MEP services ensure seamless integration of
+              mechanical, electrical, and plumbing systems.
             </p>
           </div>
         </div>
@@ -770,6 +383,545 @@ export default function Home() {
           </div>
           <div className="services-one_circle-color"></div>
         </div>
+        {/* <div className="achievement-grid">
+          <div className="achievement-card">
+            <div className="icon-wrapper">
+              <svg
+                width="30px"
+                height="64px"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3 21V3H21V21H16V17H8V21H3Z"
+                  stroke="#222"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M8 7H16M8 11H16M8 15H16"
+                  stroke="#222"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            <h2 id="target-one">4+</h2>
+            <p>Years of Excellence</p>
+          </div>
+
+          <div className="achievement-card">
+            <div className="icon-wrapper">
+              <svg
+                width="30px"
+                height="64px"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 2L14.09 8.26L21 9.27L15.5 13.97L16.82 21L12 17.77L7.18 21L8.5 13.97L3 9.27L9.91 8.26L12 2Z"
+                  stroke="#222"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            <h2 id="target-three">22</h2>
+            <p>Awards Won</p>
+          </div>
+
+          <div className="achievement-card">
+            <div className="icon-wrapper">
+              <svg
+                width="30px"
+                height="64px"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3 21V5L12 2L21 5V21H3Z"
+                  stroke="#222"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M12 2V12"
+                  stroke="#222"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M9 21V14H15V21"
+                  stroke="#222"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            <h2 id="target-two">224</h2>
+            <p>Projects Completed</p>
+          </div>
+        </div> */}
+      </div>
+
+      <div className="about-us">
+        <h2>
+          who <br />
+          we are?
+        </h2>
+        <div className="about-us-top">
+          <div className="about-us-top-left">
+            <h1>Allow us to introduce ourselves</h1>
+          </div>
+          <div className="about-us-top-right">
+            <h1>
+              <span className="asked">Welcome</span> to ADPL Consulting LLC
+            </h1>
+            <p>
+              ADPL CONSULTING LLC works as a leading Architectural and
+              Engineering outsource fraternity across India and the United
+              States of America.
+            </p>
+            <p>
+              We are a group of professionals with profound proficiency in the
+              field of architecture, engineering, designing, interiors, and
+              management. Having an established track record of serving more
+              than 150 clients in 535+ projects, our strict adherence to
+              international standards and global experience makes us the
+              paramount service provider in the market.
+            </p>
+            <span>
+              <div className="key-benefit">
+                <span>
+                  <ul>
+                    <li>Experienced Team</li>
+                    <li>Outsourcing</li>
+                    <li>Affordable Prices</li>
+                    <li>Best Quality</li>
+                  </ul>
+                </span>
+                <span>
+                  <ul>
+                    <li>Unique/Iconic Designs</li>
+                    <li>Strict Timelines</li>
+                    <li>Proficency with SketchUp Pro</li>
+                    <li>Excellence in Revit & BIM</li>
+                  </ul>
+                </span>
+              </div>
+            </span>
+          </div>
+        </div>
+
+        <div className="circle-container">
+          <Image
+            src={logo}
+            alt="logo"
+            className="center-image"
+            width={120}
+            height={120}
+          />
+
+          {/* Rotating Circular Text */}
+          <svg viewBox="0 0 250 250" className="circle-text" ref={textRef}>
+            <defs>
+              <path
+                id="circlePath"
+                d="M 125, 125 m -100, 0 a 100,100 0 1,1 200,0 a 100,100 0 1,1 -200,0"
+              />
+            </defs>
+            <text
+              fontSize="20"
+              fontWeight="bold"
+              letterSpacing="3"
+              fill="#c94446"
+            >
+              <textPath href="#circlePath" startOffset="0%">
+                🔹 ADPL CONSULTING LLC 🔹 ARCHITECTURAL & ENGINEERING 🔹
+              </textPath>
+            </text>
+          </svg>
+        </div>
+      </div>
+      <div className="about-us-video-image">
+        <div className="about-us-img">
+          <Image
+            id="pawel"
+            src={"Pawel.avif"}
+            alt="about-us image"
+            width={0}
+            height={0}
+            unoptimized
+          ></Image>
+
+          <video muted autoPlay loop>
+            <source src="/architect2.mp4" type="video/mp4" />
+          </video>
+
+          <Image
+            id="vladimir"
+            src={"Vladimir.avif"}
+            alt="about-us image"
+            width={0}
+            height={0}
+            unoptimized
+          ></Image>
+        </div>
+        <div className="about-us-video-text">
+          <h1>Adplusa</h1>
+        </div>
+        <div className="who-we-are-btn">
+          <Link href="#">
+            <button>
+              <span>Who we are</span>
+            </button>
+          </Link>
+        </div>
+      </div>
+
+      <div className="strip-text">
+        <div className="marquee">
+          <p>
+            ADPL CONSULTING LLC works as a leading Architectural and Engineering
+            outsource fraternity across India and the United States of America.
+          </p>
+        </div>
+      </div>
+
+      {/* <div className="what-we-offer">
+        <div className="what-we-offer-text">
+          <h1>Get Quote</h1>
+        </div>
+
+        <div className="what-we-offer-images">
+          <div className="what-we-offer-img" id="what-we-offer-img-one">
+            <div className="what-we-offer-overlay"></div>
+            <Image
+              src={"/PORTFOLIO-1.avif"}
+              width={0}
+              height={0}
+              alt="Offer Image"
+              unoptimized
+            ></Image>
+            <div className="what-we-offer-content">
+              <h1>Get Quote: CAD Services</h1>
+              <p>
+                Permit Drawings / Documentation - MEP Services - Fire Fighting
+                Drawings - PDF to CAD
+              </p>
+              <div className="what-we-offer-content-btn">
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-arrow-right"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+                    />
+                  </svg>
+                </span>
+
+                <button>Get a Quote</button>
+              </div>
+            </div>
+          </div>
+          <div className="what-we-offer-img" id="what-we-offer-img-one">
+            <div className="what-we-offer-overlay"></div>
+
+            <Image
+              src={"/PORTFOLIO-2.avif"}
+              width={0}
+              height={0}
+              alt="Offer Image"
+              unoptimized
+            ></Image>
+            <div className="what-we-offer-content">
+              <h1>Get Quote: BIM Services</h1>
+              <p>
+                BIM Services - Building information Modulation - Cost & Estimate
+                - BOQ - Energy Analysis
+              </p>
+              <div className="what-we-offer-content-btn">
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-arrow-right"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+                    />
+                  </svg>
+                </span>
+
+                <button>Get a Quote</button>
+              </div>
+            </div>
+          </div>
+          <div className="what-we-offer-img" id="what-we-offer-img-one">
+            <div className="what-we-offer-overlay"></div>
+
+            <video muted autoPlay loop>
+              <source src="/PORTFOLIO-3.mp4" type="video/mp4" />
+            </video>
+            <div className="what-we-offer-content">
+              <h1>2D & 3D Rendering</h1>
+              <p>
+                2D Presentation Drawings - Visualization - 3D Visualization - 3D
+                Modeling & rendering - Walkthrough
+              </p>
+              <div className="what-we-offer-content-btn">
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-arrow-right"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+                    />
+                  </svg>
+                </span>
+
+                <button>Get a Quote</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> */}
+
+      {/* <div className="expertise">
+        <h1>Our Services</h1>
+        <ul>
+          <li className="right-side-li" id="first-service">
+            <div className="link-wrapper" id="first-wrapper">
+              <a href="#">BIM.</a>
+              <p className="link-para">
+                Our BIM team delivers holistic solutions with
+                <br /> architects, engineers, and designers.
+              </p>
+            </div>
+          </li>
+
+          <li className="left-side-li" id="second-service">
+            <div className="link-wrapper" id="left-wrapper">
+              <a href="#">CAD.</a>
+              <p className="link-para">
+                We offer architectural and structural design services
+                <br /> for all project stages.
+              </p>
+            </div>
+          </li>
+
+          <li id="service-three">
+            <div className="link-wrapper" id="third-wrapper">
+              <a href="#">Permit Drawing.</a>
+              <p className="link-para">
+                Contact us to simplify authority approvals.
+              </p>
+            </div>
+          </li>
+
+          <li className="left-side-li" id="service-four">
+            <div className="link-wrapper" id="four-wrapper">
+              <a href="#">3D Visualization.</a>
+              <p className="link-para">
+                Experience your building in 3D with our expert team.
+              </p>
+            </div>
+          </li>
+
+          <li id="service-five">
+            <div className="link-wrapper" id="five-wrapper">
+              <a href="#">Prsentation.</a>
+              <p className="link-para">
+                We provide cost-effective, compelling research data.
+              </p>
+            </div>
+          </li>
+
+          <li className="left-side-li" id="six-service">
+            <div className="link-wrapper" id="left-wrapper">
+              <a href="#">MEP.</a>
+              <p className="link-para">
+                We offer reliable structural, mechanical, and
+                <br /> electrical engineering solutions.
+              </p>
+            </div>
+          </li>
+        </ul>
+      </div> */}
+
+      <div className="feature-section">
+        <div className="feature-section-df">
+          <div className="feature-left">
+            <h4>overall progress</h4>
+            <h1>Our Features</h1>
+            <p>
+              Showcasing cutting-edge designs and innovative solutions tailored
+              for modern architecture and interiors.
+            </p>
+            <div className="features-paras">
+              <ul>
+                <div className="progress-item">
+                  <div className="progress-item-df">
+                    <p>Maintenance Support</p>
+                    <Image
+                      src={"1.png"}
+                      width={50}
+                      height={50}
+                      unoptimized
+                      alt="Maintenance"
+                    ></Image>
+                  </div>
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{ width: `${valueOne}%` }}
+                    ></div>
+                  </div>
+                </div>
+
+                <div className="progress-item">
+                  <div className="progress-item-df">
+                    <p>Cost-Effective</p>
+                    <Image
+                      src={"2.png"}
+                      width={50}
+                      height={50}
+                      unoptimized
+                      alt="Maintenance"
+                    ></Image>
+                  </div>
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{ width: `${valueTwo}%` }}
+                    ></div>
+                  </div>
+                </div>
+
+                <div className="progress-item">
+                  <div className="progress-item-df">
+                    <p>Swift Deliverance</p>
+                    <Image
+                      src={"3.png"}
+                      width={50}
+                      height={50}
+                      unoptimized
+                      alt="Maintenance"
+                    ></Image>
+                  </div>
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{ width: `${valueThree}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </ul>
+
+              <ul>
+                <div className="progress-item">
+                  <div className="progress-item-df">
+                    <p>Software Expertise</p>
+                    <Image
+                      src={"4.png"}
+                      width={50}
+                      height={50}
+                      unoptimized
+                      alt="Maintenance"
+                    ></Image>
+                  </div>
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{ width: `${valueFour}%` }}
+                    ></div>
+                  </div>
+                </div>
+                <div className="progress-item">
+                  <div className="progress-item-df">
+                    <p>Newest Technology</p>
+                    <Image
+                      src={"5.png"}
+                      width={50}
+                      height={50}
+                      unoptimized
+                      alt="Maintenance"
+                    ></Image>
+                  </div>
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{ width: `${valueFive}%` }}
+                    ></div>
+                  </div>
+                </div>
+                <div className="progress-item">
+                  <div className="progress-item-df">
+                    <p>23+ years of experience</p>
+                    <Image
+                      src={"6.png"}
+                      width={50}
+                      height={50}
+                      unoptimized
+                      alt="Maintenance"
+                    ></Image>
+                  </div>
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{ width: `${valueSix}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </ul>
+            </div>
+          </div>
+
+          <div className="feature-right">
+            <Image
+              src={"/feature-img1.jpg"}
+              alt="feature-img"
+              width={0}
+              height={0}
+              unoptimized
+              priority
+            ></Image>
+            <Image
+              src={"/feature-img3.jpg"}
+              alt="feature-img"
+              width={0}
+              height={0}
+              unoptimized
+              priority
+            ></Image>
+          </div>
+        </div>
+
         <div className="achievement-grid">
           <div className="achievement-card">
             <div className="icon-wrapper">
@@ -859,6 +1011,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+
       <div className="faqs">
         <div className="faq-accordion">
           <h2>
@@ -876,6 +1029,31 @@ export default function Home() {
               <div className={`faq-answer ${open === index ? "open" : ""}`}>
                 {faq.answer}
               </div>
+            </div>
+          ))}
+        </div>
+        <div className="faq-sketch"></div>
+      </div>
+
+      <div className="process-steps">
+        <h1 id="process-heading">
+          Our <span>Working Process</span>
+        </h1>
+        <div className="process-steps-df">
+          {steps.map((step, index) => (
+            <div
+              key={step.id}
+              className={`process-steps-box ${
+                activeStep === step.id ? "active" : ""
+              }`}
+              onClick={() => setActiveStep(step.id)}
+            >
+              <div className="process-steps-line"></div>{" "}
+              {/* Line between steps */}
+              <div className="process-steps-dot"></div>
+              <h1>{step.id}</h1>
+              <h3>{step.title}</h3>
+              <p>{step.description}</p>
             </div>
           ))}
         </div>
