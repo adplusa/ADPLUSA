@@ -10,11 +10,13 @@ import "keen-slider/keen-slider.min.css";
 import { gsap } from "gsap";
 import SplitType from "split-type";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ProgressBar } from "@progress/kendo-react-progressbars";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
+import { FaQuoteLeft } from "react-icons/fa";
+import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import { FaTrophy, FaUsers, FaStar, FaChartLine } from "react-icons/fa";
+// import { FaStar } from "react-icons/fa";
+// import { BsChevronLeft, BsChevronRight, BsQuote } from "react-icons/bs";
 
 const faqs = [
   {
@@ -70,10 +72,84 @@ const steps = [
   },
 ];
 
+const testimonials = [
+  {
+    id: 1,
+    name: "Sarah Johnson",
+    role: "CEO, Tech Innovations",
+    quote:
+      "Working with this team has transformed our business operations. Their dedication to excellence is unmatched.",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
+  },
+  {
+    id: 2,
+    name: "Michael Chen",
+    role: "Marketing Director, Global Solutions",
+    quote:
+      "The level of professionalism and creativity they bring to the table is exceptional. Truly outstanding results!",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
+  },
+  {
+    id: 3,
+    name: "Emma Thompson",
+    role: "Product Manager, Innovation Labs",
+    quote:
+      "Their innovative approach and attention to detail have significantly improved our product development process.",
+    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80",
+  },
+  {
+    id: 4,
+    name: "David Rodriguez",
+    role: "CTO, Future Systems",
+    quote:
+      "We've seen remarkable growth since partnering with them. Their technical expertise is truly world-class.",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
+  },
+  {
+    id: 5,
+    name: "Lisa Wang",
+    role: "Operations Head, Smart Solutions",
+    quote:
+      "The team's commitment to delivering quality solutions has exceeded our expectations consistently.",
+    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e",
+  },
+  {
+    id: 6,
+    name: "James Wilson",
+    role: "Founder, Digital Dynamics",
+    quote:
+      "Their strategic insights and implementation capabilities have been instrumental in our success.",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e",
+  },
+];
+
+const achievements = [
+  {
+    icon: FaTrophy,
+    title: "Awards Won",
+    value: "32+",
+    gradient: "blue-gradient",
+  },
+  {
+    icon: FaUsers,
+    title: "Happy Clients",
+    value: "2.4K",
+    gradient: "teal-gradient",
+  },
+  { icon: FaStar, title: "Reviews", value: "4.9", gradient: "orange-gradient" },
+  {
+    icon: FaChartLine,
+    title: "Growth Rate",
+    value: "89%",
+    gradient: "purple-gradient",
+  },
+];
+
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const [activeStep, setActiveStep] = useState(steps[0].id);
+  const [currentIndexTwo, setCurrentIndexTwo] = useState(0);
 
   const [logo, setLogo] = useState("/red-logo.png");
   const textRef = useRef(null);
@@ -86,7 +162,7 @@ export default function Home() {
   const [valueSix, setValueSix] = useState(0);
   const textRefs = useRef([]);
   const [open, setOpen] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(1);
   const [sliderRef] = useKeenSlider(
     {
       loop: true,
@@ -129,6 +205,18 @@ export default function Home() {
 
   const toggle = (index) => {
     setOpen(open === index ? null : index);
+  };
+
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === testimonials.length - 2 ? 0 : prevIndex + 1
+    );
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? testimonials.length - 3 : prevIndex - 1
+    );
   };
 
   useEffect(() => {
@@ -241,11 +329,152 @@ export default function Home() {
         <div className="overlay"></div>
       </div>
 
+      <div className="about-us">
+        <h2>
+          who <br />
+          we are?
+        </h2>
+        <div className="about-us-top">
+          <div className="about-us-top-left">
+            <h1>Allow us to introduce ourselves</h1>
+          </div>
+          <div className="about-us-top-right">
+            <h1>
+              <span className="asked">Welcome</span> to ADPL Consulting LLC
+            </h1>
+            <p>
+              ADPL CONSULTING LLC works as a leading Architectural and
+              Engineering outsource fraternity across India and the United
+              States of America.
+            </p>
+            <p>
+              We are a group of professionals with profound proficiency in the
+              field of architecture, engineering, designing, interiors, and
+              management. Having an established track record of serving more
+              than 150 clients in 535+ projects, our strict adherence to
+              international standards and global experience makes us the
+              paramount service provider in the market.
+            </p>
+            <span>
+              <div className="key-benefit">
+                <span>
+                  <ul>
+                    <li>Experienced Team</li>
+                    <li>Outsourcing</li>
+                    <li>Affordable Prices</li>
+                    <li>Best Quality</li>
+                  </ul>
+                </span>
+                <span>
+                  <ul>
+                    <li>Unique/Iconic Designs</li>
+                    <li>Strict Timelines</li>
+                    <li>Proficency with SketchUp Pro</li>
+                    <li>Excellence in Revit & BIM</li>
+                  </ul>
+                </span>
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="about-us-video-image">
+        <div className="about-us-img">
+          <Image
+            id="pawel"
+            src={"Pawel.avif"}
+            alt="about-us image"
+            width={0}
+            height={0}
+            unoptimized
+          ></Image>
+
+          <video muted autoPlay loop>
+            <source src="/architect2.mp4" type="video/mp4" />
+          </video>
+
+          <Image
+            id="vladimir"
+            src={"Vladimir.avif"}
+            alt="about-us image"
+            width={0}
+            height={0}
+            unoptimized
+          ></Image>
+        </div>
+        <div className="about-us-video-text">
+          <h1>Adplusa</h1>
+        </div>
+        <div className="who-we-are-btn">
+          <Link href="#">
+            <button>
+              <span>Who we are</span>
+            </button>
+          </Link>
+        </div>
+      </div>
+
+      <div className="cirlce-review">
+        <div className="cirlce-review-df">
+          <div className="circle-container">
+            <Image
+              src={logo}
+              alt="logo"
+              className="center-image"
+              width={120}
+              height={120}
+            />
+
+            <svg viewBox="0 0 250 250" className="circle-text" ref={textRef}>
+              <defs>
+                <path
+                  id="circlePath"
+                  d="M 125, 125 m -100, 0 a 100,100 0 1,1 200,0 a 100,100 0 1,1 -200,0"
+                />
+              </defs>
+              <text
+                fontSize="20"
+                fontWeight="bold"
+                letterSpacing="3"
+                fill="#c94446"
+              >
+                <textPath href="#circlePath" startOffset="0%">
+                  🔹 ADPL CONSULTING LLC 🔹 ARCHITECTURAL & ENGINEERING 🔹
+                </textPath>
+              </text>
+            </svg>
+          </div>
+
+          <div className="achievements-container">
+            <h2 className="achievements-title">Our Achievements</h2>
+            <div className="achievements-grid">
+              {achievements.map((achievement, index) => (
+                <div
+                  key={index}
+                  className={`achievement-card ${achievement.gradient}`}
+                >
+                  <div className="achievement-content">
+                    <div className="achievement-text">
+                      <h3>{achievement.title}</h3>
+                      <p>{achievement.value}</p>
+                    </div>
+                    <achievement.icon className="achievement-icon" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="service-two">
         <div className="service-two-top">
           <div className="service-two-top-left">
             <h5>Company Services</h5>
-            <h1>We specialize in these fields.</h1>
+            <h1>
+              We <span className="asked">specialize</span> in these fields.
+            </h1>
           </div>
           <div className="service-two-top-right">
             <p>
@@ -387,209 +616,6 @@ export default function Home() {
           </div>
           <div className="services-one_circle-color"></div>
         </div>
-        {/* <div className="achievement-grid">
-          <div className="achievement-card">
-            <div className="icon-wrapper">
-              <svg
-                width="30px"
-                height="64px"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M3 21V3H21V21H16V17H8V21H3Z"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M8 7H16M8 11H16M8 15H16"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <h2 id="target-one">4+</h2>
-            <p>Years of Excellence</p>
-          </div>
-
-          <div className="achievement-card">
-            <div className="icon-wrapper">
-              <svg
-                width="30px"
-                height="64px"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 2L14.09 8.26L21 9.27L15.5 13.97L16.82 21L12 17.77L7.18 21L8.5 13.97L3 9.27L9.91 8.26L12 2Z"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <h2 id="target-three">22</h2>
-            <p>Awards Won</p>
-          </div>
-
-          <div className="achievement-card">
-            <div className="icon-wrapper">
-              <svg
-                width="30px"
-                height="64px"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M3 21V5L12 2L21 5V21H3Z"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M12 2V12"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M9 21V14H15V21"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <h2 id="target-two">224</h2>
-            <p>Projects Completed</p>
-          </div>
-        </div> */}
-      </div>
-
-      <div className="about-us">
-        <h2>
-          who <br />
-          we are?
-        </h2>
-        <div className="about-us-top">
-          <div className="about-us-top-left">
-            <h1>Allow us to introduce ourselves</h1>
-          </div>
-          <div className="about-us-top-right">
-            <h1>
-              <span className="asked">Welcome</span> to ADPL Consulting LLC
-            </h1>
-            <p>
-              ADPL CONSULTING LLC works as a leading Architectural and
-              Engineering outsource fraternity across India and the United
-              States of America.
-            </p>
-            <p>
-              We are a group of professionals with profound proficiency in the
-              field of architecture, engineering, designing, interiors, and
-              management. Having an established track record of serving more
-              than 150 clients in 535+ projects, our strict adherence to
-              international standards and global experience makes us the
-              paramount service provider in the market.
-            </p>
-            <span>
-              <div className="key-benefit">
-                <span>
-                  <ul>
-                    <li>Experienced Team</li>
-                    <li>Outsourcing</li>
-                    <li>Affordable Prices</li>
-                    <li>Best Quality</li>
-                  </ul>
-                </span>
-                <span>
-                  <ul>
-                    <li>Unique/Iconic Designs</li>
-                    <li>Strict Timelines</li>
-                    <li>Proficency with SketchUp Pro</li>
-                    <li>Excellence in Revit & BIM</li>
-                  </ul>
-                </span>
-              </div>
-            </span>
-          </div>
-        </div>
-
-        <div className="circle-container">
-          <Image
-            src={logo}
-            alt="logo"
-            className="center-image"
-            width={120}
-            height={120}
-          />
-
-          {/* Rotating Circular Text */}
-          <svg viewBox="0 0 250 250" className="circle-text" ref={textRef}>
-            <defs>
-              <path
-                id="circlePath"
-                d="M 125, 125 m -100, 0 a 100,100 0 1,1 200,0 a 100,100 0 1,1 -200,0"
-              />
-            </defs>
-            <text
-              fontSize="20"
-              fontWeight="bold"
-              letterSpacing="3"
-              fill="#c94446"
-            >
-              <textPath href="#circlePath" startOffset="0%">
-                🔹 ADPL CONSULTING LLC 🔹 ARCHITECTURAL & ENGINEERING 🔹
-              </textPath>
-            </text>
-          </svg>
-        </div>
-      </div>
-      <div className="about-us-video-image">
-        <div className="about-us-img">
-          <Image
-            id="pawel"
-            src={"Pawel.avif"}
-            alt="about-us image"
-            width={0}
-            height={0}
-            unoptimized
-          ></Image>
-
-          <video muted autoPlay loop>
-            <source src="/architect2.mp4" type="video/mp4" />
-          </video>
-
-          <Image
-            id="vladimir"
-            src={"Vladimir.avif"}
-            alt="about-us image"
-            width={0}
-            height={0}
-            unoptimized
-          ></Image>
-        </div>
-        <div className="about-us-video-text">
-          <h1>Adplusa</h1>
-        </div>
-        <div className="who-we-are-btn">
-          <Link href="#">
-            <button>
-              <span>Who we are</span>
-            </button>
-          </Link>
-        </div>
       </div>
 
       <div className="strip-text">
@@ -600,183 +626,6 @@ export default function Home() {
           </p>
         </div>
       </div>
-
-      {/* <div className="what-we-offer">
-        <div className="what-we-offer-text">
-          <h1>Get Quote</h1>
-        </div>
-
-        <div className="what-we-offer-images">
-          <div className="what-we-offer-img" id="what-we-offer-img-one">
-            <div className="what-we-offer-overlay"></div>
-            <Image
-              src={"/PORTFOLIO-1.avif"}
-              width={0}
-              height={0}
-              alt="Offer Image"
-              unoptimized
-            ></Image>
-            <div className="what-we-offer-content">
-              <h1>Get Quote: CAD Services</h1>
-              <p>
-                Permit Drawings / Documentation - MEP Services - Fire Fighting
-                Drawings - PDF to CAD
-              </p>
-              <div className="what-we-offer-content-btn">
-                <span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-arrow-right"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-                    />
-                  </svg>
-                </span>
-
-                <button>Get a Quote</button>
-              </div>
-            </div>
-          </div>
-          <div className="what-we-offer-img" id="what-we-offer-img-one">
-            <div className="what-we-offer-overlay"></div>
-
-            <Image
-              src={"/PORTFOLIO-2.avif"}
-              width={0}
-              height={0}
-              alt="Offer Image"
-              unoptimized
-            ></Image>
-            <div className="what-we-offer-content">
-              <h1>Get Quote: BIM Services</h1>
-              <p>
-                BIM Services - Building information Modulation - Cost & Estimate
-                - BOQ - Energy Analysis
-              </p>
-              <div className="what-we-offer-content-btn">
-                <span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-arrow-right"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-                    />
-                  </svg>
-                </span>
-
-                <button>Get a Quote</button>
-              </div>
-            </div>
-          </div>
-          <div className="what-we-offer-img" id="what-we-offer-img-one">
-            <div className="what-we-offer-overlay"></div>
-
-            <video muted autoPlay loop>
-              <source src="/PORTFOLIO-3.mp4" type="video/mp4" />
-            </video>
-            <div className="what-we-offer-content">
-              <h1>2D & 3D Rendering</h1>
-              <p>
-                2D Presentation Drawings - Visualization - 3D Visualization - 3D
-                Modeling & rendering - Walkthrough
-              </p>
-              <div className="what-we-offer-content-btn">
-                <span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-arrow-right"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-                    />
-                  </svg>
-                </span>
-
-                <button>Get a Quote</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
-
-      {/* <div className="expertise">
-        <h1>Our Services</h1>
-        <ul>
-          <li className="right-side-li" id="first-service">
-            <div className="link-wrapper" id="first-wrapper">
-              <a href="#">BIM.</a>
-              <p className="link-para">
-                Our BIM team delivers holistic solutions with
-                <br /> architects, engineers, and designers.
-              </p>
-            </div>
-          </li>
-
-          <li className="left-side-li" id="second-service">
-            <div className="link-wrapper" id="left-wrapper">
-              <a href="#">CAD.</a>
-              <p className="link-para">
-                We offer architectural and structural design services
-                <br /> for all project stages.
-              </p>
-            </div>
-          </li>
-
-          <li id="service-three">
-            <div className="link-wrapper" id="third-wrapper">
-              <a href="#">Permit Drawing.</a>
-              <p className="link-para">
-                Contact us to simplify authority approvals.
-              </p>
-            </div>
-          </li>
-
-          <li className="left-side-li" id="service-four">
-            <div className="link-wrapper" id="four-wrapper">
-              <a href="#">3D Visualization.</a>
-              <p className="link-para">
-                Experience your building in 3D with our expert team.
-              </p>
-            </div>
-          </li>
-
-          <li id="service-five">
-            <div className="link-wrapper" id="five-wrapper">
-              <a href="#">Prsentation.</a>
-              <p className="link-para">
-                We provide cost-effective, compelling research data.
-              </p>
-            </div>
-          </li>
-
-          <li className="left-side-li" id="six-service">
-            <div className="link-wrapper" id="left-wrapper">
-              <a href="#">MEP.</a>
-              <p className="link-para">
-                We offer reliable structural, mechanical, and
-                <br /> electrical engineering solutions.
-              </p>
-            </div>
-          </li>
-        </ul>
-      </div> */}
 
       <div className="feature-section">
         <div className="feature-section-df">
@@ -925,95 +774,6 @@ export default function Home() {
             ></Image>
           </div>
         </div>
-
-        <div className="achievement-grid">
-          <div className="achievement-card">
-            <div className="icon-wrapper">
-              <svg
-                width="30px"
-                height="64px"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M3 21V3H21V21H16V17H8V21H3Z"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M8 7H16M8 11H16M8 15H16"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <h2 id="target-one">4+</h2>
-            <p>Years of Excellence</p>
-          </div>
-
-          <div className="achievement-card">
-            <div className="icon-wrapper">
-              <svg
-                width="30px"
-                height="64px"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 2L14.09 8.26L21 9.27L15.5 13.97L16.82 21L12 17.77L7.18 21L8.5 13.97L3 9.27L9.91 8.26L12 2Z"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <h2 id="target-three">22</h2>
-            <p>Awards Won</p>
-          </div>
-
-          <div className="achievement-card">
-            <div className="icon-wrapper">
-              <svg
-                width="30px"
-                height="64px"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M3 21V5L12 2L21 5V21H3Z"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M12 2V12"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M9 21V14H15V21"
-                  stroke="#222"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <h2 id="target-two">224</h2>
-            <p>Projects Completed</p>
-          </div>
-        </div>
       </div>
 
       <div className="process-steps">
@@ -1063,29 +823,52 @@ export default function Home() {
         <div className="faq-sketch"></div>
       </div>
 
-      <section class="testimonial-section">
-        <div class="testimonial-header">
-          <h2>What Our Clients Say</h2>
-          <p>See how we've helped businesses achieve their goals.</p>
+      {/* <section className="testimonial-container">
+        <h2 className="testimonial-title">
+          What Our <span className="highlight">Clients</span> Say
+        </h2>
+
+        <div className="testimonial-slider">
+          <button onClick={prevSlide} className="nav-button left">
+            <BsChevronLeft />
+          </button>
+
+          <div className="testimonial-wrapper">
+            {testimonials
+              .slice(currentIndex, currentIndex + 3)
+              .map((review, index) => (
+                <div
+                  key={review.id}
+                  className={`testimonial-card ${index === 1 ? "active" : ""}`}
+                >
+                  <div className="image-wrapper">
+                    <img src={review.image} alt={review.name} />
+                    <span className="quote-icon">
+                      <BsQuote />
+                    </span>
+                  </div>
+                  <blockquote>{review.quote}</blockquote>
+                  <h4>{review.name}</h4>
+                  <p>{review.role}</p>
+                </div>
+              ))}
+          </div>
+
+          <button onClick={nextSlide} className="nav-button right">
+            <BsChevronRight />
+          </button>
         </div>
 
-        <div class="testimonial-slider">
-          <div class="testimonial-slide">
-            <div class="testimonial-card">
-              <img
-                src="image1.jpg"
-                alt="Client Name"
-                class="testimonial-image-two"
-              />
-              <p class="testimonial-feedback">
-                "Great service, highly recommend!"
-              </p>
-              <h4 class="testimonial-name">Client Name</h4>
-              <span class="testimonial-role">CEO, Company</span>
-            </div>
-          </div>
+        <div className="testimonial-dots">
+          {[...Array(testimonials.length - 2)].map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`dot ${currentIndex === index ? "active-dot" : ""}`}
+            />
+          ))}
         </div>
-      </section>
+      </section> */}
 
       <div className="reviews-section">
         <div ref={sliderRef} className="keen-slider">
@@ -1119,94 +902,6 @@ export default function Home() {
                     <p className="designation">Founder</p>
                   </div>
                 </div>
-                {/* <div className="achievement-grid">
-                  <div className="achievement-card">
-                    <div className="icon-wrapper">
-                      <svg
-                        width="30px"
-                        height="64px"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M3 21V3H21V21H16V17H8V21H3Z"
-                          stroke="#222"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M8 7H16M8 11H16M8 15H16"
-                          stroke="#222"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </div>
-                    <h2 id="target-one">4+</h2>
-                    <p>Years of Excellence</p>
-                  </div>
-
-                  <div className="achievement-card">
-                    <div className="icon-wrapper">
-                      <svg
-                        width="30px"
-                        height="64px"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M12 2L14.09 8.26L21 9.27L15.5 13.97L16.82 21L12 17.77L7.18 21L8.5 13.97L3 9.27L9.91 8.26L12 2Z"
-                          stroke="#222"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </div>
-                    <h2 id="target-three">22</h2>
-                    <p>Awards Won</p>
-                  </div>
-
-                  <div className="achievement-card">
-                    <div className="icon-wrapper">
-                      <svg
-                        width="30px"
-                        height="64px"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M3 21V5L12 2L21 5V21H3Z"
-                          stroke="#222"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M12 2V12"
-                          stroke="#222"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M9 21V14H15V21"
-                          stroke="#222"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </div>
-                    <h2 id="target-two">224</h2>
-                    <p>Projects Completed</p>
-                  </div>
-                </div> */}
               </div>
               <div className="testimonial-image">
                 <Image
