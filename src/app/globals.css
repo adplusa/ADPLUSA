@@ -12,6 +12,10 @@
   --bg-image-banner-one: url("/banner-2.jpg");
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
   font-family: "Lato-light";
   src: url("/Lato/Lato-Light.ttf");

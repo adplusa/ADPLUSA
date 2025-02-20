@@ -15,8 +15,8 @@ import "swiper/css/pagination";
 import { FaQuoteLeft } from "react-icons/fa";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { FaTrophy, FaUsers, FaStar, FaChartLine } from "react-icons/fa";
-// import { FaStar } from "react-icons/fa";
-// import { BsChevronLeft, BsChevronRight, BsQuote } from "react-icons/bs";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import "./globals.css";
 
 const faqs = [
   {
@@ -72,57 +72,6 @@ const steps = [
   },
 ];
 
-const testimonials = [
-  {
-    id: 1,
-    name: "Sarah Johnson",
-    role: "CEO, Tech Innovations",
-    quote:
-      "Working with this team has transformed our business operations. Their dedication to excellence is unmatched.",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
-  },
-  {
-    id: 2,
-    name: "Michael Chen",
-    role: "Marketing Director, Global Solutions",
-    quote:
-      "The level of professionalism and creativity they bring to the table is exceptional. Truly outstanding results!",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
-  },
-  {
-    id: 3,
-    name: "Emma Thompson",
-    role: "Product Manager, Innovation Labs",
-    quote:
-      "Their innovative approach and attention to detail have significantly improved our product development process.",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80",
-  },
-  {
-    id: 4,
-    name: "David Rodriguez",
-    role: "CTO, Future Systems",
-    quote:
-      "We've seen remarkable growth since partnering with them. Their technical expertise is truly world-class.",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
-  },
-  {
-    id: 5,
-    name: "Lisa Wang",
-    role: "Operations Head, Smart Solutions",
-    quote:
-      "The team's commitment to delivering quality solutions has exceeded our expectations consistently.",
-    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e",
-  },
-  {
-    id: 6,
-    name: "James Wilson",
-    role: "Founder, Digital Dynamics",
-    quote:
-      "Their strategic insights and implementation capabilities have been instrumental in our success.",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e",
-  },
-];
-
 const achievements = [
   {
     icon: FaTrophy,
@@ -145,11 +94,36 @@ const achievements = [
   },
 ];
 
+const testimonials = [
+  {
+    name: "John Doe",
+    position: "CEO, CompanyX",
+    image: "/john.jpg",
+    quote:
+      "This company transformed our business with their outstanding services. Highly recommended!",
+  },
+  {
+    name: "Sarah Williams",
+    position: "Marketing Head, BrandY",
+    image: "/sarah.jpg",
+    quote:
+      "The team was professional, skilled, and delivered beyond our expectations!",
+  },
+  {
+    name: "Michael Lee",
+    position: "Founder, StartupZ",
+    image: "/michael.jpg",
+    quote:
+      "Their expertise helped us scale faster than we imagined. A game changer!",
+  },
+];
+
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const [activeStep, setActiveStep] = useState(steps[0].id);
-  const [currentIndexTwo, setCurrentIndexTwo] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [imageSrc, setImageSrc] = useState("/process-img.jpg");
 
   const [logo, setLogo] = useState("/red-logo.png");
   const textRef = useRef(null);
@@ -162,7 +136,6 @@ export default function Home() {
   const [valueSix, setValueSix] = useState(0);
   const textRefs = useRef([]);
   const [open, setOpen] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(1);
   const [sliderRef] = useKeenSlider(
     {
       loop: true,
@@ -207,16 +180,16 @@ export default function Home() {
     setOpen(open === index ? null : index);
   };
 
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === testimonials.length - 2 ? 0 : prevIndex + 1
-    );
+  const cardOneHandler = () => {
+    setImageSrc("/process-img.jpg");
   };
 
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? testimonials.length - 3 : prevIndex - 1
-    );
+  const cardTwoHandler = () => {
+    setImageSrc("/process-img2.jpg");
+  };
+
+  const cardThreeHandler = () => {
+    setImageSrc("/process-img3.jpg");
   };
 
   useEffect(() => {
@@ -320,6 +293,19 @@ export default function Home() {
       duration: 8,
       ease: "linear",
     });
+
+    gsap.to(".white-box", {
+      y: 10,
+      rotation: 0, // Tilts left down, right up
+      // duration: 7,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: ".white-box",
+        start: "top 65%",
+        end: "top 50%",
+        scrub: true,
+      },
+    });
   }, []);
 
   return (
@@ -415,56 +401,12 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="cirlce-review">
-        <div className="cirlce-review-df">
-          <div className="circle-container">
-            <Image
-              src={logo}
-              alt="logo"
-              className="center-image"
-              width={120}
-              height={120}
-            />
-
-            <svg viewBox="0 0 250 250" className="circle-text" ref={textRef}>
-              <defs>
-                <path
-                  id="circlePath"
-                  d="M 125, 125 m -100, 0 a 100,100 0 1,1 200,0 a 100,100 0 1,1 -200,0"
-                />
-              </defs>
-              <text
-                fontSize="20"
-                fontWeight="bold"
-                letterSpacing="3"
-                fill="#c94446"
-              >
-                <textPath href="#circlePath" startOffset="0%">
-                  🔹 ADPL CONSULTING LLC 🔹 ARCHITECTURAL & ENGINEERING 🔹
-                </textPath>
-              </text>
-            </svg>
-          </div>
-
-          <div className="achievements-container">
-            <h2 className="achievements-title">Our Achievements</h2>
-            <div className="achievements-grid">
-              {achievements.map((achievement, index) => (
-                <div
-                  key={index}
-                  className={`achievement-card ${achievement.gradient}`}
-                >
-                  <div className="achievement-content">
-                    <div className="achievement-text">
-                      <h3>{achievement.title}</h3>
-                      <p>{achievement.value}</p>
-                    </div>
-                    <achievement.icon className="achievement-icon" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+      <div className="strip-text">
+        <div className="marquee">
+          <p>
+            ADPL CONSULTING LLC works as a leading Architectural and Engineering
+            outsource fraternity across India and the United States of America.
+          </p>
         </div>
       </div>
 
@@ -618,12 +560,64 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="strip-text">
-        <div className="marquee">
-          <p>
-            ADPL CONSULTING LLC works as a leading Architectural and Engineering
-            outsource fraternity across India and the United States of America.
-          </p>
+      <div className="cirlce-review">
+        <div className="cirlce-review-df">
+          <div className="circle-container">
+            <Image
+              src="/flip-two.png"
+              alt="logo"
+              className="center-image"
+              width={120}
+              height={120}
+            />
+
+            <svg viewBox="0 0 250 250" className="circle-text" ref={textRef}>
+              <defs>
+                <path
+                  id="circlePath"
+                  d="M 125, 125 m -100, 0 a 100,100 0 1,1 200,0 a 100,100 0 1,1 -200,0"
+                />
+              </defs>
+              <text
+                fontSize="20"
+                fontWeight="bold"
+                letterSpacing="3"
+                fill="#c94446"
+              >
+                <textPath href="#circlePath" startOffset="0%">
+                  🔹 ADPL CONSULTING LLC 🔹 ARCHITECTURAL & ENGINEERING 🔹
+                </textPath>
+              </text>
+            </svg>
+          </div>
+
+          <div className="achievements-container">
+            <h2 className="achievements-title">
+              Our <span className="asked">Achievements</span>
+            </h2>
+            <div className="achievements-grid">
+              {achievements.map((achievement, index) => (
+                <div
+                  key={index}
+                  className={`achievement-card ${achievement.gradient}`}
+                >
+                  <div className="achievement-content">
+                    <div className="achievement-text">
+                      <h3>{achievement.title}</h3>
+                      {/* <p>{achievement.value}</p> */}
+                      <achievement.icon className="achievement-icon" />
+                    </div>
+                  </div>
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{ width: `${valueOne}%` }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -776,29 +770,68 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="process-steps">
-        <h1 id="process-heading">
-          Our <span>Working Process</span>
-        </h1>
-        <div className="process-steps-df">
-          {steps.map((step, index) => (
-            <div
-              key={step.id}
-              className={`process-steps-box ${
-                activeStep === step.id ? "active" : ""
-              }`}
-              onClick={() => setActiveStep(step.id)}
-            >
-              <div className="process-steps-line"></div>{" "}
-              {/* Line between steps */}
-              <div className="process-steps-dot"></div>
-              <h1>{step.id}</h1>
-              <h3>{step.title}</h3>
-              <p>{step.description}</p>
+      <section className="rto-section">
+        <div className="background-process-img"></div>
+        <h2 className="heading">
+          Our <span className="asked">Working</span> Process
+        </h2>
+        <p className="subheading">
+          From concept to completion, we transform ideas into functional and
+          <br /> aesthetic architectural designs
+        </p>
+
+        <div className="content">
+          {/* Left Content */}
+          <div className="left">
+            <div className="card" onClick={cardOneHandler}>
+              <div className="number">1</div>
+              <div>
+                <h3 className="card-title">Meet Customers</h3>
+                <p className="card-text">
+                  We introduce and present ourselves. Our priority is to listen
+                  and understand the client’s vision for clearer insight about
+                  the project.
+                </p>
+              </div>
             </div>
-          ))}
+
+            <div className="card" onClick={cardTwoHandler}>
+              <div className="number">2</div>
+              <div>
+                <h3 className="card-title">Planning & Research</h3>
+                <p className="card-text">
+                  With the help of research and critical analysis, we prepare
+                  the first set of the drawings taking into account the
+                  requirements of the clients.
+                </p>
+              </div>
+            </div>
+
+            <div className="card" onClick={cardThreeHandler}>
+              <div className="number">3</div>
+              <div>
+                <h3 className="card-title">Finalize the Design</h3>
+                <p className="card-text">
+                  The feedback of the client is solicited and integrated. The
+                  changes are incorporated and the final set of completed
+                  drawings are prepared.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Content */}
+          <div className="right">
+            <Image
+              src={imageSrc}
+              alt="Process Image"
+              width={0}
+              height={0}
+              unoptimized
+            />
+          </div>
         </div>
-      </div>
+      </section>
 
       <div className="faqs">
         <div className="faq-accordion">
@@ -822,53 +855,6 @@ export default function Home() {
         </div>
         <div className="faq-sketch"></div>
       </div>
-
-      {/* <section className="testimonial-container">
-        <h2 className="testimonial-title">
-          What Our <span className="highlight">Clients</span> Say
-        </h2>
-
-        <div className="testimonial-slider">
-          <button onClick={prevSlide} className="nav-button left">
-            <BsChevronLeft />
-          </button>
-
-          <div className="testimonial-wrapper">
-            {testimonials
-              .slice(currentIndex, currentIndex + 3)
-              .map((review, index) => (
-                <div
-                  key={review.id}
-                  className={`testimonial-card ${index === 1 ? "active" : ""}`}
-                >
-                  <div className="image-wrapper">
-                    <img src={review.image} alt={review.name} />
-                    <span className="quote-icon">
-                      <BsQuote />
-                    </span>
-                  </div>
-                  <blockquote>{review.quote}</blockquote>
-                  <h4>{review.name}</h4>
-                  <p>{review.role}</p>
-                </div>
-              ))}
-          </div>
-
-          <button onClick={nextSlide} className="nav-button right">
-            <BsChevronRight />
-          </button>
-        </div>
-
-        <div className="testimonial-dots">
-          {[...Array(testimonials.length - 2)].map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentIndex(index)}
-              className={`dot ${currentIndex === index ? "active-dot" : ""}`}
-            />
-          ))}
-        </div>
-      </section> */}
 
       <div className="reviews-section">
         <div ref={sliderRef} className="keen-slider">
@@ -961,6 +947,67 @@ export default function Home() {
         </div>
       </div>
 
+      <section className="contact-us">
+        <div className="contact-container">
+          <div className="contact-us-df">
+            <div className="contact-left">
+              <Image
+                src="/contact-img.webp"
+                width={0}
+                height={0}
+                alt="footer-img"
+                unoptimized
+              ></Image>
+            </div>
+            <div className="contact-right">
+              <h1>
+                Begin a business journey that transitions to new heights every
+                day!
+              </h1>
+              <p>
+                Sign up today to enter the world of seamless payments and
+                deliver an outstanding customer experience
+              </p>
+              <div className="contact-btn">
+                <span>
+                  <button>Getting Started</button>
+                </span>
+                <span>
+                  <button>Contact Us</button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* <section className="testimonial-section">
+        <div className="container">
+          <h2 className="section-title">What Our Clients Say</h2>
+
+          <div className="testimonials">
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="testimonial-card">
+                <div className="testimonial-content">
+                  <p className="quote">“{testimonial.quote}”</p>
+                </div>
+                <div className="testimonial-author">
+                  <img
+                    src={testimonial.image}
+                    alt={testimonial.name}
+                    className="author-image"
+                  />
+                  <div>
+                    <h4 className="author-name">{testimonial.name}</h4>
+                    <p className="author-position">{testimonial.position}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section> */}
+
       <div className="footer">
         <div className="footer-logo">
           <Image
@@ -1008,7 +1055,10 @@ export default function Home() {
           <hr className="blue-border" />
         </span>
 
-        <p id="copyright">Copyright Adplusa</p>
+        <span className="copy-designed">
+          <p id="copyright">Copyright Adplusa</p>
+          <p>Designed By Quite Good</p>
+        </span>
       </div>
     </>
   );

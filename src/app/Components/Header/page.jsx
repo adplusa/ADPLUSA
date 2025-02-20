@@ -11,13 +11,19 @@ const Header = () => {
     element.classList.toggle("dark-mode");
 
     const div = document.querySelector(".rounder-div-changer");
-    console.log("naveen");
-    if (div.style.marginLeft === "40px") {
+    const onBtn = document.getElementById("on");
+    const offBtn = document.getElementById("off");
+
+    if (div.style.marginLeft === "31px") {
       div.style.marginLeft = "0px";
       div.style.backgroundColor = "#000";
+      onBtn.style.color = "grey";
+      offBtn.style.color = "#000";
     } else {
-      div.style.marginLeft = "40px";
+      div.style.marginLeft = "31px";
       div.style.backgroundColor = "#fff";
+      onBtn.style.color = "#fff";
+      offBtn.style.color = "grey";
     }
   };
 
@@ -47,7 +53,7 @@ const Header = () => {
     <>
       <div className="header">
         <div className="header-df">
-          <div className="logo">
+          {/* <div className="logo">
             <Image
               src={logo}
               alt="logo"
@@ -56,31 +62,31 @@ const Header = () => {
               height={0}
               unoptimized
             ></Image>
+          </div> */}
+          <div className="flip-logo">
+            <span className="flip-container">
+              <Image
+                id="flip-one"
+                className="flip-front"
+                src={"/flip-one.jpg"}
+                alt="logo"
+                width={100}
+                height={100}
+                unoptimized
+              />
+              <Image
+                id="flip-two"
+                className="flip-back"
+                src={"/flip-two.png"}
+                alt="logo"
+                width={100}
+                height={100}
+                unoptimized
+              />
+            </span>
           </div>
 
           {/* <div className="flip-logo">
-            <span>
-              <Image
-                id="flip-two"
-                src={"/flip-two.png"}
-                alt="logo"
-                width={0}
-                height={0}
-                unoptimized
-              ></Image>
-            </span>
-            <span>
-              <Image
-                id="flip-one"
-                src={"/flip-one.png"}
-                alt="logo"
-                width={0}
-                height={0}
-                unoptimized
-              ></Image>
-            </span>
-          </div> */}
-          <div className="flip-logo">
             <span className="flip-container">
               <Image
                 id="flip-one"
@@ -101,7 +107,7 @@ const Header = () => {
                 unoptimized
               />
             </span>
-          </div>
+          </div> */}
 
           <div className="menu-color">
             <div className="menu">
@@ -119,13 +125,11 @@ const Header = () => {
                 />
               </svg>
             </div>
-            <div className="color-changer">
-              <h3>ON</h3>
+
+            <div className="color-changer" onClick={colorChangerHandle}>
+              <h3 id="on">ON</h3>
               <div className="day-night">
-                <div
-                  className="rounder-div-changer dark-mode"
-                  onClick={colorChangerHandle}
-                ></div>
+                <div className="rounder-div-changer dark-mode"></div>
                 <svg
                   id="night"
                   width="15"
@@ -194,7 +198,7 @@ const Header = () => {
                   ></path>
                 </svg>
               </div>
-              <h3>OFF</h3>
+              <h3 id="off">OFF</h3>
             </div>
           </div>
         </div>
