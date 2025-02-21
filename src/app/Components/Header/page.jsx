@@ -5,7 +5,7 @@ import gsap from "gsap";
 import Image from "next/image";
 
 const Header = () => {
-  const [logo, setLogo] = useState("/red-logo.png");
+  const [logo, setLogo] = useState("/flip-one.png");
   const colorChangerHandle = () => {
     let element = document.body;
     element.classList.toggle("dark-mode");
@@ -31,8 +31,8 @@ const Header = () => {
     const updateLogo = () => {
       setLogo(
         document.body.classList.contains("dark-mode")
-          ? "/white-logo.png"
-          : "/red-logo.png"
+          ? "/flip-oneee.png"
+          : "/flip-one.jpg"
       );
     };
 
@@ -53,22 +53,12 @@ const Header = () => {
     <>
       <div className="header">
         <div className="header-df">
-          {/* <div className="logo">
-            <Image
-              src={logo}
-              alt="logo"
-              id="logo"
-              width={0}
-              height={0}
-              unoptimized
-            ></Image>
-          </div> */}
           <div className="flip-logo">
             <span className="flip-container">
               <Image
                 id="flip-one"
                 className="flip-front"
-                src={"/flip-one.jpg"}
+                src={logo}
                 alt="logo"
                 width={100}
                 height={100}
@@ -85,29 +75,6 @@ const Header = () => {
               />
             </span>
           </div>
-
-          {/* <div className="flip-logo">
-            <span className="flip-container">
-              <Image
-                id="flip-one"
-                className="flip-front"
-                src={"/flip-one.png"}
-                alt="logo"
-                width={100}
-                height={100}
-                unoptimized
-              />
-              <Image
-                id="flip-two"
-                className="flip-back"
-                src={"/flip-two.png"}
-                alt="logo"
-                width={100}
-                height={100}
-                unoptimized
-              />
-            </span>
-          </div> */}
 
           <div className="menu-color">
             <div className="menu">

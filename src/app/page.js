@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "./page.css";
 import Header from "./Components/Header/page";
 import { CountUp } from "countup.js";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
@@ -15,8 +15,39 @@ import "swiper/css/pagination";
 import { FaQuoteLeft } from "react-icons/fa";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { FaTrophy, FaUsers, FaStar, FaChartLine } from "react-icons/fa";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import "./globals.css";
+
+const testimonials = [
+  {
+    name: "Hannah Schmitt",
+    role: "Lead designer",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus maecenas.",
+    image: "https://randomuser.me/api/portraits/women/1.jpg",
+  },
+  {
+    name: "Hannah Schmitt",
+    role: "Lead designer",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus maecenas. Suspendisse sed magna eget nibh in turpis. Consequat duis diam lacus arcu.",
+    image: "https://randomuser.me/api/portraits/women/2.jpg",
+  },
+  {
+    name: "Hannah Schmitt",
+    role: "Lead designer",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus maecenas.",
+    image: "https://randomuser.me/api/portraits/women/3.jpg",
+  },
+  {
+    name: "Hannah Schmitt",
+    role: "Lead designer",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus maecenas.",
+    image: "https://randomuser.me/api/portraits/women/3.jpg",
+  },
+  {
+    name: "Hannah Schmitt",
+    role: "Lead designer",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus maecenas.",
+    image: "https://randomuser.me/api/portraits/women/3.jpg",
+  },
+];
 
 const faqs = [
   {
@@ -94,36 +125,15 @@ const achievements = [
   },
 ];
 
-const testimonials = [
-  {
-    name: "John Doe",
-    position: "CEO, CompanyX",
-    image: "/john.jpg",
-    quote:
-      "This company transformed our business with their outstanding services. Highly recommended!",
-  },
-  {
-    name: "Sarah Williams",
-    position: "Marketing Head, BrandY",
-    image: "/sarah.jpg",
-    quote:
-      "The team was professional, skilled, and delivered beyond our expectations!",
-  },
-  {
-    name: "Michael Lee",
-    position: "Founder, StartupZ",
-    image: "/michael.jpg",
-    quote:
-      "Their expertise helped us scale faster than we imagined. A game changer!",
-  },
-];
-
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
+  const [index, setIndex] = useState(0);
   const [activeStep, setActiveStep] = useState(steps[0].id);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imageSrc, setImageSrc] = useState("/process-img.jpg");
+
+  const [current, setCurrent] = useState(0);
 
   const [logo, setLogo] = useState("/red-logo.png");
   const textRef = useRef(null);
@@ -171,6 +181,26 @@ export default function Home() {
       },
     ]
   );
+
+  const nextSlide = () => {
+    setCurrent((prev) => (prev >= testimonials.length - 3 ? 0 : prev + 1));
+  };
+
+  const prevSlide = () => {
+    setCurrent((prev) => (prev <= 0 ? testimonials.length - 3 : prev - 1));
+  };
+
+  useEffect(() => {
+    const interval = setInterval(nextSlide, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const slider = document.querySelector(".testimonial-slider");
+    if (slider) {
+      slider.style.transition = "all 0.5s ease";
+    }
+  }, [current]);
 
   const handleClick = () => {
     setActive(!active);
@@ -295,9 +325,9 @@ export default function Home() {
     });
 
     gsap.to(".white-box", {
-      y: 10,
-      rotation: 0, // Tilts left down, right up
-      // duration: 7,
+      rotateX: 5, // Slight tilt effect
+      rotateZ: 3, // Subtle rotation along Z-axis
+      y: 10, // Moves up and down
       ease: "power2.out",
       scrollTrigger: {
         trigger: ".white-box",
@@ -947,6 +977,70 @@ export default function Home() {
         </div>
       </div>
 
+      <div className="testimonial-container-two">
+        <div className="testimonial-container-two-text-center">
+          <svg
+            onClick={prevSlide}
+            className="prev"
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fillRule="evenodd"
+              d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
+            />
+          </svg>
+          <h2>What Our Clients Say About Us</h2>
+          <svg
+            onClick={nextSlide}
+            className="next"
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fillRule="evenodd"
+              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+            />
+          </svg>
+        </div>
+        <div className="dots">
+          {testimonials.map((_, index) => (
+            <span
+              key={index}
+              className={`dot ${index === current ? "active" : ""}`}
+            />
+          ))}
+        </div>
+
+        <div className="testimonial-slider">
+          {testimonials
+            .slice(current, current + 3)
+            .map((testimonial, index) => (
+              <div
+                key={index}
+                className={`testimonial-card ${index === 1 ? "active" : ""}`} // Middle card is active
+              >
+                <div className="testimonial-content">
+                  <img
+                    src={testimonial.image}
+                    alt={testimonial.name}
+                    className="testimonial-img"
+                  />
+                  <h3>{testimonial.name}</h3>
+                  <p className="role">{testimonial.role}</p>
+                  <p className="quote">&ldquo;{testimonial.text}&rdquo;</p>
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
+
       <section className="contact-us">
         <div className="contact-container">
           <div className="contact-us-df">
@@ -980,33 +1074,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* <section className="testimonial-section">
-        <div className="container">
-          <h2 className="section-title">What Our Clients Say</h2>
-
-          <div className="testimonials">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="testimonial-card">
-                <div className="testimonial-content">
-                  <p className="quote">“{testimonial.quote}”</p>
-                </div>
-                <div className="testimonial-author">
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="author-image"
-                  />
-                  <div>
-                    <h4 className="author-name">{testimonial.name}</h4>
-                    <p className="author-position">{testimonial.position}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section> */}
 
       <div className="footer">
         <div className="footer-logo">

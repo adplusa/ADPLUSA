@@ -11,23 +11,23 @@
   "dependencies": {
     "@progress/kendo-react-buttons": "^9.4.0",
     "@progress/kendo-react-progressbars": "^9.4.0",
-    "@tailwindcss/vite": "^4.0.6",
-    "autoprefixer": "^10.4.20",
     "countup.js": "^2.8.0",
+    "framer-motion": "^12.4.7",
     "gsap": "^3.12.7",
     "keen-slider": "^6.8.6",
     "next": "15.1.6",
-    "postcss": "^8.5.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.4.0",
     "split-type": "^0.3.4",
-    "swiper": "^11.2.4",
-    "tailwindcss": "^4.0.6"
+    "swiper": "^11.2.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "autoprefixer": "^10.4.20",
     "eslint": "^9",
-    "eslint-config-next": "15.1.6"
+    "eslint-config-next": "15.1.6",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.0.7"
   }
 }
