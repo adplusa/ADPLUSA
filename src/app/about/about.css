@@ -48,3 +48,51 @@
   color: rgb(220, 78, 78);
   font-weight: bold;
 }
+
+.about-content-second-row,
+.about-content-third-row,
+.about-content-four-row,
+.about-content-five-row {
+  margin-top: 38%;
+  position: relative;
+}
+
+.people-content {
+  position: absolute;
+  top: -53%;
+  max-width: 50%;
+  background-color: #902b2c;
+  padding: 3%;
+  color: #fff;
+}
+
+.people-content p {
+  margin-top: 3%;
+  line-height: 1.4;
+  font-size: 19px;
+}
+
+.people-content h1 {
+  font-size: 3.2rem;
+}
+
+.people-img img {
+  width: 1150px;
+  height: 650px;
+  object-fit: cover;
+}
+
+.people-img {
+  display: flex;
+  justify-content: center;
+}
+
+#place-content {
+  right: 2%;
+  top: -45%;
+}
+
+#practice-content {
+  right: 2%;
+  top: -45%;
+}
