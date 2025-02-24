@@ -1,0 +1,50 @@
+.about-container {
+  margin-top: 10%;
+  padding: 0 3%;
+}
+
+.about-content-first-row {
+  display: flex;
+}
+
+.about-content-first-row-left h1 {
+  font-size: 5rem;
+}
+
+.about-content-first-row-left {
+  flex: 1 0 0;
+}
+
+.about-content-first-row-right {
+  flex: 0 0 50%;
+}
+
+.about-content-first-row-right h2 {
+  font-size: 3rem;
+  letter-spacing: 1.5px;
+  line-height: 1.1;
+}
+
+.about-content-first-row-right p {
+  margin-top: 15px;
+  font-size: 19px;
+  line-height: 1.4;
+  color: #464646;
+}
+
+.about-content-first-row-right p:first-of-type {
+  margin-top: 5%;
+}
+
+.four-p {
+  display: flex;
+  align-items: center;
+  gap: 4%;
+  margin-top: 4%;
+}
+
+.four-p a {
+  font-size: 18px;
+  color: rgb(220, 78, 78);
+  font-weight: bold;
+}
