@@ -54,28 +54,30 @@ const Header = () => {
     <>
       <div className="header">
         <div className="header-df">
-          <div className="flip-logo">
-            <span className="flip-container">
-              <Image
-                id="flip-one"
-                className="flip-front"
-                src={logo}
-                alt="logo"
-                width={100}
-                height={100}
-                unoptimized
-              />
-              <Image
-                id="flip-two"
-                className="flip-back"
-                src={"/flip-two.png"}
-                alt="logo"
-                width={100}
-                height={100}
-                unoptimized
-              />
-            </span>
-          </div>
+          <a href="/">
+            <div className="flip-logo">
+              <span className="flip-container">
+                <Image
+                  id="flip-one"
+                  className="flip-front"
+                  src={logo}
+                  alt="logo"
+                  width={100}
+                  height={100}
+                  unoptimized
+                />
+                <Image
+                  id="flip-two"
+                  className="flip-back"
+                  src={"/flip-two.png"}
+                  alt="logo"
+                  width={100}
+                  height={100}
+                  unoptimized
+                />
+              </span>
+            </div>
+          </a>
 
           <div className="menu-color">
             <Menu />

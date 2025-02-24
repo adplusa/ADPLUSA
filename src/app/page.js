@@ -15,6 +15,7 @@ import "swiper/css/pagination";
 import { FaQuoteLeft } from "react-icons/fa";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { FaTrophy, FaUsers, FaStar, FaChartLine } from "react-icons/fa";
+import Footer from "./Components/Footer/page";
 
 gsap.registerPlugin(CSSPlugin);
 
@@ -1199,7 +1200,7 @@ export default function Home() {
               </div>
             </section>
 
-            <div className="footer">
+            {/* <div className="footer">
               <div className="footer-logo">
                 <Image
                   src={"/red-logo.png"}
@@ -1252,7 +1253,8 @@ export default function Home() {
                 <p id="copyright">Copyright Adplusa</p>
                 <p>Designed By Quite Good</p>
               </span>
-            </div>
+            </div> */}
+            <Footer />
           </div>
         </div>
       )}

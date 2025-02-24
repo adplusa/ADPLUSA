@@ -114,8 +114,9 @@
   color: #000;
   font-size: 80px;
   font-weight: 400;
-  letter-spacing: -0.03em;
   line-height: 85%;
+  font-family: "Geist Mono";
+  text-transform: capitalize;
 }
 
 .menu-info {

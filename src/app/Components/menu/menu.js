@@ -8,11 +8,11 @@ import { gsap } from "gsap";
 import Image from "next/image";
 
 const menuLinks = [
-  { path: "/", label: "Home" },
+  { path: "/projects", label: "Projects" },
   { path: "/work", label: "Work" },
   { path: "/about", label: "About" },
+  { path: "/team", label: "Team" },
   { path: "/contact", label: "Contact" },
-  { path: "/lab", label: "Lab" },
 ];
 
 const Menu = () => {

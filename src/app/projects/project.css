@@ -1,0 +1,81 @@
+.project-container {
+  margin-top: 10%;
+  padding: 0 3%;
+}
+
+.project-content h1 {
+  font-size: 5rem;
+}
+
+#project-hr {
+  margin-top: 3%;
+}
+
+.project-images {
+  position: relative;
+  overflow: hidden;
+}
+
+.project-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: 0;
+  color: #fff;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.project-images:hover .project-overlay {
+  opacity: 0.5;
+}
+
+.pr-img {
+  transition: all 0.3s ease-in;
+}
+
+.project-images:hover .pr-img {
+  transform: scale(1.1);
+}
+
+.project-overlay h1 {
+  font-size: 25px;
+}
+
+.project-img-row-one,
+.project-img-row-two,
+.project-img-row-three,
+.project-img-row-four {
+  display: flex;
+  gap: 2%;
+  justify-content: space-between;
+}
+
+.project-img-row-two img,
+.project-img-row-three img,
+.project-img-row-four img {
+  width: 430px;
+  height: 350px;
+}
+.project-img-row-two,
+.project-img-row-three,
+.project-img-row-four {
+  margin-top: 3%;
+}
+
+.project-img img {
+  object-fit: cover;
+}
+
+.project-img {
+  margin-top: 3%;
+}
+
+.project-content {
+  overflow-x: hidden;
+}

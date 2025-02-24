@@ -621,83 +621,6 @@ svg.bi.bi-chat-quote-fill path {
   height: 2px;
 }
 
-#footer-logo {
-  width: 100px;
-  height: auto;
-}
-
-.footer {
-  margin-top: 6%;
-  border-top: 2px solid #ca4c4d;
-  padding-top: 5%;
-  background-color: #f9f9f9;
-  color: var(--foreground);
-}
-
-.footer-logo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.footer-logo p {
-  margin-top: 10px;
-}
-
-.footer-nav ul {
-  display: flex;
-  justify-content: center;
-  margin-top: 3%;
-}
-
-.footer-nav ul li {
-  list-style: none;
-}
-
-.footer-nav ul li a {
-  margin: 28px;
-  font-weight: bold;
-  font-size: 20px;
-  color: var(--foreground);
-}
-
-.social-media {
-  display: flex;
-  justify-content: center;
-  margin-top: 2%;
-}
-
-.social-media span {
-  background-color: #8b0d0e;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: none;
-  color: #ffffff;
-  margin: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-}
-
-.blue-border {
-  border: 0.5px solid #000000;
-  margin-top: 3%;
-  width: 90%;
-}
-
-#blue-border-div {
-  display: flex;
-  justify-content: center;
-}
-
-#copyright {
-  margin-top: 25px;
-  padding-bottom: 2%;
-}
-
 .service-two-top-left h5 {
   color: #a97301;
   font-size: 19px;
@@ -1208,13 +1131,6 @@ span.service-two-bottom-box-logo {
   .process-steps-box:last-child::before {
     display: none;
   }
-}
-
-.copy-designed {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  gap: 36%;
 }
 
 .rto-section {
