@@ -7,7 +7,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
-import { gsap } from "gsap";
+import { gsap, CSSPlugin, Expo } from "gsap";
 import SplitType from "split-type";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "swiper/css";
@@ -15,6 +15,8 @@ import "swiper/css/pagination";
 import { FaQuoteLeft } from "react-icons/fa";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { FaTrophy, FaUsers, FaStar, FaChartLine } from "react-icons/fa";
+
+gsap.registerPlugin(CSSPlugin);
 
 const testimonials = [
   {
@@ -128,22 +130,23 @@ const achievements = [
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
+  const [loading, setLoading] = useState(true);
+  const [counter, setCounter] = useState(0);
   const [index, setIndex] = useState(0);
   const [activeStep, setActiveStep] = useState(steps[0].id);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imageSrc, setImageSrc] = useState("/process-img.jpg");
-
   const [current, setCurrent] = useState(0);
-
   const [logo, setLogo] = useState("/red-logo.png");
   const textRef = useRef(null);
-
   const [valueOne, setValueOne] = useState(0);
   const [valueTwo, setValueTwo] = useState(0);
   const [valueThree, setValueThree] = useState(0);
   const [valueFour, setValueFour] = useState(0);
   const [valueFive, setValueFive] = useState(0);
   const [valueSix, setValueSix] = useState(0);
+  const [valueSeven, setValueSeven] = useState(0);
+
   const textRefs = useRef([]);
   const [open, setOpen] = useState(null);
   const [sliderRef] = useKeenSlider(
@@ -182,12 +185,76 @@ export default function Home() {
     ]
   );
 
+  const revealAnimation = () => {
+    const t1 = gsap.timeline({
+      onComplete: () => setLoading(false), // Instantly remove loader
+    });
+
+    t1.to(".count", { opacity: 0, duration: 0.1 })
+      .to(".progress-bar-two", { opacity: 0, duration: 0.1 })
+      .to(".follow-top", { height: "50vh", ease: "expo.inOut", duration: 0.4 })
+      .to(
+        ".follow-bottom",
+        { height: "50vh", ease: "expo.inOut", duration: 0.4 },
+        "-=0.4"
+      )
+      .fromTo(
+        ".logo",
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, ease: "expo.inOut", duration: 0.4 }
+      )
+      .to(".logo", {
+        opacity: 0,
+        scale: 0.8,
+        ease: "expo.inOut",
+        duration: 0.3,
+        delay: 0.2,
+      })
+      .to(".follow-top", { height: "0%", duration: 0.3, ease: "expo.inOut" })
+      .to(
+        ".follow-bottom",
+        { height: "0%", duration: 0.3, ease: "expo.inOut" },
+        "-=0.3"
+      )
+      .to(".loader-container", {
+        opacity: 0,
+        duration: 0.2,
+        ease: "expo.inOut",
+      })
+      .set(".loader-container", { display: "none" }); // Instantly hide
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCounter((prev) => (prev < 100 ? prev + 5 : 100));
+    }, 14);
+
+    if (counter === 100) {
+      clearInterval(interval);
+      revealAnimation();
+    }
+
+    return () => clearInterval(interval);
+  }, [counter]);
+
   const nextSlide = () => {
     setCurrent((prev) => (prev >= testimonials.length - 3 ? 0 : prev + 1));
   };
 
   const prevSlide = () => {
     setCurrent((prev) => (prev <= 0 ? testimonials.length - 3 : prev - 1));
+  };
+
+  const cardOneHandler = () => {
+    setImageSrc("/process-img.jpg");
+  };
+
+  const cardTwoHandler = () => {
+    setImageSrc("/process-img2.jpg");
+  };
+
+  const cardThreeHandler = () => {
+    setImageSrc("/process-img3.jpg");
   };
 
   useEffect(() => {
@@ -208,18 +275,6 @@ export default function Home() {
 
   const toggle = (index) => {
     setOpen(open === index ? null : index);
-  };
-
-  const cardOneHandler = () => {
-    setImageSrc("/process-img.jpg");
-  };
-
-  const cardTwoHandler = () => {
-    setImageSrc("/process-img2.jpg");
-  };
-
-  const cardThreeHandler = () => {
-    setImageSrc("/process-img3.jpg");
   };
 
   useEffect(() => {
@@ -244,6 +299,9 @@ export default function Home() {
     const intervalSix = setInterval(() => {
       setValueSix((prev) => (prev < 80 ? prev + 1 : 80));
     }, 20);
+    const intervalSeven = setInterval(() => {
+      setValueSeven((prev) => (prev < 80 ? prev + 1 : 80));
+    }, 20);
 
     return () => {
       clearInterval(intervalOne);
@@ -252,6 +310,7 @@ export default function Home() {
       clearInterval(intervalFour);
       clearInterval(intervalFive);
       clearInterval(intervalSix);
+      clearInterval(intervalSeven);
     };
   }, []);
 
@@ -340,793 +399,863 @@ export default function Home() {
 
   return (
     <>
-      <Header />
-      <div className="hero-banner">
-        <div className="overlay"></div>
-      </div>
-
-      <div className="about-us">
-        <h2>
-          who <br />
-          we are?
-        </h2>
-        <div className="about-us-top">
-          <div className="about-us-top-left">
-            <h1>Allow us to introduce ourselves</h1>
+      {loading ? (
+        <div className="loader-container">
+          <div className="loading">
+            <p className="count">{counter}%</p>
+            <div
+              className="progress-bar-two"
+              style={{ width: `${counter}%` }}
+            ></div>
           </div>
-          <div className="about-us-top-right">
-            <h1>
-              <span className="asked">Welcome</span> to ADPL Consulting LLC
-            </h1>
-            <p>
-              ADPL CONSULTING LLC works as a leading Architectural and
-              Engineering outsource fraternity across India and the United
-              States of America.
-            </p>
-            <p>
-              We are a group of professionals with profound proficiency in the
-              field of architecture, engineering, designing, interiors, and
-              management. Having an established track record of serving more
-              than 150 clients in 535+ projects, our strict adherence to
-              international standards and global experience makes us the
-              paramount service provider in the market.
-            </p>
-            <span>
-              <div className="key-benefit">
-                <span>
-                  <ul>
-                    <li>Experienced Team</li>
-                    <li>Outsourcing</li>
-                    <li>Affordable Prices</li>
-                    <li>Best Quality</li>
-                  </ul>
-                </span>
-                <span>
-                  <ul>
-                    <li>Unique/Iconic Designs</li>
-                    <li>Strict Timelines</li>
-                    <li>Proficency with SketchUp Pro</li>
-                    <li>Excellence in Revit & BIM</li>
-                  </ul>
-                </span>
-              </div>
-            </span>
+          <div className="follow-container">
+            <div className="follow follow-top"></div>
+            <div className="follow follow-bottom"></div>
           </div>
-        </div>
-      </div>
-
-      <div className="about-us-video-image">
-        <div className="about-us-img">
-          <Image
-            id="pawel"
-            src={"Pawel.avif"}
-            alt="about-us image"
-            width={0}
-            height={0}
-            unoptimized
-          ></Image>
-
-          <video muted autoPlay loop>
-            <source src="/architect2.mp4" type="video/mp4" />
-          </video>
-
-          <Image
-            id="vladimir"
-            src={"Vladimir.avif"}
-            alt="about-us image"
-            width={0}
-            height={0}
-            unoptimized
-          ></Image>
-        </div>
-        <div className="about-us-video-text">
-          <h1>Adplusa</h1>
-        </div>
-        <div className="who-we-are-btn">
-          <Link href="#">
-            <button>
-              <span>Who we are</span>
-            </button>
-          </Link>
-        </div>
-      </div>
-
-      <div className="strip-text">
-        <div className="marquee">
-          <p>
-            ADPL CONSULTING LLC works as a leading Architectural and Engineering
-            outsource fraternity across India and the United States of America.
-          </p>
-        </div>
-      </div>
-
-      <div className="service-two">
-        <div className="service-two-top">
-          <div className="service-two-top-left">
-            <h5>Company Services</h5>
-            <h1>
-              We <span className="asked">specialize</span> in these fields.
-            </h1>
-          </div>
-          <div className="service-two-top-right">
-            <p>
-              We offer a comprehensive range of services tailored to the steel
-              industry. Our expertise includes BIM services, CAD services, and
-              Permit Drawings & Documentation. We also provide advanced 3D
-              Visualization and high-quality Presentation Drawings.
-              Additionally, our MEP services ensure seamless integration of
-              mechanical, electrical, and plumbing systems.
-            </p>
-          </div>
-        </div>
-        <div className="service-two-bottom">
-          <div className="service-two-bottom-left">
-            <div className="service-two-bottom-box" id="service-two-box-one">
-              <div className="service-two-bottom-box-top">
-                <span className="service-two-bottom-box-logo">
-                  <Image
-                    src={"/icon.png"}
-                    width={60}
-                    height={60}
-                    unoptimized
-                    alt="icon-image"
-                  ></Image>
-                </span>
-                <h3>BIM services</h3>
-              </div>
-              <div className="service-two-bottom-box-bottom">
-                <p>
-                  Our BIM team consists of architects, engineers and designers
-                  offering holistic solutions.
-                </p>
-              </div>
-            </div>
-            <div className="service-two-bottom-box" id="service-two-box-one">
-              <div className="service-two-bottom-box-top">
-                <span className="service-two-bottom-box-logo">
-                  <Image
-                    src={"/icon.png"}
-                    width={60}
-                    height={60}
-                    unoptimized
-                    alt="icon-image"
-                  ></Image>
-                </span>
-                <h3>CAD services</h3>
-              </div>
-              <div className="service-two-bottom-box-bottom">
-                <p>
-                  Providing extended architectural and structural design and
-                  drafting services for all stages of your project
-                </p>
-              </div>
-            </div>
-            <div className="service-two-bottom-box" id="service-two-box-one">
-              <div className="service-two-bottom-box-top">
-                <span className="service-two-bottom-box-logo">
-                  <Image
-                    src={"/icon.png"}
-                    width={60}
-                    height={60}
-                    unoptimized
-                    alt="icon-image"
-                  ></Image>
-                </span>
-                <h3>Permit Drawings & Documentation</h3>
-              </div>
-              <div className="service-two-bottom-box-bottom">
-                <p>
-                  Contact us and save the cumbersome job of authority approvals.
-                </p>
-              </div>
-            </div>
-            <div className="service-two-bottom-box" id="service-two-box-one">
-              <div className="service-two-bottom-box-top">
-                <span className="service-two-bottom-box-logo">
-                  <Image
-                    src={"/icon.png"}
-                    width={60}
-                    height={60}
-                    unoptimized
-                    alt="icon-image"
-                  ></Image>
-                </span>
-                <h3>3d Visualization</h3>
-              </div>
-              <div className="service-two-bottom-box-bottom">
-                <p>
-                  Get the full experience of your building before hand by our 3D
-                  experts.
-                </p>
-              </div>
-            </div>
-            <div className="service-two-bottom-box" id="service-two-box-one">
-              <div className="service-two-bottom-box-top">
-                <span className="service-two-bottom-box-logo">
-                  <Image
-                    src={"/icon.png"}
-                    width={60}
-                    height={60}
-                    unoptimized
-                    alt="icon-image"
-                  ></Image>
-                </span>
-                <h3>Presentation Drawings</h3>
-              </div>
-              <div className="service-two-bottom-box-bottom">
-                <p>
-                  We provide comprehensive research data which captivate our
-                  clients, at the lowest possible cost.
-                </p>
-              </div>
-            </div>
-            <div className="service-two-bottom-box" id="service-two-box-one">
-              <div className="service-two-bottom-box-top">
-                <span className="service-two-bottom-box-logo">
-                  <Image
-                    src={"/icon.png"}
-                    width={60}
-                    height={60}
-                    unoptimized
-                    alt="icon-image"
-                  ></Image>
-                </span>
-                <h3>MEP Services</h3>
-              </div>
-              <div className="service-two-bottom-box-bottom">
-                <p>
-                  We strive to provide high-quality and reliable structural,
-                  mechanical and electrical engineering solutions.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="service-two-bottom-right">
-            <video muted autoPlay loop>
-              <source src="/service-video.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <div className="services-one_circle-color"></div>
-        </div>
-      </div>
-
-      <div className="cirlce-review">
-        <div className="cirlce-review-df">
-          <div className="circle-container">
+          <div className="logo-container">
             <Image
-              src="/flip-two.png"
+              className="logo"
+              src="/white-logo.png"
               alt="logo"
-              className="center-image"
-              width={120}
-              height={120}
+              width={200}
+              height={200}
+              unoptimized
             />
-
-            <svg viewBox="0 0 250 250" className="circle-text" ref={textRef}>
-              <defs>
-                <path
-                  id="circlePath"
-                  d="M 125, 125 m -100, 0 a 100,100 0 1,1 200,0 a 100,100 0 1,1 -200,0"
-                />
-              </defs>
-              <text
-                fontSize="20"
-                fontWeight="bold"
-                letterSpacing="3"
-                fill="#c94446"
-              >
-                <textPath href="#circlePath" startOffset="0%">
-                  🔹 ADPL CONSULTING LLC 🔹 ARCHITECTURAL & ENGINEERING 🔹
-                </textPath>
-              </text>
-            </svg>
           </div>
+        </div>
+      ) : (
+        <div className="nav">
+          <div className="intro-container">
+            <Header />
+            <div className="hero-banner">
+              <div className="overlay"></div>
+            </div>
 
-          <div className="achievements-container">
-            <h2 className="achievements-title">
-              Our <span className="asked">Achievements</span>
-            </h2>
-            <div className="achievements-grid">
-              {achievements.map((achievement, index) => (
-                <div
-                  key={index}
-                  className={`achievement-card ${achievement.gradient}`}
-                >
-                  <div className="achievement-content">
-                    <div className="achievement-text">
-                      <h3>{achievement.title}</h3>
-                      {/* <p>{achievement.value}</p> */}
-                      <achievement.icon className="achievement-icon" />
+            <div className="about-us">
+              <h2>
+                who <br />
+                we are?
+              </h2>
+              <div className="about-us-top">
+                <div className="about-us-top-left">
+                  <h1>Allow us to introduce ourselves</h1>
+                </div>
+                <div className="about-us-top-right">
+                  <h1>
+                    <span className="asked">Welcome</span> to ADPL Consulting
+                    LLC
+                  </h1>
+                  <p>
+                    ADPL CONSULTING LLC works as a leading Architectural and
+                    Engineering outsource fraternity across India and the United
+                    States of America.
+                  </p>
+                  <p>
+                    We are a group of professionals with profound proficiency in
+                    the field of architecture, engineering, designing,
+                    interiors, and management. Having an established track
+                    record of serving more than 150 clients in 535+ projects,
+                    our strict adherence to international standards and global
+                    experience makes us the paramount service provider in the
+                    market.
+                  </p>
+                  <span>
+                    <div className="key-benefit">
+                      <span>
+                        <ul>
+                          <li>Experienced Team</li>
+                          <li>Outsourcing</li>
+                          <li>Affordable Prices</li>
+                          <li>Best Quality</li>
+                        </ul>
+                      </span>
+                      <span>
+                        <ul>
+                          <li>Unique/Iconic Designs</li>
+                          <li>Strict Timelines</li>
+                          <li>Proficency with SketchUp Pro</li>
+                          <li>Excellence in Revit & BIM</li>
+                        </ul>
+                      </span>
+                    </div>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="about-us-video-image">
+              <div className="about-us-img">
+                <Image
+                  id="pawel"
+                  src={"Pawel.avif"}
+                  alt="about-us image"
+                  width={0}
+                  height={0}
+                  unoptimized
+                ></Image>
+
+                <video muted autoPlay loop>
+                  <source src="/architect2.mp4" type="video/mp4" />
+                </video>
+
+                <Image
+                  id="vladimir"
+                  src={"Vladimir.avif"}
+                  alt="about-us image"
+                  width={0}
+                  height={0}
+                  unoptimized
+                ></Image>
+              </div>
+              <div className="about-us-video-text">
+                <h1>Adplusa</h1>
+              </div>
+              <div className="who-we-are-btn">
+                <Link href="#">
+                  <button>
+                    <span>Who we are</span>
+                  </button>
+                </Link>
+              </div>
+            </div>
+
+            <div className="strip-text">
+              <div className="marquee">
+                <p>
+                  ADPL CONSULTING LLC works as a leading Architectural and
+                  Engineering outsource fraternity across India and the United
+                  States of America.
+                </p>
+              </div>
+            </div>
+
+            <div className="service-two">
+              <div className="service-two-top">
+                <div className="service-two-top-left">
+                  <h5>Company Services</h5>
+                  <h1>
+                    We <span className="asked">specialize</span> in these
+                    fields.
+                  </h1>
+                </div>
+                <div className="service-two-top-right">
+                  <p>
+                    We offer a comprehensive range of services tailored to the
+                    steel industry. Our expertise includes BIM services, CAD
+                    services, and Permit Drawings & Documentation. We also
+                    provide advanced 3D Visualization and high-quality
+                    Presentation Drawings. Additionally, our MEP services ensure
+                    seamless integration of mechanical, electrical, and plumbing
+                    systems.
+                  </p>
+                </div>
+              </div>
+              <div className="service-two-bottom">
+                <div className="service-two-bottom-left">
+                  <div
+                    className="service-two-bottom-box"
+                    id="service-two-box-one"
+                  >
+                    <div className="service-two-bottom-box-top">
+                      <span className="service-two-bottom-box-logo">
+                        <Image
+                          src={"/icon.png"}
+                          width={60}
+                          height={60}
+                          unoptimized
+                          alt="icon-image"
+                        ></Image>
+                      </span>
+                      <h3>BIM services</h3>
+                    </div>
+                    <div className="service-two-bottom-box-bottom">
+                      <p>
+                        Our BIM team consists of architects, engineers and
+                        designers offering holistic solutions.
+                      </p>
                     </div>
                   </div>
-                  <div className="progress-bar">
-                    <div
-                      className="progress-fill"
-                      style={{ width: `${valueOne}%` }}
-                    ></div>
+                  <div
+                    className="service-two-bottom-box"
+                    id="service-two-box-one"
+                  >
+                    <div className="service-two-bottom-box-top">
+                      <span className="service-two-bottom-box-logo">
+                        <Image
+                          src={"/icon.png"}
+                          width={60}
+                          height={60}
+                          unoptimized
+                          alt="icon-image"
+                        ></Image>
+                      </span>
+                      <h3>CAD services</h3>
+                    </div>
+                    <div className="service-two-bottom-box-bottom">
+                      <p>
+                        Providing extended architectural and structural design
+                        and drafting services for all stages of your project
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="service-two-bottom-box"
+                    id="service-two-box-one"
+                  >
+                    <div className="service-two-bottom-box-top">
+                      <span className="service-two-bottom-box-logo">
+                        <Image
+                          src={"/icon.png"}
+                          width={60}
+                          height={60}
+                          unoptimized
+                          alt="icon-image"
+                        ></Image>
+                      </span>
+                      <h3>Permit Drawings & Documentation</h3>
+                    </div>
+                    <div className="service-two-bottom-box-bottom">
+                      <p>
+                        Contact us and save the cumbersome job of authority
+                        approvals.
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="service-two-bottom-box"
+                    id="service-two-box-one"
+                  >
+                    <div className="service-two-bottom-box-top">
+                      <span className="service-two-bottom-box-logo">
+                        <Image
+                          src={"/icon.png"}
+                          width={60}
+                          height={60}
+                          unoptimized
+                          alt="icon-image"
+                        ></Image>
+                      </span>
+                      <h3>3d Visualization</h3>
+                    </div>
+                    <div className="service-two-bottom-box-bottom">
+                      <p>
+                        Get the full experience of your building before hand by
+                        our 3D experts.
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="service-two-bottom-box"
+                    id="service-two-box-one"
+                  >
+                    <div className="service-two-bottom-box-top">
+                      <span className="service-two-bottom-box-logo">
+                        <Image
+                          src={"/icon.png"}
+                          width={60}
+                          height={60}
+                          unoptimized
+                          alt="icon-image"
+                        ></Image>
+                      </span>
+                      <h3>Presentation Drawings</h3>
+                    </div>
+                    <div className="service-two-bottom-box-bottom">
+                      <p>
+                        We provide comprehensive research data which captivate
+                        our clients, at the lowest possible cost.
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="service-two-bottom-box"
+                    id="service-two-box-one"
+                  >
+                    <div className="service-two-bottom-box-top">
+                      <span className="service-two-bottom-box-logo">
+                        <Image
+                          src={"/icon.png"}
+                          width={60}
+                          height={60}
+                          unoptimized
+                          alt="icon-image"
+                        ></Image>
+                      </span>
+                      <h3>MEP Services</h3>
+                    </div>
+                    <div className="service-two-bottom-box-bottom">
+                      <p>
+                        We strive to provide high-quality and reliable
+                        structural, mechanical and electrical engineering
+                        solutions.
+                      </p>
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="feature-section">
-        <div className="feature-section-df">
-          <div className="feature-left">
-            <h4>overall progress</h4>
-            <h1>Our Features</h1>
-            <p>
-              Showcasing cutting-edge designs and innovative solutions tailored
-              for modern architecture and interiors.
-            </p>
-            <div className="features-paras">
-              <ul>
-                <div className="progress-item">
-                  <div className="progress-item-df">
-                    <p>Maintenance Support</p>
-                    <Image
-                      src={"1.png"}
-                      width={50}
-                      height={50}
-                      unoptimized
-                      alt="Maintenance"
-                    ></Image>
-                  </div>
-                  <div className="progress-bar">
-                    <div
-                      className="progress-fill"
-                      style={{ width: `${valueOne}%` }}
-                    ></div>
-                  </div>
+                <div className="service-two-bottom-right">
+                  <video muted autoPlay loop>
+                    <source src="/service-video.mp4" type="video/mp4" />
+                  </video>
                 </div>
-
-                <div className="progress-item">
-                  <div className="progress-item-df">
-                    <p>Cost-Effective</p>
-                    <Image
-                      src={"2.png"}
-                      width={50}
-                      height={50}
-                      unoptimized
-                      alt="Maintenance"
-                    ></Image>
-                  </div>
-                  <div className="progress-bar">
-                    <div
-                      className="progress-fill"
-                      style={{ width: `${valueTwo}%` }}
-                    ></div>
-                  </div>
-                </div>
-
-                <div className="progress-item">
-                  <div className="progress-item-df">
-                    <p>Swift Deliverance</p>
-                    <Image
-                      src={"3.png"}
-                      width={50}
-                      height={50}
-                      unoptimized
-                      alt="Maintenance"
-                    ></Image>
-                  </div>
-                  <div className="progress-bar">
-                    <div
-                      className="progress-fill"
-                      style={{ width: `${valueThree}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </ul>
-
-              <ul>
-                <div className="progress-item">
-                  <div className="progress-item-df">
-                    <p>Software Expertise</p>
-                    <Image
-                      src={"4.png"}
-                      width={50}
-                      height={50}
-                      unoptimized
-                      alt="Maintenance"
-                    ></Image>
-                  </div>
-                  <div className="progress-bar">
-                    <div
-                      className="progress-fill"
-                      style={{ width: `${valueFour}%` }}
-                    ></div>
-                  </div>
-                </div>
-                <div className="progress-item">
-                  <div className="progress-item-df">
-                    <p>Newest Technology</p>
-                    <Image
-                      src={"5.png"}
-                      width={50}
-                      height={50}
-                      unoptimized
-                      alt="Maintenance"
-                    ></Image>
-                  </div>
-                  <div className="progress-bar">
-                    <div
-                      className="progress-fill"
-                      style={{ width: `${valueFive}%` }}
-                    ></div>
-                  </div>
-                </div>
-                <div className="progress-item">
-                  <div className="progress-item-df">
-                    <p>23+ years of experience</p>
-                    <Image
-                      src={"6.png"}
-                      width={50}
-                      height={50}
-                      unoptimized
-                      alt="Maintenance"
-                    ></Image>
-                  </div>
-                  <div className="progress-bar">
-                    <div
-                      className="progress-fill"
-                      style={{ width: `${valueSix}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </ul>
-            </div>
-          </div>
-
-          <div className="feature-right">
-            <Image
-              src={"/feature-img1.jpg"}
-              alt="feature-img"
-              width={0}
-              height={0}
-              unoptimized
-              priority
-            ></Image>
-            <Image
-              src={"/feature-img3.jpg"}
-              alt="feature-img"
-              width={0}
-              height={0}
-              unoptimized
-              priority
-            ></Image>
-          </div>
-        </div>
-      </div>
-
-      <section className="rto-section">
-        <div className="background-process-img"></div>
-        <h2 className="heading">
-          Our <span className="asked">Working</span> Process
-        </h2>
-        <p className="subheading">
-          From concept to completion, we transform ideas into functional and
-          <br /> aesthetic architectural designs
-        </p>
-
-        <div className="content">
-          {/* Left Content */}
-          <div className="left">
-            <div className="card" onClick={cardOneHandler}>
-              <div className="number">1</div>
-              <div>
-                <h3 className="card-title">Meet Customers</h3>
-                <p className="card-text">
-                  We introduce and present ourselves. Our priority is to listen
-                  and understand the client’s vision for clearer insight about
-                  the project.
-                </p>
+                <div className="services-one_circle-color"></div>
               </div>
             </div>
 
-            <div className="card" onClick={cardTwoHandler}>
-              <div className="number">2</div>
-              <div>
-                <h3 className="card-title">Planning & Research</h3>
-                <p className="card-text">
-                  With the help of research and critical analysis, we prepare
-                  the first set of the drawings taking into account the
-                  requirements of the clients.
-                </p>
-              </div>
-            </div>
-
-            <div className="card" onClick={cardThreeHandler}>
-              <div className="number">3</div>
-              <div>
-                <h3 className="card-title">Finalize the Design</h3>
-                <p className="card-text">
-                  The feedback of the client is solicited and integrated. The
-                  changes are incorporated and the final set of completed
-                  drawings are prepared.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Content */}
-          <div className="right">
-            <Image
-              src={imageSrc}
-              alt="Process Image"
-              width={0}
-              height={0}
-              unoptimized
-            />
-          </div>
-        </div>
-      </section>
-
-      <div className="faqs">
-        <div className="faq-accordion">
-          <h2>
-            Frequently <span className="asked">asked</span> questions
-          </h2>
-          {faqs.map((faq, index) => (
-            <div
-              key={index}
-              className={`faq-item ${open === index ? "active" : ""}`}
-            >
-              <div className="faq-question" onClick={() => toggle(index)}>
-                {faq.question}
-                <span className="icon">{open === index ? "-" : "+"}</span>
-              </div>
-              <div className={`faq-answer ${open === index ? "open" : ""}`}>
-                {faq.answer}
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="faq-sketch"></div>
-      </div>
-
-      <div className="reviews-section">
-        <div ref={sliderRef} className="keen-slider">
-          <div className="keen-slider__slide number-slide1">
-            <div className="testimonial-container">
-              <div className="testimonial-box">
-                <h2>Our Founder & Principal Architect</h2>
-                <p>
-                  “An Indian, living in the capital city of India; Delhi, is an
-                  award-winning architect, who incorporated a company with a
-                  clear intent to foster an egalitarian organizational ethos
-                  where distinctive architectural talent finds self-expression
-                  and can contribute in a democratic and collaborative work
-                  environment.”
-                </p>
-                <p>
-                  Focused on core competencies in the field of Architecture,
-                  Interior Designing, Consulting Engineering, and other Allied
-                  Services and having an experience of 22+ Yrs.
-                </p>
-                <div className="author">
+            <div className="cirlce-review">
+              <div className="cirlce-review-df">
+                <div className="circle-container">
                   <Image
-                    src="/founder.jpg"
-                    alt="Sylwia Gieruszyńska"
-                    width={50}
-                    height={50}
-                    className="profile-img"
+                    src="/flip-two.png"
+                    alt="logo"
+                    className="center-image"
+                    width={120}
+                    height={120}
                   />
-                  <div>
-                    <h4 className="name">Abhishek Aggarwal</h4>
-                    <p className="designation">Founder</p>
+
+                  <svg
+                    viewBox="0 0 250 250"
+                    className="circle-text"
+                    ref={textRef}
+                  >
+                    <defs>
+                      <path
+                        id="circlePath"
+                        d="M 125, 125 m -100, 0 a 100,100 0 1,1 200,0 a 100,100 0 1,1 -200,0"
+                      />
+                    </defs>
+                    <text
+                      fontSize="20"
+                      fontWeight="bold"
+                      letterSpacing="3"
+                      fill="#c94446"
+                    >
+                      <textPath href="#circlePath" startOffset="0%">
+                        🔹 ADPL CONSULTING LLC 🔹 ARCHITECTURAL & ENGINEERING 🔹
+                      </textPath>
+                    </text>
+                  </svg>
+                </div>
+
+                <div className="achievements-container">
+                  <h2 className="achievements-title">
+                    Our <span className="asked">Achievements</span>
+                  </h2>
+                  <div className="achievements-grid">
+                    {achievements.map((achievement, index) => (
+                      <div
+                        key={index}
+                        className={`achievement-card ${achievement.gradient}`}
+                      >
+                        <div className="achievement-content">
+                          <div className="achievement-text">
+                            <h3>{achievement.title}</h3>
+                            {/* <p>{achievement.value}</p> */}
+                            <achievement.icon className="achievement-icon" />
+                          </div>
+                          <div className="progress-bar">
+                            <div
+                              className="progress-fill"
+                              style={{ width: `${valueSeven}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
-              <div className="testimonial-image">
-                <Image
-                  src="/founder.jpg"
-                  alt="Team"
-                  width={400}
-                  height={400}
-                  className="team-img"
-                />
-                <div className="white-box"></div>
-              </div>
             </div>
-          </div>
-          <div className="keen-slider__slide number-slide2">
-            <div className="testimonial-container">
-              <div className="testimonial-box">
-                <h2>Our Founder & Principal Architect</h2>
-                <p>
-                  “An Indian, living in the capital city of India; Delhi, is an
-                  award-winning architect, who incorporated a company with a
-                  clear intent to foster an egalitarian organizational ethos
-                  where distinctive architectural talent finds self-expression
-                  and can contribute in a democratic and collaborative work
-                  environment.”
-                </p>
-                <p>
-                  Focused on core competencies in the field of Architecture,
-                  Interior Designing, Consulting Engineering, and other Allied
-                  Services and having an experience of 22+ Yrs.
-                </p>
-                <div className="author">
+
+            <div className="feature-section">
+              <div className="feature-section-df">
+                <div className="feature-left">
+                  <h4>overall progress</h4>
+                  <h1>Our Features</h1>
+                  <p>
+                    Showcasing cutting-edge designs and innovative solutions
+                    tailored for modern architecture and interiors.
+                  </p>
+                  <div className="features-paras">
+                    <ul>
+                      <div className="progress-item">
+                        <div className="progress-item-df">
+                          <p>Maintenance Support</p>
+                          <Image
+                            src={"1.png"}
+                            width={50}
+                            height={50}
+                            unoptimized
+                            alt="Maintenance"
+                          ></Image>
+                        </div>
+                        <div className="progress-bar">
+                          <div
+                            className="progress-fill"
+                            style={{ width: `${valueOne}%` }}
+                          ></div>
+                        </div>
+                      </div>
+
+                      <div className="progress-item">
+                        <div className="progress-item-df">
+                          <p>Cost-Effective</p>
+                          <Image
+                            src={"2.png"}
+                            width={50}
+                            height={50}
+                            unoptimized
+                            alt="Maintenance"
+                          ></Image>
+                        </div>
+                        <div className="progress-bar">
+                          <div
+                            className="progress-fill"
+                            style={{ width: `${valueTwo}%` }}
+                          ></div>
+                        </div>
+                      </div>
+
+                      <div className="progress-item">
+                        <div className="progress-item-df">
+                          <p>Swift Deliverance</p>
+                          <Image
+                            src={"3.png"}
+                            width={50}
+                            height={50}
+                            unoptimized
+                            alt="Maintenance"
+                          ></Image>
+                        </div>
+                        <div className="progress-bar">
+                          <div
+                            className="progress-fill"
+                            style={{ width: `${valueThree}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </ul>
+
+                    <ul>
+                      <div className="progress-item">
+                        <div className="progress-item-df">
+                          <p>Software Expertise</p>
+                          <Image
+                            src={"4.png"}
+                            width={50}
+                            height={50}
+                            unoptimized
+                            alt="Maintenance"
+                          ></Image>
+                        </div>
+                        <div className="progress-bar">
+                          <div
+                            className="progress-fill"
+                            style={{ width: `${valueFour}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                      <div className="progress-item">
+                        <div className="progress-item-df">
+                          <p>Newest Technology</p>
+                          <Image
+                            src={"5.png"}
+                            width={50}
+                            height={50}
+                            unoptimized
+                            alt="Maintenance"
+                          ></Image>
+                        </div>
+                        <div className="progress-bar">
+                          <div
+                            className="progress-fill"
+                            style={{ width: `${valueFive}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                      <div className="progress-item">
+                        <div className="progress-item-df">
+                          <p>23+ years of experience</p>
+                          <Image
+                            src={"6.png"}
+                            width={50}
+                            height={50}
+                            unoptimized
+                            alt="Maintenance"
+                          ></Image>
+                        </div>
+                        <div className="progress-bar">
+                          <div
+                            className="progress-fill"
+                            style={{ width: `${valueSix}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="feature-right">
                   <Image
-                    src="/founder.jpg"
-                    alt="Sylwia Gieruszyńska"
-                    width={50}
-                    height={50}
-                    className="profile-img"
-                  />
-                  <div>
-                    <h4 className="name">Abhishek Aggarwal</h4>
-                    <p className="designation">Founder</p>
-                  </div>
+                    src={"/feature-img1.jpg"}
+                    alt="feature-img"
+                    width={0}
+                    height={0}
+                    unoptimized
+                    priority
+                  ></Image>
+                  <Image
+                    src={"/feature-img3.jpg"}
+                    alt="feature-img"
+                    width={0}
+                    height={0}
+                    unoptimized
+                    priority
+                  ></Image>
                 </div>
               </div>
-              <div className="testimonial-image">
-                <Image
-                  src="/founder.jpg"
-                  alt="Team"
-                  width={400}
-                  height={400}
-                  className="team-img"
-                />
-                <div className="white-box"></div>
-              </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      <div className="testimonial-container-two">
-        <div className="testimonial-container-two-text-center">
-          <svg
-            onClick={prevSlide}
-            className="prev"
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fillRule="evenodd"
-              d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
-            />
-          </svg>
-          <h2>What Our Clients Say About Us</h2>
-          <svg
-            onClick={nextSlide}
-            className="next"
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fillRule="evenodd"
-              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
-            />
-          </svg>
-        </div>
-        <div className="dots">
-          {testimonials.map((_, index) => (
-            <span
-              key={index}
-              className={`dot ${index === current ? "active" : ""}`}
-            />
-          ))}
-        </div>
-
-        <div className="testimonial-slider">
-          {testimonials
-            .slice(current, current + 3)
-            .map((testimonial, index) => (
-              <div
-                key={index}
-                className={`testimonial-card ${index === 1 ? "active" : ""}`} // Middle card is active
-              >
-                <div className="testimonial-content">
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="testimonial-img"
-                  />
-                  <h3>{testimonial.name}</h3>
-                  <p className="role">{testimonial.role}</p>
-                  <p className="quote">&ldquo;{testimonial.text}&rdquo;</p>
-                </div>
-              </div>
-            ))}
-        </div>
-      </div>
-
-      <section className="contact-us">
-        <div className="contact-container">
-          <div className="contact-us-df">
-            <div className="contact-left">
-              <Image
-                src="/contact-img.webp"
-                width={0}
-                height={0}
-                alt="footer-img"
-                unoptimized
-              ></Image>
-            </div>
-            <div className="contact-right">
-              <h1>
-                Begin a business journey that transitions to new heights every
-                day!
-              </h1>
-              <p>
-                Sign up today to enter the world of seamless payments and
-                deliver an outstanding customer experience
+            <section className="rto-section">
+              <div className="background-process-img"></div>
+              <h2 className="heading">
+                Our <span className="asked">Working</span> Process
+              </h2>
+              <p className="subheading">
+                From concept to completion, we transform ideas into functional
+                and
+                <br /> aesthetic architectural designs
               </p>
-              <div className="contact-btn">
-                <span>
-                  <button>Getting Started</button>
-                </span>
-                <span>
-                  <button>Contact Us</button>
-                </span>
+
+              <div className="content">
+                {/* Left Content */}
+                <div className="left">
+                  <div className="card" onClick={cardOneHandler}>
+                    <div className="number">1</div>
+                    <div>
+                      <h3 className="card-title">Meet Customers</h3>
+                      <p className="card-text">
+                        We introduce and present ourselves. Our priority is to
+                        listen and understand the client’s vision for clearer
+                        insight about the project.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="card" onClick={cardTwoHandler}>
+                    <div className="number">2</div>
+                    <div>
+                      <h3 className="card-title">Planning & Research</h3>
+                      <p className="card-text">
+                        With the help of research and critical analysis, we
+                        prepare the first set of the drawings taking into
+                        account the requirements of the clients.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="card" onClick={cardThreeHandler}>
+                    <div className="number">3</div>
+                    <div>
+                      <h3 className="card-title">Finalize the Design</h3>
+                      <p className="card-text">
+                        The feedback of the client is solicited and integrated.
+                        The changes are incorporated and the final set of
+                        completed drawings are prepared.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Content */}
+                <div className="right">
+                  <Image
+                    src={imageSrc}
+                    alt="Process Image"
+                    width={0}
+                    height={0}
+                    unoptimized
+                  />
+                </div>
               </div>
+            </section>
+
+            <div className="faqs">
+              <div className="faq-accordion">
+                <h2>
+                  Frequently <span className="asked">asked</span> questions
+                </h2>
+                {faqs.map((faq, index) => (
+                  <div
+                    key={index}
+                    className={`faq-item ${open === index ? "active" : ""}`}
+                  >
+                    <div className="faq-question" onClick={() => toggle(index)}>
+                      {faq.question}
+                      <span className="icon">{open === index ? "-" : "+"}</span>
+                    </div>
+                    <div
+                      className={`faq-answer ${open === index ? "open" : ""}`}
+                    >
+                      {faq.answer}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="faq-sketch"></div>
+            </div>
+
+            <div className="reviews-section">
+              <div ref={sliderRef} className="keen-slider">
+                <div className="keen-slider__slide number-slide1">
+                  <div className="testimonial-container">
+                    <div className="testimonial-box">
+                      <h2>Our Founder & Principal Architect</h2>
+                      <p>
+                        “An Indian, living in the capital city of India; Delhi,
+                        is an award-winning architect, who incorporated a
+                        company with a clear intent to foster an egalitarian
+                        organizational ethos where distinctive architectural
+                        talent finds self-expression and can contribute in a
+                        democratic and collaborative work environment.”
+                      </p>
+                      <p>
+                        Focused on core competencies in the field of
+                        Architecture, Interior Designing, Consulting
+                        Engineering, and other Allied Services and having an
+                        experience of 22+ Yrs.
+                      </p>
+                      <div className="author">
+                        <Image
+                          src="/founder.jpg"
+                          alt="Sylwia Gieruszyńska"
+                          width={50}
+                          height={50}
+                          className="profile-img"
+                        />
+                        <div>
+                          <h4 className="name">Abhishek Aggarwal</h4>
+                          <p className="designation">Founder</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="testimonial-image">
+                      <Image
+                        src="/founder.jpg"
+                        alt="Team"
+                        width={400}
+                        height={400}
+                        className="team-img"
+                      />
+                      <div className="white-box"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="keen-slider__slide number-slide2">
+                  <div className="testimonial-container">
+                    <div className="testimonial-box">
+                      <h2>Our Founder & Principal Architect</h2>
+                      <p>
+                        “An Indian, living in the capital city of India; Delhi,
+                        is an award-winning architect, who incorporated a
+                        company with a clear intent to foster an egalitarian
+                        organizational ethos where distinctive architectural
+                        talent finds self-expression and can contribute in a
+                        democratic and collaborative work environment.”
+                      </p>
+                      <p>
+                        Focused on core competencies in the field of
+                        Architecture, Interior Designing, Consulting
+                        Engineering, and other Allied Services and having an
+                        experience of 22+ Yrs.
+                      </p>
+                      <div className="author">
+                        <Image
+                          src="/founder.jpg"
+                          alt="Sylwia Gieruszyńska"
+                          width={50}
+                          height={50}
+                          className="profile-img"
+                        />
+                        <div>
+                          <h4 className="name">Abhishek Aggarwal</h4>
+                          <p className="designation">Founder</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="testimonial-image">
+                      <Image
+                        src="/founder.jpg"
+                        alt="Team"
+                        width={400}
+                        height={400}
+                        className="team-img"
+                      />
+                      <div className="white-box"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="testimonial-container-two">
+              <div className="testimonial-container-two-text-center">
+                <svg
+                  onClick={prevSlide}
+                  className="prev"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
+                  />
+                </svg>
+                <h2>What Our Clients Say About Us</h2>
+                <svg
+                  onClick={nextSlide}
+                  className="next"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+                  />
+                </svg>
+              </div>
+              <div className="dots">
+                {testimonials.map((_, index) => (
+                  <span
+                    key={index}
+                    className={`dot ${index === current ? "active" : ""}`}
+                  />
+                ))}
+              </div>
+
+              <div className="testimonial-slider">
+                {testimonials
+                  .slice(current, current + 3)
+                  .map((testimonial, index) => (
+                    <div
+                      key={index}
+                      className={`testimonial-card ${
+                        index === 1 ? "active" : ""
+                      }`} // Middle card is active
+                    >
+                      <div className="testimonial-content">
+                        <img
+                          src={testimonial.image}
+                          alt={testimonial.name}
+                          className="testimonial-img"
+                        />
+                        <h3>{testimonial.name}</h3>
+                        <p className="role">{testimonial.role}</p>
+                        <p className="quote">
+                          &ldquo;{testimonial.text}&rdquo;
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            <section className="contact-us">
+              <div className="contact-container">
+                <div className="contact-us-df">
+                  <div className="contact-left">
+                    <Image
+                      src="/contact-img.webp"
+                      width={0}
+                      height={0}
+                      alt="footer-img"
+                      unoptimized
+                    ></Image>
+                  </div>
+                  <div className="contact-right">
+                    <h1>
+                      Begin a business journey that transitions to new heights
+                      every day!
+                    </h1>
+                    <p>
+                      Sign up today to enter the world of seamless payments and
+                      deliver an outstanding customer experience
+                    </p>
+                    <div className="contact-btn">
+                      <span>
+                        <button>Getting Started</button>
+                      </span>
+                      <span>
+                        <button>Contact Us</button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <div className="footer">
+              <div className="footer-logo">
+                <Image
+                  src={"/red-logo.png"}
+                  alt="Footer-logo"
+                  id="footer-logo"
+                  width={0}
+                  height={0}
+                  unoptimized
+                ></Image>
+                <p>
+                  ADPL CONSULTING LLC works as a leading Architectural and
+                  Engineering
+                  <br />
+                  outsource fraternity across India and the United States of
+                  America.
+                </p>
+              </div>
+              <div className="footer-nav">
+                <ul>
+                  <li>
+                    <a href="#">Home</a>
+                  </li>
+                  <li>
+                    <a href="#">About us</a>
+                  </li>
+                  <li>
+                    <a href="#">Portfolio</a>
+                  </li>
+                  <li>
+                    <a href="#">Get a Quote</a>
+                  </li>
+                  <li>
+                    <a href="#">Competition: Contact-Less Restroom</a>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="social-media">
+                <span className="blue-back">Dr</span>
+                <span className="blue-back">Be</span>
+                <span className="blue-back">Ig</span>
+                <span className="blue-back">Tw</span>
+              </div>
+
+              <span id="blue-border-div">
+                <hr className="blue-border" />
+              </span>
+
+              <span className="copy-designed">
+                <p id="copyright">Copyright Adplusa</p>
+                <p>Designed By Quite Good</p>
+              </span>
             </div>
           </div>
         </div>
-      </section>
-
-      <div className="footer">
-        <div className="footer-logo">
-          <Image
-            src={"/red-logo.png"}
-            alt="Footer-logo"
-            id="footer-logo"
-            width={0}
-            height={0}
-            unoptimized
-          ></Image>
-          <p>
-            ADPL CONSULTING LLC works as a leading Architectural and Engineering
-            <br />
-            outsource fraternity across India and the United States of America.
-          </p>
-        </div>
-        <div className="footer-nav">
-          <ul>
-            <li>
-              <a href="#">Home</a>
-            </li>
-            <li>
-              <a href="#">About us</a>
-            </li>
-            <li>
-              <a href="#">Portfolio</a>
-            </li>
-            <li>
-              <a href="#">Get a Quote</a>
-            </li>
-            <li>
-              <a href="#">Competition: Contact-Less Restroom</a>
-            </li>
-          </ul>
-        </div>
-
-        <div className="social-media">
-          <span className="blue-back">Dr</span>
-          <span className="blue-back">Be</span>
-          <span className="blue-back">Ig</span>
-          <span className="blue-back">Tw</span>
-        </div>
-
-        <span id="blue-border-div">
-          <hr className="blue-border" />
-        </span>
-
-        <span className="copy-designed">
-          <p id="copyright">Copyright Adplusa</p>
-          <p>Designed By Quite Good</p>
-        </span>
-      </div>
+      )}
     </>
   );
 }

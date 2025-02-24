@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./header.css";
 import gsap from "gsap";
 import Image from "next/image";
+import Menu from "../menu/menu";
 
 const Header = () => {
   const [logo, setLogo] = useState("/flip-one.png");
@@ -77,21 +78,7 @@ const Header = () => {
           </div>
 
           <div className="menu-color">
-            <div className="menu">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                className="bi bi-list"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
-                />
-              </svg>
-            </div>
+            <Menu />
 
             <div className="color-changer" onClick={colorChangerHandle}>
               <h3 id="on">ON</h3>
@@ -169,6 +156,7 @@ const Header = () => {
             </div>
           </div>
         </div>
+        {/* <Menu /> */}
       </div>
     </>
   );

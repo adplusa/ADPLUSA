@@ -5,6 +5,7 @@
   background-size: contain;
   background-repeat: no-repeat;
   position: relative;
+  opacity: 1 !important;
 }
 
 .overlay {
@@ -929,17 +930,10 @@ span.service-two-bottom-box-logo {
   height: 500px;
 }
 
-/* progress.css */
 .progress-container {
   padding: 20px;
   max-width: 400px;
-}
-
-.progress-item-df {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  justify-content: space-between;
+  border: 2px solid red;
 }
 
 .progress-item {
@@ -959,8 +953,15 @@ span.service-two-bottom-box-logo {
 .progress-fill {
   height: 100%;
   width: 0;
-  background-color: #cb484b; /* Your theme color */
+  background-color: #cb484b;
   transition: width 0.5s ease-in-out;
+}
+
+.progress-item-df {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
 }
 
 .features-paras ul {
@@ -1317,7 +1318,7 @@ span.service-two-bottom-box-logo {
   top: -40%;
   left: 84%;
   transform: translateX(-50%);
-  opacity: 0.15; /* Lighter to blend well */
+  opacity: 0.2;
 
   /* Floating Effect */
   animation: moveBackground 8s ease-in-out infinite alternate;
@@ -1580,4 +1581,95 @@ span.service-two-bottom-box-logo {
   justify-content: center;
   align-items: baseline;
   gap: 10%;
+}
+
+/* Fullscreen black background */
+.loader-container {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #000; /* Black background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 9999;
+}
+
+/* Loading screen */
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  width: 100%;
+}
+
+/* Percentage count */
+.count {
+  font-size: 60px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 20px;
+}
+
+/* Progress bar - full width */
+.progress-bar-two {
+  width: 0;
+  height: 5px;
+  background: #902b2c; /* Theme color */
+  transition: width 0.4s ease-out;
+  margin: auto;
+}
+
+/* Red merging animation */
+.follow-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.follow {
+  width: 100%;
+  height: 0;
+  background-color: #902b2c;
+  position: absolute;
+  left: 0;
+}
+
+.follow-top {
+  top: 0;
+}
+
+.follow-bottom {
+  bottom: 0;
+}
+
+/* Logo animation */
+.logo-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
+.logo {
+  opacity: 0;
+  transform: scale(0.8);
+  width: 200px;
+  height: auto;
+}
+
+.nav {
+  display: block !important;
+  opacity: 1 !important;
 }
