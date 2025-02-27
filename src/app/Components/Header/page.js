@@ -3,10 +3,11 @@ import React, { useEffect, useRef, useState } from "react";
 import "./header.css";
 import gsap from "gsap";
 import Image from "next/image";
-import Menu from "../menu/menu";
 
 const Header = () => {
-  const [logo, setLogo] = useState("/flip-one.png");
+  const [logo, setLogo] = useState("/red-log-width.png");
+  const [isFixed, setIsFixed] = useState(false);
+  const [navbarTop, setNavbarTop] = useState(0);
   const colorChangerHandle = () => {
     let element = document.body;
     element.classList.toggle("dark-mode");
@@ -33,7 +34,7 @@ const Header = () => {
       setLogo(
         document.body.classList.contains("dark-mode")
           ? "/flip-oneee.png"
-          : "/flip-one.jpg"
+          : "/red-log-width.png"
       );
     };
 
@@ -50,6 +51,26 @@ const Header = () => {
     return () => observer.disconnect(); // Cleanup observer
   }, []);
 
+  useEffect(() => {
+    const navbar = document.getElementById("second-navbar");
+    if (navbar) {
+      setNavbarTop(navbar.offsetTop);
+    }
+
+    const handleScroll = () => {
+      if (window.scrollY >= navbarTop) {
+        setIsFixed(true);
+      } else {
+        setIsFixed(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [navbarTop]);
+
   return (
     <>
       <div className="header">
@@ -61,15 +82,16 @@ const Header = () => {
                   id="flip-one"
                   className="flip-front"
                   src={logo}
+                  // src={"/red-log-width.png"}
                   alt="logo"
-                  width={100}
-                  height={100}
+                  width={0}
+                  height={0}
                   unoptimized
                 />
                 <Image
                   id="flip-two"
                   className="flip-back"
-                  src={"/flip-two.png"}
+                  src={"/red-logo-flip.png"}
                   alt="logo"
                   width={100}
                   height={100}
@@ -79,9 +101,32 @@ const Header = () => {
             </div>
           </a>
 
-          <div className="menu-color">
-            <Menu />
+          <div className="">
+            <div
+              id="second-navbar"
+              className={`second-navbar ${isFixed ? "fixed" : ""}`}
+            >
+              <ul>
+                <li>
+                  <a href="/">Home</a>
+                </li>
+                <li>
+                  <a href="/about-us">About-us</a>
+                </li>
+                <li>
+                  <a href="/services">Services</a>
+                </li>
+                <li>
+                  <a href="/">FAQs</a>
+                </li>
+                <li>
+                  <a href="/">Contact-us</a>
+                </li>
+              </ul>
+            </div>
+          </div>
 
+          <div className="menu-color">
             <div className="color-changer" onClick={colorChangerHandle}>
               <h3 id="on">ON</h3>
               <div className="day-night">
@@ -158,7 +203,6 @@ const Header = () => {
             </div>
           </div>
         </div>
-        {/* <Menu /> */}
       </div>
     </>
   );

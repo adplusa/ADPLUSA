@@ -62,12 +62,9 @@
 }
 
 .achievements-grid {
-  max-width: 1000px;
   margin: 0 auto;
-  margin-top: 7%;
-  display: grid;
-  grid-template-columns: auto auto;
-  gap: 8%;
+  display: flex;
+  gap: 3%;
 }
 
 .achievement-card {
@@ -408,17 +405,19 @@ svg.bi.bi-chat-quote-fill path {
   transform: skewY(-3deg);
   transform-origin: left center; /* Anchor the left side */
   transition: all 0.8s ease;
+  display: none;
 }
 
 .testimonial-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #902b2c;
+  background-color: rgb(243 243 243);
   padding: 40px;
   border-radius: 12px;
   max-width: 90%;
   position: relative;
+  border: 1px solid #c20000;
 }
 
 .testimonial-box {
@@ -652,17 +651,15 @@ svg.bi.bi-chat-quote-fill path {
 
 .service-two-bottom-box {
   background: #fff;
-  /* border: 1px solid #000; */
   width: 400px;
-  height: 220px;
-  padding: 10px;
+  height: 190px;
 }
 
 .service-two-bottom-left {
   display: grid;
   grid-template-columns: auto auto;
-  gap: 5%;
-  margin-top: 8%;
+  gap: 3%;
+  margin-top: 3%;
   position: relative;
   z-index: 2;
 }
@@ -676,20 +673,22 @@ svg.bi.bi-chat-quote-fill path {
 .service-two-bottom-box-top {
   display: flex;
   align-items: center;
-  padding: 1% 5%;
+  padding: 3% 5%;
   gap: 24px;
 }
 
 .service-two-top-right {
   max-width: 39%;
 }
-.service-two-top-right p {
+
+/* .service-two-top-right p {
   font-size: 14px;
   font-family: "Lato-regular";
   word-spacing: 2px;
   letter-spacing: 0px;
   line-height: 1.3;
-}
+  display: none;
+} */
 
 .service-two-bottom-box-top h3 {
   font-size: 20px;
@@ -701,11 +700,12 @@ svg.bi.bi-chat-quote-fill path {
 }
 
 .service-two-bottom-box-bottom p {
-  padding: 2% 5%;
+  padding: 0 5%;
   margin-top: 10px;
   color: #545353;
   letter-spacing: 0.6px;
   word-spacing: 1px;
+  font-size: 15px;
 }
 
 .service-two-bottom {
@@ -715,9 +715,9 @@ svg.bi.bi-chat-quote-fill path {
 .service-two-bottom-right video {
   position: absolute;
   right: 5%;
-  top: 12%;
+  top: 5%;
   width: 530px;
-  height: 770px;
+  height: 600px;
   object-fit: cover;
   z-index: 1;
 }
@@ -755,8 +755,8 @@ span.service-two-bottom-box-logo {
   position: absolute;
   right: -3%;
   top: 10%;
-  width: 750px;
-  height: 750px;
+  width: 650px;
+  height: 650px;
   border-radius: 50%;
   background: #ffe6af;
   background: linear-gradient(to right, #db8383 0%, #c94446 100%);
@@ -784,7 +784,7 @@ span.service-two-bottom-box-logo {
 .feature-right {
   display: flex;
 }
-
+/* 
 .feature-left h4 {
   text-transform: uppercase;
   font-family: "Geist";
@@ -893,6 +893,40 @@ span.service-two-bottom-box-logo {
 
 .progress-item p:first-of-type {
   font-weight: bolder;
+} */
+
+.features-name {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: center;
+  align-items: center;
+  gap: 7%;
+  padding: 20px;
+}
+
+.features-name p {
+  line-height: 1.4;
+}
+
+.feature-box {
+  border: 2px solid #000;
+  width: 70%;
+  padding: 3% 0;
+  border-radius: 30px;
+}
+
+.feature-box h1 {
+  text-align: center;
+}
+
+.feature-section-df {
+  display: flex;
+  justify-content: center;
+}
+
+.features-name span {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding: 20px;
 }
 
 .marquee {
@@ -1234,7 +1268,7 @@ span.service-two-bottom-box-logo {
   top: -40%;
   left: 84%;
   transform: translateX(-50%);
-  opacity: 0.2;
+  opacity: 0.1;
 
   /* Floating Effect */
   animation: moveBackground 8s ease-in-out infinite alternate;
@@ -1318,17 +1352,11 @@ span.service-two-bottom-box-logo {
 }
 
 .contact-right {
-  margin-left: 50%;
+  margin-left: 80%;
 }
 
 .contact-right h1 {
   font-size: 2rem;
-  line-height: 1.4;
-}
-
-.contact-right p {
-  font-size: 18px;
-  margin-top: 7%;
   line-height: 1.4;
 }
 
@@ -1338,7 +1366,7 @@ span.service-two-bottom-box-logo {
   border: none;
   border-radius: 10px;
   padding: 10px;
-  width: 185px;
+  width: 175px;
   height: 45px;
   font-size: 16px;
   font-weight: bold;
@@ -1349,35 +1377,51 @@ span.service-two-bottom-box-logo {
   transform: scale(1.1);
 }
 
-.contact-btn span:last-of-type button {
-  background-color: transparent;
-  color: #902b2c;
-  font-weight: bold;
-  border: none;
-  border-radius: 10px;
-  padding: 10px;
-  width: 185px;
-  height: 45px;
-  font-size: 15px;
-  transition: all 0.3s ease;
-}
-
-.contact-btn span:last-of-type button:hover {
-  transform: scale(1.1);
-}
-
 .contact-btn {
   margin-top: 6%;
   display: flex;
   align-items: center;
 }
 
-.testimonial-container-two {
-  background: #f2f2f2;
-  padding: 50px;
-  text-align: center;
-  border-radius: 20px;
-  margin-top: 8%;
+.contact-form {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 600px;
+  padding: 40px 20px;
+  margin-top: 3%;
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-fields label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-fields input {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: 0.3s;
+  background-color: #fff;
+  width: 100%;
+}
+
+.form-fields input:focus {
+  border-color: #ac0404;
+  outline: none;
+  box-shadow: 0 0 5px rgba(233, 1, 1, 0.5);
 }
 
 .testimonial-container-two h2 {
@@ -1588,4 +1632,27 @@ span.service-two-bottom-box-logo {
 .nav {
   display: block !important;
   opacity: 1 !important;
+}
+
+.technology-grid img {
+  width: 110px;
+  height: auto;
+}
+
+.technology-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  row-gap: 55%;
+  margin-top: 6%;
+}
+
+.technology-we-use {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  background-color: rgb(236, 236, 236);
+  padding: 6% 5% 10% 5%;
+  margin-bottom: 9%;
+  margin-top: 5%;
 }

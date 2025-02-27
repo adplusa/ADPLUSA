@@ -19,39 +19,6 @@ import Footer from "./Components/Footer/page";
 
 gsap.registerPlugin(CSSPlugin);
 
-const testimonials = [
-  {
-    name: "Hannah Schmitt",
-    role: "Lead designer",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus maecenas.",
-    image: "https://randomuser.me/api/portraits/women/1.jpg",
-  },
-  {
-    name: "Hannah Schmitt",
-    role: "Lead designer",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus maecenas. Suspendisse sed magna eget nibh in turpis. Consequat duis diam lacus arcu.",
-    image: "https://randomuser.me/api/portraits/women/2.jpg",
-  },
-  {
-    name: "Hannah Schmitt",
-    role: "Lead designer",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus maecenas.",
-    image: "https://randomuser.me/api/portraits/women/3.jpg",
-  },
-  {
-    name: "Hannah Schmitt",
-    role: "Lead designer",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus maecenas.",
-    image: "https://randomuser.me/api/portraits/women/3.jpg",
-  },
-  {
-    name: "Hannah Schmitt",
-    role: "Lead designer",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus maecenas.",
-    image: "https://randomuser.me/api/portraits/women/3.jpg",
-  },
-];
-
 const faqs = [
   {
     question: "How do we start a project?",
@@ -109,44 +76,39 @@ const steps = [
 const achievements = [
   {
     icon: FaTrophy,
-    title: "Awards Won",
-    value: "32+",
+    title: "Years of Experience",
     gradient: "blue-gradient",
   },
   {
     icon: FaUsers,
-    title: "Happy Clients",
-    value: "2.4K",
+    title: "Clients Served",
     gradient: "teal-gradient",
   },
-  { icon: FaStar, title: "Reviews", value: "4.9", gradient: "orange-gradient" },
+  { icon: FaStar, title: "Reviews", gradient: "orange-gradient" },
   {
     icon: FaChartLine,
-    title: "Growth Rate",
-    value: "89%",
+    title: "Projects Completed",
     gradient: "purple-gradient",
   },
 ];
+
+const images = ["/process-img.jpg", "/process-img2.jpg", "/process-img3.jpg"];
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [counter, setCounter] = useState(0);
-  const [index, setIndex] = useState(0);
+  // const [index, setIndex] = useState(0);
   const [activeStep, setActiveStep] = useState(steps[0].id);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [imageSrc, setImageSrc] = useState("/process-img.jpg");
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [loaded, setLoaded] = useState(false);
+  const [imageSrc, setImageSrc] = useState(images[0]);
+  const [index, setIndex] = useState(0);
   const [current, setCurrent] = useState(0);
   const [logo, setLogo] = useState("/red-logo.png");
   const textRef = useRef(null);
-  const [valueOne, setValueOne] = useState(0);
-  const [valueTwo, setValueTwo] = useState(0);
-  const [valueThree, setValueThree] = useState(0);
-  const [valueFour, setValueFour] = useState(0);
-  const [valueFive, setValueFive] = useState(0);
-  const [valueSix, setValueSix] = useState(0);
-  const [valueSeven, setValueSeven] = useState(0);
 
   const textRefs = useRef([]);
   const [open, setOpen] = useState(null);
@@ -166,7 +128,7 @@ export default function Home() {
           if (mouseOver) return;
           timeout = setTimeout(() => {
             slider.next();
-          }, 100000000);
+          }, 2000);
         }
         slider.on("created", () => {
           slider.container.addEventListener("mouseover", () => {
@@ -227,6 +189,23 @@ export default function Home() {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      setIndex((prevIndex) => {
+        const newIndex = (prevIndex + 1) % images.length;
+        setImageSrc(images[newIndex]);
+        return newIndex;
+      });
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleImageChange = (newIndex) => {
+    setImageSrc(images[newIndex]);
+    setIndex(newIndex);
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
       setCounter((prev) => (prev < 100 ? prev + 5 : 100));
     }, 14);
 
@@ -238,37 +217,17 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [counter]);
 
-  const nextSlide = () => {
-    setCurrent((prev) => (prev >= testimonials.length - 3 ? 0 : prev + 1));
-  };
+  // useEffect(() => {
+  //   const interval = setInterval(nextSlide, 5000);
+  //   return () => clearInterval(interval);
+  // }, []);
 
-  const prevSlide = () => {
-    setCurrent((prev) => (prev <= 0 ? testimonials.length - 3 : prev - 1));
-  };
-
-  const cardOneHandler = () => {
-    setImageSrc("/process-img.jpg");
-  };
-
-  const cardTwoHandler = () => {
-    setImageSrc("/process-img2.jpg");
-  };
-
-  const cardThreeHandler = () => {
-    setImageSrc("/process-img3.jpg");
-  };
-
-  useEffect(() => {
-    const interval = setInterval(nextSlide, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const slider = document.querySelector(".testimonial-slider");
-    if (slider) {
-      slider.style.transition = "all 0.5s ease";
-    }
-  }, [current]);
+  // useEffect(() => {
+  //   const slider = document.querySelector(".testimonial-slider");
+  //   if (slider) {
+  //     slider.style.transition = "all 0.5s ease";
+  //   }
+  // }, [current]);
 
   const handleClick = () => {
     setActive(!active);
@@ -277,43 +236,6 @@ export default function Home() {
   const toggle = (index) => {
     setOpen(open === index ? null : index);
   };
-
-  useEffect(() => {
-    const intervalOne = setInterval(() => {
-      setValueOne((prev) => (prev < 50 ? prev + 1 : 50));
-    }, 20);
-
-    const intervalTwo = setInterval(() => {
-      setValueTwo((prev) => (prev < 75 ? prev + 1 : 75));
-    }, 20);
-
-    const intervalThree = setInterval(() => {
-      setValueThree((prev) => (prev < 90 ? prev + 1 : 90));
-    }, 20);
-
-    const intervalFour = setInterval(() => {
-      setValueFour((prev) => (prev < 80 ? prev + 1 : 80));
-    }, 20);
-    const intervalFive = setInterval(() => {
-      setValueFive((prev) => (prev < 80 ? prev + 1 : 80));
-    }, 20);
-    const intervalSix = setInterval(() => {
-      setValueSix((prev) => (prev < 80 ? prev + 1 : 80));
-    }, 20);
-    const intervalSeven = setInterval(() => {
-      setValueSeven((prev) => (prev < 80 ? prev + 1 : 80));
-    }, 20);
-
-    return () => {
-      clearInterval(intervalOne);
-      clearInterval(intervalTwo);
-      clearInterval(intervalThree);
-      clearInterval(intervalFour);
-      clearInterval(intervalFive);
-      clearInterval(intervalSix);
-      clearInterval(intervalSeven);
-    };
-  }, []);
 
   const icons = [
     "/HUSLOGO_WHITE.AVIF",
@@ -539,7 +461,7 @@ export default function Home() {
                     fields.
                   </h1>
                 </div>
-                <div className="service-two-top-right">
+                {/* <div className="service-two-top-right">
                   <p>
                     We offer a comprehensive range of services tailored to the
                     steel industry. Our expertise includes BIM services, CAD
@@ -549,7 +471,7 @@ export default function Home() {
                     seamless integration of mechanical, electrical, and plumbing
                     systems.
                   </p>
-                </div>
+                </div> */}
               </div>
               <div className="service-two-bottom">
                 <div className="service-two-bottom-left">
@@ -702,7 +624,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="cirlce-review">
+            {/* <div className="cirlce-review">
               <div className="cirlce-review-df">
                 <div className="circle-container">
                   <Image
@@ -750,14 +672,7 @@ export default function Home() {
                         <div className="achievement-content">
                           <div className="achievement-text">
                             <h3>{achievement.title}</h3>
-                            {/* <p>{achievement.value}</p> */}
                             <achievement.icon className="achievement-icon" />
-                          </div>
-                          <div className="progress-bar">
-                            <div
-                              className="progress-fill"
-                              style={{ width: `${valueSeven}%` }}
-                            ></div>
                           </div>
                         </div>
                       </div>
@@ -765,153 +680,80 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className="feature-section">
-              <div className="feature-section-df">
-                <div className="feature-left">
-                  <h4>overall progress</h4>
-                  <h1>Our Features</h1>
-                  <p>
-                    Showcasing cutting-edge designs and innovative solutions
-                    tailored for modern architecture and interiors.
-                  </p>
-                  <div className="features-paras">
-                    <ul>
-                      <div className="progress-item">
-                        <div className="progress-item-df">
-                          <p>Maintenance Support</p>
-                          <Image
-                            src={"1.png"}
-                            width={50}
-                            height={50}
-                            unoptimized
-                            alt="Maintenance"
-                          ></Image>
-                        </div>
-                        <div className="progress-bar">
-                          <div
-                            className="progress-fill"
-                            style={{ width: `${valueOne}%` }}
-                          ></div>
+              <div className="achievements-container">
+                <h2 className="achievements-title">
+                  Our <span className="asked">Achievements</span>
+                </h2>
+                <div className="achievements-grid">
+                  {achievements.map((achievement, index) => (
+                    <div
+                      key={index}
+                      className={`achievement-card ${achievement.gradient}`}
+                    >
+                      <div className="achievement-content">
+                        <div className="achievement-text">
+                          <h3>{achievement.title}</h3>
+                          {/* <p>{achievement.value}</p> */}
+                          <achievement.icon className="achievement-icon" />
                         </div>
                       </div>
-
-                      <div className="progress-item">
-                        <div className="progress-item-df">
-                          <p>Cost-Effective</p>
-                          <Image
-                            src={"2.png"}
-                            width={50}
-                            height={50}
-                            unoptimized
-                            alt="Maintenance"
-                          ></Image>
-                        </div>
-                        <div className="progress-bar">
-                          <div
-                            className="progress-fill"
-                            style={{ width: `${valueTwo}%` }}
-                          ></div>
-                        </div>
-                      </div>
-
-                      <div className="progress-item">
-                        <div className="progress-item-df">
-                          <p>Swift Deliverance</p>
-                          <Image
-                            src={"3.png"}
-                            width={50}
-                            height={50}
-                            unoptimized
-                            alt="Maintenance"
-                          ></Image>
-                        </div>
-                        <div className="progress-bar">
-                          <div
-                            className="progress-fill"
-                            style={{ width: `${valueThree}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    </ul>
-
-                    <ul>
-                      <div className="progress-item">
-                        <div className="progress-item-df">
-                          <p>Software Expertise</p>
-                          <Image
-                            src={"4.png"}
-                            width={50}
-                            height={50}
-                            unoptimized
-                            alt="Maintenance"
-                          ></Image>
-                        </div>
-                        <div className="progress-bar">
-                          <div
-                            className="progress-fill"
-                            style={{ width: `${valueFour}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                      <div className="progress-item">
-                        <div className="progress-item-df">
-                          <p>Newest Technology</p>
-                          <Image
-                            src={"5.png"}
-                            width={50}
-                            height={50}
-                            unoptimized
-                            alt="Maintenance"
-                          ></Image>
-                        </div>
-                        <div className="progress-bar">
-                          <div
-                            className="progress-fill"
-                            style={{ width: `${valueFive}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                      <div className="progress-item">
-                        <div className="progress-item-df">
-                          <p>23+ years of experience</p>
-                          <Image
-                            src={"6.png"}
-                            width={50}
-                            height={50}
-                            unoptimized
-                            alt="Maintenance"
-                          ></Image>
-                        </div>
-                        <div className="progress-bar">
-                          <div
-                            className="progress-fill"
-                            style={{ width: `${valueSix}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    </ul>
-                  </div>
+                    </div>
+                  ))}
                 </div>
+              </div>
 
-                <div className="feature-right">
-                  <Image
-                    src={"/feature-img1.jpg"}
-                    alt="feature-img"
-                    width={0}
-                    height={0}
-                    unoptimized
-                    priority
-                  ></Image>
-                  <Image
-                    src={"/feature-img3.jpg"}
-                    alt="feature-img"
-                    width={0}
-                    height={0}
-                    unoptimized
-                    priority
-                  ></Image>
+              <div className="feature-section-df">
+                <div className="feature-box">
+                  <h1>Feature</h1>
+                  <div className="features-name">
+                    <span>
+                      <h3>Maintenance Support</h3>
+                      <p>
+                        Maintenance is the process of ensuring that buildings
+                        retain a good appearance and operate at optimum
+                        efficiency.
+                      </p>
+                    </span>
+                    <span>
+                      <h3>Cost-Effective</h3>
+                      <p>
+                        The building design is deemed to be cost-effective if it
+                        results in benefits equal to those of alternative
+                        designs.
+                      </p>
+                    </span>
+                    <span>
+                      <h3>Swift Deliverance</h3>
+                      <p>
+                        We never miss any Deadline. Discipline is one of our
+                        core values.
+                      </p>
+                    </span>
+                    <span>
+                      <h3>Software Expertise</h3>
+                      <p>
+                        We are a team of software experts as per industry
+                        standards.
+                      </p>
+                    </span>
+                    <span>
+                      <h3>Newest Technology</h3>
+                      <p>
+                        We work with the latest technology to deliver the best
+                        to our clients.
+                      </p>
+                    </span>
+                    <span>
+                      <h3>23+ years of experience</h3>
+                      <p>
+                        A greater understanding of the cities and buildings
+                        around you.
+                      </p>
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -930,7 +772,7 @@ export default function Home() {
               <div className="content">
                 {/* Left Content */}
                 <div className="left">
-                  <div className="card" onClick={cardOneHandler}>
+                  <div className="card" onClick={() => handleImageChange(0)}>
                     <div className="number">1</div>
                     <div>
                       <h3 className="card-title">Meet Customers</h3>
@@ -942,7 +784,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="card" onClick={cardTwoHandler}>
+                  <div className="card" onClick={() => handleImageChange(1)}>
                     <div className="number">2</div>
                     <div>
                       <h3 className="card-title">Planning & Research</h3>
@@ -954,7 +796,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="card" onClick={cardThreeHandler}>
+                  <div className="card" onClick={() => handleImageChange(2)}>
                     <div className="number">3</div>
                     <div>
                       <h3 className="card-title">Finalize the Design</h3>
@@ -967,7 +809,6 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Right Content */}
                 <div className="right">
                   <Image
                     src={imageSrc}
@@ -979,6 +820,123 @@ export default function Home() {
                 </div>
               </div>
             </section>
+
+            <div className="technology-we-use">
+              <h1>Technologies we use</h1>
+              <div className="technology-grid">
+                <span>
+                  <Image
+                    src="/revit.webp"
+                    width={0}
+                    height={0}
+                    alt="footer-img"
+                    unoptimized
+                  ></Image>
+                </span>
+                <span>
+                  <Image
+                    src="/revit.webp"
+                    width={0}
+                    height={0}
+                    alt="footer-img"
+                    unoptimized
+                  ></Image>
+                </span>
+                <span>
+                  <Image
+                    src="/revit.webp"
+                    width={0}
+                    height={0}
+                    alt="footer-img"
+                    unoptimized
+                  ></Image>
+                </span>
+                <span>
+                  <Image
+                    src="/sketchup_logo.webp"
+                    width={0}
+                    height={0}
+                    alt="footer-img"
+                    unoptimized
+                  ></Image>
+                </span>
+                <span>
+                  <Image
+                    src="/sketchup_logo.webp"
+                    width={0}
+                    height={0}
+                    alt="footer-img"
+                    unoptimized
+                  ></Image>
+                </span>
+                <span>
+                  <Image
+                    src="/sketchup_logo.webp"
+                    width={0}
+                    height={0}
+                    alt="footer-img"
+                    unoptimized
+                  ></Image>
+                </span>
+                <span>
+                  <Image
+                    src="/archicad_logo (1).webp"
+                    width={0}
+                    height={0}
+                    alt="footer-img"
+                    unoptimized
+                  ></Image>
+                </span>
+
+                <span>
+                  <Image
+                    src="/archicad_logo (1).webp"
+                    width={0}
+                    height={0}
+                    alt="footer-img"
+                    unoptimized
+                  ></Image>
+                </span>
+
+                <span>
+                  <Image
+                    src="/archicad_logo (1).webp"
+                    width={0}
+                    height={0}
+                    alt="footer-img"
+                    unoptimized
+                  ></Image>
+                </span>
+
+                <span>
+                  <Image
+                    src="/archicad_logo.webp"
+                    width={0}
+                    height={0}
+                    alt="footer-img"
+                    unoptimized
+                  ></Image>
+                </span>
+                <span>
+                  <Image
+                    src="/archicad_logo.webp"
+                    width={0}
+                    height={0}
+                    alt="footer-img"
+                    unoptimized
+                  ></Image>
+                </span>
+                <span>
+                  <Image
+                    src="/archicad_logo.webp"
+                    width={0}
+                    height={0}
+                    alt="footer-img"
+                    unoptimized
+                  ></Image>
+                </span>
+              </div>
+            </div>
 
             <div className="faqs">
               <div className="faq-accordion">
@@ -1006,163 +964,97 @@ export default function Home() {
             </div>
 
             <div className="reviews-section">
-              <div ref={sliderRef} className="keen-slider">
-                <div className="keen-slider__slide number-slide1">
-                  <div className="testimonial-container">
-                    <div className="testimonial-box">
-                      <h2>Our Founder & Principal Architect</h2>
-                      <p>
-                        “An Indian, living in the capital city of India; Delhi,
-                        is an award-winning architect, who incorporated a
-                        company with a clear intent to foster an egalitarian
-                        organizational ethos where distinctive architectural
-                        talent finds self-expression and can contribute in a
-                        democratic and collaborative work environment.”
-                      </p>
-                      <p>
-                        Focused on core competencies in the field of
-                        Architecture, Interior Designing, Consulting
-                        Engineering, and other Allied Services and having an
-                        experience of 22+ Yrs.
-                      </p>
-                      <div className="author">
-                        <Image
-                          src="/founder.jpg"
-                          alt="Sylwia Gieruszyńska"
-                          width={50}
-                          height={50}
-                          className="profile-img"
-                        />
-                        <div>
-                          <h4 className="name">Abhishek Aggarwal</h4>
-                          <p className="designation">Founder</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="testimonial-image">
-                      <Image
-                        src="/founder.jpg"
-                        alt="Team"
-                        width={400}
-                        height={400}
-                        className="team-img"
-                      />
-                      <div className="white-box"></div>
-                    </div>
-                  </div>
-                </div>
-                <div className="keen-slider__slide number-slide2">
-                  <div className="testimonial-container">
-                    <div className="testimonial-box">
-                      <h2>Our Founder & Principal Architect</h2>
-                      <p>
-                        “An Indian, living in the capital city of India; Delhi,
-                        is an award-winning architect, who incorporated a
-                        company with a clear intent to foster an egalitarian
-                        organizational ethos where distinctive architectural
-                        talent finds self-expression and can contribute in a
-                        democratic and collaborative work environment.”
-                      </p>
-                      <p>
-                        Focused on core competencies in the field of
-                        Architecture, Interior Designing, Consulting
-                        Engineering, and other Allied Services and having an
-                        experience of 22+ Yrs.
-                      </p>
-                      <div className="author">
-                        <Image
-                          src="/founder.jpg"
-                          alt="Sylwia Gieruszyńska"
-                          width={50}
-                          height={50}
-                          className="profile-img"
-                        />
-                        <div>
-                          <h4 className="name">Abhishek Aggarwal</h4>
-                          <p className="designation">Founder</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="testimonial-image">
-                      <Image
-                        src="/founder.jpg"
-                        alt="Team"
-                        width={400}
-                        height={400}
-                        className="team-img"
-                      />
-                      <div className="white-box"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="testimonial-container-two">
-              <div className="testimonial-container-two-text-center">
-                <svg
-                  onClick={prevSlide}
-                  className="prev"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
-                  />
-                </svg>
-                <h2>What Our Clients Say About Us</h2>
-                <svg
-                  onClick={nextSlide}
-                  className="next"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
-                  />
-                </svg>
-              </div>
-              <div className="dots">
-                {testimonials.map((_, index) => (
-                  <span
-                    key={index}
-                    className={`dot ${index === current ? "active" : ""}`}
-                  />
-                ))}
-              </div>
-
-              <div className="testimonial-slider">
-                {testimonials
-                  .slice(current, current + 3)
-                  .map((testimonial, index) => (
-                    <div
-                      key={index}
-                      className={`testimonial-card ${
-                        index === 1 ? "active" : ""
-                      }`} // Middle card is active
-                    >
-                      <div className="testimonial-content">
-                        <img
-                          src={testimonial.image}
-                          alt={testimonial.name}
-                          className="testimonial-img"
-                        />
-                        <h3>{testimonial.name}</h3>
-                        <p className="role">{testimonial.role}</p>
-                        <p className="quote">
-                          &ldquo;{testimonial.text}&rdquo;
+              <div className="navigation-wrapper">
+                <div ref={sliderRef} className="keen-slider">
+                  <div className="keen-slider__slide number-slide1">
+                    <div className="testimonial-container">
+                      <div className="testimonial-box">
+                        <h2>Our Founder & Principal Architect</h2>
+                        <p>
+                          “An Indian, living in the capital city of India;
+                          Delhi, is an award-winning architect, who incorporated
+                          a company with a clear intent to foster an egalitarian
+                          organizational ethos where distinctive architectural
+                          talent finds self-expression and can contribute in a
+                          democratic and collaborative work environment.”
                         </p>
+                        <p>
+                          Focused on core competencies in the field of
+                          Architecture, Interior Designing, Consulting
+                          Engineering, and other Allied Services and having an
+                          experience of 22+ Yrs.
+                        </p>
+                        <div className="author">
+                          <Image
+                            src="/founder.jpg"
+                            alt="Sylwia Gieruszyńska"
+                            width={50}
+                            height={50}
+                            className="profile-img"
+                          />
+                          <div>
+                            <h4 className="name">Abhishek Aggarwal</h4>
+                            <p className="designation">Founder</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="testimonial-image">
+                        <Image
+                          src="/founder.jpg"
+                          alt="Team"
+                          width={400}
+                          height={400}
+                          className="team-img"
+                        />
+                        <div className="white-box"></div>
                       </div>
                     </div>
-                  ))}
+                  </div>
+                  <div className="keen-slider__slide number-slide2">
+                    <div className="testimonial-container">
+                      <div className="testimonial-box">
+                        <h2>Our Founder & Principal Architect</h2>
+                        <p>
+                          “An Indian, living in the capital city of India;
+                          Delhi, is an award-winning architect, who incorporated
+                          a company with a clear intent to foster an egalitarian
+                          organizational ethos where distinctive architectural
+                          talent finds self-expression and can contribute in a
+                          democratic and collaborative work environment.”
+                        </p>
+                        <p>
+                          Focused on core competencies in the field of
+                          Architecture, Interior Designing, Consulting
+                          Engineering, and other Allied Services and having an
+                          experience of 22+ Yrs.
+                        </p>
+                        <div className="author">
+                          <Image
+                            src="/founder.jpg"
+                            alt="Sylwia Gieruszyńska"
+                            width={50}
+                            height={50}
+                            className="profile-img"
+                          />
+                          <div>
+                            <h4 className="name">Abhishek Aggarwal</h4>
+                            <p className="designation">Founder</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="testimonial-image">
+                        <Image
+                          src="/founder.jpg"
+                          alt="Team"
+                          width={400}
+                          height={400}
+                          className="team-img"
+                        />
+                        <div className="white-box"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -1179,20 +1071,49 @@ export default function Home() {
                     ></Image>
                   </div>
                   <div className="contact-right">
-                    <h1>
-                      Begin a business journey that transitions to new heights
-                      every day!
-                    </h1>
-                    <p>
-                      Sign up today to enter the world of seamless payments and
-                      deliver an outstanding customer experience
-                    </p>
+                    <h1>Contact us</h1>
+
+                    <div className="contact-form">
+                      <div className="form-fields">
+                        <label htmlFor="fname">Name</label>
+                        <input
+                          type="text"
+                          name="firstName"
+                          id="fname"
+                          placeholder="Your name"
+                        />
+                      </div>
+                      <div className="form-fields">
+                        <label htmlFor="email">Email</label>
+                        <input
+                          type="text"
+                          name="email"
+                          id="email"
+                          placeholder="Email"
+                        />
+                      </div>
+                      <div className="form-fields">
+                        <label htmlFor="phone">Phone no</label>
+                        <input
+                          type="text"
+                          name="phone"
+                          id="phone"
+                          placeholder="Phone no"
+                        />
+                      </div>
+                      <div className="form-fields">
+                        <label htmlFor="service">Service</label>
+                        <input
+                          type="text"
+                          name="service"
+                          id="service"
+                          placeholder="Service"
+                        />
+                      </div>
+                    </div>
                     <div className="contact-btn">
                       <span>
-                        <button>Getting Started</button>
-                      </span>
-                      <span>
-                        <button>Contact Us</button>
+                        <button>Submit</button>
                       </span>
                     </div>
                   </div>
@@ -1200,60 +1121,6 @@ export default function Home() {
               </div>
             </section>
 
-            {/* <div className="footer">
-              <div className="footer-logo">
-                <Image
-                  src={"/red-logo.png"}
-                  alt="Footer-logo"
-                  id="footer-logo"
-                  width={0}
-                  height={0}
-                  unoptimized
-                ></Image>
-                <p>
-                  ADPL CONSULTING LLC works as a leading Architectural and
-                  Engineering
-                  <br />
-                  outsource fraternity across India and the United States of
-                  America.
-                </p>
-              </div>
-              <div className="footer-nav">
-                <ul>
-                  <li>
-                    <a href="#">Home</a>
-                  </li>
-                  <li>
-                    <a href="#">About us</a>
-                  </li>
-                  <li>
-                    <a href="#">Portfolio</a>
-                  </li>
-                  <li>
-                    <a href="#">Get a Quote</a>
-                  </li>
-                  <li>
-                    <a href="#">Competition: Contact-Less Restroom</a>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="social-media">
-                <span className="blue-back">Dr</span>
-                <span className="blue-back">Be</span>
-                <span className="blue-back">Ig</span>
-                <span className="blue-back">Tw</span>
-              </div>
-
-              <span id="blue-border-div">
-                <hr className="blue-border" />
-              </span>
-
-              <span className="copy-designed">
-                <p id="copyright">Copyright Adplusa</p>
-                <p>Designed By Quite Good</p>
-              </span>
-            </div> */}
             <Footer />
           </div>
         </div>

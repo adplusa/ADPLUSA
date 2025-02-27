@@ -59,6 +59,12 @@
   font-weight: bold;
 }
 
+.social-media span a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .blue-border {
   border: 0.5px solid #000000;
   margin-top: 3%;
