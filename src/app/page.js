@@ -72,27 +72,34 @@ const steps = [
       "The feedback of the client is solicited and integrated. The changes are incorporated and the final set of completed drawings are prepared.",
   },
 ];
+const images = ["/process-img.jpg", "/process-img2.jpg", "/process-img3.jpg"];
 
 const achievements = [
   {
     icon: FaTrophy,
     title: "Years of Experience",
+    numbers: "3+",
     gradient: "blue-gradient",
   },
   {
     icon: FaUsers,
     title: "Clients Served",
+    numbers: "100",
     gradient: "teal-gradient",
   },
-  { icon: FaStar, title: "Reviews", gradient: "orange-gradient" },
+  {
+    icon: FaStar,
+    title: "Reviews",
+    numbers: "5",
+    gradient: "orange-gradient",
+  },
   {
     icon: FaChartLine,
     title: "Projects Completed",
+    numbers: "150",
     gradient: "purple-gradient",
   },
 ];
-
-const images = ["/process-img.jpg", "/process-img2.jpg", "/process-img3.jpg"];
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -100,24 +107,27 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [counter, setCounter] = useState(0);
   // const [index, setIndex] = useState(0);
-  const [activeStep, setActiveStep] = useState(steps[0].id);
+  // const [activeStep, setActiveStep] = useState(steps[0].id);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [loaded, setLoaded] = useState(false);
+  // const [currentSlide, setCurrentSlide] = useState(0);
+  // const [loaded, setLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState(images[0]);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [index, setIndex] = useState(0);
-  const [current, setCurrent] = useState(0);
+  // const [current, setCurrent] = useState(0);
   const [logo, setLogo] = useState("/red-logo.png");
   const textRef = useRef(null);
 
   const textRefs = useRef([]);
   const [open, setOpen] = useState(null);
-  const [sliderRef] = useKeenSlider(
+
+  const [sliderRef, instanceRef] = useKeenSlider(
     {
       loop: true,
     },
     [
       (slider) => {
+        instanceRef.current = slider;
         let timeout;
         let mouseOver = false;
         function clearNextTimeout() {
@@ -147,7 +157,6 @@ export default function Home() {
       },
     ]
   );
-
   const revealAnimation = () => {
     const t1 = gsap.timeline({
       onComplete: () => setLoading(false), // Instantly remove loader
@@ -187,20 +196,22 @@ export default function Home() {
       .set(".loader-container", { display: "none" }); // Instantly hide
   };
 
+  // Working Process Images Changer
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prevIndex) => {
         const newIndex = (prevIndex + 1) % images.length;
         setImageSrc(images[newIndex]);
+        setActiveIndex(newIndex); // ✅ Correctly update activeIndex
         return newIndex;
       });
-    }, 3000); // Change image every 3 seconds
+    }, 4000); // Change image every 3 seconds
 
     return () => clearInterval(interval);
-  }, []);
-
+  }, [images]);
   const handleImageChange = (newIndex) => {
     setImageSrc(images[newIndex]);
+    setActiveIndex(newIndex);
     setIndex(newIndex);
   };
 
@@ -229,9 +240,9 @@ export default function Home() {
   //   }
   // }, [current]);
 
-  const handleClick = () => {
-    setActive(!active);
-  };
+  // const handleClick = () => {
+  //   setActive(!active);
+  // };
 
   const toggle = (index) => {
     setOpen(open === index ? null : index);
@@ -275,27 +286,27 @@ export default function Home() {
     });
   }, []);
 
-  useEffect(() => {
-    const updateLogo = () => {
-      setLogo(
-        document.body.classList.contains("dark-mode")
-          ? "/white-logo.png"
-          : "/red-logo.png"
-      );
-    };
+  // useEffect(() => {
+  //   const updateLogo = () => {
+  //     setLogo(
+  //       document.body.classList.contains("dark-mode")
+  //         ? "/white-logo.png"
+  //         : "/red-logo.png"
+  //     );
+  //   };
 
-    // Run on mount
-    updateLogo();
+  //   // Run on mount
+  //   updateLogo();
 
-    // Observe for changes
-    const observer = new MutationObserver(() => {
-      updateLogo();
-    });
+  //   // Observe for changes
+  //   const observer = new MutationObserver(() => {
+  //     updateLogo();
+  //   });
 
-    observer.observe(document.body, { attributes: true });
+  //   observer.observe(document.body, { attributes: true });
 
-    return () => observer.disconnect(); // Cleanup observer
-  }, []);
+  //   return () => observer.disconnect(); // Cleanup observer
+  // }, []);
 
   useEffect(() => {
     gsap.to(textRef.current, {
@@ -305,20 +316,11 @@ export default function Home() {
       duration: 8,
       ease: "linear",
     });
-
-    gsap.to(".white-box", {
-      rotateX: 5, // Slight tilt effect
-      rotateZ: 3, // Subtle rotation along Z-axis
-      y: 10, // Moves up and down
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: ".white-box",
-        start: "top 65%",
-        end: "top 50%",
-        scrub: true,
-      },
-    });
   }, []);
+
+  const upwardHandler = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <>
@@ -449,6 +451,11 @@ export default function Home() {
                   Engineering outsource fraternity across India and the United
                   States of America.
                 </p>
+                <p>
+                  ADPL CONSULTING LLC works as a leading Architectural and
+                  Engineering outsource fraternity across India and the United
+                  States of America.
+                </p>
               </div>
             </div>
 
@@ -461,17 +468,6 @@ export default function Home() {
                     fields.
                   </h1>
                 </div>
-                {/* <div className="service-two-top-right">
-                  <p>
-                    We offer a comprehensive range of services tailored to the
-                    steel industry. Our expertise includes BIM services, CAD
-                    services, and Permit Drawings & Documentation. We also
-                    provide advanced 3D Visualization and high-quality
-                    Presentation Drawings. Additionally, our MEP services ensure
-                    seamless integration of mechanical, electrical, and plumbing
-                    systems.
-                  </p>
-                </div> */}
               </div>
               <div className="service-two-bottom">
                 <div className="service-two-bottom-left">
@@ -624,64 +620,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* <div className="cirlce-review">
-              <div className="cirlce-review-df">
-                <div className="circle-container">
-                  <Image
-                    src="/flip-two.png"
-                    alt="logo"
-                    className="center-image"
-                    width={120}
-                    height={120}
-                  />
-
-                  <svg
-                    viewBox="0 0 250 250"
-                    className="circle-text"
-                    ref={textRef}
-                  >
-                    <defs>
-                      <path
-                        id="circlePath"
-                        d="M 125, 125 m -100, 0 a 100,100 0 1,1 200,0 a 100,100 0 1,1 -200,0"
-                      />
-                    </defs>
-                    <text
-                      fontSize="20"
-                      fontWeight="bold"
-                      letterSpacing="3"
-                      fill="#c94446"
-                    >
-                      <textPath href="#circlePath" startOffset="0%">
-                        🔹 ADPL CONSULTING LLC 🔹 ARCHITECTURAL & ENGINEERING 🔹
-                      </textPath>
-                    </text>
-                  </svg>
-                </div>
-
-                <div className="achievements-container">
-                  <h2 className="achievements-title">
-                    Our <span className="asked">Achievements</span>
-                  </h2>
-                  <div className="achievements-grid">
-                    {achievements.map((achievement, index) => (
-                      <div
-                        key={index}
-                        className={`achievement-card ${achievement.gradient}`}
-                      >
-                        <div className="achievement-content">
-                          <div className="achievement-text">
-                            <h3>{achievement.title}</h3>
-                            <achievement.icon className="achievement-icon" />
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div> */}
-
             <div className="feature-section">
               <div className="achievements-container">
                 <h2 className="achievements-title">
@@ -695,9 +633,13 @@ export default function Home() {
                     >
                       <div className="achievement-content">
                         <div className="achievement-text">
-                          <h3>{achievement.title}</h3>
-                          {/* <p>{achievement.value}</p> */}
-                          <achievement.icon className="achievement-icon" />
+                          <span>
+                            <h3>{achievement.title}</h3>
+                          </span>
+                          <span className="achievement-numbers">
+                            <p>{achievement.numbers}</p>
+                            <achievement.icon className="achievement-icon" />
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -707,51 +649,24 @@ export default function Home() {
 
               <div className="feature-section-df">
                 <div className="feature-box">
-                  <h1>Feature</h1>
+                  <h1>We specialize in outsourcing architectural services</h1>
                   <div className="features-name">
                     <span>
+                      <p>100%</p>
                       <h3>Maintenance Support</h3>
-                      <p>
-                        Maintenance is the process of ensuring that buildings
-                        retain a good appearance and operate at optimum
-                        efficiency.
-                      </p>
                     </span>
                     <span>
+                      <p>75+</p>
                       <h3>Cost-Effective</h3>
-                      <p>
-                        The building design is deemed to be cost-effective if it
-                        results in benefits equal to those of alternative
-                        designs.
-                      </p>
                     </span>
                     <span>
+                      <p>135+</p>
                       <h3>Swift Deliverance</h3>
-                      <p>
-                        We never miss any Deadline. Discipline is one of our
-                        core values.
-                      </p>
                     </span>
+
                     <span>
-                      <h3>Software Expertise</h3>
-                      <p>
-                        We are a team of software experts as per industry
-                        standards.
-                      </p>
-                    </span>
-                    <span>
-                      <h3>Newest Technology</h3>
-                      <p>
-                        We work with the latest technology to deliver the best
-                        to our clients.
-                      </p>
-                    </span>
-                    <span>
-                      <h3>23+ years of experience</h3>
-                      <p>
-                        A greater understanding of the cities and buildings
-                        around you.
-                      </p>
+                      <p>23+</p>
+                      <h3> years of experience</h3>
                     </span>
                   </div>
                 </div>
@@ -771,7 +686,7 @@ export default function Home() {
 
               <div className="content">
                 {/* Left Content */}
-                <div className="left">
+                {/* <div className="left">
                   <div className="card" onClick={() => handleImageChange(0)}>
                     <div className="number">1</div>
                     <div>
@@ -807,6 +722,35 @@ export default function Home() {
                       </p>
                     </div>
                   </div>
+                </div> */}
+
+                <div className="left">
+                  {[
+                    {
+                      title: "Meet Customers",
+                      text: "We introduce and present ourselves. Our priority is to listen and understand the client’s vision for clearer insight about the project.",
+                    },
+                    {
+                      title: "Planning & Research",
+                      text: "With the help of research and critical analysis, we prepare the first set of the drawings taking into account the requirements of the clients.",
+                    },
+                    {
+                      title: "Finalize the Design",
+                      text: "The feedback of the client is solicited and integrated. The changes are incorporated and the final set of completed drawings are prepared.",
+                    },
+                  ].map((item, idx) => (
+                    <div
+                      key={idx}
+                      className={`card ${idx === activeIndex ? "active" : ""}`}
+                      onClick={() => handleImageChange(idx)}
+                    >
+                      <div className="number">{idx + 1}</div>
+                      <div>
+                        <h3 className="card-title">{item.title}</h3>
+                        <p className="card-text">{item.text}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
                 <div className="right">
@@ -965,6 +909,24 @@ export default function Home() {
 
             <div className="reviews-section">
               <div className="navigation-wrapper">
+                <button
+                  className="prev-button"
+                  onClick={() => instanceRef.current?.prev()}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-arrow-left"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
+                    />
+                  </svg>
+                </button>
                 <div ref={sliderRef} className="keen-slider">
                   <div className="keen-slider__slide number-slide1">
                     <div className="testimonial-container">
@@ -1055,6 +1017,24 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
+                <button
+                  className="next-button"
+                  onClick={() => instanceRef.current?.next()}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-arrow-right"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+                    />
+                  </svg>
+                </button>
               </div>
             </div>
 
@@ -1122,6 +1102,37 @@ export default function Home() {
             </section>
 
             <Footer />
+          </div>
+
+          <div className="whatsapp">
+            <a
+              target="_blank"
+              href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
+            >
+              <Image
+                src={"/whatsapp.png"}
+                width={60}
+                height={60}
+                alt="Whatsapp-img"
+                unoptimized
+              ></Image>
+            </a>
+          </div>
+
+          <div className="upward" onClick={upwardHandler}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="bi bi-chevron-up"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fillRule="evenodd"
+                d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"
+              />
+            </svg>
           </div>
         </div>
       )}
