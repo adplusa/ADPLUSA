@@ -101,6 +101,32 @@ const achievements = [
   },
 ];
 
+const heroData = await fetch(
+  "http://architect-3cto.onrender.com/homepage?populate=*"
+);
+const heroResponse = await heroData.json();
+
+const aboutData = await fetch(
+  "http://localhost:1337/api/homepage-about-us-section?populate=*"
+);
+const aboutResponse = await aboutData.json();
+
+const TextSliderData = await fetch(
+  "http://localhost:1337/api/text-slider?populate=*"
+);
+const textSliderResponse = await TextSliderData.json();
+
+const SpecializerData = await fetch(
+  "http://localhost:1337/api/specialize-section?populate=*"
+);
+const specializerResponse = await SpecializerData.json();
+
+const ServiceData = await fetch(
+  "http://localhost:1337/api/service-sections?populate=*"
+);
+const ServiceResponse = await ServiceData.json();
+const services = ServiceResponse.data[0]?.Services || [];
+
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
@@ -352,54 +378,36 @@ export default function Home() {
         <div className="nav">
           <div className="intro-container">
             <Header />
-            <div className="hero-banner">
+            <div
+              className="hero-banner"
+              style={{
+                "--light-bg-image": `url(http://localhost:1337${heroResponse.data.heroBannerLight[0].url})`,
+                "--dark-bg-image": `url(http://localhost:1337${heroResponse.data.heroBannerDark[0].url})`,
+              }}
+            >
               <div className="overlay"></div>
             </div>
 
             <div className="about-us">
-              <h2>
-                who <br />
-                we are?
-              </h2>
+              <h2>{aboutResponse.data.about_us_left_who_we_are}</h2>
+
               <div className="about-us-top">
                 <div className="about-us-top-left">
-                  <h1>Allow us to introduce ourselves</h1>
+                  <h1>{aboutResponse.data.about_us_left_heading}</h1>
                 </div>
                 <div className="about-us-top-right">
-                  <h1>
-                    <span className="asked">Welcome</span> to ADPL Consulting
-                    LLC
-                  </h1>
-                  <p>
-                    ADPL CONSULTING LLC works as a leading Architectural and
-                    Engineering outsource fraternity across India and the United
-                    States of America.
-                  </p>
-                  <p>
-                    We are a group of professionals with profound proficiency in
-                    the field of architecture, engineering, designing,
-                    interiors, and management. Having an established track
-                    record of serving more than 150 clients in 535+ projects,
-                    our strict adherence to international standards and global
-                    experience makes us the paramount service provider in the
-                    market.
-                  </p>
+                  <h1>{aboutResponse.data.about_us_right_title}</h1>
+
+                  <p>{aboutResponse.data.about_us_right_paragraph}</p>
                   <span>
                     <div className="key-benefit">
                       <span>
                         <ul>
-                          <li>Experienced Team</li>
-                          <li>Outsourcing</li>
-                          <li>Affordable Prices</li>
-                          <li>Best Quality</li>
-                        </ul>
-                      </span>
-                      <span>
-                        <ul>
-                          <li>Unique/Iconic Designs</li>
-                          <li>Strict Timelines</li>
-                          <li>Proficency with SketchUp Pro</li>
-                          <li>Excellence in Revit & BIM</li>
+                          {aboutResponse.data.about_us_right_bullet_points.map(
+                            (point, index) => (
+                              <li key={index}>{point}</li>
+                            )
+                          )}
                         </ul>
                       </span>
                     </div>
@@ -412,20 +420,24 @@ export default function Home() {
               <div className="about-us-img">
                 <Image
                   id="pawel"
-                  src={"Pawel.avif"}
-                  alt="about-us image"
+                  src={`http://localhost:1337${aboutResponse.data.about_us_section_down_img_one[0].url}`}
+                  alt="about-us img"
                   width={0}
                   height={0}
                   unoptimized
                 ></Image>
 
                 <video muted autoPlay loop>
-                  <source src="/architect2.mp4" type="video/mp4" />
+                  {/* <source src="/architect2.mp4" type="video/mp4" /> */}
+                  <source
+                    src={`http://localhost:1337${aboutResponse.data.about_us_section_down_img_two[0].url}`}
+                    type="video/mp4"
+                  />
                 </video>
 
                 <Image
                   id="vladimir"
-                  src={"Vladimir.avif"}
+                  src={`http://localhost:1337${aboutResponse.data.about_us_section_down_img_three[0].url}`}
                   alt="about-us image"
                   width={0}
                   height={0}
@@ -438,7 +450,9 @@ export default function Home() {
               <div className="who-we-are-btn">
                 <Link href="#">
                   <button>
-                    <span>Who we are</span>
+                    <span>
+                      {aboutResponse.data.about_us_section_button_cta}
+                    </span>
                   </button>
                 </Link>
               </div>
@@ -446,174 +460,57 @@ export default function Home() {
 
             <div className="strip-text">
               <div className="marquee">
-                <p>
-                  ADPL CONSULTING LLC works as a leading Architectural and
-                  Engineering outsource fraternity across India and the United
-                  States of America.
-                </p>
-                <p>
-                  ADPL CONSULTING LLC works as a leading Architectural and
-                  Engineering outsource fraternity across India and the United
-                  States of America.
-                </p>
+                <p>{textSliderResponse.data.Text_one}</p>
+                <p>{textSliderResponse.data.Text_two}</p>
               </div>
             </div>
 
             <div className="service-two">
               <div className="service-two-top">
                 <div className="service-two-top-left">
-                  <h5>Company Services</h5>
-                  <h1>
-                    We <span className="asked">specialize</span> in these
-                    fields.
-                  </h1>
+                  <h5>{specializerResponse.data.heading}</h5>
+                  <h1>{specializerResponse.data.subheading}</h1>
                 </div>
               </div>
               <div className="service-two-bottom">
                 <div className="service-two-bottom-left">
-                  <div
-                    className="service-two-bottom-box"
-                    id="service-two-box-one"
-                  >
-                    <div className="service-two-bottom-box-top">
-                      <span className="service-two-bottom-box-logo">
-                        <Image
-                          src={"/icon.png"}
-                          width={60}
-                          height={60}
-                          unoptimized
-                          alt="icon-image"
-                        ></Image>
-                      </span>
-                      <h3>BIM services</h3>
+                  {services.map((service) => (
+                    <div
+                      key={service.id}
+                      className="service-two-bottom-box"
+                      id={`service-two-box-${service.id}`}
+                    >
+                      <div className="service-two-bottom-box-top">
+                        <span className="service-two-bottom-box-logo">
+                          <Image
+                            src={
+                              service.icon?.url
+                                ? `http://localhost:1337${service.icon.url}`
+                                : "/default-icon.png"
+                            }
+                            width={60}
+                            height={60}
+                            unoptimized
+                            alt={service.service_name}
+                          />
+                        </span>
+                        <h3>{service.service_name}</h3>
+                      </div>
+                      <div className="service-two-bottom-box-bottom">
+                        <p>
+                          {service.service_description[0]?.children[0]?.text ||
+                            "No description available"}
+                        </p>
+                      </div>
                     </div>
-                    <div className="service-two-bottom-box-bottom">
-                      <p>
-                        Our BIM team consists of architects, engineers and
-                        designers offering holistic solutions.
-                      </p>
-                    </div>
-                  </div>
-                  <div
-                    className="service-two-bottom-box"
-                    id="service-two-box-one"
-                  >
-                    <div className="service-two-bottom-box-top">
-                      <span className="service-two-bottom-box-logo">
-                        <Image
-                          src={"/icon.png"}
-                          width={60}
-                          height={60}
-                          unoptimized
-                          alt="icon-image"
-                        ></Image>
-                      </span>
-                      <h3>CAD services</h3>
-                    </div>
-                    <div className="service-two-bottom-box-bottom">
-                      <p>
-                        Providing extended architectural and structural design
-                        and drafting services for all stages of your project
-                      </p>
-                    </div>
-                  </div>
-                  <div
-                    className="service-two-bottom-box"
-                    id="service-two-box-one"
-                  >
-                    <div className="service-two-bottom-box-top">
-                      <span className="service-two-bottom-box-logo">
-                        <Image
-                          src={"/icon.png"}
-                          width={60}
-                          height={60}
-                          unoptimized
-                          alt="icon-image"
-                        ></Image>
-                      </span>
-                      <h3>Permit Drawings & Documentation</h3>
-                    </div>
-                    <div className="service-two-bottom-box-bottom">
-                      <p>
-                        Contact us and save the cumbersome job of authority
-                        approvals.
-                      </p>
-                    </div>
-                  </div>
-                  <div
-                    className="service-two-bottom-box"
-                    id="service-two-box-one"
-                  >
-                    <div className="service-two-bottom-box-top">
-                      <span className="service-two-bottom-box-logo">
-                        <Image
-                          src={"/icon.png"}
-                          width={60}
-                          height={60}
-                          unoptimized
-                          alt="icon-image"
-                        ></Image>
-                      </span>
-                      <h3>3d Visualization</h3>
-                    </div>
-                    <div className="service-two-bottom-box-bottom">
-                      <p>
-                        Get the full experience of your building before hand by
-                        our 3D experts.
-                      </p>
-                    </div>
-                  </div>
-                  <div
-                    className="service-two-bottom-box"
-                    id="service-two-box-one"
-                  >
-                    <div className="service-two-bottom-box-top">
-                      <span className="service-two-bottom-box-logo">
-                        <Image
-                          src={"/icon.png"}
-                          width={60}
-                          height={60}
-                          unoptimized
-                          alt="icon-image"
-                        ></Image>
-                      </span>
-                      <h3>Presentation Drawings</h3>
-                    </div>
-                    <div className="service-two-bottom-box-bottom">
-                      <p>
-                        We provide comprehensive research data which captivate
-                        our clients, at the lowest possible cost.
-                      </p>
-                    </div>
-                  </div>
-                  <div
-                    className="service-two-bottom-box"
-                    id="service-two-box-one"
-                  >
-                    <div className="service-two-bottom-box-top">
-                      <span className="service-two-bottom-box-logo">
-                        <Image
-                          src={"/icon.png"}
-                          width={60}
-                          height={60}
-                          unoptimized
-                          alt="icon-image"
-                        ></Image>
-                      </span>
-                      <h3>MEP Services</h3>
-                    </div>
-                    <div className="service-two-bottom-box-bottom">
-                      <p>
-                        We strive to provide high-quality and reliable
-                        structural, mechanical and electrical engineering
-                        solutions.
-                      </p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
                 <div className="service-two-bottom-right">
                   <video muted autoPlay loop>
-                    <source src="/service-video.mp4" type="video/mp4" />
+                    <source
+                      src={`http://localhost:1337${specializerResponse.data.service_right_big_img?.url}`}
+                      type="video/mp4"
+                    />
                   </video>
                 </div>
                 <div className="services-one_circle-color"></div>
@@ -621,10 +518,64 @@ export default function Home() {
             </div>
 
             <div className="feature-section">
+              <div className="feature-section-df">
+                <div className="feature-box">
+                  <h1>We specialize in outsourcing architectural services</h1>
+                  <div className="features-name">
+                    <span>
+                      <Image
+                        src={"1.png"}
+                        alt="icon-img"
+                        width={70}
+                        height={70}
+                        unoptimized
+                        priority
+                      ></Image>
+                      <p>100%</p>
+                      <h3>Maintenance Support</h3>
+                    </span>
+                    <span>
+                      <Image
+                        src={"2.png"}
+                        alt="icon-img"
+                        width={70}
+                        height={70}
+                        unoptimized
+                        priority
+                      ></Image>
+                      <p>75+</p>
+                      <h3>Cost-Effective</h3>
+                    </span>
+                    <span>
+                      <Image
+                        src={"6.png"}
+                        alt="icon-img"
+                        width={70}
+                        height={70}
+                        unoptimized
+                        priority
+                      ></Image>
+                      <p>135+</p>
+                      <h3>Swift Deliverance</h3>
+                    </span>
+
+                    <span>
+                      <Image
+                        src={"5.png"}
+                        alt="icon-img"
+                        width={70}
+                        height={70}
+                        unoptimized
+                        priority
+                      ></Image>
+                      <p>90+</p>
+                      <h3> Newest Technology</h3>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
               <div className="achievements-container">
-                <h2 className="achievements-title">
-                  Our <span className="asked">Achievements</span>
-                </h2>
                 <div className="achievements-grid">
                   {achievements.map((achievement, index) => (
                     <div
@@ -646,31 +597,6 @@ export default function Home() {
                   ))}
                 </div>
               </div>
-
-              <div className="feature-section-df">
-                <div className="feature-box">
-                  <h1>We specialize in outsourcing architectural services</h1>
-                  <div className="features-name">
-                    <span>
-                      <p>100%</p>
-                      <h3>Maintenance Support</h3>
-                    </span>
-                    <span>
-                      <p>75+</p>
-                      <h3>Cost-Effective</h3>
-                    </span>
-                    <span>
-                      <p>135+</p>
-                      <h3>Swift Deliverance</h3>
-                    </span>
-
-                    <span>
-                      <p>23+</p>
-                      <h3> years of experience</h3>
-                    </span>
-                  </div>
-                </div>
-              </div>
             </div>
 
             <section className="rto-section">
@@ -685,45 +611,6 @@ export default function Home() {
               </p>
 
               <div className="content">
-                {/* Left Content */}
-                {/* <div className="left">
-                  <div className="card" onClick={() => handleImageChange(0)}>
-                    <div className="number">1</div>
-                    <div>
-                      <h3 className="card-title">Meet Customers</h3>
-                      <p className="card-text">
-                        We introduce and present ourselves. Our priority is to
-                        listen and understand the client’s vision for clearer
-                        insight about the project.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="card" onClick={() => handleImageChange(1)}>
-                    <div className="number">2</div>
-                    <div>
-                      <h3 className="card-title">Planning & Research</h3>
-                      <p className="card-text">
-                        With the help of research and critical analysis, we
-                        prepare the first set of the drawings taking into
-                        account the requirements of the clients.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="card" onClick={() => handleImageChange(2)}>
-                    <div className="number">3</div>
-                    <div>
-                      <h3 className="card-title">Finalize the Design</h3>
-                      <p className="card-text">
-                        The feedback of the client is solicited and integrated.
-                        The changes are incorporated and the final set of
-                        completed drawings are prepared.
-                      </p>
-                    </div>
-                  </div>
-                </div> */}
-
                 <div className="left">
                   {[
                     {
@@ -918,12 +805,12 @@ export default function Home() {
                     width="16"
                     height="16"
                     fill="currentColor"
-                    className="bi bi-arrow-left"
+                    className="bi bi-chevron-left"
                     viewBox="0 0 16 16"
                   >
                     <path
                       fillRule="evenodd"
-                      d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
+                      d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
                     />
                   </svg>
                 </button>
@@ -1026,12 +913,12 @@ export default function Home() {
                     width="16"
                     height="16"
                     fill="currentColor"
-                    className="bi bi-arrow-right"
+                    className="bi bi-chevron-right"
                     viewBox="0 0 16 16"
                   >
                     <path
                       fillRule="evenodd"
-                      d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+                      d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
                     />
                   </svg>
                 </button>

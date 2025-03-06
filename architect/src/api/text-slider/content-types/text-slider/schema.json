@@ -1,0 +1,21 @@
+{
+  "kind": "singleType",
+  "collectionName": "text_sliders",
+  "info": {
+    "singularName": "text-slider",
+    "pluralName": "text-sliders",
+    "displayName": "Text-slider",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Text_one": {
+      "type": "text"
+    },
+    "Text_two": {
+      "type": "string"
+    }
+  }
+}

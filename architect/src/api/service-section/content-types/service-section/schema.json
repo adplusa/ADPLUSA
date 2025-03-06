@@ -1,0 +1,19 @@
+{
+  "kind": "collectionType",
+  "collectionName": "service_sections",
+  "info": {
+    "singularName": "service-section",
+    "pluralName": "service-sections",
+    "displayName": "Service Section"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Services": {
+      "type": "component",
+      "repeatable": true,
+      "component": "service.specialize-service-box"
+    }
+  }
+}

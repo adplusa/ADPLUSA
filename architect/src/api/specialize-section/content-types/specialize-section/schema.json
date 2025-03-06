@@ -1,0 +1,31 @@
+{
+  "kind": "singleType",
+  "collectionName": "specialize_sections",
+  "info": {
+    "singularName": "specialize-section",
+    "pluralName": "specialize-sections",
+    "displayName": "Specialize Section",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "subheading": {
+      "type": "string"
+    },
+    "service_right_big_img": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

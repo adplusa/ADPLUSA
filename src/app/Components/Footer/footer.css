@@ -7,7 +7,8 @@
   margin-top: 6%;
   border-top: 2px solid #ca4c4d;
   padding-top: 5%;
-  background-color: #f9f9f9;
+  /* background-color: #f9f9f9; */
+  background-color: var(--backgroundColor);
   color: var(--foreground);
 }
 
@@ -66,7 +67,8 @@
 }
 
 .blue-border {
-  border: 0.5px solid #000000;
+  border: 0.5px solid;
+  border-color: var(--foreground);
   margin-top: 3%;
   width: 90%;
 }
