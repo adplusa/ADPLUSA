@@ -102,7 +102,8 @@ const achievements = [
 ];
 
 const heroData = await fetch(
-  "http://architect-3cto.onrender.com/homepage?populate=*"
+  "http://architect-3cto.onrender.com/api/homepage?populate=*"
+  // "http://localhost:1337/api/homepage?populate=*"
 );
 const heroResponse = await heroData.json();
 
