@@ -107,26 +107,26 @@ const heroData = await fetch(
 );
 const heroResponse = await heroData.json();
 
-const aboutData = await fetch(
-  "http://localhost:1337/api/homepage-about-us-section?populate=*"
-);
-const aboutResponse = await aboutData.json();
+// const aboutData = await fetch(
+//   "http://localhost:1337/api/homepage-about-us-section?populate=*"
+// );
+// const aboutResponse = await aboutData.json();
 
-const TextSliderData = await fetch(
-  "http://localhost:1337/api/text-slider?populate=*"
-);
-const textSliderResponse = await TextSliderData.json();
+// const TextSliderData = await fetch(
+//   "http://localhost:1337/api/text-slider?populate=*"
+// );
+// const textSliderResponse = await TextSliderData.json();
 
-const SpecializerData = await fetch(
-  "http://localhost:1337/api/specialize-section?populate=*"
-);
-const specializerResponse = await SpecializerData.json();
+// const SpecializerData = await fetch(
+//   "http://localhost:1337/api/specialize-section?populate=*"
+// );
+// const specializerResponse = await SpecializerData.json();
 
-const ServiceData = await fetch(
-  "http://localhost:1337/api/service-sections?populate=*"
-);
-const ServiceResponse = await ServiceData.json();
-const services = ServiceResponse.data[0]?.Services || [];
+// const ServiceData = await fetch(
+//   "http://localhost:1337/api/service-sections?populate=*"
+// );
+// const ServiceResponse = await ServiceData.json();
+// const services = ServiceResponse.data[0]?.Services || [];
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -389,7 +389,7 @@ export default function Home() {
               <div className="overlay"></div>
             </div>
 
-            <div className="about-us">
+            {/* <div className="about-us">
               <h2>{aboutResponse.data.about_us_left_who_we_are}</h2>
 
               <div className="about-us-top">
@@ -415,9 +415,9 @@ export default function Home() {
                   </span>
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <div className="about-us-video-image">
+            {/* <div className="about-us-video-image">
               <div className="about-us-img">
                 <Image
                   id="pawel"
@@ -429,7 +429,6 @@ export default function Home() {
                 ></Image>
 
                 <video muted autoPlay loop>
-                  {/* <source src="/architect2.mp4" type="video/mp4" /> */}
                   <source
                     src={`http://localhost:1337${aboutResponse.data.about_us_section_down_img_two[0].url}`}
                     type="video/mp4"
@@ -457,16 +456,16 @@ export default function Home() {
                   </button>
                 </Link>
               </div>
-            </div>
+            </div> */}
 
-            <div className="strip-text">
+            {/* <div className="strip-text">
               <div className="marquee">
                 <p>{textSliderResponse.data.Text_one}</p>
                 <p>{textSliderResponse.data.Text_two}</p>
               </div>
-            </div>
+            </div> */}
 
-            <div className="service-two">
+            {/* <div className="service-two">
               <div className="service-two-top">
                 <div className="service-two-top-left">
                   <h5>{specializerResponse.data.heading}</h5>
@@ -516,7 +515,7 @@ export default function Home() {
                 </div>
                 <div className="services-one_circle-color"></div>
               </div>
-            </div>
+            </div> */}
 
             <div className="feature-section">
               <div className="feature-section-df">

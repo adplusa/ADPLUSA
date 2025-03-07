@@ -2,14 +2,16 @@
   --background: #ffffff;
   --foreground: #171717;
   --borderColor: #000;
-  /* --bg-image-banner-one: url("/banner-1.jpg"); */
+  --backgroundContact: #e2dbdb;
+  --backgroundTechnology: rgb(236, 236, 236);
 }
 
 .dark-mode {
   --background: #000;
   --foreground: #fff;
   --borderColor: #fff;
-  /* --bg-image-banner-one: url("/banner-2.jpg"); */
+  --backgroundContact: #6c6c6c;
+  --backgroundTechnology: #b9b9b9;
 }
 
 /* Dark Mode */

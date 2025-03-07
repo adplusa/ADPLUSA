@@ -34,17 +34,17 @@ const About = () => {
                 exist.
               </p>
               <span className="four-p">
-                <a href="#">People</a>
-                <a href="#about-content-third-row">Place</a>
-                <a href="#">Process</a>
-                <a href="#">Practice</a>
+                <a href="#people-box">People</a>
+                <a href="#place-box">Place</a>
+                <a href="#process-box">Process</a>
+                <a href="#practice-box">Practice</a>
               </span>
             </div>
           </div>
 
           <div className="about-content-second-row">
             <div className="people-content">
-              <h1>People</h1>
+              <h1 id="people-box">People</h1>
               <p>
                 Our people come from far and wide and form the backbone of
                 Decibel Architecture – we are storytellers, technicians,
@@ -71,7 +71,7 @@ const About = () => {
 
           <div className="about-content-third-row">
             <div className="people-content" id="place-content">
-              <h1>Place</h1>
+              <h1 id="place-box">Place</h1>
               <p>
                 Exploration of (and connection to) place and Country is
                 foundational to exceptional design outcomes. Deep listening
@@ -97,7 +97,7 @@ const About = () => {
 
           <div className="about-content-four-row">
             <div className="people-content" id="process-content">
-              <h1>Process</h1>
+              <h1 id="process-box">Process</h1>
               <p>
                 Our research and strategic thinking intensifies connections and
                 invigorates design possibilities beyond the brief. This is where
@@ -122,8 +122,8 @@ const About = () => {
           </div>
 
           <div className="about-content-five-row">
-            <div className="people-content" id="practice-content">
-              <h1>Practice</h1>
+            <div className="people-content" id="process-content">
+              <h1 id="practice-box">Practice</h1>
               <p>
                 We support our people and our clients to be focused, effective,
                 curious and kind. Together we embark on creative journeys to

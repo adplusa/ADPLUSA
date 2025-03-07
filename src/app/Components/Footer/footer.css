@@ -58,6 +58,11 @@
   justify-content: center;
   align-items: center;
   font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.social-media span:hover {
+  transform: scale(1.1);
 }
 
 .social-media span a {

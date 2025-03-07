@@ -7,6 +7,27 @@
   display: flex;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+#people-box,
+#place-box,
+#process-box,
+#practice-box {
+  scroll-margin-top: 150px;
+}
+
+#process-content {
+  top: -28%;
+  right: 20%;
+}
+
+#practice-content img {
+  width: 850px;
+  height: 1150px;
+}
+
 .about-content-first-row-left h1 {
   font-size: 5rem;
 }
@@ -55,6 +76,20 @@
 .about-content-five-row {
   margin-top: 38%;
   position: relative;
+}
+
+.about-content-four-row .people-img img,
+.about-content-five-row .people-img img {
+  width: 700px;
+  height: 1050px;
+}
+
+.about-content-five-row .people-img {
+  justify-content: right;
+}
+
+.about-content-four-row .people-img {
+  justify-content: left;
 }
 
 .people-content {
