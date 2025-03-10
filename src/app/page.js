@@ -16,6 +16,7 @@ import { FaQuoteLeft } from "react-icons/fa";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { FaTrophy, FaUsers, FaStar, FaChartLine } from "react-icons/fa";
 import Footer from "./Components/Footer/page";
+import DOMPurify from "dompurify";
 
 gsap.registerPlugin(CSSPlugin);
 
@@ -101,21 +102,23 @@ const achievements = [
   },
 ];
 
-const heroData = await fetch(
-  "http://architect-3cto.onrender.com/api/homepage?populate=*"
-  // "http://localhost:1337/api/homepage?populate=*"
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+console.log(API_BASE_URL);
+
+// const heroData = await fetch(`${API_BASE_URL}/api/homepage?populate=*`);
+// const heroData = await fetch("http://localhost:1337/api/homepage?populate=*");
+
+// const heroResponse = await heroData.json();
+
+const TextSliderData = await fetch(
+  `${API_BASE_URL}/api/text-slider?populate=*`
 );
-const heroResponse = await heroData.json();
+const textSliderResponse = await TextSliderData.json();
 
 // const aboutData = await fetch(
 //   "http://localhost:1337/api/homepage-about-us-section?populate=*"
 // );
 // const aboutResponse = await aboutData.json();
-
-// const TextSliderData = await fetch(
-//   "http://localhost:1337/api/text-slider?populate=*"
-// );
-// const textSliderResponse = await TextSliderData.json();
 
 // const SpecializerData = await fetch(
 //   "http://localhost:1337/api/specialize-section?populate=*"
@@ -379,15 +382,15 @@ export default function Home() {
         <div className="nav">
           <div className="intro-container">
             <Header />
-            <div
+            {/* <div
               className="hero-banner"
               style={{
-                "--light-bg-image": `url(http://localhost:1337${heroResponse.data.heroBannerLight[0].url})`,
-                "--dark-bg-image": `url(http://localhost:1337${heroResponse.data.heroBannerDark[0].url})`,
+                "--light-bg-image": `url(${API_BASE_URL}${heroResponse.data.heroBannerLight[0].url})`,
+                "--dark-bg-image": `url(${API_BASE_URL}${heroResponse.data.heroBannerDark[0].url})`,
               }}
             >
               <div className="overlay"></div>
-            </div>
+            </div> */}
 
             {/* <div className="about-us">
               <h2>{aboutResponse.data.about_us_left_who_we_are}</h2>
@@ -458,12 +461,12 @@ export default function Home() {
               </div>
             </div> */}
 
-            {/* <div className="strip-text">
+            <div className="strip-text">
               <div className="marquee">
                 <p>{textSliderResponse.data.Text_one}</p>
                 <p>{textSliderResponse.data.Text_two}</p>
               </div>
-            </div> */}
+            </div>
 
             {/* <div className="service-two">
               <div className="service-two-top">

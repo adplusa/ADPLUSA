@@ -861,6 +861,10 @@ span.service-two-bottom-box-logo {
   padding-bottom: 2%;
 }
 
+.strip-text {
+  opacity: 1 !important;
+}
+
 .marquee {
   background-color: var(--backgroundColor);
   overflow: hidden;

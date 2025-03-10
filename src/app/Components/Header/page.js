@@ -18,12 +18,11 @@ const Header = () => {
 
     if (div.style.marginLeft === "31px") {
       div.style.marginLeft = "0px";
-      // div.style.backgroundColor = "#000";
+
       onBtn.style.color = "grey";
       offBtn.style.color = "#000";
     } else {
       div.style.marginLeft = "31px";
-      // div.style.backgroundColor = "#fff";
       onBtn.style.color = "#000";
       offBtn.style.color = "grey";
     }
