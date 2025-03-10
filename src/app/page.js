@@ -102,8 +102,11 @@ const achievements = [
   },
 ];
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-console.log(API_BASE_URL);
+// const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://fallback-url.com";
+
+const response = await fetch(`${API_BASE_URL}/api/text-slider?populate=*`);
 
 // const heroData = await fetch(`${API_BASE_URL}/api/homepage?populate=*`);
 // const heroData = await fetch("http://localhost:1337/api/homepage?populate=*");
