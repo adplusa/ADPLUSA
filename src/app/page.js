@@ -102,13 +102,18 @@ const achievements = [
   },
 ];
 
-// const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-const NEXT_PUBLIC_API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+// const NEXT_PUBLIC_API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const NEXT_PUBLIC_API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://architect-3cto.onrender.com";
 
 const TextSliderData = await fetch(
   `${NEXT_PUBLIC_API_BASE_URL}/api/text-slider?populate=*`
 );
 const textSliderResponse = await TextSliderData.json();
+
+// Sanitize the text data
+const sanitizedTextOne = DOMPurify.sanitize(textSliderResponse.data.Text_one);
+const sanitizedTextTwo = DOMPurify.sanitize(textSliderResponse.data.Text_two);
 
 // const response = await fetch(`${API_BASE_URL}/api/text-slider?populate=*`);
 
@@ -465,8 +470,8 @@ export default function Home() {
 
             <div className="strip-text">
               <div className="marquee">
-                <p>{textSliderResponse.data.Text_one}</p>
-                <p>{textSliderResponse.data.Text_two}</p>
+                <p dangerouslySetInnerHTML={{ __html: sanitizedTextOne }}></p>
+                <p dangerouslySetInnerHTML={{ __html: sanitizedTextTwo }}></p>
               </div>
             </div>
 
