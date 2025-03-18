@@ -103,17 +103,17 @@ const achievements = [
 ];
 
 // const NEXT_PUBLIC_API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-const NEXT_PUBLIC_API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "https://architect-3cto.onrender.com";
+// const NEXT_PUBLIC_API_BASE_URL =
+//   process.env.NEXT_PUBLIC_API_BASE_URL || "https://architect-3cto.onrender.com";
 
-const TextSliderData = await fetch(
-  `${NEXT_PUBLIC_API_BASE_URL}/api/text-slider?populate=*`
-);
-const textSliderResponse = await TextSliderData.json();
+// const TextSliderData = await fetch(
+//   `${NEXT_PUBLIC_API_BASE_URL}/api/text-slider?populate=*`
+// );
+// const textSliderResponse = await TextSliderData.json();
 
-// Sanitize the text data
-const sanitizedTextOne = DOMPurify.sanitize(textSliderResponse.data.Text_one);
-const sanitizedTextTwo = DOMPurify.sanitize(textSliderResponse.data.Text_two);
+// // Sanitize the text data
+// const sanitizedTextOne = DOMPurify.sanitize(textSliderResponse.data.Text_one);
+// const sanitizedTextTwo = DOMPurify.sanitize(textSliderResponse.data.Text_two);
 
 // const response = await fetch(`${API_BASE_URL}/api/text-slider?populate=*`);
 
@@ -141,6 +141,9 @@ const sanitizedTextTwo = DOMPurify.sanitize(textSliderResponse.data.Text_two);
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
+  const [textOne, setTextOne] = useState("");
+  const [textTwo, setTextTwo] = useState("");
+
   const [loading, setLoading] = useState(true);
   const [counter, setCounter] = useState(0);
   // const [index, setIndex] = useState(0);
@@ -232,6 +235,47 @@ export default function Home() {
       })
       .set(".loader-container", { display: "none" }); // Instantly hide
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch the response as text (since it's HTML)
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/text-slider?populate=*`
+        );
+
+        const html = await response.text();
+
+        // Parse the HTML string into a document
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+
+        // Example extraction: assume the API returns at least two <p> elements.
+        // Adjust the selectors if your HTML structure is different.
+        const paragraphs = doc.querySelectorAll("p");
+        let rawTextOne = "";
+        let rawTextTwo = "";
+        if (paragraphs.length >= 2) {
+          rawTextOne = paragraphs[0].innerHTML;
+          rawTextTwo = paragraphs[1].innerHTML;
+        } else {
+          // Fallback: use the entire HTML if not structured as expected.
+          rawTextOne = doc.body.innerHTML;
+        }
+
+        // Sanitize the extracted HTML fragments
+        const sanitizedTextOne = DOMPurify.sanitize(rawTextOne);
+        const sanitizedTextTwo = DOMPurify.sanitize(rawTextTwo);
+
+        setTextOne(sanitizedTextOne);
+        setTextTwo(sanitizedTextTwo);
+      } catch (error) {
+        console.error("Error fetching or parsing text slider data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // Working Process Images Changer
   useEffect(() => {
@@ -470,8 +514,8 @@ export default function Home() {
 
             <div className="strip-text">
               <div className="marquee">
-                <p dangerouslySetInnerHTML={{ __html: sanitizedTextOne }}></p>
-                <p dangerouslySetInnerHTML={{ __html: sanitizedTextTwo }}></p>
+                <p dangerouslySetInnerHTML={{ __html: textOne }} />
+                <p dangerouslySetInnerHTML={{ __html: textTwo }} />
               </div>
             </div>
 

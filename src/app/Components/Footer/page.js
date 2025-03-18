@@ -32,7 +32,7 @@ const Footer = () => {
       <div className="footer">
         <div className="footer-logo">
           <Image
-            src={whiteLogo ? "white-logo.png" : "red-logo.png"}
+            src={whiteLogo ? "/white-logo.png" : "/red-logo.png"}
             alt="Footer-logo"
             id="footer-logo"
             width={0}

@@ -16,7 +16,7 @@ const page = () => {
 
           <div className="project-img">
             <div className="project-img-row-one">
-              <a href="#">
+              <a href="/projects/project-internal-one">
                 <div className="project-images">
                   <span className="project-relative">
                     <Image
@@ -29,13 +29,13 @@ const page = () => {
                       priority
                     ></Image>
                     <span className="project-overlay">
-                      <h1>Image Text</h1>
+                      <h1>The Iconic Arrival</h1>
                     </span>
                   </span>
                 </div>
               </a>
 
-              <a href="#">
+              <a href="/projects/project-internal-two">
                 <div className="project-images">
                   <span className="project-relative">
                     <Image
@@ -48,7 +48,7 @@ const page = () => {
                       priority
                     ></Image>
                     <span className="project-overlay">
-                      <h1>Image Text</h1>
+                      <h1>PICAC Brunswick</h1>
                     </span>
                   </span>
                 </div>
