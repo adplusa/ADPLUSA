@@ -239,36 +239,19 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch the response as text (since it's HTML)
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/text-slider?populate=*`
         );
+        const data = await response.json(); // Parse as JSON
+        console.log("API Response:", data); // Debugging log
 
-        const html = await response.text();
+        if (data?.data) {
+          const rawTextOne = data.data.Text_one || "";
+          const rawTextTwo = data.data.Text_two || "";
 
-        // Parse the HTML string into a document
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, "text/html");
-
-        // Example extraction: assume the API returns at least two <p> elements.
-        // Adjust the selectors if your HTML structure is different.
-        const paragraphs = doc.querySelectorAll("p");
-        let rawTextOne = "";
-        let rawTextTwo = "";
-        if (paragraphs.length >= 2) {
-          rawTextOne = paragraphs[0].innerHTML;
-          rawTextTwo = paragraphs[1].innerHTML;
-        } else {
-          // Fallback: use the entire HTML if not structured as expected.
-          rawTextOne = doc.body.innerHTML;
+          setTextOne(DOMPurify.sanitize(rawTextOne));
+          setTextTwo(DOMPurify.sanitize(rawTextTwo));
         }
-
-        // Sanitize the extracted HTML fragments
-        const sanitizedTextOne = DOMPurify.sanitize(rawTextOne);
-        const sanitizedTextTwo = DOMPurify.sanitize(rawTextTwo);
-
-        setTextOne(sanitizedTextOne);
-        setTextTwo(sanitizedTextTwo);
       } catch (error) {
         console.error("Error fetching or parsing text slider data:", error);
       }
