@@ -979,7 +979,7 @@ export default function Home() {
                         />
                       </div>
                       <div className="form-fields">
-                        <label htmlFor="service">Service</label>
+                        <label htmlFor="service">Services</label>
                         <input
                           type="text"
                           name="service"
