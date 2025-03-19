@@ -236,6 +236,7 @@ export default function Home() {
       .set(".loader-container", { display: "none" }); // Instantly hide
   };
 
+  // Text Slider Useeffect
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -243,7 +244,7 @@ export default function Home() {
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/text-slider?populate=*`
         );
         const data = await response.json(); // Parse as JSON
-        console.log("API Response:", data); // Debugging log
+        console.log("API Response:", response); // Debugging log
 
         if (data?.data) {
           const rawTextOne = data.data.Text_one || "";
