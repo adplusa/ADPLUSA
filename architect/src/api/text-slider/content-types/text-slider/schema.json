@@ -12,7 +12,7 @@
   },
   "attributes": {
     "Text_one": {
-      "type": "text"
+      "type": "string"
     },
     "Text_two": {
       "type": "string"

@@ -540,7 +540,7 @@ export interface ApiTextSliderTextSlider extends Struct.SingleTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    Text_one: Schema.Attribute.Text;
+    Text_one: Schema.Attribute.String;
     Text_two: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &

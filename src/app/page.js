@@ -102,18 +102,13 @@ const achievements = [
   },
 ];
 
-// const NEXT_PUBLIC_API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-// const NEXT_PUBLIC_API_BASE_URL =
-//   process.env.NEXT_PUBLIC_API_BASE_URL || "https://architect-3cto.onrender.com";
+const NEXT_PUBLIC_API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://architect-3cto.onrender.com";
 
-// const TextSliderData = await fetch(
-//   `${NEXT_PUBLIC_API_BASE_URL}/api/text-slider?populate=*`
-// );
-// const textSliderResponse = await TextSliderData.json();
-
-// // Sanitize the text data
-// const sanitizedTextOne = DOMPurify.sanitize(textSliderResponse.data.Text_one);
-// const sanitizedTextTwo = DOMPurify.sanitize(textSliderResponse.data.Text_two);
+const TextSliderData = await fetch(
+  `${NEXT_PUBLIC_API_BASE_URL}/api/text-slider?populate=*`
+);
+const textSliderResponse = await TextSliderData.json();
 
 // const response = await fetch(`${API_BASE_URL}/api/text-slider?populate=*`);
 
@@ -141,8 +136,8 @@ const achievements = [
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
-  const [textOne, setTextOne] = useState("");
-  const [textTwo, setTextTwo] = useState("");
+  // const [textOne, setTextOne] = useState("");
+  // const [textTwo, setTextTwo] = useState("");
 
   const [loading, setLoading] = useState(true);
   const [counter, setCounter] = useState(0);
@@ -237,29 +232,29 @@ export default function Home() {
   };
 
   // Text Slider Useeffect
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/text-slider?populate=*`
-        );
-        const data = await response.json(); // Parse as JSON
-        console.log("API Response:", response); // Debugging log
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/text-slider?populate=*`
+  //       );
+  //       const data = await response.json(); // Parse as JSON
+  //       console.log("API Response:", response); // Debugging log
 
-        if (data?.data) {
-          const rawTextOne = data.data.Text_one || "";
-          const rawTextTwo = data.data.Text_two || "";
+  //       if (data?.data) {
+  //         const rawTextOne = data.data.Text_one || "";
+  //         const rawTextTwo = data.data.Text_two || "";
 
-          setTextOne(DOMPurify.sanitize(rawTextOne));
-          setTextTwo(DOMPurify.sanitize(rawTextTwo));
-        }
-      } catch (error) {
-        console.error("Error fetching or parsing text slider data:", error);
-      }
-    };
+  //         setTextOne(DOMPurify.sanitize(rawTextOne));
+  //         setTextTwo(DOMPurify.sanitize(rawTextTwo));
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching or parsing text slider data:", error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   // Working Process Images Changer
   useEffect(() => {
@@ -498,8 +493,10 @@ export default function Home() {
 
             <div className="strip-text">
               <div className="marquee">
-                <p dangerouslySetInnerHTML={{ __html: textOne }} />
-                <p dangerouslySetInnerHTML={{ __html: textTwo }} />
+                {/* <p dangerouslySetInnerHTML={{ __html: textOne }} />
+                <p dangerouslySetInnerHTML={{ __html: textTwo }} /> */}
+                <p>{textSliderResponse.data.Text_one}</p>
+                <p>{textSliderResponse.data.Text_two}</p>
               </div>
             </div>
 
