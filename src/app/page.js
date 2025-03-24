@@ -383,7 +383,8 @@ export default function Home() {
       const TextSliderData = await fetch(
         `${NEXT_PUBLIC_API_BASE_URL}/api/text-slider?populate=*`
       );
-      const textSliderResponse = await TextSliderData.json();
+      const data = await TextSliderData.json();
+      setTextSliderContent(data);
     })();
   }, []);
   const upwardHandler = () => {
@@ -503,8 +504,8 @@ export default function Home() {
               <div className="marquee">
                 {/* <p dangerouslySetInnerHTML={{ __html: textOne }} />
                 <p dangerouslySetInnerHTML={{ __html: textTwo }} /> */}
-                {/* <p>{textSliderResponse.data.Text_one}</p>
-                <p>{textSliderResponse.data.Text_two}</p> */}
+                <p>{testSliderContent.data.Text_one}</p>
+                <p>{testSliderContent.data.Text_two}</p>
               </div>
             </div>
 
