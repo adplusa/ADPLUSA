@@ -103,12 +103,12 @@ const achievements = [
 ];
 
 const NEXT_PUBLIC_API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "https://architect-3cto.onrender.com";
+  process.env.NODE_ENV == "development"
+    ? process.env.NEXT_PUBLIC_API_BASE_URL
+    : "https://architect-3cto.onrender.com";
 
-const TextSliderData = await fetch(
-  `${NEXT_PUBLIC_API_BASE_URL}/api/text-slider?populate=*`
-);
-const textSliderResponse = await TextSliderData.json();
+console.log("ENV:", process.env.NODE_ENV);
+console.log("API BASE URL:", process.env.NEXT_PUBLIC_API_BASE_URL);
 
 // const response = await fetch(`${API_BASE_URL}/api/text-slider?populate=*`);
 
@@ -155,6 +155,7 @@ export default function Home() {
 
   const textRefs = useRef([]);
   const [open, setOpen] = useState(null);
+  const [testSliderContent, setTextSliderContent] = useState(false);
 
   const [sliderRef, instanceRef] = useKeenSlider(
     {
@@ -377,7 +378,14 @@ export default function Home() {
       ease: "linear",
     });
   }, []);
-
+  useEffect(() => {
+    (async () => {
+      const TextSliderData = await fetch(
+        `${NEXT_PUBLIC_API_BASE_URL}/api/text-slider?populate=*`
+      );
+      const textSliderResponse = await TextSliderData.json();
+    })();
+  }, []);
   const upwardHandler = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -495,8 +503,8 @@ export default function Home() {
               <div className="marquee">
                 {/* <p dangerouslySetInnerHTML={{ __html: textOne }} />
                 <p dangerouslySetInnerHTML={{ __html: textTwo }} /> */}
-                <p>{textSliderResponse.data.Text_one}</p>
-                <p>{textSliderResponse.data.Text_two}</p>
+                {/* <p>{textSliderResponse.data.Text_one}</p>
+                <p>{textSliderResponse.data.Text_two}</p> */}
               </div>
             </div>
 
