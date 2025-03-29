@@ -474,7 +474,7 @@ export default function Home() {
               <div className="about-us-img">
                 <Image
                   id="pawel"
-                  src="/pawel.avif"
+                  src="/Pawel.avif"
                   alt="about-us img"
                   width={0}
                   height={0}
@@ -487,7 +487,7 @@ export default function Home() {
 
                 <Image
                   id="vladimir"
-                  src="/vladimir.avif"
+                  src="/Vladimir.avif"
                   alt="about-us image"
                   width={0}
                   height={0}
