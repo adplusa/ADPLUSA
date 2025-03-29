@@ -508,9 +508,9 @@ export default function Home() {
 
             <div className="strip-text">
               <div className="marquee">
-                <h1>{homepageData && homepageData.Name}</h1>
-                {/* <p>ADPL CONSULTING LLC works as a leading Archite</p>
-                <p>ADPL CONSULTING LLC works as a leading Archite</p> */}
+                {/* <h1>{homepageData && homepageData.Name}</h1> */}
+                <p>ADPL CONSULTING LLC works as a leading Archite</p>
+                <p>ADPL CONSULTING LLC works as a leading Archite</p>
               </div>
             </div>
 
