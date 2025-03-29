@@ -102,56 +102,56 @@ const achievements = [
 const services = [
   {
     id: 1,
-    service_name: "Maintenance Support",
+    service_name: "BIM Services",
     service_description:
-      "Maintenance is the process of ensuring that buildings retain a good appearance and operate at optimum efficiency.",
+      "Our BIM team consists of architects, engineers and designers offering holistic solutions.",
     icon: {
-      url: "/icons/maintenance-support.png",
+      url: "/1.png",
     },
   },
   {
     id: 2,
-    service_name: "Cost-Effective",
+    service_name: "CAD Services",
     service_description:
-      "The building design is deemed to be cost-effective if it results in benefits equal to those of alternative designs.",
+      "Providing extended architectural and structural design and drafting services for all stages of your project.",
     icon: {
-      url: "/icons/cost-effective.png",
+      url: "/2.png",
     },
   },
   {
     id: 3,
-    service_name: "Swift Deliverance",
+    service_name: "Permit Drawings & Documentation",
     service_description:
-      "We never miss any Deadline. Discipline is one of our core values.",
+      "Contact us and save the cumbersome job of authority approvals.",
     icon: {
-      url: "/icons/swift-deliverance.png",
+      url: "/3.png",
     },
   },
   {
     id: 4,
-    service_name: "Software Expertise",
+    service_name: "3D Visualization",
     service_description:
-      "We are a team of software experts as per industry standards.",
+      "Get the full experience of your building beforehand by our 3D experts.",
     icon: {
-      url: "/icons/software-expertise.png",
+      url: "/4.png",
     },
   },
   {
     id: 5,
-    service_name: "Newest Technology",
+    service_name: "Presentation Drawings",
     service_description:
-      "We work with the latest technology to deliver the best to our clients.",
+      "We provide comprehensive research data which captivates our clients at the lowest possible cost.",
     icon: {
-      url: "/icons/newest-technology.png",
+      url: "/5.png",
     },
   },
   {
     id: 6,
-    service_name: "23+ years of experience",
+    service_name: "MEP Services",
     service_description:
-      "A greater understanding of the cities and buildings around you.",
+      "We strive to provide high-quality and reliable structural, mechanical, and electrical engineering solutions.",
     icon: {
-      url: "/icons/experience.png",
+      url: "/6.png",
     },
   },
 ];
@@ -474,7 +474,7 @@ export default function Home() {
               <div className="about-us-img">
                 <Image
                   id="pawel"
-                  src="pawel.avif"
+                  src="/pawel.avif"
                   alt="about-us img"
                   width={0}
                   height={0}
@@ -487,7 +487,7 @@ export default function Home() {
 
                 <Image
                   id="vladimir"
-                  src="vladimir.avif"
+                  src="/vladimir.avif"
                   alt="about-us image"
                   width={0}
                   height={0}
@@ -547,8 +547,8 @@ export default function Home() {
                       </div>
                       <div className="service-two-bottom-box-bottom">
                         <p>
-                          {service.service_description?.[0]?.children?.[0]
-                            ?.text || "No description available"}
+                          {service.service_description ||
+                            "No description available"}
                         </p>
                       </div>
                     </div>

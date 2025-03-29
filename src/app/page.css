@@ -79,7 +79,9 @@
   padding: 20px;
   border-radius: 15px;
   text-align: left;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  transition:
+    transform 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   border: 1px solid #dfdfdf;
   margin-top: 10px;
@@ -293,7 +295,9 @@
   color: var(--foreground);
   position: relative;
   overflow: hidden;
-  transition: color 0.3s ease, border-color 0.3s ease;
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .who-we-are-btn button:before {
@@ -638,7 +642,9 @@ svg.bi.bi-chat-quote-fill path {
   overflow: hidden;
   max-height: 0;
   opacity: 0;
-  transition: max-height 0.4s ease-out, opacity 0.3s ease-in-out,
+  transition:
+    max-height 0.4s ease-out,
+    opacity 0.3s ease-in-out,
     padding 0.3s ease-out;
 }
 
@@ -740,7 +746,7 @@ svg.bi.bi-chat-quote-fill path {
 
 .service-two-bottom-box-bottom p {
   padding: 0 5%;
-  margin-top: 10px;
+  margin-top: 5px;
   color: #545353;
   letter-spacing: 0.6px;
   word-spacing: 1px;
@@ -771,7 +777,9 @@ span.service-two-bottom-box-logo {
   border-top: 1px solid #902b2c;
   border-right: 1px solid transparent;
   border-bottom: 1px solid transparent;
-  transition: border-color 0.3s ease, transform 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    transform 0.3s ease;
 }
 
 .service-two-bottom-box:hover span.service-two-bottom-box-logo {
@@ -811,7 +819,7 @@ span.service-two-bottom-box-logo {
 .feature-section {
   margin-top: 5%;
   padding: 5%;
-  /* background-color: #f9f9f9; */
+  padding-bottom: 0;
   background-color: var(--backgroundColor);
 }
 
@@ -1014,7 +1022,9 @@ span.service-two-bottom-box-logo {
   opacity: 0;
   max-height: 0;
   overflow: hidden;
-  transition: opacity 0.4s ease, max-height 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    max-height 0.4s ease;
 }
 
 /* Pulsating Dot */
@@ -1028,7 +1038,9 @@ span.service-two-bottom-box-logo {
   background-color: #ca4c4d;
   border-radius: 50%;
   box-shadow: 0 0 10px rgba(233, 99, 1, 0.6);
-  transition: opacity 0.4s ease, transform 0.3s ease;
+  transition:
+    opacity 0.4s ease,
+    transform 0.3s ease;
 }
 
 /* Active State */
