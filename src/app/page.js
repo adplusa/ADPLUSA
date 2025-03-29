@@ -2,7 +2,6 @@
 import Image from "next/image";
 import styles from "./page.css";
 import Header from "./Components/Header/page";
-import { CountUp } from "countup.js";
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { useKeenSlider } from "keen-slider/react";
@@ -12,11 +11,9 @@ import SplitType from "split-type";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "swiper/css";
 import "swiper/css/pagination";
-import { FaQuoteLeft } from "react-icons/fa";
-import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { FaTrophy, FaUsers, FaStar, FaChartLine } from "react-icons/fa";
 import Footer from "./Components/Footer/page";
-import DOMPurify from "dompurify";
+import { sanityClient } from "@/sanity/lib/sanityClient";
 
 gsap.registerPlugin(CSSPlugin);
 
@@ -102,60 +99,78 @@ const achievements = [
   },
 ];
 
-const NEXT_PUBLIC_API_BASE_URL =
-  process.env.NODE_ENV == "development"
-    ? process.env.NEXT_PUBLIC_API_BASE_URL
-    : "https://architect-3cto.onrender.com";
-
-console.log("ENV:", process.env.NODE_ENV);
-console.log("API BASE URL:", process.env.NEXT_PUBLIC_API_BASE_URL);
-
-// const response = await fetch(`${API_BASE_URL}/api/text-slider?populate=*`);
-
-// const heroData = await fetch(`${API_BASE_URL}/api/homepage?populate=*`);
-// const heroData = await fetch("http://localhost:1337/api/homepage?populate=*");
-
-// const heroResponse = await heroData.json();
-
-// const aboutData = await fetch(
-//   "http://localhost:1337/api/homepage-about-us-section?populate=*"
-// );
-// const aboutResponse = await aboutData.json();
-
-// const SpecializerData = await fetch(
-//   "http://localhost:1337/api/specialize-section?populate=*"
-// );
-// const specializerResponse = await SpecializerData.json();
-
-// const ServiceData = await fetch(
-//   "http://localhost:1337/api/service-sections?populate=*"
-// );
-// const ServiceResponse = await ServiceData.json();
-// const services = ServiceResponse.data[0]?.Services || [];
+const services = [
+  {
+    id: 1,
+    service_name: "Maintenance Support",
+    service_description:
+      "Maintenance is the process of ensuring that buildings retain a good appearance and operate at optimum efficiency.",
+    icon: {
+      url: "/icons/maintenance-support.png",
+    },
+  },
+  {
+    id: 2,
+    service_name: "Cost-Effective",
+    service_description:
+      "The building design is deemed to be cost-effective if it results in benefits equal to those of alternative designs.",
+    icon: {
+      url: "/icons/cost-effective.png",
+    },
+  },
+  {
+    id: 3,
+    service_name: "Swift Deliverance",
+    service_description:
+      "We never miss any Deadline. Discipline is one of our core values.",
+    icon: {
+      url: "/icons/swift-deliverance.png",
+    },
+  },
+  {
+    id: 4,
+    service_name: "Software Expertise",
+    service_description:
+      "We are a team of software experts as per industry standards.",
+    icon: {
+      url: "/icons/software-expertise.png",
+    },
+  },
+  {
+    id: 5,
+    service_name: "Newest Technology",
+    service_description:
+      "We work with the latest technology to deliver the best to our clients.",
+    icon: {
+      url: "/icons/newest-technology.png",
+    },
+  },
+  {
+    id: 6,
+    service_name: "23+ years of experience",
+    service_description:
+      "A greater understanding of the cities and buildings around you.",
+    icon: {
+      url: "/icons/experience.png",
+    },
+  },
+];
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
-  // const [textOne, setTextOne] = useState("");
-  // const [textTwo, setTextTwo] = useState("");
-
   const [loading, setLoading] = useState(true);
   const [counter, setCounter] = useState(0);
-  // const [index, setIndex] = useState(0);
-  // const [activeStep, setActiveStep] = useState(steps[0].id);
   const [currentIndex, setCurrentIndex] = useState(0);
-  // const [currentSlide, setCurrentSlide] = useState(0);
-  // const [loaded, setLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState(images[0]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [index, setIndex] = useState(0);
-  // const [current, setCurrent] = useState(0);
   const [logo, setLogo] = useState("/red-logo.png");
   const textRef = useRef(null);
-
   const textRefs = useRef([]);
   const [open, setOpen] = useState(null);
   const [testSliderContent, setTextSliderContent] = useState(false);
+  const [homepageData, setHomepageData] = useState([]);
 
   const [sliderRef, instanceRef] = useKeenSlider(
     {
@@ -231,29 +246,25 @@ export default function Home() {
       })
       .set(".loader-container", { display: "none" }); // Instantly hide
   };
+  const [data, setData] = useState(null);
 
-  // Text Slider Useeffect
+  const homepageDataFunction = async () => {
+    const query = '*[_type == "homepage"][0]';
+    const data = await sanityClient.fetch(query);
+    setHomepageData(data);
+
+    console.log(data);
+  };
+
+  useEffect(() => {
+    homepageDataFunction();
+  }, []);
+
   // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/text-slider?populate=*`
-  //       );
-  //       const data = await response.json(); // Parse as JSON
-  //       console.log("API Response:", response); // Debugging log
-
-  //       if (data?.data) {
-  //         const rawTextOne = data.data.Text_one || "";
-  //         const rawTextTwo = data.data.Text_two || "";
-
-  //         setTextOne(DOMPurify.sanitize(rawTextOne));
-  //         setTextTwo(DOMPurify.sanitize(rawTextTwo));
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching or parsing text slider data:", error);
-  //     }
-  //   };
-
+  //   async function fetchData() {
+  //     const data = await getHomepageData();
+  //     setHomepageData(data);
+  //   }
   //   fetchData();
   // }, []);
 
@@ -378,15 +389,7 @@ export default function Home() {
       ease: "linear",
     });
   }, []);
-  useEffect(() => {
-    (async () => {
-      const TextSliderData = await fetch(
-        `${NEXT_PUBLIC_API_BASE_URL}/api/text-slider?populate=*`
-      );
-      const data = await TextSliderData.json();
-      setTextSliderContent(data);
-    })();
-  }, []);
+
   const upwardHandler = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -421,49 +424,57 @@ export default function Home() {
         <div className="nav">
           <div className="intro-container">
             <Header />
-            {/* <div
-              className="hero-banner"
-              style={{
-                "--light-bg-image": `url(${API_BASE_URL}${heroResponse.data.heroBannerLight[0].url})`,
-                "--dark-bg-image": `url(${API_BASE_URL}${heroResponse.data.heroBannerDark[0].url})`,
-              }}
-            >
+            <div className="hero-banner">
               <div className="overlay"></div>
-            </div> */}
+            </div>
 
-            {/* <div className="about-us">
-              <h2>{aboutResponse.data.about_us_left_who_we_are}</h2>
+            <div className="about-us">
+              <h2>Who we are?</h2>
 
               <div className="about-us-top">
                 <div className="about-us-top-left">
-                  <h1>{aboutResponse.data.about_us_left_heading}</h1>
+                  <h1>Allow us to introduce ourselves</h1>
                 </div>
                 <div className="about-us-top-right">
-                  <h1>{aboutResponse.data.about_us_right_title}</h1>
+                  <h1>Welcome to ADPL Consulting LLC</h1>
 
-                  <p>{aboutResponse.data.about_us_right_paragraph}</p>
+                  <p>
+                    ADPL CONSULTING LLC works as a leading Architectural and
+                    Engineering outsource fraternity across India and the United
+                    States of America. <br /> <br />
+                    We are a group of professionals with profound proficiency in
+                    the field of architecture, engineering, designing,
+                    interiors, and management. Having an established track
+                    record of serving more than 150 clients in 535+ projects,
+                    our strict adherence to international standards and global
+                    experience makes us the paramount service provider in the
+                    market.
+                  </p>
                   <span>
                     <div className="key-benefit">
                       <span>
                         <ul>
-                          {aboutResponse.data.about_us_right_bullet_points.map(
-                            (point, index) => (
-                              <li key={index}>{point}</li>
-                            )
-                          )}
+                          <li>Experienced Team</li>
+                          <li>Outsourcing</li>
+                          <li>Affordable Prices</li>
+                          <li>Best Quality</li>
+                          <li>Unique/Iconic Designs</li>
+                          <li>Strict Timelines</li>
+                          <li>Proficiency with SketchUp Pro</li>
+                          <li>Excellence in Revit & BIM</li>
                         </ul>
                       </span>
                     </div>
                   </span>
                 </div>
               </div>
-            </div> */}
+            </div>
 
-            {/* <div className="about-us-video-image">
+            <div className="about-us-video-image">
               <div className="about-us-img">
                 <Image
                   id="pawel"
-                  src={`http://localhost:1337${aboutResponse.data.about_us_section_down_img_one[0].url}`}
+                  src="pawel.avif"
                   alt="about-us img"
                   width={0}
                   height={0}
@@ -471,15 +482,12 @@ export default function Home() {
                 ></Image>
 
                 <video muted autoPlay loop>
-                  <source
-                    src={`http://localhost:1337${aboutResponse.data.about_us_section_down_img_two[0].url}`}
-                    type="video/mp4"
-                  />
+                  <source src="/architect2.mp4" type="video/mp4" />
                 </video>
 
                 <Image
                   id="vladimir"
-                  src={`http://localhost:1337${aboutResponse.data.about_us_section_down_img_three[0].url}`}
+                  src="vladimir.avif"
                   alt="about-us image"
                   width={0}
                   height={0}
@@ -492,28 +500,25 @@ export default function Home() {
               <div className="who-we-are-btn">
                 <Link href="#">
                   <button>
-                    <span>
-                      {aboutResponse.data.about_us_section_button_cta}
-                    </span>
+                    <span>Who we are</span>
                   </button>
                 </Link>
               </div>
-            </div> */}
+            </div>
 
             <div className="strip-text">
               <div className="marquee">
-                {/* <p dangerouslySetInnerHTML={{ __html: textOne }} />
-                <p dangerouslySetInnerHTML={{ __html: textTwo }} /> */}
-                <p>{testSliderContent.data.Text_one}</p>
-                <p>{testSliderContent.data.Text_two}</p>
+                <h1>{homepageData && homepageData.Name}</h1>
+                {/* <p>ADPL CONSULTING LLC works as a leading Archite</p>
+                <p>ADPL CONSULTING LLC works as a leading Archite</p> */}
               </div>
             </div>
 
-            {/* <div className="service-two">
+            <div className="service-two">
               <div className="service-two-top">
                 <div className="service-two-top-left">
-                  <h5>{specializerResponse.data.heading}</h5>
-                  <h1>{specializerResponse.data.subheading}</h1>
+                  <h5>Company Services</h5>
+                  <h1>We specialize in these fields.</h1>
                 </div>
               </div>
               <div className="service-two-bottom">
@@ -529,7 +534,7 @@ export default function Home() {
                           <Image
                             src={
                               service.icon?.url
-                                ? `http://localhost:1337${service.icon.url}`
+                                ? service.icon.url
                                 : "/default-icon.png"
                             }
                             width={60}
@@ -542,8 +547,8 @@ export default function Home() {
                       </div>
                       <div className="service-two-bottom-box-bottom">
                         <p>
-                          {service.service_description[0]?.children[0]?.text ||
-                            "No description available"}
+                          {service.service_description?.[0]?.children?.[0]
+                            ?.text || "No description available"}
                         </p>
                       </div>
                     </div>
@@ -551,15 +556,12 @@ export default function Home() {
                 </div>
                 <div className="service-two-bottom-right">
                   <video muted autoPlay loop>
-                    <source
-                      src={`http://localhost:1337${specializerResponse.data.service_right_big_img?.url}`}
-                      type="video/mp4"
-                    />
+                    <source src="/service-video.mp4" type="video/mp4" />
                   </video>
                 </div>
                 <div className="services-one_circle-color"></div>
               </div>
-            </div> */}
+            </div>
 
             <div className="feature-section">
               <div className="feature-section-df">
