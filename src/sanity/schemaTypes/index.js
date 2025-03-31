@@ -1,6 +1,6 @@
-// import { eventType } from "./eventType";
-import { homepage } from "./eventType";
+import { eventType } from "./eventType";
+import { artistType } from "./artistType";
 
 export const schema = {
-  types: [homepage],
+  types: [eventType, artistType],
 };

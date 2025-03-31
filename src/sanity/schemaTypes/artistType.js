@@ -1,12 +1,12 @@
 import { defineField, defineType } from "sanity";
 
-export const eventType = defineType({
-  name: "homepage",
-  title: "Homepage",
+export const artistType = defineType({
+  name: "artist",
+  title: "Artist",
   type: "document",
   fields: [
     defineField({
-      name: "Title",
+      name: "name",
       type: "string",
     }),
   ],

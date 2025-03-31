@@ -13,7 +13,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { FaTrophy, FaUsers, FaStar, FaChartLine } from "react-icons/fa";
 import Footer from "./Components/Footer/page";
-import { sanityClient } from "@/sanity/lib/sanityClient";
+import { client } from "@/sanity/lib/client";
 
 gsap.registerPlugin(CSSPlugin);
 
@@ -159,6 +159,9 @@ const services = [
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
+  // const data2 = client.fetch('*[_type == "artist"]');
+  // console.log(data2);
+
   const [loading, setLoading] = useState(true);
   const [counter, setCounter] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -170,7 +173,6 @@ export default function Home() {
   const textRefs = useRef([]);
   const [open, setOpen] = useState(null);
   const [testSliderContent, setTextSliderContent] = useState(false);
-  const [homepageData, setHomepageData] = useState([]);
 
   const [sliderRef, instanceRef] = useKeenSlider(
     {
@@ -246,27 +248,28 @@ export default function Home() {
       })
       .set(".loader-container", { display: "none" }); // Instantly hide
   };
-  const [data, setData] = useState(null);
 
-  const homepageDataFunction = async () => {
-    const query = '*[_type == "homepage"][0]';
-    const data = await sanityClient.fetch(query);
-    setHomepageData(data);
-
-    console.log(data);
-  };
+  const [artistData, setArtistData] = useState(null);
+  const [homepageData, setHomepageData] = useState(null);
 
   useEffect(() => {
-    homepageDataFunction();
-  }, []);
+    const fetchData = async () => {
+      try {
+        const artistData = await client.fetch('*[_type == "artist"]');
+        const homepageData = await client.fetch('*[_type == "homepage"]');
+        console.log(artistData);
+        console.log(homepageData);
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const data = await getHomepageData();
-  //     setHomepageData(data);
-  //   }
-  //   fetchData();
-  // }, []);
+        // Set the fetched data into the state
+        setArtistData(artistData);
+        setHomepageData(homepageData);
+      } catch (error) {
+        console.error("Error fetching data from Sanity:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // Working Process Images Changer
   useEffect(() => {
@@ -508,7 +511,8 @@ export default function Home() {
 
             <div className="strip-text">
               <div className="marquee">
-                {/* <h1>{homepageData && homepageData.Name}</h1> */}
+                <h1>{artistData[0].name}</h1>
+                <h1>{homepageData[0].Title}</h1>
                 <p>ADPL CONSULTING LLC works as a leading Archite</p>
                 <p>ADPL CONSULTING LLC works as a leading Archite</p>
               </div>
@@ -1051,7 +1055,6 @@ export default function Home() {
               ></Image>
             </a>
           </div>
-
           <div className="upward" onClick={upwardHandler}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
