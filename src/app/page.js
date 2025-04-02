@@ -14,41 +14,16 @@ import "swiper/css/pagination";
 import { FaTrophy, FaUsers, FaStar, FaChartLine } from "react-icons/fa";
 import Footer from "./Components/Footer/page";
 import { client } from "@/sanity/lib/client";
+import imageUrlBuilder from "@sanity/image-url";
+import { PortableText } from "@portabletext/react";
+import { urlFor } from "@/sanity/lib/image";
 
 gsap.registerPlugin(CSSPlugin);
 
-const faqs = [
-  {
-    question: "How do we start a project?",
-    answer:
-      "Here’s how to begin a project: First, you’ll need to decide on the scope of work, the desired timelines, and the resources you need. Then, you can contact us with your details.",
-  },
-  {
-    question: "What file types do you accept?",
-    answer:
-      "We accept a variety of file formats such as .pdf, .jpg, .png, .docx, .xlsx, and more. If you have a specific type, feel free to reach out.",
-  },
-  {
-    question: "Are revisions included in the price?",
-    answer:
-      "Yes, we include revisions as part of the initial price. The number of revisions depends on the project type.",
-  },
-  {
-    question: "Is my project information safe?",
-    answer:
-      "Absolutely. We use secure platforms and maintain a strict confidentiality agreement to ensure your project details are safe with us.",
-  },
-  {
-    question: "How will we communicate?",
-    answer:
-      "Communication will take place via email, calls, or video meetings, depending on the project needs and your preferences.",
-  },
-  {
-    question: "How can I pay?",
-    answer:
-      "You can pay through various methods, including bank transfers, credit/debit cards, or digital payment services like PayPal.",
-  },
-];
+// const builder = imageUrlBuilder(client);
+// function urlFor(source) {
+//   return builder.image(source);
+// }
 
 const steps = [
   {
@@ -72,96 +47,9 @@ const steps = [
 ];
 const images = ["/process-img.jpg", "/process-img2.jpg", "/process-img3.jpg"];
 
-const achievements = [
-  {
-    icon: FaTrophy,
-    title: "Years of Experience",
-    numbers: "3+",
-    gradient: "blue-gradient",
-  },
-  {
-    icon: FaUsers,
-    title: "Clients Served",
-    numbers: "100",
-    gradient: "teal-gradient",
-  },
-  {
-    icon: FaStar,
-    title: "Reviews",
-    numbers: "5",
-    gradient: "orange-gradient",
-  },
-  {
-    icon: FaChartLine,
-    title: "Projects Completed",
-    numbers: "150",
-    gradient: "purple-gradient",
-  },
-];
-
-const services = [
-  {
-    id: 1,
-    service_name: "BIM Services",
-    service_description:
-      "Our BIM team consists of architects, engineers and designers offering holistic solutions.",
-    icon: {
-      url: "/1.png",
-    },
-  },
-  {
-    id: 2,
-    service_name: "CAD Services",
-    service_description:
-      "Providing extended architectural and structural design and drafting services for all stages of your project.",
-    icon: {
-      url: "/2.png",
-    },
-  },
-  {
-    id: 3,
-    service_name: "Permit Drawings & Documentation",
-    service_description:
-      "Contact us and save the cumbersome job of authority approvals.",
-    icon: {
-      url: "/3.png",
-    },
-  },
-  {
-    id: 4,
-    service_name: "3D Visualization",
-    service_description:
-      "Get the full experience of your building beforehand by our 3D experts.",
-    icon: {
-      url: "/4.png",
-    },
-  },
-  {
-    id: 5,
-    service_name: "Presentation Drawings",
-    service_description:
-      "We provide comprehensive research data which captivates our clients at the lowest possible cost.",
-    icon: {
-      url: "/5.png",
-    },
-  },
-  {
-    id: 6,
-    service_name: "MEP Services",
-    service_description:
-      "We strive to provide high-quality and reliable structural, mechanical, and electrical engineering solutions.",
-    icon: {
-      url: "/6.png",
-    },
-  },
-];
-
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
-  // const data2 = client.fetch('*[_type == "artist"]');
-  // console.log(data2);
-
   const [loading, setLoading] = useState(true);
   const [counter, setCounter] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -257,6 +145,7 @@ export default function Home() {
       try {
         const artistData = await client.fetch('*[_type == "artist"]');
         const homepageData = await client.fetch('*[_type == "homepage"]');
+
         console.log(artistData);
         console.log(homepageData);
 
@@ -271,6 +160,28 @@ export default function Home() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (homepageData?.[0]) {
+      const lightImg = urlFor(homepageData[0].lightModeImage).url();
+      const darkImg = urlFor(homepageData[0].darkModeImage).url();
+
+      document.documentElement.style.setProperty(
+        "--lightBanner",
+        `url(${lightImg})`
+      );
+      document.documentElement.style.setProperty(
+        "--darkBanner",
+        `url(${darkImg})`
+      );
+
+      const isDark = document.body.classList.contains("dark-mode");
+      document.documentElement.style.setProperty(
+        "--backgrounImg",
+        isDark ? `url(${darkImg})` : `url(${lightImg})`
+      );
+    }
+  }, [homepageData]);
+
   // Working Process Images Changer
   useEffect(() => {
     const interval = setInterval(() => {
@@ -284,6 +195,7 @@ export default function Home() {
 
     return () => clearInterval(interval);
   }, [images]);
+
   const handleImageChange = (newIndex) => {
     setImageSrc(images[newIndex]);
     setActiveIndex(newIndex);
@@ -432,39 +344,23 @@ export default function Home() {
             </div>
 
             <div className="about-us">
-              <h2>Who we are?</h2>
+              <h2>{homepageData[0].allowLightHeading}</h2>
 
               <div className="about-us-top">
                 <div className="about-us-top-left">
-                  <h1>Allow us to introduce ourselves</h1>
+                  <h1>{homepageData[0].allowUsHeading}</h1>
                 </div>
                 <div className="about-us-top-right">
-                  <h1>Welcome to ADPL Consulting LLC</h1>
+                  <h1>{homepageData[0].allowRightHeading}</h1>
 
-                  <p>
-                    ADPL CONSULTING LLC works as a leading Architectural and
-                    Engineering outsource fraternity across India and the United
-                    States of America. <br /> <br />
-                    We are a group of professionals with profound proficiency in
-                    the field of architecture, engineering, designing,
-                    interiors, and management. Having an established track
-                    record of serving more than 150 clients in 535+ projects,
-                    our strict adherence to international standards and global
-                    experience makes us the paramount service provider in the
-                    market.
-                  </p>
+                  <PortableText value={homepageData[0].paragraph} />
                   <span>
                     <div className="key-benefit">
                       <span>
-                        <ul>
-                          <li>Experienced Team</li>
-                          <li>Outsourcing</li>
-                          <li>Affordable Prices</li>
-                          <li>Best Quality</li>
-                          <li>Unique/Iconic Designs</li>
-                          <li>Strict Timelines</li>
-                          <li>Proficiency with SketchUp Pro</li>
-                          <li>Excellence in Revit & BIM</li>
+                        <ul className="list-disc pl-6 space-y-2">
+                          {homepageData[0].bulletPoints.map((point, index) => (
+                            <li key={index}>{point}</li>
+                          ))}
                         </ul>
                       </span>
                     </div>
@@ -475,35 +371,40 @@ export default function Home() {
 
             <div className="about-us-video-image">
               <div className="about-us-img">
-                <Image
-                  id="pawel"
-                  src="/Pawel.avif"
-                  alt="about-us img"
-                  width={0}
-                  height={0}
-                  unoptimized
-                ></Image>
-
+                {homepageData?.[0]?.peoplImageOne?.asset && (
+                  <Image
+                    src={urlFor(homepageData[0].peoplImageOne).url()}
+                    width={500}
+                    height={500}
+                    alt="People image"
+                    unoptimized
+                  />
+                )}
                 <video muted autoPlay loop>
-                  <source src="/architect2.mp4" type="video/mp4" />
+                  {/* <source src="/architect2.mp4" type="video/mp4" /> */}
+                  <source
+                    src={homepageData[0]?.peopleVideo?.asset?.url}
+                    type="video/mp4"
+                  />
                 </video>
 
-                <Image
-                  id="vladimir"
-                  src="/Vladimir.avif"
-                  alt="about-us image"
-                  width={0}
-                  height={0}
-                  unoptimized
-                ></Image>
+                {homepageData?.[0]?.peoplImageTwo?.asset && (
+                  <Image
+                    src={urlFor(homepageData[0].peoplImageTwo).url()}
+                    width={500}
+                    height={500}
+                    alt="People image"
+                    unoptimized
+                  />
+                )}
               </div>
               <div className="about-us-video-text">
-                <h1>Adplusa</h1>
+                <h1>{homepageData[0].peopleText}</h1>
               </div>
               <div className="who-we-are-btn">
                 <Link href="#">
                   <button>
-                    <span>Who we are</span>
+                    <span>{homepageData[0].ctaButton}</span>
                   </button>
                 </Link>
               </div>
@@ -511,49 +412,47 @@ export default function Home() {
 
             <div className="strip-text">
               <div className="marquee">
-                <h1>{artistData[0].name}</h1>
-                <h1>{homepageData[0].Title}</h1>
-                <p>ADPL CONSULTING LLC works as a leading Archite</p>
-                <p>ADPL CONSULTING LLC works as a leading Archite</p>
+                <p>{homepageData[0].sliderTextOne}</p>
+                <p>{homepageData[0].sliderTextTwo}</p>
               </div>
             </div>
 
             <div className="service-two">
               <div className="service-two-top">
                 <div className="service-two-top-left">
-                  <h5>Company Services</h5>
-                  <h1>We specialize in these fields.</h1>
+                  <h5>{homepageData[0].serviceSmallHeading}</h5>
+                  <h1>{homepageData[0].serviceBigHeading}</h1>
                 </div>
               </div>
               <div className="service-two-bottom">
                 <div className="service-two-bottom-left">
-                  {services.map((service) => (
+                  {homepageData[0]?.services?.map((service, index) => (
                     <div
-                      key={service.id}
+                      key={service._id || index} // Use _id for a unique key if available, else fallback to index
                       className="service-two-bottom-box"
-                      id={`service-two-box-${service.id}`}
+                      id={`service-two-box-${service._id || index}`}
                     >
                       <div className="service-two-bottom-box-top">
                         <span className="service-two-bottom-box-logo">
                           <Image
                             src={
-                              service.icon?.url
-                                ? service.icon.url
-                                : "/default-icon.png"
-                            }
+                              service.serviceImage.asset.url ||
+                              "/default-icon.png"
+                            } // Fetch the image URL from Sanity
                             width={60}
                             height={60}
                             unoptimized
-                            alt={service.service_name}
+                            alt={service.serviceTitle || "Service Icon"} // Fallback alt text if serviceTitle is missing
                           />
                         </span>
-                        <h3>{service.service_name}</h3>
+                        <h3>{service.serviceTitle || "No title available"}</h3>{" "}
+                        {/* Fallback title if serviceTitle is missing */}
                       </div>
                       <div className="service-two-bottom-box-bottom">
                         <p>
-                          {service.service_description ||
-                            "No description available"}
-                        </p>
+                          {service.serviceContent || "No description available"}
+                        </p>{" "}
+                        {/* Fallback content if serviceContent is missing */}
                       </div>
                     </div>
                   ))}
@@ -570,81 +469,60 @@ export default function Home() {
             <div className="feature-section">
               <div className="feature-section-df">
                 <div className="feature-box">
-                  <h1>We specialize in outsourcing architectural services</h1>
+                  <h1>{homepageData[0].trustIconsHeading}</h1>
                   <div className="features-name">
-                    <span>
-                      <Image
-                        src={"1.png"}
-                        alt="icon-img"
-                        width={70}
-                        height={70}
-                        unoptimized
-                        priority
-                      ></Image>
-                      <p>100%</p>
-                      <h3>Maintenance Support</h3>
-                    </span>
-                    <span>
-                      <Image
-                        src={"2.png"}
-                        alt="icon-img"
-                        width={70}
-                        height={70}
-                        unoptimized
-                        priority
-                      ></Image>
-                      <p>75+</p>
-                      <h3>Cost-Effective</h3>
-                    </span>
-                    <span>
-                      <Image
-                        src={"6.png"}
-                        alt="icon-img"
-                        width={70}
-                        height={70}
-                        unoptimized
-                        priority
-                      ></Image>
-                      <p>135+</p>
-                      <h3>Swift Deliverance</h3>
-                    </span>
+                    {homepageData[0]?.serviceRelatedIcon?.map(
+                      (related, index) => {
+                        return (
+                          <div key={index} className="service-related-item">
+                            <Image
+                              src={urlFor(related.serviceRelatedImg).url()}
+                              alt={related.serviceRelatedName || "Service Icon"}
+                              width={70}
+                              height={70}
+                              unoptimized
+                              priority
+                            />
 
-                    <span>
-                      <Image
-                        src={"5.png"}
-                        alt="icon-img"
-                        width={70}
-                        height={70}
-                        unoptimized
-                        priority
-                      ></Image>
-                      <p>90+</p>
-                      <h3> Newest Technology</h3>
-                    </span>
+                            <p>{related.serviceRelatedNumber}</p>
+                            <h3>{related.serviceRelatedName}</h3>
+                          </div>
+                        );
+                      }
+                    )}
                   </div>
                 </div>
               </div>
 
               <div className="achievements-container">
                 <div className="achievements-grid">
-                  {achievements.map((achievement, index) => (
-                    <div
-                      key={index}
-                      className={`achievement-card ${achievement.gradient}`}
-                    >
-                      <div className="achievement-content">
-                        <div className="achievement-text">
-                          <span>
-                            <h3>{achievement.title}</h3>
-                          </span>
-                          <span className="achievement-numbers">
-                            <p>{achievement.numbers}</p>
-                            <achievement.icon className="achievement-icon" />
-                          </span>
+                  {homepageData[0]?.clientReviews?.map((review, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className={`achievement-card ${review.gradient}`}
+                      >
+                        <div className="achievement-content">
+                          <div className="achievement-text">
+                            <span>
+                              <h3>{review.clientReviewTitle}</h3>
+                            </span>
+                            <span className="achievement-numbers">
+                              <p>{review.clientReviewNumber}</p>
+                              {/* Using Image component for the image */}
+                              <Image
+                                src={urlFor(review.clientReviewImg)}
+                                width={70}
+                                height={70}
+                                alt={review.clientReviewTitle || "Review Image"}
+                                unoptimized
+                              />
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -652,52 +530,46 @@ export default function Home() {
             <section className="rto-section">
               <div className="background-process-img"></div>
               <h2 className="heading">
-                Our <span className="asked">Working</span> Process
+                {homepageData[0].workingProcessHeading}
               </h2>
               <p className="subheading">
-                From concept to completion, we transform ideas into functional
-                and
-                <br /> aesthetic architectural designs
+                {homepageData[0].workingProcessSubHeading}
               </p>
 
               <div className="content">
                 <div className="left">
-                  {[
-                    {
-                      title: "Meet Customers",
-                      text: "We introduce and present ourselves. Our priority is to listen and understand the client’s vision for clearer insight about the project.",
-                    },
-                    {
-                      title: "Planning & Research",
-                      text: "With the help of research and critical analysis, we prepare the first set of the drawings taking into account the requirements of the clients.",
-                    },
-                    {
-                      title: "Finalize the Design",
-                      text: "The feedback of the client is solicited and integrated. The changes are incorporated and the final set of completed drawings are prepared.",
-                    },
-                  ].map((item, idx) => (
-                    <div
-                      key={idx}
-                      className={`card ${idx === activeIndex ? "active" : ""}`}
-                      onClick={() => handleImageChange(idx)}
-                    >
-                      <div className="number">{idx + 1}</div>
-                      <div>
-                        <h3 className="card-title">{item.title}</h3>
-                        <p className="card-text">{item.text}</p>
+                  {homepageData[0]?.processSteps
+                    ?.filter((step) => step.stepTitle && step.stepText) // Filter out empty or incomplete steps
+                    .map((step, idx) => (
+                      <div
+                        key={idx}
+                        className={`card ${idx === activeIndex ? "active" : ""}`}
+                        onClick={() => handleImageChange(idx)} // Update activeIndex
+                      >
+                        <div className="number">{idx + 1}</div>
+                        <div>
+                          <h3 className="card-title">{step.stepTitle}</h3>
+                          <p className="card-text">{step.stepText}</p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
 
                 <div className="right">
-                  <Image
-                    src={imageSrc}
-                    alt="Process Image"
-                    width={0}
-                    height={0}
-                    unoptimized
-                  />
+                  {homepageData[0]?.processSteps?.[activeIndex]?.stepImage && (
+                    <Image
+                      src={urlFor(
+                        homepageData[0]?.processSteps[activeIndex]?.stepImage
+                      ).url()}
+                      alt={
+                        homepageData[0]?.processSteps[activeIndex]?.stepTitle ||
+                        "Step Image"
+                      }
+                      width={500}
+                      height={500}
+                      unoptimized
+                    />
+                  )}
                 </div>
               </div>
             </section>
@@ -705,126 +577,30 @@ export default function Home() {
             <div className="technology-we-use">
               <h1>Technologies we use</h1>
               <div className="technology-grid">
-                <span>
-                  <Image
-                    src="/revit.webp"
-                    width={0}
-                    height={0}
-                    alt="footer-img"
-                    unoptimized
-                  ></Image>
-                </span>
-                <span>
-                  <Image
-                    src="/revit.webp"
-                    width={0}
-                    height={0}
-                    alt="footer-img"
-                    unoptimized
-                  ></Image>
-                </span>
-                <span>
-                  <Image
-                    src="/revit.webp"
-                    width={0}
-                    height={0}
-                    alt="footer-img"
-                    unoptimized
-                  ></Image>
-                </span>
-                <span>
-                  <Image
-                    src="/sketchup_logo.webp"
-                    width={0}
-                    height={0}
-                    alt="footer-img"
-                    unoptimized
-                  ></Image>
-                </span>
-                <span>
-                  <Image
-                    src="/sketchup_logo.webp"
-                    width={0}
-                    height={0}
-                    alt="footer-img"
-                    unoptimized
-                  ></Image>
-                </span>
-                <span>
-                  <Image
-                    src="/sketchup_logo.webp"
-                    width={0}
-                    height={0}
-                    alt="footer-img"
-                    unoptimized
-                  ></Image>
-                </span>
-                <span>
-                  <Image
-                    src="/archicad_logo (1).webp"
-                    width={0}
-                    height={0}
-                    alt="footer-img"
-                    unoptimized
-                  ></Image>
-                </span>
-
-                <span>
-                  <Image
-                    src="/archicad_logo (1).webp"
-                    width={0}
-                    height={0}
-                    alt="footer-img"
-                    unoptimized
-                  ></Image>
-                </span>
-
-                <span>
-                  <Image
-                    src="/archicad_logo (1).webp"
-                    width={0}
-                    height={0}
-                    alt="footer-img"
-                    unoptimized
-                  ></Image>
-                </span>
-
-                <span>
-                  <Image
-                    src="/archicad_logo.webp"
-                    width={0}
-                    height={0}
-                    alt="footer-img"
-                    unoptimized
-                  ></Image>
-                </span>
-                <span>
-                  <Image
-                    src="/archicad_logo.webp"
-                    width={0}
-                    height={0}
-                    alt="footer-img"
-                    unoptimized
-                  ></Image>
-                </span>
-                <span>
-                  <Image
-                    src="/archicad_logo.webp"
-                    width={0}
-                    height={0}
-                    alt="footer-img"
-                    unoptimized
-                  ></Image>
-                </span>
+                {homepageData[0]?.technologyImgs?.length > 0 ? (
+                  homepageData[0].technologyImgs.map((img, index) => {
+                    return (
+                      <span key={index}>
+                        <Image
+                          src={urlFor(img.technologyImage).url()} // Fetch image URL from Sanity
+                          width={500} // Set your preferred width for the image
+                          height={500} // Set your preferred height for the image
+                          alt="img" // Alt text for the image
+                          unoptimized
+                        />
+                      </span>
+                    );
+                  })
+                ) : (
+                  <p>No images available</p> // Fallback if no images are available
+                )}
               </div>
             </div>
 
             <div className="faqs">
               <div className="faq-accordion">
-                <h2>
-                  Frequently <span className="asked">asked</span> questions
-                </h2>
-                {faqs.map((faq, index) => (
+                <h2>{homepageData[0]?.faqHeading}</h2>
+                {homepageData[0]?.faq?.map((faq, index) => (
                   <div
                     key={index}
                     className={`faq-item ${open === index ? "active" : ""}`}
