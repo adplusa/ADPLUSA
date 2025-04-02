@@ -509,7 +509,7 @@ export default function Home() {
                             </span>
                             <span className="achievement-numbers">
                               <p>{review.clientReviewNumber}</p>
-                              {/* Using Image component for the image */}
+
                               <Image
                                 src={urlFor(review.clientReviewImg)}
                                 width={70}
@@ -575,7 +575,7 @@ export default function Home() {
             </section>
 
             <div className="technology-we-use">
-              <h1>Technologies we use</h1>
+              <h1>Technologies We Used</h1>
               <div className="technology-grid">
                 {homepageData[0]?.technologyImgs?.length > 0 ? (
                   homepageData[0].technologyImgs.map((img, index) => {
