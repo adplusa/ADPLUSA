@@ -505,14 +505,6 @@ export default function Home() {
                             </span>
                             <span className="achievement-numbers">
                               <p>{review.clientReviewNumber}</p>
-
-                              {/* <Image
-                                src={urlFor(review.clientReviewImg)}
-                                width={70}
-                                height={70}
-                                alt={review.clientReviewTitle || "Review Image"}
-                                unoptimized
-                              /> */}
                             </span>
                           </div>
                         </div>
