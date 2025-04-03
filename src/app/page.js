@@ -441,14 +441,14 @@ export default function Home() {
                             alt={service.serviceTitle || "Service Icon"} // Fallback alt text if serviceTitle is missing
                           />
                         </span>
-                        <h3>{service.serviceTitle || "No title available"}</h3>{" "}
-                        {/* Fallback title if serviceTitle is missing */}
+                        <h3>
+                          {service.serviceTitle || "No title available"}
+                        </h3>{" "}
                       </div>
                       <div className="service-two-bottom-box-bottom">
                         <p>
                           {service.serviceContent || "No description available"}
                         </p>{" "}
-                        {/* Fallback content if serviceContent is missing */}
                       </div>
                     </div>
                   ))}
