@@ -14,16 +14,17 @@ import "swiper/css/pagination";
 import { FaTrophy, FaUsers, FaStar, FaChartLine } from "react-icons/fa";
 import Footer from "./Components/Footer/page";
 import { client } from "@/sanity/lib/client";
-import imageUrlBuilder from "@sanity/image-url";
+// import imageUrlBuilder from "@sanity/image-url";
 import { PortableText } from "@portabletext/react";
 import { urlFor } from "@/sanity/lib/image";
 
-gsap.registerPlugin(CSSPlugin);
-
 // const builder = imageUrlBuilder(client);
-// function urlFor(source) {
+
+// export function urlFor(source) {
 //   return builder.image(source);
 // }
+
+gsap.registerPlugin(CSSPlugin);
 
 const steps = [
   {
