@@ -18,12 +18,6 @@ import { client } from "@/sanity/lib/client";
 import { PortableText } from "@portabletext/react";
 import { urlFor } from "@/sanity/lib/image";
 
-// const builder = imageUrlBuilder(client);
-
-// export function urlFor(source) {
-//   return builder.image(source);
-// }
-
 gsap.registerPlugin(CSSPlugin);
 
 const steps = [
