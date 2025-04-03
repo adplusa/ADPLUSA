@@ -345,7 +345,6 @@ export default function Home() {
 
             <div className="about-us">
               <h2>{homepageData[0].allowLightHeading}</h2>
-
               <div className="about-us-top">
                 <div className="about-us-top-left">
                   <h1>{homepageData[0].allowUsHeading}</h1>
@@ -435,10 +434,7 @@ export default function Home() {
                       <div className="service-two-bottom-box-top">
                         <span className="service-two-bottom-box-logo">
                           <Image
-                            src={
-                              service.serviceImage.asset.url ||
-                              "/default-icon.png"
-                            } // Fetch the image URL from Sanity
+                            src={urlFor(service.serviceImage).url()}
                             width={60}
                             height={60}
                             unoptimized
@@ -510,13 +506,13 @@ export default function Home() {
                             <span className="achievement-numbers">
                               <p>{review.clientReviewNumber}</p>
 
-                              <Image
+                              {/* <Image
                                 src={urlFor(review.clientReviewImg)}
                                 width={70}
                                 height={70}
                                 alt={review.clientReviewTitle || "Review Image"}
                                 unoptimized
-                              />
+                              /> */}
                             </span>
                           </div>
                         </div>

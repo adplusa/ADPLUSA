@@ -262,6 +262,7 @@
 .about-us-video-image {
   position: relative;
   opacity: 1 !important;
+  padding: 0 21%;
 }
 
 .about-us-video-text {
