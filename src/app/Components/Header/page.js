@@ -28,28 +28,6 @@ const Header = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const updateLogo = () => {
-  //     setLogo(
-  //       document.body.classList.contains("dark-mode")
-  //         ? "/flip-oneee.png"
-  //         : "/red-log-width.png"
-  //     );
-  //   };
-
-  //   // Run on mount
-  //   updateLogo();
-
-  //   // Observe for changes
-  //   const observer = new MutationObserver(() => {
-  //     updateLogo();
-  //   });
-
-  //   observer.observe(document.body, { attributes: true });
-
-  //   return () => observer.disconnect(); // Cleanup observer
-  // }, []);
-
   useEffect(() => {
     const navbar = document.getElementById("second-navbar");
     if (navbar) {
