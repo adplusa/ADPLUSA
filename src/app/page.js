@@ -172,7 +172,7 @@ export default function Home() {
       const setBanner = () => {
         const isDark = document.body.classList.contains("dark-mode");
         document.documentElement.style.setProperty(
-          "--backgrounImg",
+          "--backgroundImg",
           isDark ? `url(${darkImg})` : `url(${lightImg})`
         );
       };
@@ -589,7 +589,7 @@ export default function Home() {
                     );
                   })
                 ) : (
-                  <p>No images available</p> // Fallback if no images are available
+                  <p>No images available</p>
                 )}
               </div>
             </div>
@@ -638,94 +638,49 @@ export default function Home() {
                   </svg>
                 </button>
                 <div ref={sliderRef} className="keen-slider">
-                  <div className="keen-slider__slide number-slide1">
-                    <div className="testimonial-container">
-                      <div className="testimonial-box">
-                        <h2>Our Founder & Principal Architect</h2>
-                        <p>
-                          “An Indian, living in the capital city of India;
-                          Delhi, is an award-winning architect, who incorporated
-                          a company with a clear intent to foster an egalitarian
-                          organizational ethos where distinctive architectural
-                          talent finds self-expression and can contribute in a
-                          democratic and collaborative work environment.”
-                        </p>
-                        <p>
-                          Focused on core competencies in the field of
-                          Architecture, Interior Designing, Consulting
-                          Engineering, and other Allied Services and having an
-                          experience of 22+ Yrs.
-                        </p>
-                        <div className="author">
-                          <Image
-                            src="/founder.jpg"
-                            alt="Sylwia Gieruszyńska"
-                            width={50}
-                            height={50}
-                            className="profile-img"
-                          />
-                          <div>
-                            <h4 className="name">Abhishek Aggarwal</h4>
-                            <p className="designation">Founder</p>
+                  {homepageData[0]?.founderSlider?.map((founder, idx) => (
+                    <div
+                      key={idx}
+                      className={`keen-slider__slide number-slide${idx + 1}`}
+                    >
+                      <div className="testimonial-container">
+                        <div className="testimonial-box">
+                          <h2>{founder.founderTitle}</h2>
+
+                          <PortableText value={founder.founderDescription} />
+
+                          <div className="author">
+                            {founder.founderThumbnailImage?.asset?.url && (
+                              <Image
+                                src={founder.founderThumbnailImage.asset.url}
+                                alt={founder.founderName}
+                                width={50}
+                                height={50}
+                                className="profile-img"
+                              />
+                            )}
+                            <div>
+                              <h4 className="name">{founder.founderName}</h4>
+                              <p className="designation">{founder.position}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="testimonial-image">
-                        <Image
-                          src="/founder.jpg"
-                          alt="Team"
-                          width={400}
-                          height={400}
-                          className="team-img"
-                        />
-                        <div className="white-box"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="keen-slider__slide number-slide2">
-                    <div className="testimonial-container">
-                      <div className="testimonial-box">
-                        <h2>Our Founder & Principal Architect</h2>
-                        <p>
-                          “An Indian, living in the capital city of India;
-                          Delhi, is an award-winning architect, who incorporated
-                          a company with a clear intent to foster an egalitarian
-                          organizational ethos where distinctive architectural
-                          talent finds self-expression and can contribute in a
-                          democratic and collaborative work environment.”
-                        </p>
-                        <p>
-                          Focused on core competencies in the field of
-                          Architecture, Interior Designing, Consulting
-                          Engineering, and other Allied Services and having an
-                          experience of 22+ Yrs.
-                        </p>
-                        <div className="author">
-                          <Image
-                            src="/founder.jpg"
-                            alt="Sylwia Gieruszyńska"
-                            width={50}
-                            height={50}
-                            className="profile-img"
-                          />
-                          <div>
-                            <h4 className="name">Abhishek Aggarwal</h4>
-                            <p className="designation">Founder</p>
-                          </div>
+
+                        <div className="testimonial-image">
+                          {founder.founderImage?.asset?.url && (
+                            <Image
+                              src={founder.founderImage.asset.url}
+                              alt="Founder Team"
+                              width={400}
+                              height={400}
+                              className="team-img"
+                            />
+                          )}
+                          <div className="white-box"></div>
                         </div>
                       </div>
-                      <div className="testimonial-image">
-                        <Image
-                          src="/founder.jpg"
-                          alt="Team"
-                          width={400}
-                          height={400}
-                          className="team-img"
-                        />
-                        <div className="white-box"></div>
-                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
                 <button
                   className="next-button"

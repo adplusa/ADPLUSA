@@ -317,5 +317,59 @@ export const eventType = defineType({
         },
       ],
     }),
+    defineField({
+      name: "founderSlider",
+      title: "Founder Slider",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "founderTitle",
+              title: "Founder Title",
+              type: "string",
+            },
+
+            {
+              name: "founderDescription",
+              title: "Founder Description",
+              type: "array",
+              of: [{ type: "block" }],
+            },
+
+            {
+              name: "founderThumbnailImage",
+              title: "Founder Thumbnail Image",
+              type: "image",
+              options: {
+                hotspot: true,
+              },
+            },
+
+            {
+              name: "founderName",
+              title: "Founder Name",
+              type: "string",
+            },
+
+            {
+              name: "position",
+              title: "Position",
+              type: "string",
+            },
+
+            {
+              name: "founderImage",
+              title: "Founder Image",
+              type: "image",
+              options: {
+                hotspot: true,
+              },
+            },
+          ],
+        },
+      ],
+    }),
   ],
 });

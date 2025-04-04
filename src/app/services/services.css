@@ -733,7 +733,6 @@ button.next-button:active {
 .card {
   position: relative;
   width: 27%;
-  background-color: #fff;
   overflow: hidden;
   text-align: center;
   transition: transform 0.3s ease;
