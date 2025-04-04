@@ -478,8 +478,8 @@ button.next-button:active {
   align-items: center;
   gap: 1%;
   padding: 50px;
-  background-color: #fff;
-  color: #333;
+  /* background-color: #fff; */
+  color: var(--foreground);
   border-radius: 15px;
   margin-top: 3%;
 }
@@ -497,7 +497,8 @@ button.next-button:active {
 
 .highlight {
   font-weight: bold;
-  color: #080808;
+  color: var(--foreground);
+  font-weight: bolder;
 }
 
 .feature-list {
@@ -620,8 +621,7 @@ button.next-button:active {
   justify-content: space-around;
   align-items: center;
   padding: 50px 6%;
-  background-color: #fff;
-  color: #333;
+  color: var(--foreground);
   border-radius: 20px;
 }
 
