@@ -4,7 +4,6 @@
   --borderColor: #000;
   --backgroundContact: #e2dbdb;
   --backgroundTechnology: rgb(236, 236, 236);
-  /* --backgrounImg: url("/banner-1.jpg"); */
 }
 
 .dark-mode {
@@ -13,7 +12,6 @@
   --borderColor: #fff;
   --backgroundContact: #6c6c6c;
   --backgroundTechnology: #b9b9b9;
-  /* --backgrounImg: url("/banner-2.jpg"); */
 }
 
 @font-face {

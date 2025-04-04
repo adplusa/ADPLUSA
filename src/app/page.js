@@ -169,11 +169,21 @@ export default function Home() {
         `url(${darkImg})`
       );
 
-      const isDark = document.body.classList.contains("dark-mode");
-      document.documentElement.style.setProperty(
-        "--backgrounImg",
-        isDark ? `url(${darkImg})` : `url(${lightImg})`
-      );
+      const setBanner = () => {
+        const isDark = document.body.classList.contains("dark-mode");
+        document.documentElement.style.setProperty(
+          "--backgrounImg",
+          isDark ? `url(${darkImg})` : `url(${lightImg})`
+        );
+      };
+      setBanner();
+
+      const observer = new MutationObserver(setBanner);
+      observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
+      return () => observer.disconnect();
     }
   }, [homepageData]);
 
@@ -374,13 +384,17 @@ export default function Home() {
                     unoptimized
                   />
                 )}
-                <video muted autoPlay loop>
-                  {/* <source src="/architect2.mp4" type="video/mp4" /> */}
-                  <source
-                    src={homepageData[0]?.peopleVideo?.asset?.url}
-                    type="video/mp4"
+                {homepageData?.[0]?.peopleVideo?.asset?.url && (
+                  <video
+                    src={homepageData[0].peopleVideo.asset.url}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls={false}
+                    style={{ width: "100%", height: "auto" }}
                   />
-                </video>
+                )}
 
                 {homepageData?.[0]?.peoplImageTwo?.asset && (
                   <Image

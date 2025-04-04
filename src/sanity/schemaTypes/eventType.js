@@ -77,7 +77,7 @@ export const eventType = defineType({
       title: "People Video",
       type: "file",
       options: {
-        accept: "video/*", // Ensures that only video files can be uploaded
+        accept: "video/*",
       },
     }),
 
