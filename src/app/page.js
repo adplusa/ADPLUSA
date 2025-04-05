@@ -650,13 +650,16 @@ export default function Home() {
                           <PortableText value={founder.founderDescription} />
 
                           <div className="author">
-                            {founder.founderThumbnailImage?.asset?.url && (
+                            {founder.founderThumbnailImage?.asset?._ref && (
                               <Image
-                                src={founder.founderThumbnailImage.asset.url}
-                                alt={founder.founderName}
-                                width={50}
-                                height={50}
+                                src={urlFor(
+                                  founder.founderThumbnailImage
+                                ).url()}
+                                alt="Founder Team"
+                                width={400}
+                                height={400}
                                 className="profile-img"
+                                unoptimized
                               />
                             )}
                             <div>
@@ -667,15 +670,17 @@ export default function Home() {
                         </div>
 
                         <div className="testimonial-image">
-                          {founder.founderImage?.asset?.url && (
+                          {founder.founderImage?.asset?._ref && (
                             <Image
-                              src={founder.founderImage.asset.url}
+                              src={urlFor(founder.founderImage).url()}
                               alt="Founder Team"
                               width={400}
                               height={400}
                               className="team-img"
+                              unoptimized
                             />
                           )}
+
                           <div className="white-box"></div>
                         </div>
                       </div>
@@ -707,16 +712,18 @@ export default function Home() {
               <div className="contact-container">
                 <div className="contact-us-df">
                   <div className="contact-left">
-                    <Image
-                      src="/contact-img.webp"
-                      width={0}
-                      height={0}
-                      alt="footer-img"
-                      unoptimized
-                    ></Image>
+                    {homepageData[0]?.contactUsSectionImg?.asset && (
+                      <Image
+                        src={urlFor(homepageData[0].contactUsSectionImg).url()}
+                        width={500}
+                        height={500}
+                        alt="footer-img"
+                        unoptimized
+                      />
+                    )}
                   </div>
                   <div className="contact-right">
-                    <h1>Contact us</h1>
+                    <h1>{homepageData[0]?.contactUsTitle}</h1>
 
                     <div className="contact-form">
                       <div className="form-fields">
@@ -758,7 +765,7 @@ export default function Home() {
                     </div>
                     <div className="contact-btn">
                       <span>
-                        <button>Submit</button>
+                        <button>{homepageData[0]?.contactUsButton}</button>
                       </span>
                     </div>
                   </div>

@@ -317,6 +317,8 @@ export const eventType = defineType({
         },
       ],
     }),
+
+    //Founder Slider
     defineField({
       name: "founderSlider",
       title: "Founder Slider",
@@ -370,6 +372,25 @@ export const eventType = defineType({
           ],
         },
       ],
+    }),
+
+    // Contact us
+    defineField({
+      name: "contactUsSectionImg",
+      title: "Contact Us Section Image",
+      type: "image",
+    }),
+
+    defineField({
+      name: "contactUsTitle",
+      title: "Contact Us Title",
+      type: "string",
+    }),
+
+    defineField({
+      name: "contactUsButton",
+      title: "Contact Us Button",
+      type: "string",
     }),
   ],
 });
