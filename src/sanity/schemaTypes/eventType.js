@@ -149,6 +149,15 @@ export const eventType = defineType({
     }),
 
     defineField({
+      name: "serviceCircleImage",
+      title: "Service Video",
+      type: "file",
+      options: {
+        accept: "video/*",
+      },
+    }),
+
+    defineField({
       name: "trustIconsHeading",
       title: "Trust Icon Heading",
       type: "string",

@@ -28,10 +28,9 @@ const page = () => {
                       unoptimized
                       priority
                     ></Image>
-                    <span className="project-overlay">
-                      <h1>The Iconic Arrival</h1>
-                    </span>
+                    <span className="project-overlay"></span>
                   </span>
+                  <h1>The Iconic Arrival</h1>
                 </div>
               </a>
 

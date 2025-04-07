@@ -14,9 +14,9 @@ import "swiper/css/pagination";
 import { FaTrophy, FaUsers, FaStar, FaChartLine } from "react-icons/fa";
 import Footer from "./Components/Footer/page";
 import { client } from "@/sanity/lib/client";
-// import imageUrlBuilder from "@sanity/image-url";
 import { PortableText } from "@portabletext/react";
 import { urlFor } from "@/sanity/lib/image";
+import { getFileAsset } from "@sanity/asset-utils";
 
 gsap.registerPlugin(CSSPlugin);
 
@@ -56,6 +56,10 @@ export default function Home() {
   const textRefs = useRef([]);
   const [open, setOpen] = useState(null);
   const [testSliderContent, setTextSliderContent] = useState(false);
+  const [videos, setVideos] = useState({
+    peopleVideo: null,
+    serviceVideo: null,
+  });
 
   const [sliderRef, instanceRef] = useKeenSlider(
     {
@@ -140,6 +144,21 @@ export default function Home() {
       try {
         const artistData = await client.fetch('*[_type == "artist"]');
         const homepageData = await client.fetch('*[_type == "homepage"]');
+
+        const resolveVideo = (ref) => {
+          if (!ref) return null;
+          return getFileAsset(
+            { _ref: ref },
+            {
+              projectId: "5ippxm43",
+              dataset: "production",
+            }
+          ).url;
+        };
+        setVideos({
+          peopleVideo: resolveVideo(homepageData[0]?.peopleVideo?.asset?._ref),
+          serviceVideo: resolveVideo(homepageData[0]?.peopleVideo?.asset?._ref),
+        });
 
         console.log(artistData);
         console.log(homepageData);
@@ -384,9 +403,9 @@ export default function Home() {
                     unoptimized
                   />
                 )}
-                {homepageData?.[0]?.peopleVideo?.asset?.url && (
+                {videos.peopleVideo && (
                   <video
-                    src={homepageData[0].peopleVideo.asset.url}
+                    src={videos.peopleVideo}
                     autoPlay
                     muted
                     loop
@@ -463,9 +482,17 @@ export default function Home() {
                   ))}
                 </div>
                 <div className="service-two-bottom-right">
-                  <video muted autoPlay loop>
-                    <source src="/service-video.mp4" type="video/mp4" />
-                  </video>
+                  {videos.serviceVideo && (
+                    <video
+                      src={videos.serviceVideo}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      controls={false}
+                      style={{ width: "100%", height: "auto" }}
+                    />
+                  )}
                 </div>
                 <div className="services-one_circle-color"></div>
               </div>

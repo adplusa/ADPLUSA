@@ -226,19 +226,20 @@
 }
 
 .about-us-img img {
-  width: 470px;
-  height: auto;
-  object-fit: cover;
+  width: 440px;
+  height: 460px;
+  object-fit: none;
 }
 
 .about-us-img video {
-  width: 335px;
-  margin-left: 11%;
+  width: 350px !important;
+  height: 430px !important;
+  margin-top: -3%;
 }
 
 #vladimir {
-  width: 290px;
-  height: auto;
+  /* width: 290px;
+  height: auto; */
   margin-top: 4%;
   position: absolute;
   right: 10%;
@@ -263,6 +264,7 @@
   position: relative;
   opacity: 1 !important;
   padding: 0 21%;
+  margin-top: 3%;
 }
 
 .about-us-video-text {
@@ -760,10 +762,10 @@ svg.bi.bi-chat-quote-fill path {
 
 .service-two-bottom-right video {
   position: absolute;
-  right: 5%;
+  right: 2%;
   top: 5%;
-  width: 530px;
-  height: 600px;
+  width: 530px !important;
+  height: 630px !important;
   object-fit: cover;
   z-index: 1;
 }
