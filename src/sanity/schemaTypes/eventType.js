@@ -149,7 +149,7 @@ export const eventType = defineType({
     }),
 
     defineField({
-      name: "serviceCircleImage",
+      name: "serviceCirclVideo",
       title: "Service Video",
       type: "file",
       options: {

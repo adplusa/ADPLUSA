@@ -60,6 +60,7 @@ export default function Home() {
     peopleVideo: null,
     serviceVideo: null,
   });
+  const [bgImage, setBgImage] = useState("");
 
   const [sliderRef, instanceRef] = useKeenSlider(
     {
@@ -157,7 +158,9 @@ export default function Home() {
         };
         setVideos({
           peopleVideo: resolveVideo(homepageData[0]?.peopleVideo?.asset?._ref),
-          serviceVideo: resolveVideo(homepageData[0]?.peopleVideo?.asset?._ref),
+          serviceVideo: resolveVideo(
+            homepageData[0]?.serviceCirclVideo?.asset?._ref
+          ),
         });
 
         console.log(artistData);
@@ -179,29 +182,19 @@ export default function Home() {
       const lightImg = urlFor(homepageData[0].lightModeImage).url();
       const darkImg = urlFor(homepageData[0].darkModeImage).url();
 
-      document.documentElement.style.setProperty(
-        "--lightBanner",
-        `url(${lightImg})`
-      );
-      document.documentElement.style.setProperty(
-        "--darkBanner",
-        `url(${darkImg})`
-      );
-
-      const setBanner = () => {
+      const updateImage = () => {
         const isDark = document.body.classList.contains("dark-mode");
-        document.documentElement.style.setProperty(
-          "--backgroundImg",
-          isDark ? `url(${darkImg})` : `url(${lightImg})`
-        );
+        setBgImage(isDark ? darkImg : lightImg);
       };
-      setBanner();
 
-      const observer = new MutationObserver(setBanner);
+      updateImage();
+
+      const observer = new MutationObserver(updateImage);
       observer.observe(document.body, {
         attributes: true,
         attributeFilter: ["class"],
       });
+
       return () => observer.disconnect();
     }
   }, [homepageData]);
@@ -363,7 +356,12 @@ export default function Home() {
         <div className="nav">
           <div className="intro-container">
             <Header />
-            <div className="hero-banner">
+            <div
+              className="hero-banner"
+              style={{
+                backgroundImage: `url(${bgImage})`,
+              }}
+            >
               <div className="overlay"></div>
             </div>
 
