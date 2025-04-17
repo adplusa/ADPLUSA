@@ -182,6 +182,9 @@ export default function Home() {
       const lightImg = urlFor(homepageData[0].lightModeImage).url();
       const darkImg = urlFor(homepageData[0].darkModeImage).url();
 
+      console.log("LIGHT IMG:", lightImg);
+      console.log("DARK IMG:", darkImg);
+
       const updateImage = () => {
         const isDark = document.body.classList.contains("dark-mode");
         setBgImage(isDark ? darkImg : lightImg);
@@ -196,6 +199,8 @@ export default function Home() {
       });
 
       return () => observer.disconnect();
+    } else {
+      console.log("Homepage data missing");
     }
   }, [homepageData]);
 
@@ -358,8 +363,11 @@ export default function Home() {
             <Header />
             <div
               className="hero-banner"
+              // style={{
+              //   backgroundImage: `url(${bgImage})`,
+              // }}
               style={{
-                backgroundImage: `url(${bgImage})`,
+                backgroundImage: bgImage ? `url(${bgImage})` : "none",
               }}
             >
               <div className="overlay"></div>

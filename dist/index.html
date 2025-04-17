@@ -250,7 +250,12 @@
     src: url("https://studio-static.sanity.io/Inter-BlackItalic.woff2") format("woff2");
   }
   html {
-    background-color: #f1f3f6;
+    @media (prefers-color-scheme: dark) {
+      background-color: #13141b;
+    }
+    @media (prefers-color-scheme: light) {
+      background-color: #ffffff;
+    }
   }
   html,
   body,
@@ -262,7 +267,7 @@
     -webkit-font-smoothing: antialiased;
   }
 </style><script src="https://core.sanity-cdn.com/bridge.js" async type="module" data-sanity-core></script>
-</head><body><div id="sanity"></div><script type="module" src="/static/sanity-CX2tHYyS.js"></script><noscript><div class="sanity-app-no-js__root"><div class="sanity-app-no-js__content"><style type="text/css">
+</head><body><div id="sanity"></div><script type="module" src="/static/sanity-DGwE0NKc.js"></script><noscript><div class="sanity-app-no-js__root"><div class="sanity-app-no-js__content"><style type="text/css">
 .sanity-app-no-js__root {
   position: absolute;
   top: 0;
