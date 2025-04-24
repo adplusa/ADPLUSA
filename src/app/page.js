@@ -363,14 +363,195 @@ export default function Home() {
             <Header />
             <div
               className="hero-banner"
-              // style={{
-              //   backgroundImage: `url(${bgImage})`,
-              // }}
               style={{
                 backgroundImage: bgImage ? `url(${bgImage})` : "none",
               }}
             >
               <div className="overlay"></div>
+            </div>
+
+            <div className="feature-section">
+              <div className="feature-section-df">
+                <div className="feature-box">
+                  <h1>{homepageData[0].trustIconsHeading}</h1>
+                  <div className="features-name">
+                    {homepageData[0]?.serviceRelatedIcon?.map(
+                      (related, index) => {
+                        return (
+                          <div key={index} className="service-related-item">
+                            <Image
+                              src={urlFor(related.serviceRelatedImg).url()}
+                              alt={related.serviceRelatedName || "Service Icon"}
+                              width={70}
+                              height={70}
+                              unoptimized
+                              priority
+                            />
+
+                            <p>{related.serviceRelatedNumber}</p>
+                            <h3>{related.serviceRelatedName}</h3>
+                          </div>
+                        );
+                      }
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="achievements-container">
+                <div className="achievements-grid">
+                  {homepageData[0]?.clientReviews?.map((review, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className={`achievement-card ${review.gradient}`}
+                      >
+                        <div className="achievement-content">
+                          <div className="achievement-text">
+                            <span>
+                              <h3>{review.clientReviewTitle}</h3>
+                            </span>
+                            <span className="achievement-numbers">
+                              <p>{review.clientReviewNumber}</p>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            <div className="service-two">
+              <div className="service-two-top">
+                <div className="service-two-top-left">
+                  <h5>{homepageData[0].serviceSmallHeading}</h5>
+                  <h1>{homepageData[0].serviceBigHeading}</h1>
+                </div>
+              </div>
+              <div className="service-two-bottom">
+                <div className="service-two-bottom-left">
+                  {homepageData[0]?.services?.map((service, index) => (
+                    <div
+                      key={service._id || index} // Use _id for a unique key if available, else fallback to index
+                      className="service-two-bottom-box"
+                      id={`service-two-box-${service._id || index}`}
+                    >
+                      <div className="service-two-bottom-box-top">
+                        <span className="service-two-bottom-box-logo">
+                          <Image
+                            src={urlFor(service.serviceImage).url()}
+                            width={60}
+                            height={60}
+                            unoptimized
+                            alt={service.serviceTitle || "Service Icon"} // Fallback alt text if serviceTitle is missing
+                          />
+                        </span>
+                        <h3>
+                          {service.serviceTitle || "No title available"}
+                        </h3>{" "}
+                      </div>
+                      <div className="service-two-bottom-box-bottom">
+                        <p>
+                          {service.serviceContent || "No description available"}
+                        </p>{" "}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="service-two-bottom-right">
+                  {videos.serviceVideo && (
+                    <video
+                      src={videos.serviceVideo}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      controls={false}
+                      style={{ width: "100%", height: "auto" }}
+                    />
+                  )}
+                </div>
+                <div className="services-one_circle-color"></div>
+              </div>
+            </div>
+
+            <div className="technology-we-use">
+              <h1>Technologies We Used</h1>
+              <div className="technology-grid">
+                {homepageData[0]?.technologyImgs?.length > 0 ? (
+                  homepageData[0].technologyImgs.map((img, index) => {
+                    return (
+                      <span key={index}>
+                        <Image
+                          src={urlFor(img.technologyImage).url()} // Fetch image URL from Sanity
+                          width={500} // Set your preferred width for the image
+                          height={500} // Set your preferred height for the image
+                          alt="img" // Alt text for the image
+                          unoptimized
+                        />
+                      </span>
+                    );
+                  })
+                ) : (
+                  <p>No images available</p>
+                )}
+              </div>
+            </div>
+
+            <section className="rto-section">
+              <div className="background-process-img"></div>
+              <h2 className="heading">
+                {homepageData[0].workingProcessHeading}
+              </h2>
+              <p className="subheading">
+                {homepageData[0].workingProcessSubHeading}
+              </p>
+
+              <div className="content">
+                <div className="left">
+                  {homepageData[0]?.processSteps
+                    ?.filter((step) => step.stepTitle && step.stepText) // Filter out empty or incomplete steps
+                    .map((step, idx) => (
+                      <div
+                        key={idx}
+                        className={`card ${idx === activeIndex ? "active" : ""}`}
+                        onClick={() => handleImageChange(idx)} // Update activeIndex
+                      >
+                        <div className="number">{idx + 1}</div>
+                        <div>
+                          <h3 className="card-title">{step.stepTitle}</h3>
+                          <p className="card-text">{step.stepText}</p>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+
+                <div className="right">
+                  {homepageData[0]?.processSteps?.[activeIndex]?.stepImage && (
+                    <Image
+                      src={urlFor(
+                        homepageData[0]?.processSteps[activeIndex]?.stepImage
+                      ).url()}
+                      alt={
+                        homepageData[0]?.processSteps[activeIndex]?.stepTitle ||
+                        "Step Image"
+                      }
+                      width={500}
+                      height={500}
+                      unoptimized
+                    />
+                  )}
+                </div>
+              </div>
+            </section>
+
+            <div className="strip-text">
+              <div className="marquee">
+                <p>{homepageData[0].sliderTextOne}</p>
+                <p>{homepageData[0].sliderTextTwo}</p>
+              </div>
             </div>
 
             <div className="about-us">
@@ -443,191 +624,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="strip-text">
-              <div className="marquee">
-                <p>{homepageData[0].sliderTextOne}</p>
-                <p>{homepageData[0].sliderTextTwo}</p>
-              </div>
-            </div>
-
-            <div className="service-two">
-              <div className="service-two-top">
-                <div className="service-two-top-left">
-                  <h5>{homepageData[0].serviceSmallHeading}</h5>
-                  <h1>{homepageData[0].serviceBigHeading}</h1>
-                </div>
-              </div>
-              <div className="service-two-bottom">
-                <div className="service-two-bottom-left">
-                  {homepageData[0]?.services?.map((service, index) => (
-                    <div
-                      key={service._id || index} // Use _id for a unique key if available, else fallback to index
-                      className="service-two-bottom-box"
-                      id={`service-two-box-${service._id || index}`}
-                    >
-                      <div className="service-two-bottom-box-top">
-                        <span className="service-two-bottom-box-logo">
-                          <Image
-                            src={urlFor(service.serviceImage).url()}
-                            width={60}
-                            height={60}
-                            unoptimized
-                            alt={service.serviceTitle || "Service Icon"} // Fallback alt text if serviceTitle is missing
-                          />
-                        </span>
-                        <h3>
-                          {service.serviceTitle || "No title available"}
-                        </h3>{" "}
-                      </div>
-                      <div className="service-two-bottom-box-bottom">
-                        <p>
-                          {service.serviceContent || "No description available"}
-                        </p>{" "}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="service-two-bottom-right">
-                  {videos.serviceVideo && (
-                    <video
-                      src={videos.serviceVideo}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      controls={false}
-                      style={{ width: "100%", height: "auto" }}
-                    />
-                  )}
-                </div>
-                <div className="services-one_circle-color"></div>
-              </div>
-            </div>
-
-            <div className="feature-section">
-              <div className="feature-section-df">
-                <div className="feature-box">
-                  <h1>{homepageData[0].trustIconsHeading}</h1>
-                  <div className="features-name">
-                    {homepageData[0]?.serviceRelatedIcon?.map(
-                      (related, index) => {
-                        return (
-                          <div key={index} className="service-related-item">
-                            <Image
-                              src={urlFor(related.serviceRelatedImg).url()}
-                              alt={related.serviceRelatedName || "Service Icon"}
-                              width={70}
-                              height={70}
-                              unoptimized
-                              priority
-                            />
-
-                            <p>{related.serviceRelatedNumber}</p>
-                            <h3>{related.serviceRelatedName}</h3>
-                          </div>
-                        );
-                      }
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className="achievements-container">
-                <div className="achievements-grid">
-                  {homepageData[0]?.clientReviews?.map((review, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className={`achievement-card ${review.gradient}`}
-                      >
-                        <div className="achievement-content">
-                          <div className="achievement-text">
-                            <span>
-                              <h3>{review.clientReviewTitle}</h3>
-                            </span>
-                            <span className="achievement-numbers">
-                              <p>{review.clientReviewNumber}</p>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-            <section className="rto-section">
-              <div className="background-process-img"></div>
-              <h2 className="heading">
-                {homepageData[0].workingProcessHeading}
-              </h2>
-              <p className="subheading">
-                {homepageData[0].workingProcessSubHeading}
-              </p>
-
-              <div className="content">
-                <div className="left">
-                  {homepageData[0]?.processSteps
-                    ?.filter((step) => step.stepTitle && step.stepText) // Filter out empty or incomplete steps
-                    .map((step, idx) => (
-                      <div
-                        key={idx}
-                        className={`card ${idx === activeIndex ? "active" : ""}`}
-                        onClick={() => handleImageChange(idx)} // Update activeIndex
-                      >
-                        <div className="number">{idx + 1}</div>
-                        <div>
-                          <h3 className="card-title">{step.stepTitle}</h3>
-                          <p className="card-text">{step.stepText}</p>
-                        </div>
-                      </div>
-                    ))}
-                </div>
-
-                <div className="right">
-                  {homepageData[0]?.processSteps?.[activeIndex]?.stepImage && (
-                    <Image
-                      src={urlFor(
-                        homepageData[0]?.processSteps[activeIndex]?.stepImage
-                      ).url()}
-                      alt={
-                        homepageData[0]?.processSteps[activeIndex]?.stepTitle ||
-                        "Step Image"
-                      }
-                      width={500}
-                      height={500}
-                      unoptimized
-                    />
-                  )}
-                </div>
-              </div>
-            </section>
-
-            <div className="technology-we-use">
-              <h1>Technologies We Used</h1>
-              <div className="technology-grid">
-                {homepageData[0]?.technologyImgs?.length > 0 ? (
-                  homepageData[0].technologyImgs.map((img, index) => {
-                    return (
-                      <span key={index}>
-                        <Image
-                          src={urlFor(img.technologyImage).url()} // Fetch image URL from Sanity
-                          width={500} // Set your preferred width for the image
-                          height={500} // Set your preferred height for the image
-                          alt="img" // Alt text for the image
-                          unoptimized
-                        />
-                      </span>
-                    );
-                  })
-                ) : (
-                  <p>No images available</p>
-                )}
-              </div>
-            </div>
-
-            <div className="faqs">
+            {/* <div className="faqs">
               <div className="faq-accordion">
                 <h2>{homepageData[0]?.faqHeading}</h2>
                 {homepageData[0]?.faq?.map((faq, index) => (
@@ -648,7 +645,7 @@ export default function Home() {
                 ))}
               </div>
               <div className="faq-sketch"></div>
-            </div>
+            </div> */}
 
             <div className="reviews-section">
               <div className="navigation-wrapper">
