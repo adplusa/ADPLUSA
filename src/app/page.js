@@ -40,6 +40,7 @@ const steps = [
       "The feedback of the client is solicited and integrated. The changes are incorporated and the final set of completed drawings are prepared.",
   },
 ];
+
 const images = ["/process-img.jpg", "/process-img2.jpg", "/process-img3.jpg"];
 
 gsap.registerPlugin(ScrollTrigger);
@@ -512,12 +513,12 @@ export default function Home() {
               <div className="content">
                 <div className="left">
                   {homepageData[0]?.processSteps
-                    ?.filter((step) => step.stepTitle && step.stepText) // Filter out empty or incomplete steps
+                    ?.filter((step) => step.stepTitle && step.stepText)
                     .map((step, idx) => (
                       <div
                         key={idx}
                         className={`card ${idx === activeIndex ? "active" : ""}`}
-                        onClick={() => handleImageChange(idx)} // Update activeIndex
+                        onClick={() => handleImageChange(idx)}
                       >
                         <div className="number">{idx + 1}</div>
                         <div>
