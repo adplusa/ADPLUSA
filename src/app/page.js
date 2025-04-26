@@ -809,18 +809,24 @@ export default function Home() {
 
           <div className="whatsapp">
             <a
+              className="btn-whatsapp-pulse"
               target="_blank"
               href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
             >
               <Image
                 src={"/whatsapp.png"}
-                width={60}
-                height={60}
+                width={40}
+                height={40}
                 alt="Whatsapp-img"
                 unoptimized
               ></Image>
             </a>
           </div>
+
+          <div className="enquire">
+            <button>Enquire Now</button>
+          </div>
+
           <div className="upward" onClick={upwardHandler}>
             <svg
               xmlns="http://www.w3.org/2000/svg"

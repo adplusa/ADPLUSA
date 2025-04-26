@@ -1596,6 +1596,61 @@ span.service-two-bottom-box-logo {
   z-index: 100;
 }
 
+.btn-whatsapp-pulse {
+  background: #25d366;
+  color: white;
+  position: fixed;
+  bottom: 50px;
+  left: 30px;
+  font-size: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 0;
+  height: 0;
+  padding: 25px;
+  text-decoration: none;
+  border-radius: 50%;
+  animation-name: pulse;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
+  }
+  80% {
+    box-shadow: 0 0 0 14px rgba(37, 211, 102, 0);
+  }
+}
+
+.enquire {
+  position: fixed;
+  right: 0;
+  top: 50%;
+}
+
+.enquire button {
+  background: #000; /* solid black */
+  color: #fff; /* white text */
+  border: none;
+  outline: none;
+  font-size: 16px; /* slightly smaller for better fit */
+  padding: 7px 15px; /* more padding to look premium */
+  transform: rotate(-90deg); /* clean vertical look */
+  transform-origin: right center; /* rotate around the right edge */
+  position: fixed;
+  right: 16.5px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg); /* perfect centering */
+  cursor: pointer;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border-radius: 5px 5px 0 0;
+}
+
 .upward {
   background: #000;
   /* background-color: var(--backgroundColor); */

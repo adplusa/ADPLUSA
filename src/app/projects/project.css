@@ -80,3 +80,7 @@
 .project-content {
   overflow-x: hidden;
 }
+
+.project-img-row-one {
+  display: none;
+}

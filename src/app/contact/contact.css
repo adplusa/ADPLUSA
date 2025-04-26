@@ -1,0 +1,166 @@
+/* styles/ContactForm.css */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    sans-serif;
+  line-height: 1.6;
+}
+
+.contact-container {
+  display: flex;
+  max-width: 1000px;
+  margin: 50px auto;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin-top: 10%;
+}
+
+/* Left side - Dark form section */
+.contact-form-section {
+  background-color: #333;
+  color: white;
+  padding: 50px 40px;
+  width: 50%;
+}
+
+.contact-title {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.title-underline {
+  width: 70px;
+  height: 4px;
+  background-color: #ff7a59;
+  margin-bottom: 40px;
+}
+
+.form-field {
+  margin-bottom: 25px;
+}
+
+.form-field input {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 10px 0;
+  color: white;
+  font-size: 16px;
+  outline: none;
+}
+
+.form-field input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.content-field input {
+  padding-bottom: 60px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.checkbox-container input {
+  margin-right: 10px;
+}
+
+.checkbox-container label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.submit-button {
+  background-color: #ff7a59;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #ff6440;
+}
+
+/* Right side - Light info section */
+.contact-info-section {
+  background-color: white;
+  padding: 50px 40px;
+  width: 50%;
+}
+
+.info-text {
+  color: #333;
+  margin-bottom: 30px;
+  font-size: 16px;
+}
+
+.map-container {
+  margin-bottom: 30px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.map-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact-detail {
+  display: flex;
+  align-items: center;
+  color: #333;
+}
+
+.contact-detail svg {
+  width: 20px;
+  height: 20px;
+  margin-right: 15px;
+  color: #333;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .contact-container {
+    flex-direction: column;
+    margin: 20px;
+  }
+
+  .contact-form-section,
+  .contact-info-section {
+    width: 100%;
+    padding: 30px 20px;
+  }
+
+  .contact-title {
+    font-size: 32px;
+  }
+}
