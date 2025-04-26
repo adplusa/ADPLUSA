@@ -15,7 +15,7 @@ import { FaTrophy, FaUsers, FaStar, FaChartLine } from "react-icons/fa";
 import Footer from "./Components/Footer/page";
 import { client } from "@/sanity/lib/client";
 import { PortableText } from "@portabletext/react";
-import { urlFor } from "@/sanity/lib/image";
+import urlFor from "./helpers/sanity";
 import { getFileAsset } from "@sanity/asset-utils";
 
 gsap.registerPlugin(CSSPlugin);
