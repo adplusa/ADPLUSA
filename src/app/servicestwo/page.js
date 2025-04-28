@@ -168,7 +168,7 @@ const ServiceTwo = () => {
           </div>
           <div className="text">
             <p>
-              During the Schematic Design phase, remote architects and designers
+              During the Schematic Design phase, remote architects and designer
               work closely with clients to develop a clear understanding of the
               project's goals, objectives, and aesthetic preferences. This phase
               involves creating preliminary design options that illustrate
