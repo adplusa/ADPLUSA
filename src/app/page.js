@@ -217,7 +217,7 @@ export default function Home() {
     }, 4000); // Change image every 3 seconds
 
     return () => clearInterval(interval);
-  }, [images]);
+  }, []);
 
   const handleImageChange = (newIndex) => {
     setImageSrc(images[newIndex]);

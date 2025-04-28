@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./header.css";
 import gsap from "gsap";
 import Image from "next/image";
+import Link from "next/link";
 
 const Header = () => {
   const [logo, setLogo] = useState("/red-log-width.png");
@@ -52,7 +53,7 @@ const Header = () => {
     <>
       <div className="header">
         <div className="header-df">
-          <a href="/">
+          <Link href="/">
             <div className="flip-logo">
               <span className="flip-container">
                 <Image
@@ -76,7 +77,7 @@ const Header = () => {
                 />
               </span>
             </div>
-          </a>
+          </Link>
 
           <div className="header-right">
             <div
@@ -85,22 +86,22 @@ const Header = () => {
             >
               <ul>
                 <li>
-                  <a href="/">Home</a>
+                  <Link href="/">Home</Link>
                 </li>
                 <li>
-                  <a href="/about">About us</a>
+                  <Link href="/about">About us</Link>
                 </li>
                 <li>
-                  <a href="/services">Services</a>
+                  <Link href="/services">Services</Link>
                 </li>
                 <li>
-                  <a href="/projects">Projects</a>
+                  <Link href="/projects">Projects</Link>
                 </li>
                 <li>
-                  <a href="/">FAQs</a>
+                  <Link href="/">FAQs</Link>
                 </li>
                 <li>
-                  <a href="/contact">Contact us</a>
+                  <Link href="/contact">Contact us</Link>
                 </li>
               </ul>
             </div>

@@ -22,16 +22,15 @@ const About = () => {
               </p>
               <p>
                 Our architecture is imagined with, formed for, and shaped by our
-                clients' aspirations – by the challenge of the opportunity, and
+                clients aspirations – by the challenge of the opportunity, and
                 by our desire to make a better world.
               </p>
               <p>
                 Be it to heal, entertain, educate, house or inspire, we advocate
                 for deeper thinking and engagement in the process of design. We
-                explore and challenge our clients' ambitions to ensure that
-                their purpose is core to our shared outcomes. In doing this, we
-                help people to imagine and believe in things that don't yet
-                exist.
+                explore and challenge our clients ambitions to ensure that their
+                purpose is core to our shared outcomes. In doing this, we help
+                people to imagine and believe in things that dont yet exist.
               </p>
               <span className="four-p">
                 <a href="#people-box">People</a>

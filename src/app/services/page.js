@@ -253,11 +253,16 @@ const Services = () => {
           Our top architecture outsourcing services
         </p>
         <div className="service-boxes">
-          {services.map((service, index) => (
-            <div className="service-box" id={`service-box-${index + 1}`}>
+          {serviceTwo.map((service, index) => (
+            <div
+              key={index} // <-- ✅ Added key
+              className="service-box"
+              id={`service-box-${index + 1}`} // <-- ✅ Fixed string interpolation
+              style={{ backgroundColor: service.color }} // (Optional) If you want to use the color
+            >
               <div className="service-box-inner">
                 <h3 className="service-title">{service.title}</h3>
-                <p className="service-description">{service.description}</p>
+                {/* <p className="service-description">{service.description}</p> */}
               </div>
             </div>
           ))}
@@ -405,11 +410,14 @@ const Services = () => {
         <div className="cards-container">
           {articles.map((article, index) => (
             <div className={`card card-${index + 1}`} key={index}>
-              <img
+              <Image
                 src={article.image}
                 alt={article.alt}
                 className="card-image"
-              />
+                unoptimized
+                width={0}
+                height={0}
+              ></Image>
               <div className="card-text">
                 <h3 className="card-title">{article.title}</h3>
                 <p className="card-description">{article.description}</p>

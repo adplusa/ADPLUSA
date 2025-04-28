@@ -3,6 +3,7 @@
 import { useState } from "react";
 import "./contact.css";
 import Header from "../Components/Header/page";
+import Image from "next/image";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -96,7 +97,14 @@ export default function ContactForm() {
           </p>
 
           <div className="map-container">
-            <img src="/banner-3.jpg" alt="Location Map" className="map-image" />
+            <Image
+              src="/banner-3.jpg"
+              width={0}
+              height={0}
+              unoptimized
+              alt="Location Map"
+              className="map-image"
+            ></Image>
           </div>
 
           <div className="contact-details">

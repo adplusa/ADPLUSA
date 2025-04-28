@@ -5,6 +5,7 @@ import "./servicetwo.css";
 import Image from "next/image";
 import Footer from "../Components/Footer/page";
 import { useEffect, useState, useRef } from "react";
+import Link from "next/link";
 
 const ServiceTwo = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -139,10 +140,9 @@ const ServiceTwo = () => {
               At WorldTeams, we care about the initial stage of the construction
               process by selecting the best talents who convert ideas into rough
               sketches, diagrams, and basic layouts. The primary goal of the
-              Schematic Design phase is to explore and define a project's
-              overall design direction while considering the client’s
-              requirements, functional needs, site conditions, and budget
-              constraints.
+              Schematic Design phase is to explore and define a projects overall
+              design direction while considering the clients requirements,
+              functional needs, site conditions, and budget constraints.
             </p>
           </div>
           <div className="image">
@@ -170,7 +170,7 @@ const ServiceTwo = () => {
             <p>
               During the Schematic Design phase, remote architects and designer
               work closely with clients to develop a clear understanding of the
-              project's goals, objectives, and aesthetic preferences. This phase
+              projects goals, objectives, and aesthetic preferences. This phase
               involves creating preliminary design options that illustrate
               various conceptual approaches to the project. These options may
               include rough floor plans, elevations, basic 3D models, and
@@ -210,7 +210,7 @@ const ServiceTwo = () => {
             <h3>Reshaping Possibilities: From Scan to BIM</h3>
             <p>
               Develop design concepts that align with the project’s goals and
-              the client’s vision. These concepts might involve architectural
+              the clients vision. These concepts might involve architectural
               styles, materials, and overall design philosophies.
             </p>
           </div>
@@ -381,7 +381,13 @@ const ServiceTwo = () => {
                       className="card-image"
                       style={{ backgroundColor: professional.bgColor }}
                     >
-                      <img src={professional.image} alt={professional.title} />
+                      <Image
+                        src={professional.image}
+                        alt={professional.title}
+                        unoptimized
+                        width={0}
+                        height={0}
+                      ></Image>
                     </div>
                     <div className="card-content">
                       <h3
