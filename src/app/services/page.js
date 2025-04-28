@@ -174,7 +174,7 @@ const Services = () => {
         </div>
       </section>
 
-      <section className="service-info">
+      {/* <section className="service-info">
         <div className="service-info-df">
           <div className="service-left">
             <h1>Let us help you with your architecture outsourcing needs</h1>
@@ -234,7 +234,7 @@ const Services = () => {
             ></Image>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="sepecialize">
         <div className="sepecialize-df">

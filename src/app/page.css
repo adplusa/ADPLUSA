@@ -1643,7 +1643,7 @@ span.service-two-bottom-box-logo {
   transform-origin: right center; /* rotate around the right edge */
   position: fixed;
   right: 16.5px;
-  top: 50%;
+  top: 30%;
   transform: translateY(-50%) rotate(-90deg); /* perfect centering */
   cursor: pointer;
   font-weight: bold;
