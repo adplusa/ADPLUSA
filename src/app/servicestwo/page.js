@@ -151,7 +151,7 @@ const ServiceTwo = () => {
 
         <div className="cards-grid">
           {data.activitiesOutcomes?.cards?.map((card, idx) => (
-            <div key={idx} className="card">
+            <div key={idx} className="card-two">
               <div className="icon">{card.icon}</div>
               <h3>{card.title}</h3>
               <p>{card.description}</p>
@@ -189,7 +189,7 @@ const ServiceTwo = () => {
 
       {/* Why Work With Us */}
       <section className="why-work">
-        <div className="content">
+        <div className="content-two">
           <div className="text">
             <h2>{data.whyWorkWithUs?.title}</h2>
 

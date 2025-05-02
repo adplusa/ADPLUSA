@@ -191,7 +191,7 @@
   gap: 30px;
 }
 
-.card {
+.card-two {
   background: #fff4f0;
   padding: 30px 20px;
   border-radius: 15px;
@@ -201,23 +201,23 @@
   border: 1px solid #d2d2d2;
 }
 
-.card:hover {
+.card-two:hover {
   transform: translateY(-5px);
 }
 
-.card .icon {
+.card-two .icon {
   font-size: 30px;
   color: #d2a191;
   margin-bottom: 15px;
 }
 
-.card h3 {
+.card-two h3 {
   font-size: 20px;
   color: #1e1e1e;
   margin-bottom: 10px;
 }
 
-.card p {
+.card-two p {
   font-size: 16px;
   color: #444;
   line-height: 1.5;
@@ -330,7 +330,7 @@
   font-family: "Geist", sans-serif;
 }
 
-.content {
+.content-two {
   display: flex;
   flex-wrap: wrap;
   gap: 50px;
