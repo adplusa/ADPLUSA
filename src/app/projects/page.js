@@ -3,6 +3,7 @@ import Header from "../Components/Header/page";
 import "./project.css";
 import Image from "next/image";
 import Footer from "../Components/Footer/page";
+import Link from "next/link";
 
 const page = () => {
   return (
@@ -15,8 +16,8 @@ const page = () => {
           <hr id="project-hr" />
 
           <div className="project-img">
-            <div className="project-img-row-one">
-              <a href="/projects/project-internal-one">
+            {/* <div className="project-img-row-one">
+              <Link href="/projects/project-internal-one">
                 <div className="project-images">
                   <span className="project-relative">
                     <Image
@@ -32,9 +33,9 @@ const page = () => {
                   </span>
                   <h1>The Iconic Arrival</h1>
                 </div>
-              </a>
+              </Link>
 
-              <a href="/projects/project-internal-two">
+              <Link href="/projects/project-internal-two">
                 <div className="project-images">
                   <span className="project-relative">
                     <Image
@@ -51,11 +52,11 @@ const page = () => {
                     </span>
                   </span>
                 </div>
-              </a>
+              </Link>
             </div>
 
             <div className="project-img-row-two">
-              <a href="#">
+              <Link href="#">
                 <div className="project-images">
                   <span className="project-relative">
                     <Image
@@ -72,9 +73,9 @@ const page = () => {
                     </span>
                   </span>
                 </div>
-              </a>
+              </Link>
 
-              <a href="#">
+              <Link href="#">
                 <div className="project-images">
                   <span className="project-relative">
                     <Image
@@ -91,9 +92,9 @@ const page = () => {
                     </span>
                   </span>
                 </div>
-              </a>
+              </Link>
 
-              <a href="#">
+              <Link href="#">
                 <div className="project-images">
                   <span className="project-relative">
                     <Image
@@ -110,11 +111,11 @@ const page = () => {
                     </span>
                   </span>
                 </div>
-              </a>
-            </div>
+              </Link>
+            </div> */}
 
             <div className="project-img-row-three">
-              <a href="#">
+              <Link href="/projects/project-internal-one">
                 <div className="project-images">
                   <span className="project-relative">
                     <Image
@@ -131,9 +132,9 @@ const page = () => {
                     </span>
                   </span>
                 </div>
-              </a>
+              </Link>
 
-              <a href="#">
+              <Link href="/projects/project-internal-two">
                 <div className="project-images">
                   <span className="project-relative">
                     <Image
@@ -150,9 +151,9 @@ const page = () => {
                     </span>
                   </span>
                 </div>
-              </a>
+              </Link>
 
-              <a href="#">
+              <Link href="#">
                 <div className="project-images">
                   <span className="project-relative">
                     <Image
@@ -169,11 +170,11 @@ const page = () => {
                     </span>
                   </span>
                 </div>
-              </a>
+              </Link>
             </div>
 
             <div className="project-img-row-four">
-              <a href="#">
+              <Link href="#">
                 <div className="project-images">
                   <span className="project-relative">
                     <Image
@@ -190,9 +191,9 @@ const page = () => {
                     </span>
                   </span>
                 </div>
-              </a>
+              </Link>
 
-              <a href="#">
+              <Link href="#">
                 <div className="project-images">
                   <span className="project-relative">
                     <Image
@@ -209,9 +210,9 @@ const page = () => {
                     </span>
                   </span>
                 </div>
-              </a>
+              </Link>
 
-              <a href="#">
+              <Link href="#">
                 <div className="project-images">
                   <span className="project-relative">
                     <Image
@@ -228,7 +229,7 @@ const page = () => {
                     </span>
                   </span>
                 </div>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

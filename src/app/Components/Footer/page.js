@@ -3,6 +3,8 @@
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import "./footer.css";
+// import Header from "../Header/page";
+import Link from "next/link";
 
 const Footer = () => {
   const [whiteLogo, setWhiteLogo] = useState(false);
@@ -45,7 +47,7 @@ const Footer = () => {
             outsource fraternity across India and the United States of America.
           </p>
         </div>
-        <div className="footer-nav">
+        {/* <div className="footer-nav">
           <ul>
             <li>
               <a href="#">Home</a>
@@ -63,6 +65,31 @@ const Footer = () => {
               <a href="#">Competition: Contact-Less Restroom</a>
             </li>
           </ul>
+        </div> */}
+
+        <div className="header-right" id="footer-right">
+          <div id="second-navbar" className="second-navbar">
+            <ul>
+              <li>
+                <Link href="/">Home</Link>
+              </li>
+              <li>
+                <Link href="/about">About us</Link>
+              </li>
+              <li>
+                <Link href="/servicestwo">Services</Link>
+              </li>
+              <li>
+                <Link href="/projects">Projects</Link>
+              </li>
+              <li>
+                <Link href="/">FAQs</Link>
+              </li>
+              <li>
+                <Link href="/contact">Contact us</Link>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="social-media">
@@ -130,7 +157,12 @@ const Footer = () => {
 
         <span className="copy-designed">
           <p id="copyright">Copyright Adplusa</p>
-          <p>Designed By Quite Good</p>
+          <p>
+            Designed By
+            <Link id="quitegood" href="https://quitegood.co/">
+              &nbsp; Quite Good
+            </Link>
+          </p>
         </span>
       </div>
     </div>

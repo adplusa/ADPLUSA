@@ -112,8 +112,200 @@ const ServiceTwo = () => {
       {/* Trust Section */}
       <section className="comapany-trust">
         <div className="comapany-trust-df">
-          <h1>{data.trustSection?.title}</h1>
-          <p>{data.trustSection?.subtitle}</p>
+          <h1>{data?.trustSection?.title}</h1>
+          <p>{data?.trustSection?.subtitle}</p>
+        </div>
+      </section>
+
+      <div className="feature-section">
+        <div className="feature-section-df">
+          <div className="feature-box">
+            <h1>{data.serviceRelatedHeading}</h1>
+            <h1>{data?.trustIconsHeading}</h1>
+            <div className="features-name">
+              {data?.serviceRelatedIcon?.map((related, index) => {
+                return (
+                  <div key={index} className="service-related-item">
+                    <Image
+                      src={urlFor(related.serviceRelatedImg).url()}
+                      alt={related.serviceRelatedName || "Service Icon"}
+                      width={70}
+                      height={70}
+                      unoptimized
+                      priority
+                    />
+                    <p>{related.serviceRelatedNumber}</p>
+                    <h3>{related.serviceRelatedName}</h3>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <div className="achievements-container">
+          <div className="achievements-grid">
+            {data?.clientReviews?.map((review, index) => {
+              return (
+                <div
+                  key={index}
+                  className={`achievement-card ${review.gradient}`}
+                >
+                  <div className="achievement-content">
+                    <div className="achievement-text">
+                      <span>
+                        <h3>{review.clientReviewTitle}</h3>
+                      </span>
+                      <span className="achievement-numbers">
+                        <p>{review.clientReviewNumber}</p>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Activities Outcomes */}
+      <section className="activities-outcomes">
+        <div className="heading">
+          <h2>{data?.activitiesOutcomes?.heading}</h2>
+          <p>{data?.activitiesOutcomes?.subheading}</p>
+        </div>
+
+        <div className="cards-grid">
+          {data?.activitiesOutcomes?.cards?.map((card, idx) => (
+            <div key={idx} className="card-two">
+              <div className="icon">{card.icon}</div>
+              <h3>{card.title}</h3>
+              <p>{card.description}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="card-cta">
+          <div className="card-cta-df">
+            <span>
+              <button>{data?.activitiesOutcomes?.cta?.buttonText}</button>
+            </span>
+            {data?.activitiesOutcomes?.cta?.image && (
+              <Image
+                src={urlFor(data.activitiesOutcomes.cta.image).url()}
+                alt="CTA Image"
+                width={500}
+                height={300}
+              />
+            )}
+          </div>
+        </div>
+      </section>
+
+      <div className="professionals-container">
+        <h2 className="section-title">{data.serviceRelatedHeading}</h2>
+
+        <div className="carousel-wrapper">
+          <button className="carousel-control prev" onClick={prevSlide}>
+            &#10094;
+          </button>
+
+          <div className="carousel-viewport">
+            <div
+              ref={carouselRef}
+              className="carousel-container"
+              style={{
+                transform: `translateX(${-activeIndex * 25}%)`,
+                transition: isTransitioning
+                  ? "transform 0.5s ease-in-out"
+                  : "none",
+              }}
+            >
+              {allCards.map((pro, index) => (
+                <div key={index} className="professional-card">
+                  <div className="card-inner">
+                    <div
+                      className="card-image"
+                      style={{ backgroundColor: pro.bgColor }}
+                    >
+                      {pro.image && (
+                        <Image
+                          src={urlFor(pro.image).url()}
+                          alt={pro.title}
+                          width={0}
+                          height={0}
+                          unoptimized
+                        />
+                      )}
+                    </div>
+                    <div className="card-content">
+                      <h3
+                        className="card-title"
+                        style={{ color: pro.textColor }}
+                      >
+                        {pro.title}
+                      </h3>
+                      {pro.subtitle && (
+                        <p className="card-subtitle">{pro.subtitle}</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <button className="carousel-control next" onClick={nextSlide}>
+            &#10095;
+          </button>
+        </div>
+
+        <div className="carousel-indicators">
+          {professionals.map((_, index) => (
+            <button
+              key={index}
+              className={`indicator ${
+                index ===
+                (activeIndex - startIndex + professionals.length) %
+                  professionals.length
+                  ? "active"
+                  : ""
+              }`}
+              onClick={() => goToSlide(index)}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Why Work With Us */}
+      <section className="why-work">
+        <div className="content-two">
+          <div className="text">
+            <h2>{data?.whyWorkWithUs?.title}</h2>
+
+            {data?.whyWorkWithUs?.features?.map((feature, idx) => (
+              <div key={idx} className="feature">
+                <div className="icon">{feature.icon}</div>
+                <div className="info">
+                  <h3>{feature.title}</h3>
+                  <p>{feature.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="image-wrapper">
+            <div className="background">
+              {data?.whyWorkWithUs?.image && (
+                <Image
+                  src={urlFor(data.whyWorkWithUs.image).url()}
+                  alt="Why Work Image"
+                  width={500}
+                  height={400}
+                />
+              )}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -142,97 +334,31 @@ const ServiceTwo = () => {
         ))}
       </section>
 
-      {/* Activities Outcomes */}
-      <section className="activities-outcomes">
-        <div className="heading">
-          <h2>{data.activitiesOutcomes?.heading}</h2>
-          <p>{data.activitiesOutcomes?.subheading}</p>
-        </div>
-
-        <div className="cards-grid">
-          {data.activitiesOutcomes?.cards?.map((card, idx) => (
-            <div key={idx} className="card-two">
-              <div className="icon">{card.icon}</div>
-              <h3>{card.title}</h3>
-              <p>{card.description}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="card-cta">
-          <div className="card-cta-df">
-            <span>
-              <button>{data.activitiesOutcomes?.cta?.buttonText}</button>
-            </span>
-            {data.activitiesOutcomes?.cta?.image && (
-              <Image
-                src={urlFor(data.activitiesOutcomes.cta.image).url()}
-                alt="CTA Image"
-                width={500}
-                height={300}
-              />
-            )}
-          </div>
-        </div>
-      </section>
-
       {/* Following Steps */}
       <section className="following-steps">
-        <h2>{data.followingSteps?.title}</h2>
-        <p>{data.followingSteps?.description}</p>
+        <h2>{data?.followingSteps?.title}</h2>
+        <p>{data?.followingSteps?.description}</p>
         <span>
-          {data.followingSteps?.buttons?.map((btn, idx) => (
+          {data?.followingSteps?.buttons?.map((btn, idx) => (
             <button key={idx}>{btn}</button>
           ))}
         </span>
-      </section>
-
-      {/* Why Work With Us */}
-      <section className="why-work">
-        <div className="content-two">
-          <div className="text">
-            <h2>{data.whyWorkWithUs?.title}</h2>
-
-            {data.whyWorkWithUs?.features?.map((feature, idx) => (
-              <div key={idx} className="feature">
-                <div className="icon">{feature.icon}</div>
-                <div className="info">
-                  <h3>{feature.title}</h3>
-                  <p>{feature.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="image-wrapper">
-            <div className="background">
-              {data.whyWorkWithUs?.image && (
-                <Image
-                  src={urlFor(data.whyWorkWithUs.image).url()}
-                  alt="Why Work Image"
-                  width={500}
-                  height={400}
-                />
-              )}
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* Final CTA */}
       <div className="card-cta" id="card-cta-two">
         <div className="card-cta-df">
           <span>
-            <button>{data.finalCTA?.buttonText}</button>
+            <button>{data?.finalCTA?.buttonText}</button>
           </span>
           <span>
-            <h1>{data.finalCTA?.title}</h1>
+            <h1>{data?.finalCTA?.title}</h1>
           </span>
         </div>
       </div>
 
       {/* Professionals Carousel */}
-      <div className="professionals-container">
+      {/* <div className="professionals-container">
         <h2 className="section-title">
           Explore other Most Wanted Professionals
         </h2>
@@ -307,7 +433,7 @@ const ServiceTwo = () => {
             />
           ))}
         </div>
-      </div>
+      </div> */}
 
       <Footer />
     </>

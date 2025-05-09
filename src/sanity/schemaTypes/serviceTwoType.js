@@ -37,33 +37,66 @@ export const serviceType = defineType({
       ],
     }),
     defineField({
-      name: "trustSection",
-      title: "Trust Section",
-      type: "object",
-      fields: [
-        defineField({ name: "title", title: "Title", type: "string" }),
-        defineField({ name: "subtitle", title: "Subtitle", type: "string" }),
-      ],
+      name: "serviceRelatedHeading",
+      title: "Service Related Heading",
+      type: "string",
     }),
     defineField({
-      name: "visualConcepts",
-      title: "Visual Concepts Section",
+      name: "serviceRelatedIcon",
+      title: "Service Related Icons",
       type: "array",
       of: [
         defineField({
           type: "object",
           fields: [
-            defineField({ name: "title", title: "Title", type: "string" }),
             defineField({
-              name: "description",
-              title: "Description",
-              type: "text",
+              name: "serviceRelatedImg",
+              title: "Service Icon Image",
+              type: "image",
             }),
-            defineField({ name: "image", title: "Image", type: "image" }),
+            defineField({
+              name: "serviceRelatedNumber",
+              title: "Service Number",
+              type: "string",
+            }),
+            defineField({
+              name: "serviceRelatedName",
+              title: "Service Name",
+              type: "string",
+            }),
           ],
         }),
       ],
     }),
+
+    defineField({
+      name: "clientReviews",
+      title: "Client Reviews",
+      type: "array",
+      of: [
+        defineField({
+          type: "object",
+          fields: [
+            defineField({
+              name: "clientReviewTitle",
+              title: "Client Review Title",
+              type: "string",
+            }),
+            defineField({
+              name: "clientReviewNumber",
+              title: "Client Review Number",
+              type: "string",
+            }),
+            defineField({
+              name: "gradient",
+              title: "Gradient",
+              type: "string",
+            }),
+          ],
+        }),
+      ],
+    }),
+
     defineField({
       name: "activitiesOutcomes",
       title: "Activities and Outcomes",
@@ -113,25 +146,37 @@ export const serviceType = defineType({
         }),
       ],
     }),
+
     defineField({
-      name: "followingSteps",
-      title: "Following Steps Section",
-      type: "object",
-      fields: [
-        defineField({ name: "title", title: "Title", type: "string" }),
+      name: "professionals",
+      title: "Professionals Carousel",
+      type: "array",
+      of: [
         defineField({
-          name: "description",
-          title: "Description",
-          type: "text",
-        }),
-        defineField({
-          name: "buttons",
-          title: "Buttons",
-          type: "array",
-          of: [defineField({ type: "string" })],
+          type: "object",
+          fields: [
+            defineField({ name: "title", title: "Title", type: "string" }),
+            defineField({
+              name: "subtitle",
+              title: "Subtitle",
+              type: "string",
+            }),
+            defineField({ name: "image", title: "Image", type: "image" }),
+            defineField({
+              name: "bgColor",
+              title: "Background Color",
+              type: "string",
+            }),
+            defineField({
+              name: "textColor",
+              title: "Text Color",
+              type: "string",
+            }),
+          ],
         }),
       ],
     }),
+
     defineField({
       name: "whyWorkWithUs",
       title: "Why Work With Us Section",
@@ -168,6 +213,56 @@ export const serviceType = defineType({
         defineField({ name: "image", title: "Image", type: "image" }),
       ],
     }),
+
+    defineField({
+      name: "trustSection",
+      title: "Trust Section",
+      type: "object",
+      fields: [
+        defineField({ name: "title", title: "Title", type: "string" }),
+        defineField({ name: "subtitle", title: "Subtitle", type: "string" }),
+      ],
+    }),
+    defineField({
+      name: "visualConcepts",
+      title: "Visual Concepts Section",
+      type: "array",
+      of: [
+        defineField({
+          type: "object",
+          fields: [
+            defineField({ name: "title", title: "Title", type: "string" }),
+            defineField({
+              name: "description",
+              title: "Description",
+              type: "text",
+            }),
+            defineField({ name: "image", title: "Image", type: "image" }),
+          ],
+        }),
+      ],
+    }),
+
+    defineField({
+      name: "followingSteps",
+      title: "Following Steps Section",
+      type: "object",
+      fields: [
+        defineField({ name: "title", title: "Title", type: "string" }),
+        defineField({
+          name: "description",
+          title: "Description",
+          type: "text",
+        }),
+        defineField({
+          name: "buttons",
+          title: "Buttons",
+          type: "array",
+          of: [defineField({ type: "string" })],
+        }),
+      ],
+    }),
+
     defineField({
       name: "finalCTA",
       title: "Final Call to Action",
@@ -179,35 +274,6 @@ export const serviceType = defineType({
           type: "string",
         }),
         defineField({ name: "title", title: "Title", type: "string" }),
-      ],
-    }),
-    defineField({
-      name: "professionals",
-      title: "Professionals Carousel",
-      type: "array",
-      of: [
-        defineField({
-          type: "object",
-          fields: [
-            defineField({ name: "title", title: "Title", type: "string" }),
-            defineField({
-              name: "subtitle",
-              title: "Subtitle",
-              type: "string",
-            }),
-            defineField({ name: "image", title: "Image", type: "image" }),
-            defineField({
-              name: "bgColor",
-              title: "Background Color",
-              type: "string",
-            }),
-            defineField({
-              name: "textColor",
-              title: "Text Color",
-              type: "string",
-            }),
-          ],
-        }),
       ],
     }),
   ],

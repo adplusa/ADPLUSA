@@ -94,3 +94,43 @@
   align-items: center;
   gap: 36%;
 }
+
+.second-navbar {
+  margin-top: 4%;
+  padding: 15px 0;
+}
+
+.second-navbar ul {
+  display: flex;
+  justify-content: center;
+}
+
+.second-navbar ul li {
+  list-style: none;
+}
+
+.second-navbar ul li a {
+  text-decoration: none;
+  margin: 23px;
+  font-size: 17px;
+  font-weight: bold;
+  position: relative;
+}
+
+.header-right {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+}
+
+#quitegood {
+  font-weight: bold;
+}
+
+#footer-right {
+  justify-content: center;
+}
+
+#footer-right .second-navbar {
+  margin-top: 2% !important;
+}
