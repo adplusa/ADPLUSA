@@ -247,7 +247,7 @@
   background-repeat: no-repeat;
   position: relative;
 }
-
+/* 
 .visual-concepts {
   padding: 60px 5%;
   font-family: "Geist", sans-serif;
@@ -292,7 +292,7 @@
   width: 100%;
   height: auto;
   object-fit: contain;
-}
+} */
 
 .activities-outcomes {
   padding: 60px 5%;
@@ -352,7 +352,7 @@
   color: #444;
   line-height: 1.5;
 }
-
+/* 
 .card-cta {
   display: flex;
   justify-content: center;
@@ -409,8 +409,8 @@
 
 .card-cta {
   padding: 5%;
-}
-
+} */
+/* 
 .following-steps {
   background-color: #fff7f2;
   display: flex;
@@ -452,7 +452,7 @@
   display: flex;
   gap: 15px;
   margin-top: 2%;
-}
+} */
 
 .why-work {
   padding: 80px 5%;
@@ -552,13 +552,11 @@
   color: #fff;
 }
 
-/* ProfessionalsCarousel.css */
 .professionals-container {
   max-width: 1300px;
   margin: 0 auto;
   padding: 40px 20px;
   overflow: hidden;
-  margin-top: 5%;
 }
 
 .section-title {
@@ -590,7 +588,7 @@
 }
 
 .professional-card {
-  flex: 0 0 25%; /* Show 4 cards at once */
+  flex: 0 0 25%;
   padding: 10px;
   box-sizing: border-box;
 }
@@ -711,27 +709,26 @@
   margin-left: 15px;
 }
 
-/* Custom card colors */
 .professional-card:nth-child(4n + 1) .card-image {
-  background-color: #400a3a; /* Dark purple */
+  background-color: #400a3a;
 }
 
 .professional-card:nth-child(4n + 2) .card-image {
-  background-color: #e8d1cb; /* Light pink */
+  background-color: #e8d1cb;
 }
 
 .professional-card:nth-child(4n + 3) .card-image {
-  background-color: #143e3a; /* Dark green */
+  background-color: #143e3a;
 }
 
 .professional-card:nth-child(4n + 4) .card-image {
-  background-color: #f2e9e4; /* Light beige */
+  background-color: #f2e9e4;
 }
 
 /* Responsive styles */
 @media (max-width: 1024px) {
   .professional-card {
-    flex: 0 0 50%; /* Show 2 cards at once on tablets */
+    flex: 0 0 50%;
   }
 
   .carousel-container {
@@ -741,7 +738,7 @@
 
 @media (max-width: 768px) {
   .professional-card {
-    flex: 0 0 100%; /* Show 1 card at once on mobile */
+    flex: 0 0 100%;
   }
 
   .section-title {

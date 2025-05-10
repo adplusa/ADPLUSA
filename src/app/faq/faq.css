@@ -1,0 +1,166 @@
+/* FAQ.css */
+
+.faq-head {
+  text-align: center;
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.faq-head h1 {
+  font-size: 3rem;
+}
+
+.faq-head hr {
+  width: 40%;
+  border: 1px solid red;
+  margin-top: 2%;
+}
+
+/* Main container */
+.faq-container {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 60px 20px;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+    Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  color: #333;
+}
+
+/* Section styling */
+.faq-section {
+  margin-bottom: 80px;
+  margin-top: 4%;
+}
+
+.faq-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #111;
+}
+
+/* Content layout */
+.faq-content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* For desktop screens */
+@media (min-width: 992px) {
+  .faq-content {
+    flex-direction: row;
+    margin-top: 2%;
+    align-items: center;
+  }
+
+  .faq-content.reverse {
+    flex-direction: row-reverse;
+  }
+}
+
+.faq-text-content,
+.faq-image-container {
+  flex: 1;
+}
+
+/* Description styling */
+.faq-description {
+  margin-bottom: 24px;
+}
+
+.faq-description p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #555;
+  max-width: 70%;
+}
+
+.chat-link {
+  color: #4a6cf7;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.chat-link:hover {
+  color: #3451b2;
+}
+
+/* FAQ items */
+.faq-items {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.faq-item {
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 24px;
+}
+
+.faq-question-container {
+  display: flex;
+  cursor: pointer;
+}
+
+.faq-icon {
+  margin-right: 16px;
+  margin-top: 4px;
+}
+
+.icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+}
+
+.icon-circle svg {
+  width: 20px;
+  height: 20px;
+  color: #000;
+}
+
+.faq-content-text {
+  flex: 1;
+}
+
+.faq-question-two {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #222;
+}
+
+.faq-question-two:hover {
+  color: #444;
+}
+
+.faq-answer-two {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* Image styling */
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.faq-image {
+  width: 100%;
+  height: 550px;
+  object-fit: cover;
+  display: block;
+}

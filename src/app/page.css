@@ -1678,3 +1678,62 @@ span.service-two-bottom-box-logo {
   width: 30px;
   height: 30px;
 }
+
+.activities-outcomes {
+  padding: 60px 5%;
+  background: #fff;
+  font-family: "Geist", sans-serif;
+  text-align: center;
+  padding-top: 0;
+  margin-top: 5%;
+}
+
+.activities-outcomes .heading h2 {
+  font-size: 2.8rem;
+  color: #1e1e1e;
+  margin-bottom: 10px;
+}
+
+.activities-outcomes .heading p {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 50px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.card-two {
+  background: #fff4f0;
+  padding: 30px 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  transition: transform 0.3s;
+  border: 1px solid #d2d2d2;
+}
+
+.card-two:hover {
+  transform: translateY(-5px);
+}
+
+.card-two .icon {
+  font-size: 30px;
+  color: #d2a191;
+  margin-bottom: 15px;
+}
+
+.card-two h3 {
+  font-size: 20px;
+  color: #1e1e1e;
+  margin-bottom: 10px;
+}
+
+.card-two p {
+  font-size: 16px;
+  color: #444;
+  line-height: 1.5;
+}

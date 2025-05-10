@@ -185,7 +185,7 @@ const ServiceTwo = () => {
           ))}
         </div>
 
-        <div className="card-cta">
+        {/* <div className="card-cta">
           <div className="card-cta-df">
             <span>
               <button>{data?.activitiesOutcomes?.cta?.buttonText}</button>
@@ -199,7 +199,7 @@ const ServiceTwo = () => {
               />
             )}
           </div>
-        </div>
+        </div> */}
       </section>
 
       <div className="professionals-container">
@@ -310,7 +310,7 @@ const ServiceTwo = () => {
       </section>
 
       {/* Visual Concepts */}
-      <section className="visual-concepts">
+      {/* <section className="visual-concepts">
         {data.visualConcepts?.map((item, index) => (
           <div
             key={index}
@@ -332,10 +332,10 @@ const ServiceTwo = () => {
             </div>
           </div>
         ))}
-      </section>
+      </section> */}
 
       {/* Following Steps */}
-      <section className="following-steps">
+      {/* <section className="following-steps">
         <h2>{data?.followingSteps?.title}</h2>
         <p>{data?.followingSteps?.description}</p>
         <span>
@@ -343,10 +343,10 @@ const ServiceTwo = () => {
             <button key={idx}>{btn}</button>
           ))}
         </span>
-      </section>
+      </section> */}
 
       {/* Final CTA */}
-      <div className="card-cta" id="card-cta-two">
+      {/* <div className="card-cta" id="card-cta-two">
         <div className="card-cta-df">
           <span>
             <button>{data?.finalCTA?.buttonText}</button>
@@ -354,84 +354,6 @@ const ServiceTwo = () => {
           <span>
             <h1>{data?.finalCTA?.title}</h1>
           </span>
-        </div>
-      </div>
-
-      {/* Professionals Carousel */}
-      {/* <div className="professionals-container">
-        <h2 className="section-title">
-          Explore other Most Wanted Professionals
-        </h2>
-
-        <div className="carousel-wrapper">
-          <button className="carousel-control prev" onClick={prevSlide}>
-            &#10094;
-          </button>
-
-          <div className="carousel-viewport">
-            <div
-              ref={carouselRef}
-              className="carousel-container"
-              style={{
-                transform: `translateX(${-activeIndex * 25}%)`,
-                transition: isTransitioning
-                  ? "transform 0.5s ease-in-out"
-                  : "none",
-              }}
-            >
-              {allCards.map((pro, index) => (
-                <div key={index} className="professional-card">
-                  <div className="card-inner">
-                    <div
-                      className="card-image"
-                      style={{ backgroundColor: pro.bgColor }}
-                    >
-                      {pro.image && (
-                        <Image
-                          src={urlFor(pro.image).url()}
-                          alt={pro.title}
-                          width={0}
-                          height={0}
-                          unoptimized
-                        />
-                      )}
-                    </div>
-                    <div className="card-content">
-                      <h3
-                        className="card-title"
-                        style={{ color: pro.textColor }}
-                      >
-                        {pro.title}
-                      </h3>
-                      {pro.subtitle && (
-                        <p className="card-subtitle">{pro.subtitle}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <button className="carousel-control next" onClick={nextSlide}>
-            &#10095;
-          </button>
-        </div>
-
-        <div className="carousel-indicators">
-          {professionals.map((_, index) => (
-            <button
-              key={index}
-              className={`indicator ${
-                index ===
-                (activeIndex - startIndex + professionals.length) %
-                  professionals.length
-                  ? "active"
-                  : ""
-              }`}
-              onClick={() => goToSlide(index)}
-            />
-          ))}
         </div>
       </div> */}
 

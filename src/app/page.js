@@ -138,6 +138,51 @@ export default function Home() {
       .set(".loader-container", { display: "none" }); // Instantly hide
   };
 
+  const activitiesOutcomesCards = [
+    {
+      icon: "*",
+      title: "BIM Services",
+      description:
+        "Our BIM team consists of architects, engineers and designers offering holistic solutions.",
+    },
+    {
+      icon: "*",
+      title: "CAD Services",
+      description:
+        "Providing extended architectural and structural design and drafting services for all stages of your project",
+    },
+    {
+      icon: "*",
+      title: "Permit Drawings & Documentation",
+      description:
+        "Contact us and save the cumbersome job of authority approvals.",
+    },
+    {
+      icon: "*",
+      title: "3D Visualization",
+      description:
+        "Get the full experience of your building before hand by our 3D experts.",
+    },
+    {
+      icon: "*",
+      title: "Presentation Drawing",
+      description:
+        "We provide comprehensive research data which captivate our clients, at the lowest possible cost.",
+    },
+    {
+      icon: "*",
+      title: "Design Presentations",
+      description:
+        "Share schematic designs with stakeholders for feedback and refinement.",
+    },
+    {
+      icon: "*",
+      title: "MEP Services",
+      description:
+        "We strive to provide high-quality and reliable structural, mechanical and electrical engineering solutions.",
+    },
+  ];
+
   const [artistData, setArtistData] = useState(null);
   const [homepageData, setHomepageData] = useState(null);
 
@@ -424,7 +469,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="service-two">
+            {/* <div className="service-two">
               <div className="service-two-top">
                 <div className="service-two-top-left">
                   <h5>{homepageData[0].serviceSmallHeading}</h5>
@@ -476,7 +521,52 @@ export default function Home() {
                 </div>
                 <div className="services-one_circle-color"></div>
               </div>
-            </div>
+            </div> */}
+
+            {/* Activities Outcomes */}
+            <section className="activities-outcomes">
+              <div className="heading">
+                <h2>Key activities and outcomes</h2>
+                <p>
+                  of the Schematic Design Architecture phase typically include:
+                </p>
+              </div>
+
+              {/* <div className="cards-grid">
+                {data?.activitiesOutcomes?.cards?.map((card, idx) => (
+                  <div key={idx} className="card-two">
+                    <div className="icon">{card.icon}</div>
+                    <h3>{card.title}</h3>
+                    <p>{card.description}</p>
+                  </div>
+                ))}
+              </div> */}
+              <div className="cards-grid">
+                {activitiesOutcomesCards.map((card, idx) => (
+                  <div key={idx} className="card-two">
+                    <div className="icon">{card.icon}</div>
+                    <h3>{card.title}</h3>
+                    <p>{card.description}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* <div className="card-cta">
+          <div className="card-cta-df">
+            <span>
+              <button>{data?.activitiesOutcomes?.cta?.buttonText}</button>
+            </span>
+            {data?.activitiesOutcomes?.cta?.image && (
+              <Image
+                src={urlFor(data.activitiesOutcomes.cta.image).url()}
+                alt="CTA Image"
+                width={500}
+                height={300}
+              />
+            )}
+          </div>
+        </div> */}
+            </section>
 
             <div className="technology-we-use">
               <h1>Technologies We Used</h1>
