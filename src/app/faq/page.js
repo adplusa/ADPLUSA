@@ -176,7 +176,7 @@ export default function FAQ() {
 
               {/* Image */}
               <div className="faq-image-container">
-                <div className="image-wrapper">
+                <div className="image-wrapper-two">
                   <img
                     src={category.image}
                     alt={`${category.title} illustration`}
