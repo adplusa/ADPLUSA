@@ -79,17 +79,15 @@
   padding: 20px;
   border-radius: 15px;
   text-align: left;
-  transition:
-    transform 0.3s ease-in-out,
-    box-shadow 0.3s ease-in-out;
+
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  border: 1px solid #dfdfdf;
+  border: 2px solid transparent;
+  transition: border 0.4s ease;
   margin-top: 10px;
 }
 
 .achievement-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.2);
+  border-color: #e96301;
 }
 
 .achievement-content {
@@ -1736,4 +1734,63 @@ span.service-two-bottom-box-logo {
   font-size: 16px;
   color: #444;
   line-height: 1.5;
+}
+
+.services-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.service-box {
+  width: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: white;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.service-box:hover {
+  transform: translateY(-5px);
+}
+
+.service-image {
+  width: 200px;
+  height: auto;
+  position: relative;
+}
+
+.service-box h2 {
+  font-size: 20px;
+  margin: 15px 0 5px;
+}
+
+.service-box p {
+  color: #666;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.home_services_box {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  justify-content: space-evenly;
+  margin-top: 2%;
+  gap: 3%;
+  padding: 2% 5%;
+}
+
+.home_services h1 {
+  text-align: center;
+}
+
+.home_services {
+  margin-top: 5%;
+}
+
+.service-image img {
+  object-fit: cover;
 }

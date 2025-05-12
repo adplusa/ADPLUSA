@@ -36,11 +36,11 @@ export const serviceType = defineType({
         }),
       ],
     }),
-    defineField({
-      name: "serviceRelatedHeading",
-      title: "Service Related Heading",
-      type: "string",
-    }),
+    // defineField({
+    //   name: "serviceRelatedHeading",
+    //   title: "Service Related Heading",
+    //   type: "string",
+    // }),
     defineField({
       name: "serviceRelatedIcon",
       title: "Service Related Icons",
@@ -126,6 +126,11 @@ export const serviceType = defineType({
                   name: "description",
                   title: "Description",
                   type: "text",
+                }),
+                defineField({
+                  name: "cardlink",
+                  title: "Card Link",
+                  type: "string",
                 }),
               ],
             }),

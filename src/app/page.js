@@ -43,6 +43,53 @@ const steps = [
 
 const images = ["/process-img.jpg", "/process-img2.jpg", "/process-img3.jpg"];
 
+const servicesData = [
+  {
+    title: "Remote Executive Assistant",
+    category: "Services",
+    image: "/cad-1.webp",
+  },
+  {
+    title: "MEP Engineer",
+    category: "Services",
+    image: "/cad-2.webp",
+  },
+  {
+    title: "Construction Documentation",
+    category: "Services",
+    image: "/cad-4.webp",
+  },
+  {
+    title: "CAD Outsourcing",
+    category: "Services",
+    image: "/cad-3.webp",
+  },
+
+  {
+    title: "Bim Services",
+    category: "Services",
+    image: "/cad-2.webp",
+  },
+
+  {
+    title: "MEP Engineer",
+    category: "Services",
+    image: "/cad-3.webp",
+  },
+
+  {
+    title: "Presenting Drawing",
+    category: "Services",
+    image: "/cad-4.webp",
+  },
+
+  {
+    title: "3D Visualization",
+    category: "Services",
+    image: "/cad-5.webp",
+  },
+];
+
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
@@ -469,6 +516,26 @@ export default function Home() {
               </div>
             </div>
 
+            <div className="home_services">
+              <h1>We specialize in outsourcing architectural services</h1>
+              <div className="home_services_box">
+                {servicesData.map((service, index) => (
+                  <div className="service-box" key={index}>
+                    <div className="service-image">
+                      <Image
+                        src={service.image}
+                        alt={service.title}
+                        width={400}
+                        height={200}
+                      />
+                    </div>
+                    <h2>{service.title}</h2>
+                    <p>{service.category}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* <div className="service-two">
               <div className="service-two-top">
                 <div className="service-two-top-left">
@@ -524,7 +591,7 @@ export default function Home() {
             </div> */}
 
             {/* Activities Outcomes */}
-            <section className="activities-outcomes">
+            {/* <section className="activities-outcomes">
               <div className="heading">
                 <h2>Key activities and outcomes</h2>
                 <p>
@@ -532,15 +599,6 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* <div className="cards-grid">
-                {data?.activitiesOutcomes?.cards?.map((card, idx) => (
-                  <div key={idx} className="card-two">
-                    <div className="icon">{card.icon}</div>
-                    <h3>{card.title}</h3>
-                    <p>{card.description}</p>
-                  </div>
-                ))}
-              </div> */}
               <div className="cards-grid">
                 {activitiesOutcomesCards.map((card, idx) => (
                   <div key={idx} className="card-two">
@@ -551,7 +609,7 @@ export default function Home() {
                 ))}
               </div>
 
-              {/* <div className="card-cta">
+              <div className="card-cta">
           <div className="card-cta-df">
             <span>
               <button>{data?.activitiesOutcomes?.cta?.buttonText}</button>
@@ -565,8 +623,8 @@ export default function Home() {
               />
             )}
           </div>
-        </div> */}
-            </section>
+        </div>
+            </section> */}
 
             <div className="technology-we-use">
               <h1>Technologies We Used</h1>
@@ -795,8 +853,8 @@ export default function Home() {
                             <Image
                               src={urlFor(founder.founderImage).url()}
                               alt="Founder Team"
-                              width={400}
-                              height={400}
+                              width={500}
+                              height={500}
                               className="team-img"
                               unoptimized
                             />

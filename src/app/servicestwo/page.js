@@ -15,6 +15,53 @@ const ServiceTwo = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const carouselRef = useRef(null);
 
+  const servicesData = [
+    {
+      title: "Remote Executive Assistant",
+      category: "Services",
+      image: "/cad-1.webp",
+    },
+    {
+      title: "MEP Engineer",
+      category: "Services",
+      image: "/cad-2.webp",
+    },
+    {
+      title: "Construction Documentation",
+      category: "Services",
+      image: "/cad-4.webp",
+    },
+    {
+      title: "CAD Outsourcing",
+      category: "Services",
+      image: "/cad-3.webp",
+    },
+
+    {
+      title: "Bim Services",
+      category: "Services",
+      image: "/cad-2.webp",
+    },
+
+    {
+      title: "MEP Engineer",
+      category: "Services",
+      image: "/cad-3.webp",
+    },
+
+    {
+      title: "Presenting Drawing",
+      category: "Services",
+      image: "/cad-4.webp",
+    },
+
+    {
+      title: "3D Visualization",
+      category: "Services",
+      image: "/cad-5.webp",
+    },
+  ];
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -143,7 +190,7 @@ const ServiceTwo = () => {
           </div>
         </div>
 
-        <div className="achievements-container">
+        {/* <div className="achievements-container">
           <div className="achievements-grid">
             {data?.clientReviews?.map((review, index) => {
               return (
@@ -165,11 +212,11 @@ const ServiceTwo = () => {
               );
             })}
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Activities Outcomes */}
-      <section className="activities-outcomes">
+      {/* <section className="activities-outcomes">
         <div className="heading">
           <h2>{data?.activitiesOutcomes?.heading}</h2>
           <p>{data?.activitiesOutcomes?.subheading}</p>
@@ -177,15 +224,17 @@ const ServiceTwo = () => {
 
         <div className="cards-grid">
           {data?.activitiesOutcomes?.cards?.map((card, idx) => (
-            <div key={idx} className="card-two">
-              <div className="icon">{card.icon}</div>
-              <h3>{card.title}</h3>
-              <p>{card.description}</p>
-            </div>
+            <Link key={idx} href={card.cardlink || "/"}>
+              <div className="card-two">
+                <div className="icon">{card.icon}</div>
+                <h3>{card.title}</h3>
+                <p>{card.description}</p>
+              </div>
+            </Link>
           ))}
         </div>
 
-        {/* <div className="card-cta">
+        <div className="card-cta">
           <div className="card-cta-df">
             <span>
               <button>{data?.activitiesOutcomes?.cta?.buttonText}</button>
@@ -199,10 +248,30 @@ const ServiceTwo = () => {
               />
             )}
           </div>
-        </div> */}
-      </section>
+        </div>
+      </section> */}
 
-      <div className="professionals-container">
+      <div className="home_services-two">
+        <h1>What we Offer</h1>
+        <div className="home_services_box-two">
+          {servicesData.map((service, index) => (
+            <div className="service-box-two" key={index}>
+              <div className="service-image-two">
+                <Image
+                  src={service.image}
+                  alt={service.title}
+                  width={400}
+                  height={200}
+                />
+              </div>
+              <h2>{service.title}</h2>
+              <p>{service.category}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* <div className="professionals-container">
         <h2 className="section-title">{data.serviceRelatedHeading}</h2>
 
         <div className="carousel-wrapper">
@@ -275,7 +344,7 @@ const ServiceTwo = () => {
             />
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Why Work With Us */}
       <section className="why-work">
