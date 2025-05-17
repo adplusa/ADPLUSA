@@ -139,7 +139,7 @@ export default function FAQ() {
               <p>
                 {category.description}{" "}
                 <a href={category.chatLink} className="chat-link">
-                  chat to our friendly team
+                  Chat to our friendly team
                 </a>
                 .
               </p>
