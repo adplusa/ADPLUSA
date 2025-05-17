@@ -1,11 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./contact.css";
 import Header from "../Components/Header/page";
 import Image from "next/image";
+import Footer from "../Components/Footer/page";
+import gsap from "gsap";
 
 export default function ContactForm() {
+  const textRef = useRef(null);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -26,6 +30,22 @@ export default function ContactForm() {
     e.preventDefault();
     console.log("Form submitted:", formData);
     // Add your form submission logic here
+  };
+
+  useEffect(() => {
+    if (textRef.current) {
+      gsap.to(textRef.current, {
+        rotation: 360,
+        transformOrigin: "center",
+        repeat: -1,
+        duration: 8,
+        ease: "linear",
+      });
+    }
+  }, []);
+
+  const upwardHandler = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -148,6 +168,110 @@ export default function ContactForm() {
             </div>
           </div>
         </div>
+      </div>
+
+      <section className="why-work">
+        <div className="content-two">
+          {/* Text Section */}
+          <div className="text">
+            <h2>Why work with us?</h2>
+
+            <div className="feature">
+              <div className="icon">✔️</div>
+              <div className="info">
+                <h3>Cost Effective</h3>
+                <p>
+                  Hiring highly-skilled nearshore talent unlocks cost savings of
+                  50% compared to US-based professionals
+                </p>
+              </div>
+            </div>
+
+            <div className="feature">
+              <div className="icon">✔️</div>
+              <div className="info">
+                <h3>Flexible contracts</h3>
+                <p>
+                  You can choose your type of contract: full, part or flex and
+                  switch between these options with no strings attached
+                </p>
+              </div>
+            </div>
+
+            <div className="feature">
+              <div className="icon">✔️</div>
+              <div className="info">
+                <h3>HR department of your dreams</h3>
+                <p>
+                  Our pre-screening ensures we present only motivated candidates
+                  aligned with your culture and an onboarding process in just 72
+                  hours!
+                </p>
+              </div>
+            </div>
+
+            <div className="feature">
+              <div className="icon">✔️</div>
+              <div className="info">
+                <h3>100% satisfaction guaranteed</h3>
+                <p>
+                  If you’re not satisfied, we’ll give your money back – no
+                  questions asked
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Image Section */}
+          <div className="image-wrapper">
+            <div className="background">
+              <Image
+                src="/service-img-5.webp"
+                alt="Why Work With Us"
+                width="500"
+                height="400"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+
+      <div className="whatsapp">
+        <a
+          className="btn-whatsapp-pulse"
+          target="_blank"
+          href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
+        >
+          <Image
+            src={"/whatsapp.png"}
+            width={40}
+            height={40}
+            alt="Whatsapp-img"
+            unoptimized
+          ></Image>
+        </a>
+      </div>
+
+      <div className="enquire">
+        <button>Enquire Now</button>
+      </div>
+
+      <div className="upward" onClick={upwardHandler}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          className="bi bi-chevron-up"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fillRule="evenodd"
+            d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"
+          />
+        </svg>
       </div>
     </>
   );

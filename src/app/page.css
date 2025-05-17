@@ -111,26 +111,11 @@
   opacity: 0.8;
 }
 
-.key-benefit {
-  display: flex;
-}
-
-.key-benefit ul {
-  display: grid;
-  grid-template-columns: auto auto;
-  width: 500px;
-}
-
 .achievement-text {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-}
-
-.key-benefit span {
-  width: 250px;
-  margin-top: 15px;
 }
 
 .about-us-top {
@@ -869,7 +854,7 @@ span.service-two-bottom-box-logo {
   padding-bottom: 2%;
 }
 
-.strip-text {
+/* .strip-text {
   opacity: 1 !important;
 }
 
@@ -907,6 +892,48 @@ span.service-two-bottom-box-logo {
 
   100% {
     transform: translateX(-100%);
+  }
+} */
+
+.strip-text {
+  overflow: hidden;
+  /* background-color: #902b2c; */
+  color: #000000;
+  padding: 12px 0;
+  white-space: nowrap;
+}
+
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 20s linear infinite;
+  gap: 15px;
+}
+
+.marquee-item {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.marquee-item h1 {
+  font-size: 2rem;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.marquee-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }
 
@@ -1106,7 +1133,8 @@ span.service-two-bottom-box-logo {
   padding: 60px 9%;
   position: relative;
   overflow: hidden;
-  background-color: var(--backgroundTechnology);
+  /* background-color: var(--backgroundTechnology); */
+  background-color: #f9f9f9;
 }
 
 .heading {
@@ -1252,86 +1280,61 @@ span.service-two-bottom-box-logo {
   }
 }
 
-.contact-left img {
-  width: 450px;
-  height: 450px;
+.contact-us {
+  display: flex;
+  justify-content: center;
+  padding: 60px 20px;
+  margin-top: 5%;
+}
+
+.contact-container {
+  max-width: 1200px;
+  width: 100%;
+  position: relative;
 }
 
 .contact-us-df {
   display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
   justify-content: center;
   align-items: center;
-  gap: 5%;
-}
-
-.contact-left {
-  position: absolute;
-  left: 5%;
-  top: -15%;
-}
-
-.contact-us {
-  display: flex;
-  justify-content: center;
-}
-
-.contact-container {
-  margin-top: 10%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--backgroundContact);
-  /* background-color: var(--backgroundColor); */
-  width: 90%;
-  padding: 6% 0;
-  border-radius: 10px;
   position: relative;
 }
 
+.contact-left {
+  flex: 1 1 400px;
+  text-align: center;
+}
+
+.contact-left img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 10px;
+}
+
 .contact-right {
-  margin-left: 80%;
+  flex: 1 1 500px;
 }
 
 .contact-right h1 {
   font-size: 2rem;
-  line-height: 1.4;
-}
-
-.contact-btn span:first-of-type button {
-  background-color: #902b2c;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 10px;
-  width: 175px;
-  height: 45px;
-  font-size: 16px;
-  font-weight: bold;
-  transition: all 0.3s ease;
-}
-
-.contact-btn span:first-of-type button:hover {
-  transform: scale(1.1);
-}
-
-.contact-btn {
-  margin-top: 6%;
-  display: flex;
-  align-items: center;
+  margin-bottom: 20px;
+  color: #222;
+  text-align: left;
 }
 
 .contact-form {
   background: #fff;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 600px;
-  padding: 40px 20px;
-  margin-top: 3%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 30px;
+  margin-top: 20px;
+  border: 0.5px solid rgb(200, 200, 200);
 }
 
 .form-fields {
@@ -1341,24 +1344,50 @@ span.service-two-bottom-box-logo {
 
 .form-fields label {
   font-weight: 600;
-  margin-bottom: 5px;
-  color: #333;
+  margin-bottom: 8px;
+  color: #444;
 }
 
 .form-fields input {
   padding: 12px;
   font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: 0.3s;
-  background-color: #fff;
-  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #fafafa;
+  transition:
+    border 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .form-fields input:focus {
-  border-color: #ac0404;
+  border-color: #902b2c;
+  box-shadow: 0 0 6px rgba(144, 43, 44, 0.3);
   outline: none;
-  box-shadow: 0 0 5px rgba(233, 1, 1, 0.5);
+}
+
+.contact-btn {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.contact-btn span:first-of-type button {
+  background-color: #902b2c;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.contact-btn span:first-of-type button:hover {
+  background-color: #a03536;
+  transform: scale(1.05);
 }
 
 .testimonial-container-two h2 {
@@ -1566,7 +1595,7 @@ span.service-two-bottom-box-logo {
 }
 
 .technology-grid img {
-  width: 110px;
+  width: 120px;
   height: auto;
 }
 
@@ -1764,14 +1793,10 @@ span.service-two-bottom-box-logo {
 }
 
 .service-box h2 {
-  font-size: 20px;
-  margin: 15px 0 5px;
-}
-
-.service-box p {
-  color: #666;
-  margin-bottom: 15px;
-  font-weight: 500;
+  font-size: 17px;
+  margin: 10px 0 5px;
+  padding: 10px;
+  padding-bottom: 20px;
 }
 
 .home_services_box {
@@ -1793,4 +1818,59 @@ span.service-two-bottom-box-logo {
 
 .service-image img {
   object-fit: cover;
+}
+
+.service-cta-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.service-cta {
+  font-size: 16px;
+  padding: 5px 10px;
+  background: none;
+  border: 1px solid var(--borderColor);
+  width: 200px;
+  height: 47px;
+  color: var(--foreground);
+  position: relative;
+  overflow: hidden;
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.service-cta:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2%;
+  height: 100%;
+  background-color: #902b2c;
+  transition: all 0.8s cubic-bezier(0.7, -0.5, 0.2, 2);
+  z-index: -1;
+}
+
+.service-cta span {
+  position: relative;
+  z-index: 2;
+  color: var(--foreground);
+  transition: color 0.3s ease;
+}
+
+.service-cta:hover:before {
+  width: 100%;
+}
+
+.service-cta:hover span {
+  color: white;
+}
+
+.service-cta:hover {
+  border-color: white;
+}
+
+#practice-content {
+  right: 0;
 }

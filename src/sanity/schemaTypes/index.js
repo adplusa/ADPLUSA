@@ -1,7 +1,7 @@
 import { eventType } from "./eventType";
-import { artistType } from "./artistType";
 import { serviceType } from "./serviceTwoType";
+import { aboutPage } from "./aboutUsType";
 
 export const schema = {
-  types: [eventType, artistType, serviceType],
+  types: [eventType, aboutPage, serviceType],
 };

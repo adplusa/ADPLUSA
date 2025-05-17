@@ -5,9 +5,10 @@ export const eventType = defineType({
   title: "Homepage",
   type: "document",
   fields: [
+    // Image for Light and Dark Mode
     defineField({
       name: "lightModeImage",
-      title: "Light Mode Image",
+      title: "Banner Image for Light Mode",
       type: "image",
       options: {
         hotspot: true,
@@ -15,158 +16,22 @@ export const eventType = defineType({
     }),
     defineField({
       name: "darkModeImage",
-      title: "Dark Mode Image",
+      title: "Banner Image for Dark Mode",
       type: "image",
       options: {
         hotspot: true,
       },
     }),
 
-    defineField({
-      name: "allowLightHeading",
-      title: "Light Background Heading",
-      type: "string",
-    }),
-
-    defineField({
-      name: "allowUsHeading",
-      title: "Allow Us Heading",
-      type: "string",
-    }),
-
-    defineField({
-      name: "allowRightHeading",
-      title: "Right Heading",
-      type: "string",
-    }),
-
-    defineField({
-      name: "paragraph",
-      title: "paragraph",
-      type: "array",
-      of: [{ type: "block" }],
-    }),
-
-    defineField({
-      name: "bulletPoints",
-      title: "Bullet Points",
-      type: "array",
-      of: [{ type: "string" }],
-    }),
-
-    defineField({
-      name: "peoplImageOne",
-      title: "People Image One",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
-    }),
-
-    defineField({
-      name: "peoplImageTwo",
-      title: "People Image Two",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
-    }),
-
-    defineField({
-      name: "peopleVideo",
-      title: "People Video",
-      type: "file",
-      options: {
-        accept: "video/*",
-      },
-    }),
-
-    defineField({
-      name: "peopleText",
-      title: "People Image Text",
-      type: "string",
-    }),
-
-    defineField({
-      name: "ctaButton",
-      title: "Button for About us Redirection section",
-      type: "string",
-    }),
-
-    defineField({
-      name: "sliderTextOne",
-      title: "Slider Text One",
-      type: "string",
-    }),
-
-    defineField({
-      name: "sliderTextTwo",
-      title: "Slider Text Two",
-      type: "string",
-    }),
-
-    defineField({
-      name: "serviceSmallHeading",
-      title: "Service Small Heading",
-      type: "string",
-    }),
-
-    defineField({
-      name: "serviceBigHeading",
-      title: "Service Big Heading",
-      type: "string",
-    }),
-
-    defineField({
-      name: "services", // Name of the array
-      title: "Services",
-      type: "array", // Array type to store multiple services
-      of: [
-        {
-          type: "object", // Each service will be an object
-          fields: [
-            {
-              name: "serviceTitle", // Title of the service
-              type: "string",
-              title: "Service Title",
-            },
-            {
-              name: "serviceImage", // Image for the service
-              type: "image",
-              title: "Service Image",
-              options: {
-                hotspot: true, // Enables hotspot for cropping and resizing
-              },
-            },
-            {
-              name: "serviceContent", // Content/Description of the service
-              type: "text",
-              title: "Service Content",
-            },
-          ],
-        },
-      ],
-    }),
-
-    defineField({
-      name: "serviceCirclVideo",
-      title: "Service Video",
-      type: "file",
-      options: {
-        accept: "video/*",
-      },
-    }),
-
+    // Trust Icons
     defineField({
       name: "trustIconsHeading",
       title: "Trust Icon Heading",
       type: "string",
     }),
-
-    // Trust Icons
     defineField({
       name: "serviceRelatedIcon",
-      title: "Service Related icons and text",
+      title: "Trust icons and text",
       type: "array",
       of: [
         {
@@ -193,34 +58,78 @@ export const eventType = defineType({
         },
       ],
     }),
-
-    // Client reviews (Trust icon)
     defineField({
-      name: "clientReviews",
-      title: "Cleint Reviews",
+      name: "sectionTitle",
+      title: "Achievement Title",
+      type: "string",
+    }),
+    defineField({
+      name: "achievements",
+      title: "Achievements",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "achievementCard",
+          title: "Achievement Card",
+          fields: [
+            defineField({
+              name: "title",
+              title: "Title",
+              type: "string",
+            }),
+            defineField({
+              name: "number",
+              title: "Number",
+              type: "string",
+              description: 'Use string to allow characters like "+"',
+            }),
+          ],
+        },
+      ],
+    }),
+
+    // Services
+    defineField({
+      name: "serviceHeading",
+      title: "Service Heading",
+      type: "string",
+    }),
+    defineField({
+      name: "serviceBox",
+      title: "Service Box",
       type: "array",
       of: [
         {
           type: "object",
           fields: [
             {
-              name: "clientReviewTitle",
-              title: "Client Review Title",
-              type: "string",
+              name: "boxUrl",
+              title: "Service Box URL",
+              type: "url",
+              validation: (Rule) =>
+                Rule.uri({
+                  scheme: ["http", "https", "mailto", "tel"],
+                }),
             },
             {
-              name: "clientReviewNumber",
-              title: "Client Review Number",
-              type: "string",
-            },
-            {
-              name: "clientReviewImg",
-              title: "Client Review Image",
+              name: "serviceBoxImg",
+              title: "Service Box Img",
               type: "image",
+            },
+            {
+              name: "serviceBoxTitle",
+              title: "Service Box Title",
+              type: "string",
             },
           ],
         },
       ],
+    }),
+    defineField({
+      name: "home_services_cta",
+      title: "Service CTA",
+      type: "string",
     }),
 
     // Working Process
@@ -229,14 +138,11 @@ export const eventType = defineType({
       title: "Working Process Heading",
       type: "string",
     }),
-
     defineField({
       name: "workingProcessSubHeading",
       title: "Working Process Sub Heading",
       type: "string",
     }),
-
-    // Process Steps
     defineField({
       name: "processSteps",
       title: "Process Steps",
@@ -268,13 +174,53 @@ export const eventType = defineType({
       ],
     }),
 
+    // TEXT SLIDER
+    // defineField({
+    //   name: "sliderTextOne",
+    //   title: "Slider Text One",
+    //   type: "string",
+    // }),
+    // defineField({
+    //   name: "sliderTextTwo",
+    //   title: "Slider Text Two",
+    //   type: "string",
+    // }),
+    // {
+    //   name: "sliderImage",
+    //   title: "Slider Image",
+    //   type: "image",
+    // },
+    defineField({
+      name: "sliderTextOne",
+      title: "Slider Text One",
+      type: "string",
+      description: "First line of text for the scrolling marquee",
+    }),
+
+    defineField({
+      name: "sliderTextTwo",
+      title: "Slider Text Two",
+      type: "string",
+      description: "Second line of text for the scrolling marquee",
+    }),
+
+    defineField({
+      name: "sliderImage",
+      title: "Slider Icon/Image",
+      type: "image",
+      description:
+        "Optional image that appears after each text item in the marquee",
+      options: {
+        hotspot: true,
+      },
+    }),
+
     // FAQ Section
     defineField({
       name: "faqHeading",
       title: "Faq Heading",
       type: "string",
     }),
-
     defineField({
       name: "faq",
       title: "FAQ",
@@ -305,7 +251,6 @@ export const eventType = defineType({
       title: "Technology Heading",
       type: "string",
     }),
-
     defineField({
       name: "technologyImgs",
       title: "Technology used images",
@@ -325,6 +270,63 @@ export const eventType = defineType({
           ],
         },
       ],
+    }),
+
+    // About-us Section
+    defineField({
+      name: "allowLightHeading",
+      title: "Light Background Heading",
+      type: "string",
+    }),
+    defineField({
+      name: "allowUsHeading",
+      title: "Allow Us Heading",
+      type: "string",
+    }),
+    defineField({
+      name: "allowRightHeading",
+      title: "Right Heading",
+      type: "string",
+    }),
+    defineField({
+      name: "paragraph",
+      title: "paragraph",
+      type: "array",
+      of: [{ type: "block" }],
+    }),
+    defineField({
+      name: "ctaButton",
+      title: "Button for About us Redirection section",
+      type: "string",
+    }),
+    defineField({
+      name: "peoplImageOne",
+      title: "People Image One",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: "peoplImageTwo",
+      title: "People Image Two",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: "peopleVideo",
+      title: "People Video",
+      type: "file",
+      options: {
+        accept: "video/*",
+      },
+    }),
+    defineField({
+      name: "peopleText",
+      title: "People Image Text",
+      type: "string",
     }),
 
     //Founder Slider
@@ -389,13 +391,12 @@ export const eventType = defineType({
       title: "Contact Us Section Image",
       type: "image",
     }),
-
+    //
     defineField({
       name: "contactUsTitle",
       title: "Contact Us Title",
       type: "string",
     }),
-
     defineField({
       name: "contactUsButton",
       title: "Contact Us Button",

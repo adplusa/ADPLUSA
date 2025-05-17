@@ -8,8 +8,11 @@ import { client } from "@/sanity/lib/client"; // Correct Sanity client import
 import Image from "next/image";
 import Link from "next/link";
 import urlFor from "../helpers/sanity";
+import gsap from "gsap";
 
 const ServiceTwo = () => {
+  const textRef = useRef(null);
+
   const [data, setData] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -87,6 +90,22 @@ const ServiceTwo = () => {
 
     fetchData();
   }, []);
+  useEffect(() => {
+    if (textRef.current) {
+      gsap.to(textRef.current, {
+        rotation: 360,
+        transformOrigin: "center",
+        repeat: -1,
+        duration: 8,
+        ease: "linear",
+      });
+    }
+  }, []);
+
+  const upwardHandler = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   // Infinite Carousel Logic
   const professionals = data?.professionals || [];
   const allCards = [...professionals, ...professionals, ...professionals];
@@ -189,67 +208,7 @@ const ServiceTwo = () => {
             </div>
           </div>
         </div>
-
-        {/* <div className="achievements-container">
-          <div className="achievements-grid">
-            {data?.clientReviews?.map((review, index) => {
-              return (
-                <div
-                  key={index}
-                  className={`achievement-card ${review.gradient}`}
-                >
-                  <div className="achievement-content">
-                    <div className="achievement-text">
-                      <span>
-                        <h3>{review.clientReviewTitle}</h3>
-                      </span>
-                      <span className="achievement-numbers">
-                        <p>{review.clientReviewNumber}</p>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div> */}
       </div>
-
-      {/* Activities Outcomes */}
-      {/* <section className="activities-outcomes">
-        <div className="heading">
-          <h2>{data?.activitiesOutcomes?.heading}</h2>
-          <p>{data?.activitiesOutcomes?.subheading}</p>
-        </div>
-
-        <div className="cards-grid">
-          {data?.activitiesOutcomes?.cards?.map((card, idx) => (
-            <Link key={idx} href={card.cardlink || "/"}>
-              <div className="card-two">
-                <div className="icon">{card.icon}</div>
-                <h3>{card.title}</h3>
-                <p>{card.description}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        <div className="card-cta">
-          <div className="card-cta-df">
-            <span>
-              <button>{data?.activitiesOutcomes?.cta?.buttonText}</button>
-            </span>
-            {data?.activitiesOutcomes?.cta?.image && (
-              <Image
-                src={urlFor(data.activitiesOutcomes.cta.image).url()}
-                alt="CTA Image"
-                width={500}
-                height={300}
-              />
-            )}
-          </div>
-        </div>
-      </section> */}
 
       <div className="home_services-two">
         <h1>What we Offer</h1>
@@ -262,6 +221,7 @@ const ServiceTwo = () => {
                   alt={service.title}
                   width={400}
                   height={200}
+                  unoptimized
                 />
               </div>
               <h2>{service.title}</h2>
@@ -270,81 +230,6 @@ const ServiceTwo = () => {
           ))}
         </div>
       </div>
-
-      {/* <div className="professionals-container">
-        <h2 className="section-title">{data.serviceRelatedHeading}</h2>
-
-        <div className="carousel-wrapper">
-          <button className="carousel-control prev" onClick={prevSlide}>
-            &#10094;
-          </button>
-
-          <div className="carousel-viewport">
-            <div
-              ref={carouselRef}
-              className="carousel-container"
-              style={{
-                transform: `translateX(${-activeIndex * 25}%)`,
-                transition: isTransitioning
-                  ? "transform 0.5s ease-in-out"
-                  : "none",
-              }}
-            >
-              {allCards.map((pro, index) => (
-                <div key={index} className="professional-card">
-                  <div className="card-inner">
-                    <div
-                      className="card-image"
-                      style={{ backgroundColor: pro.bgColor }}
-                    >
-                      {pro.image && (
-                        <Image
-                          src={urlFor(pro.image).url()}
-                          alt={pro.title}
-                          width={0}
-                          height={0}
-                          unoptimized
-                        />
-                      )}
-                    </div>
-                    <div className="card-content">
-                      <h3
-                        className="card-title"
-                        style={{ color: pro.textColor }}
-                      >
-                        {pro.title}
-                      </h3>
-                      {pro.subtitle && (
-                        <p className="card-subtitle">{pro.subtitle}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <button className="carousel-control next" onClick={nextSlide}>
-            &#10095;
-          </button>
-        </div>
-
-        <div className="carousel-indicators">
-          {professionals.map((_, index) => (
-            <button
-              key={index}
-              className={`indicator ${
-                index ===
-                (activeIndex - startIndex + professionals.length) %
-                  professionals.length
-                  ? "active"
-                  : ""
-              }`}
-              onClick={() => goToSlide(index)}
-            />
-          ))}
-        </div>
-      </div> */}
 
       {/* Why Work With Us */}
       <section className="why-work">
@@ -378,55 +263,46 @@ const ServiceTwo = () => {
         </div>
       </section>
 
-      {/* Visual Concepts */}
-      {/* <section className="visual-concepts">
-        {data.visualConcepts?.map((item, index) => (
-          <div
-            key={index}
-            className={`row ${index % 2 !== 0 ? "reverse" : ""}`}
-          >
-            <div className="text">
-              <h2>{item.title}</h2>
-              <p>{item.description}</p>
-            </div>
-            <div className="image">
-              {item.image && (
-                <Image
-                  src={urlFor(item.image).url()}
-                  alt="Visual Concept"
-                  width={500}
-                  height={300}
-                />
-              )}
-            </div>
-          </div>
-        ))}
-      </section> */}
-
-      {/* Following Steps */}
-      {/* <section className="following-steps">
-        <h2>{data?.followingSteps?.title}</h2>
-        <p>{data?.followingSteps?.description}</p>
-        <span>
-          {data?.followingSteps?.buttons?.map((btn, idx) => (
-            <button key={idx}>{btn}</button>
-          ))}
-        </span>
-      </section> */}
-
-      {/* Final CTA */}
-      {/* <div className="card-cta" id="card-cta-two">
-        <div className="card-cta-df">
-          <span>
-            <button>{data?.finalCTA?.buttonText}</button>
-          </span>
-          <span>
-            <h1>{data?.finalCTA?.title}</h1>
-          </span>
-        </div>
-      </div> */}
-
       <Footer />
+
+      {/* WhatsApp Button */}
+      <div className="whatsapp">
+        <a
+          className="btn-whatsapp-pulse"
+          target="_blank"
+          href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
+        >
+          <Image
+            src={"/whatsapp.png"}
+            width={40}
+            height={40}
+            alt="Whatsapp-img"
+            unoptimized
+          ></Image>
+        </a>
+      </div>
+
+      {/* Enquire Button */}
+      <div className="enquire">
+        <button>{data.enquiryButtonText || "Enquire Now"}</button>
+      </div>
+
+      {/* Upward Scroll Button */}
+      <div className="upward" onClick={upwardHandler}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          className="bi bi-chevron-up"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fillRule="evenodd"
+            d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"
+          />
+        </svg>
+      </div>
     </>
   );
 };

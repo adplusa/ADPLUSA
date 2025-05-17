@@ -17,6 +17,7 @@ import { client } from "@/sanity/lib/client";
 import { PortableText } from "@portabletext/react";
 import urlFor from "./helpers/sanity";
 import { getFileAsset } from "@sanity/asset-utils";
+import { Fragment } from "react";
 
 gsap.registerPlugin(CSSPlugin);
 
@@ -236,7 +237,6 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const artistData = await client.fetch('*[_type == "artist"]');
         const homepageData = await client.fetch('*[_type == "homepage"]');
 
         const resolveVideo = (ref) => {
@@ -256,11 +256,9 @@ export default function Home() {
           ),
         });
 
-        console.log(artistData);
         console.log(homepageData);
 
         // Set the fetched data into the state
-        setArtistData(artistData);
         setHomepageData(homepageData);
       } catch (error) {
         console.error("Error fetching data from Sanity:", error);
@@ -490,141 +488,53 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-
               <div className="achievements-container">
                 <div className="achievements-grid">
-                  {homepageData[0]?.clientReviews?.map((review, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className={`achievement-card ${review.gradient}`}
-                      >
-                        <div className="achievement-content">
-                          <div className="achievement-text">
-                            <span>
-                              <h3>{review.clientReviewTitle}</h3>
-                            </span>
-                            <span className="achievement-numbers">
-                              <p>{review.clientReviewNumber}</p>
-                            </span>
-                          </div>
+                  {homepageData[0]?.achievements?.map((item, index) => (
+                    <div className="achievement-card" key={index}>
+                      <div className="achievement-content">
+                        <div className="achievement-text">
+                          <span>
+                            <h3>{item.title}</h3>
+                          </span>
+                          <span className="achievement-numbers">
+                            <p>{item.number}</p>
+                          </span>
                         </div>
                       </div>
-                    );
-                  })}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
 
             <div className="home_services">
-              <h1>We specialize in outsourcing architectural services</h1>
+              <h1>{homepageData[0].serviceHeading}</h1>
               <div className="home_services_box">
-                {servicesData.map((service, index) => (
-                  <div className="service-box" key={index}>
-                    <div className="service-image">
-                      <Image
-                        src={service.image}
-                        alt={service.title}
-                        width={400}
-                        height={200}
-                      />
+                {homepageData[0].serviceBox?.map((service, index) => (
+                  <Link href="/services" key={index}>
+                    <div className="service-box" key={index}>
+                      <div className="service-image">
+                        <Image
+                          src={urlFor(service.serviceBoxImg).url()}
+                          alt={service.serviceBoxTitle}
+                          width={400}
+                          height={200}
+                          unoptimized
+                        ></Image>
+                      </div>
+                      <h2>{service.serviceBoxTitle}</h2>
                     </div>
-                    <h2>{service.title}</h2>
-                    <p>{service.category}</p>
-                  </div>
+                  </Link>
                 ))}
               </div>
+
+              <Link className="service-cta-wrap" href={"/servicestwo"}>
+                <button className="service-cta">
+                  {homepageData[0].home_services_cta}
+                </button>
+              </Link>
             </div>
-
-            {/* <div className="service-two">
-              <div className="service-two-top">
-                <div className="service-two-top-left">
-                  <h5>{homepageData[0].serviceSmallHeading}</h5>
-                  <h1>{homepageData[0].serviceBigHeading}</h1>
-                </div>
-              </div>
-              <div className="service-two-bottom">
-                <div className="service-two-bottom-left">
-                  {homepageData[0]?.services?.map((service, index) => (
-                    <div
-                      key={service._id || index} // Use _id for a unique key if available, else fallback to index
-                      className="service-two-bottom-box"
-                      id={`service-two-box-${service._id || index}`}
-                    >
-                      <div className="service-two-bottom-box-top">
-                        <span className="service-two-bottom-box-logo">
-                          <Image
-                            src={urlFor(service.serviceImage).url()}
-                            width={60}
-                            height={60}
-                            unoptimized
-                            alt={service.serviceTitle || "Service Icon"} // Fallback alt text if serviceTitle is missing
-                          />
-                        </span>
-                        <h3>
-                          {service.serviceTitle || "No title available"}
-                        </h3>{" "}
-                      </div>
-                      <div className="service-two-bottom-box-bottom">
-                        <p>
-                          {service.serviceContent || "No description available"}
-                        </p>{" "}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="service-two-bottom-right">
-                  {videos.serviceVideo && (
-                    <video
-                      src={videos.serviceVideo}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      controls={false}
-                      style={{ width: "100%", height: "auto" }}
-                    />
-                  )}
-                </div>
-                <div className="services-one_circle-color"></div>
-              </div>
-            </div> */}
-
-            {/* Activities Outcomes */}
-            {/* <section className="activities-outcomes">
-              <div className="heading">
-                <h2>Key activities and outcomes</h2>
-                <p>
-                  of the Schematic Design Architecture phase typically include:
-                </p>
-              </div>
-
-              <div className="cards-grid">
-                {activitiesOutcomesCards.map((card, idx) => (
-                  <div key={idx} className="card-two">
-                    <div className="icon">{card.icon}</div>
-                    <h3>{card.title}</h3>
-                    <p>{card.description}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="card-cta">
-          <div className="card-cta-df">
-            <span>
-              <button>{data?.activitiesOutcomes?.cta?.buttonText}</button>
-            </span>
-            {data?.activitiesOutcomes?.cta?.image && (
-              <Image
-                src={urlFor(data.activitiesOutcomes.cta.image).url()}
-                alt="CTA Image"
-                width={500}
-                height={300}
-              />
-            )}
-          </div>
-        </div>
-            </section> */}
 
             <div className="technology-we-use">
               <h1>Technologies We Used</h1>
@@ -696,10 +606,57 @@ export default function Home() {
               </div>
             </section>
 
-            <div className="strip-text">
+            {/* <div className="strip-text">
               <div className="marquee">
                 <p>{homepageData[0].sliderTextOne}</p>
                 <p>{homepageData[0].sliderTextTwo}</p>
+              </div>
+            </div> */}
+            <div className="strip-text">
+              <div className="marquee">
+                <div className="marquee-item">
+                  <h1>{homepageData[0]?.sliderTextOne}</h1>
+                  {homepageData[0]?.sliderImage && (
+                    <Image
+                      src={urlFor(homepageData[0].sliderImage).url()}
+                      alt="Slider Icon"
+                      width="30"
+                      height="30"
+                    />
+                  )}
+                  <h1>{homepageData[0]?.sliderTextTwo}</h1>
+                  {homepageData[0]?.sliderImage && (
+                    <Image
+                      src={urlFor(homepageData[0].sliderImage).url()}
+                      alt="Slider Icon"
+                      width="30"
+                      height="30"
+                    />
+                  )}
+                </div>
+                {/* duplicate for infinite scroll effect */}
+                <div className="marquee-item">
+                  <h1>{homepageData[0]?.sliderTextOne}</h1>
+                  {homepageData[0]?.sliderImage && (
+                    <Image
+                      src={urlFor(homepageData[0].sliderImage).url()}
+                      alt="Slider Icon"
+                      width="30"
+                      height="30"
+                      unoptimized
+                    />
+                  )}
+                  <h1>{homepageData[0]?.sliderTextTwo}</h1>
+                  {homepageData[0]?.sliderImage && (
+                    <Image
+                      src={urlFor(homepageData[0].sliderImage).url()}
+                      alt="Slider Icon"
+                      width="30"
+                      height="30"
+                      unoptimized
+                    />
+                  )}
+                </div>
               </div>
             </div>
 
@@ -713,18 +670,14 @@ export default function Home() {
                   <h1>{homepageData[0].allowRightHeading}</h1>
 
                   <PortableText value={homepageData[0].paragraph} />
-                  <span>
-                    <div className="key-benefit">
-                      <span>
-                        <ul className="list-disc pl-6 space-y-2">
-                          {homepageData[0].bulletPoints.map((point, index) => (
-                            <li key={index}>{point}</li>
-                          ))}
-                        </ul>
-                      </span>
-                    </div>
-                  </span>
                 </div>
+              </div>
+              <div className="who-we-are-btn">
+                <Link href="#">
+                  <button>
+                    <span>{homepageData[0].ctaButton}</span>
+                  </button>
+                </Link>
               </div>
             </div>
 
@@ -764,37 +717,14 @@ export default function Home() {
               <div className="about-us-video-text">
                 <h1>{homepageData[0].peopleText}</h1>
               </div>
-              <div className="who-we-are-btn">
+              {/* <div className="who-we-are-btn">
                 <Link href="#">
                   <button>
                     <span>{homepageData[0].ctaButton}</span>
                   </button>
                 </Link>
-              </div>
+              </div> */}
             </div>
-
-            {/* <div className="faqs">
-              <div className="faq-accordion">
-                <h2>{homepageData[0]?.faqHeading}</h2>
-                {homepageData[0]?.faq?.map((faq, index) => (
-                  <div
-                    key={index}
-                    className={`faq-item ${open === index ? "active" : ""}`}
-                  >
-                    <div className="faq-question" onClick={() => toggle(index)}>
-                      {faq.question}
-                      <span className="icon">{open === index ? "-" : "+"}</span>
-                    </div>
-                    <div
-                      className={`faq-answer ${open === index ? "open" : ""}`}
-                    >
-                      {faq.answer}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="faq-sketch"></div>
-            </div> */}
 
             <div className="reviews-section">
               <div className="navigation-wrapper">

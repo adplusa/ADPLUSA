@@ -47,25 +47,6 @@ const Footer = () => {
             outsource fraternity across India and the United States of America.
           </p>
         </div>
-        {/* <div className="footer-nav">
-          <ul>
-            <li>
-              <a href="#">Home</a>
-            </li>
-            <li>
-              <a href="#">About us</a>
-            </li>
-            <li>
-              <a href="#">Portfolio</a>
-            </li>
-            <li>
-              <a href="#">Get a Quote</a>
-            </li>
-            <li>
-              <a href="#">Competition: Contact-Less Restroom</a>
-            </li>
-          </ul>
-        </div> */}
 
         <div className="header-right" id="footer-right">
           <div id="second-navbar" className="second-navbar">
@@ -83,7 +64,7 @@ const Footer = () => {
                 <Link href="/projects">Projects</Link>
               </li>
               <li>
-                <Link href="/">FAQs</Link>
+                <Link href="/faq">FAQs</Link>
               </li>
               <li>
                 <Link href="/contact">Contact us</Link>

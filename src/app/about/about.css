@@ -11,6 +11,30 @@ html {
   scroll-behavior: smooth;
 }
 
+#place-box {
+  right: 0;
+  top: -45%;
+}
+
+.about-content-4-row {
+  display: flex;
+  justify-content: center;
+}
+
+div#process-box {
+  left: 0;
+}
+
+.about-content-5-row {
+  display: flex;
+  justify-content: center;
+}
+
+div#practice-box {
+  right: 0;
+  top: -45%;
+}
+
 #people-box,
 #place-box,
 #process-box,
@@ -19,13 +43,19 @@ html {
 }
 
 #process-content {
-  top: -28%;
-  right: 20%;
+  top: -45%;
+  left: 0;
 }
 
 #practice-content img {
-  width: 850px;
+  width: 950px;
   height: 1150px;
+}
+
+.about-content-4-row .people-img img,
+.about-content-5-row .people-img img {
+  width: 950px;
+  height: 450px;
 }
 
 .about-content-first-row-left h1 {
@@ -70,26 +100,25 @@ html {
   font-weight: bold;
 }
 
-.about-content-second-row,
-.about-content-third-row,
-.about-content-four-row,
-.about-content-five-row {
-  margin-top: 38%;
+.about-content-2-row,
+.about-content-3-row,
+.about-content-4-row,
+.about-content-5-row {
+  margin-top: 30%;
   position: relative;
 }
 
-.about-content-four-row .people-img img,
-.about-content-five-row .people-img img {
-  width: 700px;
-  height: 1050px;
-}
-
-.about-content-five-row .people-img {
+.about-content-5-row .people-img {
   justify-content: right;
 }
 
-.about-content-four-row .people-img {
+.about-content-4-row .people-img {
   justify-content: left;
+}
+
+.about-content-four-row {
+  display: flex;
+  justify-content: center;
 }
 
 .people-content {
@@ -104,16 +133,16 @@ html {
 .people-content p {
   margin-top: 3%;
   line-height: 1.4;
-  font-size: 19px;
+  font-size: 15px;
 }
 
 .people-content h1 {
-  font-size: 3.2rem;
+  font-size: 2.2rem;
 }
 
 .people-img img {
-  width: 1150px;
-  height: 650px;
+  width: 850px;
+  height: 450px;
   object-fit: cover;
 }
 
@@ -130,4 +159,9 @@ html {
 #practice-content {
   right: 2%;
   top: -45%;
+}
+
+.about-content-five-row {
+  display: flex;
+  justify-content: center;
 }
