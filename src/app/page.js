@@ -493,7 +493,7 @@ export default function Home() {
                   {homepageData[0]?.achievements?.map((item, index) => (
                     <div className="achievement-card" key={index}>
                       <div className="achievement-content">
-                        <div className="achievement-text">
+                        <div className="achievement-text-home">
                           <span>
                             <h3>{item.title}</h3>
                           </span>

@@ -94,13 +94,13 @@
   width: 100%;
 }
 
-.achievement-text h3 {
+.achievement-text-home h3 {
   font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 5px;
 }
 
-.achievement-text p {
+.achievement-text-home p {
   font-size: 20px;
   font-weight: bold;
   color: #737373;
@@ -111,7 +111,7 @@
   opacity: 0.8;
 }
 
-.achievement-text {
+.achievement-text-home {
   display: flex;
   /* align-items: center; */
   justify-content: center;
