@@ -1820,7 +1820,7 @@ span.service-two-bottom-box-logo {
   object-fit: cover;
 } */
 
-.service-box {
+.service-box-home {
   width: 100%;
   border-radius: 12px;
   overflow: hidden;
@@ -1830,7 +1830,7 @@ span.service-two-bottom-box-logo {
   transition: transform 0.3s ease;
 }
 
-.service-box:hover {
+.service-box-home:hover {
   transform: translateY(-5px);
 }
 
@@ -1842,7 +1842,7 @@ span.service-two-bottom-box-logo {
   position: relative;
 }
 
-.service-box h2 {
+.service-box-home h2 {
   font-size: 17px;
   margin: 10px 0 5px;
   padding: 10px;

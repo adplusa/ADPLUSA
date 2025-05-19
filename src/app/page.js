@@ -513,7 +513,7 @@ export default function Home() {
               <div className="home_services_box">
                 {homepageData[0].serviceBox?.map((service, index) => (
                   <Link href="/services" key={index}>
-                    <div className="service-box" key={index}>
+                    <div className="service-box-home" key={index}>
                       <div className="service-image">
                         <Image
                           src={urlFor(service.serviceBoxImg).url()}
