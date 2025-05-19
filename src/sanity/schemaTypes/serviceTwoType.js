@@ -5,15 +5,16 @@ export const serviceType = defineType({
   title: "Service Two Page",
   type: "document",
   fields: [
+    // Banner
     defineField({
       name: "hero",
       title: "Hero Section",
       type: "object",
       fields: [
-        defineField({ name: "title", title: "Title", type: "string" }),
+        defineField({ name: "title", title: "BannerTitle", type: "string" }),
         defineField({
           name: "buttonText",
-          title: "Button Text",
+          title: "Banner Button Text",
           type: "string",
         }),
         defineField({
@@ -36,11 +37,18 @@ export const serviceType = defineType({
         }),
       ],
     }),
-    // defineField({
-    //   name: "serviceRelatedHeading",
-    //   title: "Service Related Heading",
-    //   type: "string",
-    // }),
+
+    // Banner Green Box Content
+    defineField({
+      name: "trustSection",
+      title: "Trust Section",
+      type: "object",
+      fields: [
+        defineField({ name: "title", title: "Title", type: "string" }),
+        defineField({ name: "subtitle", title: "Subtitle", type: "string" }),
+      ],
+    }),
+
     defineField({
       name: "serviceRelatedIcon",
       title: "Service Related Icons",
@@ -69,119 +77,92 @@ export const serviceType = defineType({
       ],
     }),
 
+    // defineField({
+    //   name: "activitiesOutcomes",
+    //   title: "Activities and Outcomes",
+    //   type: "object",
+    //   fields: [
+    //     defineField({ name: "heading", title: "Heading", type: "string" }),
+    //     defineField({
+    //       name: "subheading",
+    //       title: "Subheading",
+    //       type: "string",
+    //     }),
+    //     defineField({
+    //       name: "cards",
+    //       title: "Cards",
+    //       type: "array",
+    //       of: [
+    //         defineField({
+    //           type: "object",
+    //           fields: [
+    //             defineField({
+    //               name: "icon",
+    //               title: "Icon Emoji",
+    //               type: "string",
+    //             }),
+    //             defineField({ name: "title", title: "Title", type: "string" }),
+    //             defineField({
+    //               name: "description",
+    //               title: "Description",
+    //               type: "text",
+    //             }),
+    //             defineField({
+    //               name: "cardlink",
+    //               title: "Card Link",
+    //               type: "string",
+    //             }),
+    //           ],
+    //         }),
+    //       ],
+    //     }),
+    //   ],
+    // }),
+
+    //Service Box
     defineField({
-      name: "clientReviews",
-      title: "Client Reviews",
+      name: "serviceHeading",
+      title: "Service Heading",
+      type: "string",
+    }),
+    defineField({
+      name: "serviceBox",
+      title: "Service Box",
       type: "array",
       of: [
-        defineField({
+        {
           type: "object",
           fields: [
-            defineField({
-              name: "clientReviewTitle",
-              title: "Client Review Title",
+            {
+              name: "boxUrl",
+              title: "Service Box URL",
+              type: "url",
+              validation: (Rule) =>
+                Rule.uri({
+                  scheme: ["http", "https", "mailto", "tel"],
+                }),
+            },
+            {
+              name: "serviceBoxImg",
+              title: "Service Box Img",
+              type: "image",
+            },
+            {
+              name: "serviceBoxTitle",
+              title: "Service Box Title",
               type: "string",
-            }),
-            defineField({
-              name: "clientReviewNumber",
-              title: "Client Review Number",
-              type: "string",
-            }),
-            defineField({
-              name: "gradient",
-              title: "Gradient",
-              type: "string",
-            }),
+            },
           ],
-        }),
+        },
       ],
     }),
-
     defineField({
-      name: "activitiesOutcomes",
-      title: "Activities and Outcomes",
-      type: "object",
-      fields: [
-        defineField({ name: "heading", title: "Heading", type: "string" }),
-        defineField({
-          name: "subheading",
-          title: "Subheading",
-          type: "string",
-        }),
-        defineField({
-          name: "cards",
-          title: "Cards",
-          type: "array",
-          of: [
-            defineField({
-              type: "object",
-              fields: [
-                defineField({
-                  name: "icon",
-                  title: "Icon Emoji",
-                  type: "string",
-                }),
-                defineField({ name: "title", title: "Title", type: "string" }),
-                defineField({
-                  name: "description",
-                  title: "Description",
-                  type: "text",
-                }),
-                defineField({
-                  name: "cardlink",
-                  title: "Card Link",
-                  type: "string",
-                }),
-              ],
-            }),
-          ],
-        }),
-        defineField({
-          name: "cta",
-          title: "CTA Section",
-          type: "object",
-          fields: [
-            defineField({
-              name: "buttonText",
-              title: "Button Text",
-              type: "string",
-            }),
-            defineField({ name: "image", title: "Image", type: "image" }),
-          ],
-        }),
-      ],
+      name: "home_services_cta",
+      title: "Service CTA",
+      type: "string",
     }),
 
-    defineField({
-      name: "professionals",
-      title: "Professionals Carousel",
-      type: "array",
-      of: [
-        defineField({
-          type: "object",
-          fields: [
-            defineField({ name: "title", title: "Title", type: "string" }),
-            defineField({
-              name: "subtitle",
-              title: "Subtitle",
-              type: "string",
-            }),
-            defineField({ name: "image", title: "Image", type: "image" }),
-            defineField({
-              name: "bgColor",
-              title: "Background Color",
-              type: "string",
-            }),
-            defineField({
-              name: "textColor",
-              title: "Text Color",
-              type: "string",
-            }),
-          ],
-        }),
-      ],
-    }),
-
+    // Why Work With us
     defineField({
       name: "whyWorkWithUs",
       title: "Why Work With Us Section",
@@ -216,69 +197,6 @@ export const serviceType = defineType({
           ],
         }),
         defineField({ name: "image", title: "Image", type: "image" }),
-      ],
-    }),
-
-    defineField({
-      name: "trustSection",
-      title: "Trust Section",
-      type: "object",
-      fields: [
-        defineField({ name: "title", title: "Title", type: "string" }),
-        defineField({ name: "subtitle", title: "Subtitle", type: "string" }),
-      ],
-    }),
-    defineField({
-      name: "visualConcepts",
-      title: "Visual Concepts Section",
-      type: "array",
-      of: [
-        defineField({
-          type: "object",
-          fields: [
-            defineField({ name: "title", title: "Title", type: "string" }),
-            defineField({
-              name: "description",
-              title: "Description",
-              type: "text",
-            }),
-            defineField({ name: "image", title: "Image", type: "image" }),
-          ],
-        }),
-      ],
-    }),
-
-    defineField({
-      name: "followingSteps",
-      title: "Following Steps Section",
-      type: "object",
-      fields: [
-        defineField({ name: "title", title: "Title", type: "string" }),
-        defineField({
-          name: "description",
-          title: "Description",
-          type: "text",
-        }),
-        defineField({
-          name: "buttons",
-          title: "Buttons",
-          type: "array",
-          of: [defineField({ type: "string" })],
-        }),
-      ],
-    }),
-
-    defineField({
-      name: "finalCTA",
-      title: "Final Call to Action",
-      type: "object",
-      fields: [
-        defineField({
-          name: "buttonText",
-          title: "Button Text",
-          type: "string",
-        }),
-        defineField({ name: "title", title: "Title", type: "string" }),
       ],
     }),
   ],

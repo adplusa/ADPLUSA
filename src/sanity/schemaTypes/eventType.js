@@ -175,35 +175,18 @@ export const eventType = defineType({
     }),
 
     // TEXT SLIDER
-    // defineField({
-    //   name: "sliderTextOne",
-    //   title: "Slider Text One",
-    //   type: "string",
-    // }),
-    // defineField({
-    //   name: "sliderTextTwo",
-    //   title: "Slider Text Two",
-    //   type: "string",
-    // }),
-    // {
-    //   name: "sliderImage",
-    //   title: "Slider Image",
-    //   type: "image",
-    // },
     defineField({
       name: "sliderTextOne",
       title: "Slider Text One",
       type: "string",
       description: "First line of text for the scrolling marquee",
     }),
-
     defineField({
       name: "sliderTextTwo",
       title: "Slider Text Two",
       type: "string",
       description: "Second line of text for the scrolling marquee",
     }),
-
     defineField({
       name: "sliderImage",
       title: "Slider Icon/Image",
@@ -370,7 +353,6 @@ export const eventType = defineType({
               title: "Founder Name",
               type: "string",
             },
-
             {
               name: "position",
               title: "Position",
@@ -378,8 +360,18 @@ export const eventType = defineType({
             },
 
             {
-              name: "founderImage",
-              title: "Founder Image",
+              name: "partnerLabel",
+              title: "Partner Label",
+              type: "string",
+            },
+            {
+              name: "partner",
+              title: "Partner Content",
+              type: "string",
+            },
+            {
+              name: "founderBackImage",
+              title: "Founder Background Image",
               type: "image",
               options: {
                 hotspot: true,

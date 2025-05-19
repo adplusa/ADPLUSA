@@ -8,6 +8,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { client } from "../../sanity/lib/client";
 import urlFor from "../helpers/sanity";
+import { PortableText } from "@portabletext/react";
 
 const About = () => {
   const textRef = useRef(null);

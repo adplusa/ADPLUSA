@@ -211,7 +211,7 @@
 .about-us-img img {
   width: 440px;
   height: 460px;
-  object-fit: none;
+  object-fit: contain;
 }
 
 .about-us-img video {
@@ -375,8 +375,21 @@ button.next-button:active {
 }
 
 .navigation-wrapper svg {
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
+  stroke: #000;
+}
+
+.contact-form input::placeholder {
+  font-size: 12px;
+}
+
+.partner-content {
+  margin-top: 5px !important;
+}
+
+.p-label {
+  margin-top: 10px;
 }
 
 .review-box {
@@ -455,7 +468,7 @@ svg.bi.bi-chat-quote-fill path {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: rgb(243 243 243);
+  /* background-color: rgb(243 243 243); */
   padding: 40px;
   border-radius: 12px;
   max-width: 90%;
@@ -466,12 +479,16 @@ svg.bi.bi-chat-quote-fill path {
   flex: 1;
   color: rgb(0, 0, 0);
   padding: 20px;
-  background-color: #f4f4f4;
+  /* background-color: #f4f4f4; */
   border-radius: 15px;
+  width: 100%;
+  height: auto;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .testimonial-box p {
-  font-size: 17px;
+  font-size: 15px;
   line-height: 1.4;
   text-align: left;
   color: #000;
@@ -510,7 +527,8 @@ svg.bi.bi-chat-quote-fill path {
 
 .team-img {
   border-radius: 12px;
-  max-width: 100%;
+  /* max-width: 100%; */
+  width: 400px;
   height: auto;
   position: relative;
   z-index: 1;

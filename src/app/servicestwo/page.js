@@ -210,25 +210,30 @@ const ServiceTwo = () => {
         </div>
       </div>
 
-      <div className="home_services-two">
-        <h1>What we Offer</h1>
-        <div className="home_services_box-two">
-          {servicesData.map((service, index) => (
-            <div className="service-box-two" key={index}>
-              <div className="service-image-two">
-                <Image
-                  src={service.image}
-                  alt={service.title}
-                  width={400}
-                  height={200}
-                  unoptimized
-                />
+      <div className="home_services">
+        <h1>{data.serviceHeading}</h1>
+        <div className="home_services_box">
+          {data.serviceBox?.map((service, index) => (
+            <Link href="/services" key={index}>
+              <div className="service-box-home" key={index}>
+                <div className="service-image">
+                  <Image
+                    src={urlFor(service.serviceBoxImg).url()}
+                    alt={service.serviceBoxTitle}
+                    width={400}
+                    height={200}
+                    unoptimized
+                  ></Image>
+                </div>
+                <h2>{service.serviceBoxTitle}</h2>
               </div>
-              <h2>{service.title}</h2>
-              <p>{service.category}</p>
-            </div>
+            </Link>
           ))}
         </div>
+
+        <Link className="service-cta-wrap" href={"/servicestwo"}>
+          <button className="service-cta">{data.home_services_cta}</button>
+        </Link>
       </div>
 
       {/* Why Work With Us */}

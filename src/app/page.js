@@ -753,7 +753,14 @@ export default function Home() {
                       className={`keen-slider__slide number-slide${idx + 1}`}
                     >
                       <div className="testimonial-container">
-                        <div className="testimonial-box">
+                        <div
+                          className="testimonial-box"
+                          style={{
+                            backgroundImage: founder.founderBackImage
+                              ? `url(${urlFor(founder.founderBackImage).url()})`
+                              : "none", // fallback or handle gracefully
+                          }}
+                        >
                           <h2>{founder.founderTitle}</h2>
 
                           <PortableText value={founder.founderDescription} />
@@ -774,11 +781,17 @@ export default function Home() {
                             <div>
                               <h4 className="name">{founder.founderName}</h4>
                               <p className="designation">{founder.position}</p>
+                              <h4 className="p-label">
+                                {founder.partnerLabel}
+                              </h4>
+                              <p className="partner-content">
+                                {founder.partner}
+                              </p>
                             </div>
                           </div>
                         </div>
 
-                        <div className="testimonial-image">
+                        {/* <div className="testimonial-image">
                           {founder.founderImage?.asset?._ref && (
                             <Image
                               src={urlFor(founder.founderImage).url()}
@@ -791,7 +804,7 @@ export default function Home() {
                           )}
 
                           <div className="white-box"></div>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   ))}
@@ -850,7 +863,7 @@ export default function Home() {
                           type="text"
                           name="email"
                           id="email"
-                          placeholder="Email"
+                          placeholder="Your Email"
                         />
                       </div>
                       <div className="form-fields">
@@ -859,7 +872,7 @@ export default function Home() {
                           type="text"
                           name="phone"
                           id="phone"
-                          placeholder="Phone no"
+                          placeholder="Your Phone Number"
                         />
                       </div>
                       <div className="form-fields">
@@ -868,7 +881,7 @@ export default function Home() {
                           type="text"
                           name="service"
                           id="service"
-                          placeholder="Service"
+                          placeholder="Select Service"
                         />
                       </div>
                     </div>
