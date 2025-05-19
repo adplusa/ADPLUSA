@@ -537,7 +537,7 @@ export default function Home() {
             </div>
 
             <div className="technology-we-use">
-              <h1>Technologies We Used</h1>
+              <h1>Technologies We Use</h1>
               <div className="technology-grid">
                 {homepageData[0]?.technologyImgs?.length > 0 ? (
                   homepageData[0].technologyImgs.map((img, index) => {
