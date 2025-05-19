@@ -8,7 +8,7 @@ import Footer from "../Components/Footer/page";
 import Link from "next/link";
 import { gsap, CSSPlugin, Expo } from "gsap";
 
-const page = () => {
+const Project = () => {
   const textRef = useRef(null);
 
   useEffect(() => {
@@ -294,4 +294,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Project;
