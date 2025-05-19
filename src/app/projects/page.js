@@ -1,11 +1,29 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useRef } from "react";
 import Header from "../Components/Header/page";
 import "./project.css";
 import Image from "next/image";
 import Footer from "../Components/Footer/page";
 import Link from "next/link";
+import { gsap, CSSPlugin, Expo } from "gsap";
 
 const page = () => {
+  const textRef = useRef(null);
+
+  useEffect(() => {
+    gsap.to(textRef.current, {
+      rotation: 360,
+      transformOrigin: "center",
+      repeat: -1,
+      duration: 8,
+      ease: "linear",
+    });
+  }, []);
+
+  const upwardHandler = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   return (
     <>
       <Header />
@@ -235,6 +253,42 @@ const page = () => {
         </div>
 
         <Footer />
+
+        <div className="whatsapp">
+          <a
+            className="btn-whatsapp-pulse"
+            target="_blank"
+            href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
+          >
+            <Image
+              src={"/whatsapp.png"}
+              width={40}
+              height={40}
+              alt="Whatsapp-img"
+              unoptimized
+            ></Image>
+          </a>
+        </div>
+
+        <div className="enquire">
+          <button>Enquire Now</button>
+        </div>
+
+        <div className="upward" onClick={upwardHandler}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            className="bi bi-chevron-up"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fillRule="evenodd"
+              d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"
+            />
+          </svg>
+        </div>
       </div>
     </>
   );

@@ -24,40 +24,40 @@ export const eventType = defineType({
     }),
 
     // Trust Icons
-    defineField({
-      name: "trustIconsHeading",
-      title: "Trust Icon Heading",
-      type: "string",
-    }),
-    defineField({
-      name: "serviceRelatedIcon",
-      title: "Trust icons and text",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            {
-              name: "serviceRelatedImg",
-              title: "Service Related Img",
-              type: "image",
-            },
+    // defineField({
+    //   name: "trustIconsHeading",
+    //   title: "Trust Icon Heading",
+    //   type: "string",
+    // }),
+    // defineField({
+    //   name: "serviceRelatedIcon",
+    //   title: "Trust icons and text",
+    //   type: "array",
+    //   of: [
+    //     {
+    //       type: "object",
+    //       fields: [
+    //         {
+    //           name: "serviceRelatedImg",
+    //           title: "Service Related Img",
+    //           type: "image",
+    //         },
 
-            {
-              name: "serviceRelatedNumber",
-              title: "Service Related Number",
-              type: "string",
-            },
+    //         {
+    //           name: "serviceRelatedNumber",
+    //           title: "Service Related Number",
+    //           type: "string",
+    //         },
 
-            {
-              name: "serviceRelatedName",
-              title: "Service Related Name",
-              type: "string",
-            },
-          ],
-        },
-      ],
-    }),
+    //         {
+    //           name: "serviceRelatedName",
+    //           title: "Service Related Name",
+    //           type: "string",
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // }),
     defineField({
       name: "sectionTitle",
       title: "Achievement Title",
@@ -268,6 +268,11 @@ export const eventType = defineType({
               },
             },
           ],
+          preview: {
+            select: {
+              media: "technologyImage",
+            },
+          },
         },
       ],
     }),

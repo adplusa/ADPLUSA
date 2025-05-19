@@ -113,8 +113,8 @@
 
 .achievement-text {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  /* align-items: center; */
+  justify-content: center;
   width: 100%;
 }
 
@@ -1287,7 +1287,7 @@ span.service-two-bottom-box-logo {
   margin-top: 5%;
 }
 
-.contact-container {
+.contact-container-two {
   max-width: 1200px;
   width: 100%;
   position: relative;
@@ -1595,14 +1595,14 @@ span.service-two-bottom-box-logo {
 }
 
 .technology-grid img {
-  width: 120px;
+  width: 150px;
   height: auto;
 }
 
 .technology-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  row-gap: 55%;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  row-gap: 25%;
   margin-top: 6%;
 }
 
@@ -1826,6 +1826,7 @@ span.service-two-bottom-box-logo {
 }
 
 .service-cta {
+  margin-top: 2%;
   font-size: 16px;
   padding: 5px 10px;
   background: none;
@@ -1852,18 +1853,11 @@ span.service-two-bottom-box-logo {
   z-index: -1;
 }
 
-.service-cta span {
-  position: relative;
-  z-index: 2;
-  color: var(--foreground);
-  transition: color 0.3s ease;
-}
-
 .service-cta:hover:before {
   width: 100%;
 }
 
-.service-cta:hover span {
+.service-cta:hover {
   color: white;
 }
 

@@ -818,7 +818,7 @@ export default function Home() {
             </div>
 
             <section className="contact-us">
-              <div className="contact-container">
+              <div className="contact-container-two">
                 <div className="contact-us-df">
                   <div className="contact-left">
                     {homepageData[0]?.contactUsSectionImg?.asset && (
