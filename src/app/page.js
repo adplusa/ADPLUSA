@@ -581,7 +581,7 @@ export default function Home() {
                         <div className="number">{idx + 1}</div>
                         <div>
                           <h3 className="card-title">{step.stepTitle}</h3>
-                          <p className="card-text">{step.stepText}</p>
+                          <p className="card-text-home">{step.stepText}</p>
                         </div>
                       </div>
                     ))}

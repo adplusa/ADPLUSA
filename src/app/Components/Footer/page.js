@@ -75,7 +75,10 @@ const Footer = () => {
 
         <div className="social-media">
           <span className="blue-back">
-            <a href="https://www.facebook.com/aggarwaldesignerspvt.ltd">
+            <a
+              href="https://www.facebook.com/aggarwaldesignerspvt.ltd"
+              target="_blank"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -89,7 +92,10 @@ const Footer = () => {
             </a>
           </span>
           <span className="blue-back">
-            <a href="https://www.linkedin.com/in/ar-abhishek-aggarwal-international-associate-aia-05272013b/">
+            <a
+              href="https://www.linkedin.com/in/ar-abhishek-aggarwal-international-associate-aia-05272013b/"
+              target="_blank"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -103,7 +109,10 @@ const Footer = () => {
             </a>
           </span>
           <span className="blue-back">
-            <a href="https://www.instagram.com/adplconsultingllc/">
+            <a
+              href="https://www.instagram.com/adplconsultingllc/"
+              target="_blank"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -117,7 +126,10 @@ const Footer = () => {
             </a>
           </span>
           <span className="blue-back">
-            <a href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!">
+            <a
+              href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
+              target="_blank"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
