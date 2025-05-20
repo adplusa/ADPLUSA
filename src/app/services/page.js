@@ -351,7 +351,7 @@ const Services = () => {
             <h3 className="key-card-title">Space Planning</h3>
             <p className="key-card-description">
               Explore different layouts and spatial configurations to determine
-              how the building's functions will be organized.
+              how the buildings functions will be organized.
             </p>
           </div>
 
@@ -361,9 +361,9 @@ const Services = () => {
               Reshaping Possibilities: From Scan to BIM
             </h3>
             <p className="key-card-description">
-              Develop design concepts that align with the project's goals and
-              the client's vision. These concepts might involve architectural
-              styles, materials, and overall design philosophies.
+              Develop design concepts that align with the projects goals and the
+              clients vision. These concepts might involve architectural styles,
+              materials, and overall design philosophies.
             </p>
           </div>
 
