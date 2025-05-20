@@ -268,7 +268,7 @@
 .who-we-are-btn {
   display: flex;
   justify-content: center;
-  margin-top: 8%;
+  margin-top: 6%;
 }
 
 .who-we-are-btn button {
@@ -446,10 +446,6 @@ svg.bi.bi-chat-quote-fill {
   margin-top: 5%;
 }
 
-svg.bi.bi-chat-quote-fill path {
-  fill: #fff;
-}
-
 .white-box {
   position: absolute;
   top: 4%;
@@ -462,6 +458,11 @@ svg.bi.bi-chat-quote-fill path {
   transform-origin: left center; /* Anchor the left side */
   transition: all 0.8s ease;
   display: none;
+}
+
+button.next-button:hover svg,
+button.prev-button:hover svg {
+  stroke: #fff;
 }
 
 .testimonial-container {
@@ -874,50 +875,8 @@ span.service-two-bottom-box-logo {
   padding-bottom: 2%;
 }
 
-/* .strip-text {
-  opacity: 1 !important;
-}
-
-.marquee {
-  background-color: var(--backgroundColor);
-  overflow: hidden;
-  position: relative;
-  height: 50px;
-  width: 100%;
-  white-space: nowrap;
-  margin-top: 5%;
-  display: flex;
-  gap: 3%;
-  align-items: center;
-}
-
-.marquee p {
-  text-transform: capitalize;
-  word-spacing: 3px;
-  font-size: 36px;
-  font-family: "Lato-bold";
-  width: auto;
-  height: 100%;
-  margin: 0;
-  line-height: 50px;
-  text-align: center;
-  transform: translateX(100%);
-  animation: 30s linear infinite scroll-left;
-}
-
-@keyframes scroll-left {
-  0% {
-    transform: translateX(10%);
-  }
-
-  100% {
-    transform: translateX(-100%);
-  }
-} */
-
 .strip-text {
   overflow: hidden;
-  /* background-color: #902b2c; */
   color: #000000;
   padding: 12px 0;
   white-space: nowrap;
@@ -926,7 +885,7 @@ span.service-two-bottom-box-logo {
 .marquee {
   display: flex;
   width: max-content;
-  animation: marqueeScroll 20s linear infinite;
+  animation: marqueeScroll 10s linear infinite;
   gap: 15px;
 }
 
@@ -953,7 +912,7 @@ span.service-two-bottom-box-logo {
     transform: translateX(0%);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translateX(-35%);
   }
 }
 

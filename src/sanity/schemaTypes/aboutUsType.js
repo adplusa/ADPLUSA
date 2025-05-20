@@ -58,7 +58,6 @@ export const aboutPage = defineType({
               title: "Section Content",
               type: "text",
             }),
-
             defineField({
               name: "image",
               title: "Section Image",

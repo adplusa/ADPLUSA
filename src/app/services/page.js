@@ -1,10 +1,15 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect, useRef } from "react";
 import "./services.css";
 import Image from "next/image";
 import Header from "../Components/Header/page";
 import Footer from "../Components/Footer/page";
 
 const Services = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const slideRef = useRef(null);
+  const intervalRef = useRef(null);
+
   const services = [
     {
       title: "Schematic Design (SD)",
@@ -48,6 +53,131 @@ const Services = () => {
         "Description for As Built Conversion from Scanning or Measurement",
     },
   ];
+
+  const professionals = [
+    {
+      id: 1,
+      title: "Landscape Design Services",
+      image: "./cad-2.webp",
+    },
+    {
+      id: 2,
+      title: "BIM Modeler Services",
+      image: "./cad-3.webp",
+    },
+    {
+      id: 3,
+      title: "Revit Architecture Services",
+      image: "./cad-4.webp",
+    },
+    {
+      id: 4,
+      title: "Remote Executive Assistant",
+      image: "./cad-5.webp",
+    },
+  ];
+
+  const allSlides = [...professionals, ...professionals];
+
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) => {
+      let nextIndex = prevIndex + 1;
+
+      // When we reach the duplicate section, seamlessly jump back to the original
+      if (nextIndex >= professionals.length) {
+        // We don't immediately set to 0, but will do it after transition ends
+        return nextIndex;
+      }
+
+      return nextIndex;
+    });
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) => {
+      let nextIndex = prevIndex - 1;
+
+      // When we go below 0, seamlessly jump to the end of original section
+      if (nextIndex < 0) {
+        // We handle this as a special case in the useEffect
+        return nextIndex;
+      }
+
+      return nextIndex;
+    });
+  };
+
+  // Reset slide position after transition when needed
+  useEffect(() => {
+    if (currentIndex >= professionals.length) {
+      // Wait for transition to complete before resetting
+      const timer = setTimeout(() => {
+        // Disable transition temporarily
+        if (slideRef.current) {
+          slideRef.current.style.transition = "none";
+          setCurrentIndex(currentIndex - professionals.length);
+
+          // Re-enable transition after the reset
+          setTimeout(() => {
+            if (slideRef.current) {
+              slideRef.current.style.transition = "transform 0.5s ease";
+            }
+          }, 50);
+        }
+      }, 500); // This should match the CSS transition time
+      return () => clearTimeout(timer);
+    }
+
+    // Handle wrapping from beginning to end
+    if (currentIndex < 0) {
+      // Wait for transition to complete before resetting
+      const timer = setTimeout(() => {
+        // Disable transition temporarily
+        if (slideRef.current) {
+          slideRef.current.style.transition = "none";
+          setCurrentIndex(professionals.length - 1);
+
+          // Re-enable transition after the reset
+          setTimeout(() => {
+            if (slideRef.current) {
+              slideRef.current.style.transition = "transform 0.5s ease";
+            }
+          }, 50);
+        }
+      }, 500); // This should match the CSS transition time
+      return () => clearTimeout(timer);
+    }
+  }, [currentIndex, professionals.length]);
+
+  // Auto-play effect
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      nextSlide();
+    }, 3000);
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+
+  // Pause auto-play on hover
+  const pauseAutoPlay = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+  };
+
+  // Resume auto-play when not hovering
+  const resumeAutoPlay = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    intervalRef.current = setInterval(() => {
+      nextSlide();
+    }, 3000);
+  };
 
   const serviceTwo = [
     { title: "Engineering", color: "#ffbdf4" },
@@ -174,80 +304,182 @@ const Services = () => {
         </div>
       </section>
 
-      {/* <section className="service-info">
+      <section className="service-info">
         <div className="service-info-df">
           <div className="service-left">
-            <h1>Let us help you with your architecture outsourcing needs</h1>
+            <h1>Transforming Ideas into Visual Concepts</h1>
             <p>
-              Is it possible to quickly hire cost-effective architecture
-              professionals without compromising quality results?
-            </p>
-            <h4>With WorldTeams it is.</h4>
-            <p>
-              The help you need, when you need it. We have remote architects to
-              assist in all parts of the production ecosystem. From models and
-              renders to full-time staff architects or project managers: let us
-              help you make it happen.
+              At WorldTeams, we care about the initial stage of the construction
+              process by selecting the best talents who convert ideas into rough
+              sketches, diagrams, and basic layouts. The primary goal of the
+              Schematic Design phase is to explore and define a project’s
+              overall design direction while considering the client’s
+              requirements, functional needs, site conditions, and budget
+              constraints.
             </p>
           </div>
           <div className="service-right">
             <Image
-              src={"/service-2.webp"}
+              src={"/service-img-1.webp"}
               alt="img"
               width={0}
               height={0}
               unoptimized
             ></Image>
           </div>
-        </div>
-        <div className="service-info-df rotate">
-          <div className="service-left">
-            <h1>Architecture Outsourcing Services</h1>
-            <p>
-              Outsourcing architectural services involves delegating specific
-              architectural design services traditionally performed in-house to
-              a qualified external team. This can encompass various tasks, from
-              creating detailed construction drawings and 3D renderings to
-              <a href="#"> Building Information Modeling (BIM)</a> and project
-              management. Architectural firms can choose to outsource to
-              domestic or international partners, depending on the project needs
-              and expertise required.
-            </p>
-
-            <p>
-              TWhile architectural design is a crucial component of the
-              outsourcing boom, it’s important to recognize the broader impact.
-              When we talk about architectural outsourcing services, we’re not
-              just talking about aesthetics. We’re encompassing the entire
-              spectrum of architectural expertise, from meticulous planning and
-              technical drawings to specialized engineering and construction
-              management.
-            </p>
-          </div>
-          <div className="service-right">
-            <Image
-              src={"/service-3.webp"}
-              alt="img"
-              width={0}
-              height={0}
-              unoptimized
-            ></Image>
-          </div>
-        </div>
-      </section> */}
-
-      <section className="sepecialize">
-        <div className="sepecialize-df">
-          <h1>We specialize in outsourcing architectural services</h1>
-          <p>
-            to help you access a global pool of talented architects, ensuring
-            access to the most qualified professionals for your specific project
-            requirements, regardless of location.
-          </p>
         </div>
       </section>
 
-      <div className="what-we-offer-container">
+      <div className="key-container">
+        <h1 className="key-heading">Key activities and outcomes</h1>
+        <h2 className="key-subheading">
+          of the Schematic Design Architecture phase typically include:
+        </h2>
+
+        <div className="key-cards-container">
+          <div className="key-card">
+            <div className="key-asterisk">*</div>
+            <h3 className="key-card-title">Site Analysis</h3>
+            <p className="key-card-description">
+              Understand the site conditions, context, and constraints that
+              might impact the design.
+            </p>
+          </div>
+
+          <div className="key-card">
+            <div className="key-asterisk">*</div>
+            <h3 className="key-card-title">Space Planning</h3>
+            <p className="key-card-description">
+              Explore different layouts and spatial configurations to determine
+              how the building's functions will be organized.
+            </p>
+          </div>
+
+          <div className="key-card">
+            <div className="key-asterisk">*</div>
+            <h3 className="key-card-title">
+              Reshaping Possibilities: From Scan to BIM
+            </h3>
+            <p className="key-card-description">
+              Develop design concepts that align with the project's goals and
+              the client's vision. These concepts might involve architectural
+              styles, materials, and overall design philosophies.
+            </p>
+          </div>
+
+          <div className="key-card">
+            <div className="key-asterisk">*</div>
+            <h3 className="key-card-title">Rough Sketches and Diagrams</h3>
+            <p className="key-card-description">
+              Create rough hand sketches, diagrams, and basic drawings to
+              communicate design ideas.
+            </p>
+          </div>
+
+          <div className="key-card">
+            <div className="key-asterisk">*</div>
+            <h3 className="key-card-title">Preliminary Drawings</h3>
+            <p className="key-card-description">
+              Generate preliminary floor plans, elevations, and sections that
+              give a basic understanding of the design.
+            </p>
+          </div>
+
+          <div className="key-card">
+            <div className="key-asterisk">*</div>
+            <h3 className="key-card-title">Design Presentations</h3>
+            <p className="key-card-description">
+              Share the design concepts with the client for feedback and
+              refinement.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <section className="sepecialize">
+        <div className="sepecialize-df">
+          <div className="specialize-left">
+            <button>Reduce labor cost by 40%</button>
+          </div>
+          <div className="specialize-right">
+            <Image
+              src={"/service-img-4.webp"}
+              width={0}
+              height={0}
+              unoptimized
+              alt="img"
+            ></Image>
+          </div>
+        </div>
+      </section>
+
+      <section className="why-work">
+        <div className="content-two">
+          {/* Text Section */}
+          <div className="text">
+            <h2>Why work with us?</h2>
+
+            <div className="feature">
+              <div className="icon">✔️</div>
+              <div className="info">
+                <h3>Cost Effective</h3>
+                <p>
+                  Hiring highly-skilled nearshore talent unlocks cost savings of
+                  50% compared to US-based professionals
+                </p>
+              </div>
+            </div>
+
+            <div className="feature">
+              <div className="icon">✔️</div>
+              <div className="info">
+                <h3>Flexible contracts</h3>
+                <p>
+                  You can choose your type of contract: full, part or flex and
+                  switch between these options with no strings attached
+                </p>
+              </div>
+            </div>
+
+            <div className="feature">
+              <div className="icon">✔️</div>
+              <div className="info">
+                <h3>HR department of your dreams</h3>
+                <p>
+                  Our pre-screening ensures we present only motivated candidates
+                  aligned with your culture and an onboarding process in just 72
+                  hours!
+                </p>
+              </div>
+            </div>
+
+            <div className="feature">
+              <div className="icon">✔️</div>
+              <div className="info">
+                <h3>100% satisfaction guaranteed</h3>
+                <p>
+                  If you’re not satisfied, we’ll give your money back – no
+                  questions asked
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Image Section */}
+          <div className="image-wrapper">
+            <div className="background">
+              <Image
+                src="/abhi.jpg"
+                alt="Why Work With Us"
+                width="500"
+                height="400"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* <div className="what-we-offer-container">
         <h2 className="section-title">What we offer</h2>
         <p className="section-subtitle">
           Our top architecture outsourcing services
@@ -255,14 +487,13 @@ const Services = () => {
         <div className="service-boxes">
           {serviceTwo.map((service, index) => (
             <div
-              key={index} // <-- ✅ Added key
+              key={index} 
               className="service-box"
-              id={`service-box-${index + 1}`} // <-- ✅ Fixed string interpolation
-              style={{ backgroundColor: service.color }} // (Optional) If you want to use the color
+              id={`service-box-${index + 1}`} 
+              style={{ backgroundColor: service.color }} 
             >
               <div className="service-box-inner">
                 <h3 className="service-title">{service.title}</h3>
-                {/* <p className="service-description">{service.description}</p> */}
               </div>
             </div>
           ))}
@@ -270,9 +501,9 @@ const Services = () => {
         <div className="offer-cta">
           <button>Hire an architect</button>
         </div>
-      </div>
+      </div> */}
 
-      <div className="outsourcing-container">
+      {/* <div className="outsourcing-container">
         <h2 className="section-title">Why Choose Architecture Outsourcing?</h2>
         <div className="outsourcing-boxes">
           {reasons.map((reason, index) => (
@@ -282,9 +513,9 @@ const Services = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
-      <div className="outsourcing-container-two">
+      {/* <div className="outsourcing-container-two">
         <div className="text-container">
           <p className="intro-text">
             There are many reasons why{" "}
@@ -332,22 +563,50 @@ const Services = () => {
             unoptimized
           ></Image>
         </div>
-      </div>
+      </div> */}
 
       <div className="cta-container-df">
         <div className="cta-container">
           <div className="cta-text">
-            <h2>At WorldTeams,</h2>
-            <p>
-              we streamline recruitment, allowing you to find and hire top
-              architects efficiently. Let us help you make it happen.
-            </p>
+            <h2>At WorldTeams</h2>
           </div>
-          <button className="cta-button">Hire an architect</button>
+          <button className="cta-button">Need Help</button>
         </div>
       </div>
 
-      <div className="most-wanter">
+      <div className="professionals-section">
+        <h1 className="professionals-heading">
+          Explore other Most Wanted Professionals
+        </h1>
+
+        <div
+          className="carousel-container"
+          onMouseEnter={pauseAutoPlay}
+          onMouseLeave={resumeAutoPlay}
+        >
+          <div
+            className="carousel-slides"
+            ref={slideRef}
+            style={{ transform: `translateX(-${currentIndex * 25}%)` }}
+          >
+            {allSlides.map((professional, index) => (
+              <div
+                key={`${professional.id}-${index}`}
+                className="carousel-slide"
+              >
+                <div className="professional-card">
+                  <div className="image-container">
+                    <img src={professional.image} alt={professional.title} />
+                  </div>
+                  <h3>{professional.title}</h3>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="most-wanter">
         <h1>Most Wanted Architecture Professionals</h1>
         <div className="wanted-box-df">
           <div className="wanted-box">
@@ -366,8 +625,8 @@ const Services = () => {
             <h3>Senior Revit Architect</h3>
           </div>
         </div>
-      </div>
-
+      </div> */}
+      {/* 
       <div className="why-work-container">
         <div className="text-container">
           <h2 className="title">Why work with us?</h2>
@@ -394,8 +653,8 @@ const Services = () => {
             unoptimized
           ></Image>
         </div>
-      </div>
-
+      </div> */}
+      {/* 
       <div className="cta-container-df" id="cta-small-parent">
         <div className="cta-container" id="cta-small">
           <div className="cta-text">
@@ -403,9 +662,9 @@ const Services = () => {
           </div>
           <button className="cta-button">Hire an Architect Now</button>
         </div>
-      </div>
+      </div> */}
 
-      <div className="stay-updated">
+      {/* <div className="stay-updated">
         <h2 className="section-title">Stay Updated</h2>
         <div className="cards-container">
           {articles.map((article, index) => (
@@ -425,9 +684,9 @@ const Services = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
-      <div className="other-services-container">
+      {/* <div className="other-services-container">
         <h2 className="other-title">Our Other Services</h2>
         <div className="services-container">
           {serviceTwo.map((service, index) => (
@@ -441,7 +700,7 @@ const Services = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       <Footer />
     </>

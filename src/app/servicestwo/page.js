@@ -230,10 +230,6 @@ const ServiceTwo = () => {
             </Link>
           ))}
         </div>
-
-        <Link className="service-cta-wrap" href={"/servicestwo"}>
-          <button className="service-cta">{data.home_services_cta}</button>
-        </Link>
       </div>
 
       {/* Why Work With Us */}

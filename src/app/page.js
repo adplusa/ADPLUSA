@@ -231,9 +231,9 @@ export default function Home() {
     },
   ];
 
-  const [artistData, setArtistData] = useState(null);
   const [homepageData, setHomepageData] = useState(null);
 
+  // Home Sanity Fetch Data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -268,6 +268,7 @@ export default function Home() {
     fetchData();
   }, []);
 
+  // Banner for Light and Dark Mode
   useEffect(() => {
     if (homepageData?.[0]) {
       const lightImg = urlFor(homepageData[0].lightModeImage).url();
@@ -315,6 +316,7 @@ export default function Home() {
     setIndex(newIndex);
   };
 
+  // Intro Animation
   useEffect(() => {
     const interval = setInterval(() => {
       setCounter((prev) => (prev < 100 ? prev + 5 : 100));
@@ -606,12 +608,6 @@ export default function Home() {
               </div>
             </section>
 
-            {/* <div className="strip-text">
-              <div className="marquee">
-                <p>{homepageData[0].sliderTextOne}</p>
-                <p>{homepageData[0].sliderTextTwo}</p>
-              </div>
-            </div> */}
             <div className="strip-text">
               <div className="marquee">
                 <div className="marquee-item">
@@ -634,7 +630,6 @@ export default function Home() {
                     />
                   )}
                 </div>
-                {/* duplicate for infinite scroll effect */}
                 <div className="marquee-item">
                   <h1>{homepageData[0]?.sliderTextOne}</h1>
                   {homepageData[0]?.sliderImage && (
@@ -673,7 +668,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="who-we-are-btn">
-                <Link href="#">
+                <Link href="/about">
                   <button>
                     <span>{homepageData[0].ctaButton}</span>
                   </button>
