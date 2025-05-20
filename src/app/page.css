@@ -473,18 +473,20 @@ svg.bi.bi-chat-quote-fill path {
   border-radius: 12px;
   max-width: 90%;
   position: relative;
+  width: 100%;
+  height: 500px;
+  background-position: top center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.9;
 }
 
 .testimonial-box {
   flex: 1;
   color: rgb(0, 0, 0);
   padding: 20px;
-  /* background-color: #f4f4f4; */
+  max-width: 50%;
   border-radius: 15px;
-  width: 100%;
-  height: auto;
-  background-size: cover;
-  background-repeat: no-repeat;
 }
 
 .testimonial-box p {

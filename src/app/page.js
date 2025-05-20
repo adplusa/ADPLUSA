@@ -752,15 +752,15 @@ export default function Home() {
                       key={idx}
                       className={`keen-slider__slide number-slide${idx + 1}`}
                     >
-                      <div className="testimonial-container">
-                        <div
-                          className="testimonial-box"
-                          style={{
-                            backgroundImage: founder.founderBackImage
-                              ? `url(${urlFor(founder.founderBackImage).url()})`
-                              : "none", // fallback or handle gracefully
-                          }}
-                        >
+                      <div
+                        className="testimonial-container"
+                        style={{
+                          backgroundImage: founder.founderBackImage
+                            ? `url(${urlFor(founder.founderBackImage).url()})`
+                            : "none", // fallback or handle gracefully
+                        }}
+                      >
+                        <div className="testimonial-box">
                           <h2>{founder.founderTitle}</h2>
 
                           <PortableText value={founder.founderDescription} />
