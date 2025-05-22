@@ -1,86 +1,68 @@
-.project-container {
+/* .project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(350px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+  padding: 50px;
+} */
+
+.project-content {
   margin-top: 10%;
-  padding: 0 3%;
 }
 
-.project-content h1 {
-  font-size: 1.3rem;
-  margin-top: 10px;
+.project-heading {
+  margin: 3%;
 }
 
 #project-hr {
   margin-top: 3%;
 }
 
-.project-images {
-  position: relative;
-  overflow: hidden;
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  padding: 40px 30px;
 }
 
-/* .project-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
+@media (max-width: 1024px) {
+  .project-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.project-tile {
+  text-align: center;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.image-wrapper-pr {
+  width: 100%;
+  aspect-ratio: 4 / 3; /* Maintains same height across */
+  overflow: hidden;
+  border-radius: 8px;
+  position: relative;
+}
+
+.image-wrapper-pr img {
   width: 100%;
   height: 100%;
-  background-color: #000;
-  opacity: 0;
-  color: #fff;
-  justify-content: center;
-  display: flex;
-  align-items: center;
-  transition: all 0.3s ease;
-} */
-
-/* .project-images:hover .project-overlay {
-  opacity: 0.6;
-} */
-
-.pr-img {
-  transition: all 0.3s ease-in;
-}
-
-/* .project-images:hover .pr-img {
-  transform: scale(1.1);
-} */
-
-.project-overlay h1 {
-  font-size: 20px;
-}
-
-.project-img-row-one,
-.project-img-row-two,
-.project-img-row-three,
-.project-img-row-four {
-  display: flex;
-  gap: 2%;
-  justify-content: space-between;
-}
-
-.project-img-row-two img,
-.project-img-row-three img,
-.project-img-row-four img {
-  width: 430px;
-  height: 350px;
-}
-.project-img-row-two,
-.project-img-row-three,
-.project-img-row-four {
-  margin-top: 3%;
-}
-
-.project-img img {
   object-fit: cover;
+  display: block;
 }
 
-.project-img {
-  margin-top: 3%;
-}
-
-.project-content {
-  overflow-x: hidden;
-}
-
-.project-img-row-one {
-  display: none;
+.image-title {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #000000;
+  text-align: left;
 }

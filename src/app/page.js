@@ -21,6 +21,24 @@ import { Fragment } from "react";
 
 gsap.registerPlugin(CSSPlugin);
 
+const slides = [
+  {
+    id: 1,
+    title: "Slide One",
+    image: "/project-img3.jpg",
+  },
+  {
+    id: 2,
+    title: "Slide Two",
+    image: "/project-img2.jpg",
+  },
+  {
+    id: 3,
+    title: "Slide Three",
+    image: "/project-img4.jpg",
+  },
+];
+
 const steps = [
   {
     id: "01",
@@ -94,6 +112,13 @@ const servicesData = [
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
+  const [currentSlideHeroBanner, setCurrentSlideHeroBanner] = useState(0);
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const [isLeftHalf, setIsLeftHalf] = useState(true);
+  const [showCustomCursor, setShowCustomCursor] = useState(false);
+  const [cursorPosSecond, setCursorPosSecond] = useState({ x: 0, y: 0 });
+  const [renderCursorPos, setRenderCursorPos] = useState({ x: 0, y: 0 });
+
   const [loading, setLoading] = useState(true);
   const [counter, setCounter] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -424,6 +449,59 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  /// For HeroBanner Slider Buttons
+  const prevSlide = () => {
+    setCurrentSlideHeroBanner(
+      (prev) => (prev - 1 + slides.length) % slides.length
+    );
+  };
+
+  const nextSlide = () => {
+    setCurrentSlideHeroBanner((prev) => (prev + 1) % slides.length);
+  };
+
+  const handleMouseMove = (e) => {
+    const bounds = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - bounds.left;
+    const y = e.clientY - bounds.top;
+
+    const leftHalf = x < bounds.width / 2;
+
+    setCursorPos({ x, y });
+    setIsLeftHalf(leftHalf);
+
+    console.log({ x, y }, "isLeftHalf:", leftHalf);
+  };
+
+  const handleMouseEnter = () => setShowCustomCursor(true);
+  const handleMouseLeave = () => setShowCustomCursor(false);
+
+  const handleClick = () => {
+    if (isLeftHalf) {
+      prevSlide();
+    } else {
+      nextSlide();
+    }
+  };
+
+  useEffect(() => {
+    let animationFrame;
+
+    const lerp = (a, b, n) => a + (b - a) * n;
+
+    const animate = () => {
+      setRenderCursorPos((prev) => ({
+        x: lerp(prev.x, cursorPos.x, 0.1), // adjust 0.1 for speed (lower = smoother/slower)
+        y: lerp(prev.y, cursorPos.y, 0.1),
+      }));
+      animationFrame = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => cancelAnimationFrame(animationFrame);
+  }, [cursorPos]);
+
   return (
     <>
       {loading ? (
@@ -461,6 +539,85 @@ export default function Home() {
               }}
             >
               <div className="overlay"></div>
+            </div>
+
+            <div
+              className="animation-slider"
+              onMouseMove={handleMouseMove}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              onClick={() => {
+                isLeftHalf ? prevSlide() : nextSlide();
+              }}
+            >
+              <div
+                className="animation-slider-df"
+                style={{
+                  transform: `translateX(-${currentSlideHeroBanner * 100}%)`,
+                }}
+              >
+                {slides.map((slide, index) => (
+                  <div
+                    key={index}
+                    className="animate-back-img"
+                    style={{ backgroundImage: `url(${slide.image})` }}
+                  ></div>
+                ))}
+              </div>
+
+              {showCustomCursor && (
+                <div
+                  className={`custom-cursor ${isLeftHalf ? "left-btn" : "right-btn"}`}
+                  style={{
+                    left: `${renderCursorPos.x}px`,
+                    top: `${renderCursorPos.y}px`,
+                    transform: "translate(-50%, -50%)",
+                  }}
+                >
+                  <span>
+                    {isLeftHalf ? (
+                      <svg
+                        id="left-btn-hero"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="bi bi-chevron-left"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        id="right-btn-hero"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="bi bi-chevron-right"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+                        />
+                      </svg>
+                    )}
+                  </span>
+                </div>
+              )}
+              <div className="slider-dots">
+                {slides.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`dot ${index === currentSlideHeroBanner ? "active" : ""}`}
+                    onClick={() => setCurrentSlideHeroBanner(index)}
+                  ></button>
+                ))}
+              </div>
             </div>
 
             <div className="feature-section">

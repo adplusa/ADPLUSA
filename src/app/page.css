@@ -7,6 +7,7 @@
   position: relative;
   opacity: 1 !important;
   margin-top: 6%;
+  display: none;
 }
 
 .overlay {
@@ -1926,4 +1927,121 @@ span.service-two-bottom-box-logo {
 
 #practice-content {
   right: 0;
+}
+
+.animation-slider {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin-top: 5%;
+}
+
+.animation-slider-df {
+  display: flex;
+  transition: transform 1.3s ease-in-out;
+  width: 100%;
+}
+
+.animate-back-img {
+  flex: 0 0 100%;
+  height: 650px;
+  background-size: cover;
+  background-position: center;
+  animation: fadeInSlide 0.5s ease-in-out;
+}
+
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: scale(0.98) translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+  }
+}
+
+.nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 1;
+  transition: all 1s ease;
+}
+
+.nav-button:first-of-type {
+  left: 10px;
+}
+
+.nav-button:last-of-type {
+  right: 10px;
+}
+
+.custom-cursor {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: rgba(169, 61, 61, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  transition: background 0.3s ease;
+}
+
+.custom-cursor span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0; /* Prevents spacing/misrendering */
+}
+
+.custom-cursor svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+  pointer-events: none;
+  flex-shrink: 0;
+  fill: white;
+}
+
+.animation-slider {
+  cursor: none;
+}
+
+.slider-dots {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  z-index: 10;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: white;
+  opacity: 0.6;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dot.active {
+  width: 13px;
+  height: 13px;
+  background-color: white;
+  border: 2px solid white;
+  opacity: 1;
 }

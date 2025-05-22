@@ -1,259 +1,88 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Header from "../Components/Header/page";
-import "./project.css";
-import Image from "next/image";
 import Footer from "../Components/Footer/page";
+import Image from "next/image";
 import Link from "next/link";
-import { gsap, CSSPlugin, Expo } from "gsap";
+import { gsap } from "gsap";
+import { client } from "@/sanity/lib/client";
+import urlFor from "../helpers/sanity";
+import "./project.css";
 
 const Project = () => {
   const textRef = useRef(null);
+  const [data, setData] = useState(null);
 
+  // 🧠 Fetch Sanity CMS data
   useEffect(() => {
-    gsap.to(textRef.current, {
-      rotation: 360,
-      transformOrigin: "center",
-      repeat: -1,
-      duration: 8,
-      ease: "linear",
-    });
+    const fetchData = async () => {
+      try {
+        const fetched = await client.fetch(`*[_type == "projectPage"]`);
+        setData(fetched);
+      } catch (error) {
+        console.error("Error fetching project data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
+
+  // 🎞️ GSAP rotation
+  // useEffect(() => {
+  //   if (textRef.current) {
+  //     gsap.to(textRef.current, {
+  //       rotation: 360,
+  //       transformOrigin: "center",
+  //       repeat: -1,
+  //       duration: 8,
+  //       ease: "linear",
+  //     });
+  //   }
+  // }, []);
 
   const upwardHandler = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  if (!data) return <div>Loading...</div>;
+
   return (
     <>
       <Header />
+
       <div className="project-container">
         <div className="project-content">
-          <h1>Projects</h1>
+          <div className="project-heading">
+            <h1 ref={textRef}>{data[0].heading}</h1>
+            <hr id="project-hr" />
+          </div>
 
-          <hr id="project-hr" />
-
-          <div className="project-img">
-            {/* <div className="project-img-row-one">
-              <Link href="/projects/project-internal-one">
-                <div className="project-images">
-                  <span className="project-relative">
-                    <Image
-                      className="pr-img"
-                      src={"/project-img4.jpg"}
-                      alt="project-img"
-                      width={430}
-                      height={600}
-                      unoptimized
-                      priority
-                    ></Image>
-                    <span className="project-overlay"></span>
-                  </span>
-                  <h1>The Iconic Arrival</h1>
+          <div className="project-grid">
+            {data[0].projects?.map((item, index) => (
+              <Link
+                href={item.link || "#"}
+                key={index}
+                className="project-tile"
+              >
+                <div className="image-wrapper-pr">
+                  <Image
+                    src={urlFor(item.image).url()}
+                    alt={item.title}
+                    fill
+                    unoptimized
+                    priority
+                  />
                 </div>
+                <p className="image-title">{item.title}</p>
               </Link>
-
-              <Link href="/projects/project-internal-two">
-                <div className="project-images">
-                  <span className="project-relative">
-                    <Image
-                      className="pr-img"
-                      src={"/project-img2.jpg"}
-                      alt="project-img"
-                      width={890}
-                      height={600}
-                      unoptimized
-                      priority
-                    ></Image>
-                    <span className="project-overlay">
-                      <h1>PICAC Brunswick</h1>
-                    </span>
-                  </span>
-                </div>
-              </Link>
-            </div>
-
-            <div className="project-img-row-two">
-              <Link href="#">
-                <div className="project-images">
-                  <span className="project-relative">
-                    <Image
-                      className="pr-img"
-                      src={"/project-img1.jpg"}
-                      alt="project-img"
-                      width={0}
-                      height={0}
-                      unoptimized
-                      priority
-                    ></Image>
-                    <span className="project-overlay">
-                      <h1>Image Text</h1>
-                    </span>
-                  </span>
-                </div>
-              </Link>
-
-              <Link href="#">
-                <div className="project-images">
-                  <span className="project-relative">
-                    <Image
-                      className="pr-img"
-                      src={"/project-img1.jpg"}
-                      alt="project-img"
-                      width={0}
-                      height={0}
-                      unoptimized
-                      priority
-                    ></Image>
-                    <span className="project-overlay">
-                      <h1>Image Text</h1>
-                    </span>
-                  </span>
-                </div>
-              </Link>
-
-              <Link href="#">
-                <div className="project-images">
-                  <span className="project-relative">
-                    <Image
-                      className="pr-img"
-                      src={"/project-img1.jpg"}
-                      alt="project-img"
-                      width={0}
-                      height={0}
-                      unoptimized
-                      priority
-                    ></Image>
-                    <span className="project-overlay">
-                      <h1>Image Text</h1>
-                    </span>
-                  </span>
-                </div>
-              </Link>
-            </div> */}
-
-            <div className="project-img-row-three">
-              <Link href="/projects/project-internal-one">
-                <div className="project-images">
-                  <span className="project-relative">
-                    <Image
-                      className="pr-img"
-                      src={"/project-img3.jpg"}
-                      alt="project-img"
-                      width={0}
-                      height={0}
-                      unoptimized
-                      priority
-                    ></Image>
-                    <span className="project-overlay">
-                      <h1>Image Text</h1>
-                    </span>
-                  </span>
-                </div>
-              </Link>
-
-              <Link href="/projects/project-internal-two">
-                <div className="project-images">
-                  <span className="project-relative">
-                    <Image
-                      className="pr-img"
-                      src={"/project-img3.jpg"}
-                      alt="project-img"
-                      width={0}
-                      height={0}
-                      unoptimized
-                      priority
-                    ></Image>
-                    <span className="project-overlay">
-                      <h1>Image Text</h1>
-                    </span>
-                  </span>
-                </div>
-              </Link>
-
-              <Link href="#">
-                <div className="project-images">
-                  <span className="project-relative">
-                    <Image
-                      className="pr-img"
-                      src={"/project-img3.jpg"}
-                      alt="project-img"
-                      width={0}
-                      height={0}
-                      unoptimized
-                      priority
-                    ></Image>
-                    <span className="project-overlay">
-                      <h1>Image Text</h1>
-                    </span>
-                  </span>
-                </div>
-              </Link>
-            </div>
-
-            <div className="project-img-row-four">
-              <Link href="#">
-                <div className="project-images">
-                  <span className="project-relative">
-                    <Image
-                      className="pr-img"
-                      src={"/project-img4.jpg"}
-                      alt="project-img"
-                      width={0}
-                      height={0}
-                      unoptimized
-                      priority
-                    ></Image>
-                    <span className="project-overlay">
-                      <h1>Image Text</h1>
-                    </span>
-                  </span>
-                </div>
-              </Link>
-
-              <Link href="#">
-                <div className="project-images">
-                  <span className="project-relative">
-                    <Image
-                      className="pr-img"
-                      src={"/project-img4.jpg"}
-                      alt="project-img"
-                      width={0}
-                      height={0}
-                      unoptimized
-                      priority
-                    ></Image>
-                    <span className="project-overlay">
-                      <h1>Image Text</h1>
-                    </span>
-                  </span>
-                </div>
-              </Link>
-
-              <Link href="#">
-                <div className="project-images">
-                  <span className="project-relative">
-                    <Image
-                      className="pr-img"
-                      src={"/project-img4.jpg"}
-                      alt="project-img"
-                      width={0}
-                      height={0}
-                      unoptimized
-                      priority
-                    ></Image>
-                    <span className="project-overlay">
-                      <h1>Image Text</h1>
-                    </span>
-                  </span>
-                </div>
-              </Link>
-            </div>
+            ))}
           </div>
         </div>
 
         <Footer />
 
+        {/* WhatsApp Button */}
         <div className="whatsapp">
           <a
             className="btn-whatsapp-pulse"
@@ -266,14 +95,16 @@ const Project = () => {
               height={40}
               alt="Whatsapp-img"
               unoptimized
-            ></Image>
+            />
           </a>
         </div>
 
+        {/* Enquire Button */}
         <div className="enquire">
           <button>Enquire Now</button>
         </div>
 
+        {/* Scroll Up Button */}
         <div className="upward" onClick={upwardHandler}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
