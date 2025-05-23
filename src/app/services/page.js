@@ -262,13 +262,25 @@ const ServicesPage = () => {
               <div key={i} className="carousel-slide">
                 <div className="professional-card">
                   <div className="image-container">
-                    <Image
-                      src={urlFor(pro.image).url()}
-                      alt={pro.title}
-                      width={300}
-                      height={200}
-                      unoptimized
-                    />
+                    {pro.image ? (
+                      <Image
+                        src={urlFor(pro.image).url()}
+                        alt={pro.title || "Professional"}
+                        width={300}
+                        height={200}
+                        unoptimized
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          width: 300,
+                          height: 200,
+                          backgroundColor: "#eee",
+                        }}
+                      >
+                        <p>No Image</p>
+                      </div>
+                    )}
                   </div>
                   <h3>{pro.title}</h3>
                 </div>
