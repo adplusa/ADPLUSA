@@ -1580,10 +1580,22 @@ span.service-two-bottom-box-logo {
 }
 
 .technology-grid {
-  display: grid;
+  /* display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   row-gap: 25%;
+  margin-top: 6%; */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Centers rows as needed */
+  gap: 40px 60px; /* row gap | column gap */
   margin-top: 6%;
+}
+
+.technology-grid span {
+  width: 200px; /* or a consistent width for icons */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .technology-we-use {
@@ -1593,7 +1605,7 @@ span.service-two-bottom-box-logo {
   /* background-color: rgb(236, 236, 236); */
   /* background-color: var(--backgroundTechnology); */
   padding: 8% 5% 5% 5%;
-  margin-bottom: 9%;
+  margin-bottom: 3%;
 }
 
 .whatsapp {

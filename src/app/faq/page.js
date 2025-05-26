@@ -65,28 +65,30 @@ export default function FAQ() {
             >
               {/* FAQ Text */}
               <div className="faq-text-content">
-                <div className="faq-items">
-                  {category.faqs?.map((faq, faqIndex) => {
-                    return (
-                      <div key={faqIndex} className="faq-item">
-                        <div
-                          className="faq-question-container"
-                          onClick={() => toggleFaq(categoryIndex, faqIndex)}
-                        >
-                          <div className="faq-icon">
-                            <div className="icon-circle">
-                              {/* {getIcon(faq.icon)} */}✅
-                            </div>
-                          </div>
-                          <div className="faq-content-text">
-                            <h3 className="faq-question-two">{faq.question}</h3>
-                            <p className="faq-answer-two">{faq.answer}</p>
-                          </div>
+                {category.faqs?.map((faq, faqIndex) => {
+                  const isOpen = openFaqs[`${categoryIndex}-${faqIndex}`];
+                  return (
+                    <div key={faqIndex} className="faq-item">
+                      <div
+                        className="faq-question-container"
+                        onClick={() => toggleFaq(categoryIndex, faqIndex)}
+                      >
+                        <div className="faq-content-text">
+                          <h3 className="faq-question-two">{faq.question}</h3>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
+
+                      {/* Only show the answer if isOpen is true */}
+                      {isOpen && (
+                        <div
+                          className={`faq-answer-container ${isOpen ? "open" : ""}`}
+                        >
+                          <p className="faq-answer-two">{faq.answer}</p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
 
               {/* FAQ Image */}

@@ -186,7 +186,7 @@ const ServiceTwo = () => {
       <div className="feature-section">
         <div className="feature-section-df">
           <div className="feature-box">
-            <h1>{data.serviceRelatedHeading}</h1>
+            {/* <h1>{data.serviceRelatedHeading}</h1> */}
             <h1>{data?.trustIconsHeading}</h1>
             <div className="features-name">
               {data?.serviceRelatedIcon?.map((related, index) => {

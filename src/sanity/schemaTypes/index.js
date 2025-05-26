@@ -4,6 +4,8 @@ import { aboutPage } from "./aboutUsType";
 import { faqSection } from "./faqType";
 import { projectPage } from "./projectType";
 import { servicesPage } from "./serviceType";
+import { projectInternalPageOne } from "./projectInternalOne";
+import { projectInternalPageTwo } from "./projectInternalTwo";
 
 export const schema = {
   types: [
@@ -12,6 +14,8 @@ export const schema = {
     serviceType,
     faqSection,
     projectPage,
+    projectInternalPageOne,
+    projectInternalPageTwo,
     servicesPage,
   ],
 };

@@ -9,6 +9,7 @@ import gsap from "gsap";
 import { client } from "../../sanity/lib/client";
 import urlFor from "../helpers/sanity";
 import { PortableText } from "@portabletext/react";
+import Link from "next/link";
 
 const About = () => {
   const textRef = useRef(null);
@@ -82,6 +83,74 @@ const About = () => {
                   </a>
                 ))}
               </span>
+            </div>
+          </div>
+
+          <div className="home-about">
+            <div className="about-us">
+              <h2>{data.allowLightHeading}</h2>
+              <div className="about-us-top">
+                <div className="about-us-top-left">
+                  <h1>{data.allowUsHeading}</h1>
+                </div>
+                <div className="about-us-top-right">
+                  <h1>{data.allowRightHeading}</h1>
+
+                  <PortableText value={data.paragraph} />
+                </div>
+              </div>
+              <div className="who-we-are-btn">
+                <Link href="/about">
+                  <button>
+                    <span>{data.ctaButton}</span>
+                  </button>
+                </Link>
+              </div>
+            </div>
+
+            <div className="about-us-video-image">
+              <div className="about-us-img">
+                {data?.peoplImageOne?.asset && (
+                  <Image
+                    src={urlFor(data.peoplImageOne).url()}
+                    width={500}
+                    height={500}
+                    alt="People image"
+                    unoptimized
+                  />
+                )}
+                {data.peopleVideo && data.peopleVideo.asset && (
+                  <video
+                    src={data.peopleVideo.asset.url} // use direct URL for video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls={false}
+                    style={{ width: "100%", height: "auto" }}
+                  />
+                )}
+
+                {data?.peoplImageTwo?.asset && (
+                  <Image
+                    src={urlFor(data.peoplImageTwo).url()}
+                    width={500}
+                    height={500}
+                    alt="People image"
+                    unoptimized
+                  />
+                )}
+              </div>
+              <div className="about-us-video-text">
+                <h1>{data.peopleText}</h1>
+              </div>
+              {/* <div className="who-we-are-btn">
+                <Link href="#">
+                  <button>
+                    <span>{homepageData[0].ctaButton}</span>
+                  </button>
+                </Link>
+              </div> */}
             </div>
           </div>
 

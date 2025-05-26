@@ -129,6 +129,7 @@
 
 .faq-content-text {
   flex: 1;
+  margin-top: 25px;
 }
 
 .faq-question-two {
@@ -163,4 +164,25 @@
   height: 550px;
   object-fit: cover;
   display: block;
+}
+
+.faq-answer-container {
+  overflow: hidden;
+  max-height: 0;
+  transition:
+    max-height 0.4s ease,
+    opacity 0.4s ease;
+  opacity: 0;
+  margin-top: 0;
+}
+
+/* When open, apply styles via a class or inline styles in JSX */
+.faq-answer-container.open {
+  max-height: 500px; /* or enough to fit your longest answer */
+  opacity: 1;
+  margin-top: 12px;
+}
+
+.faq-item {
+  transition: all 0.3s ease;
 }

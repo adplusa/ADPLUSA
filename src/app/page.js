@@ -172,43 +172,59 @@ export default function Home() {
       },
     ]
   );
+
   const revealAnimation = () => {
     const t1 = gsap.timeline({
-      onComplete: () => setLoading(false), // Instantly remove loader
+      onComplete: () => setLoading(false),
     });
 
     t1.to(".count", { opacity: 0, duration: 0.1 })
       .to(".progress-bar-two", { opacity: 0, duration: 0.1 })
+
+      // Split open the top and bottom covers
       .to(".follow-top", { height: "50vh", ease: "expo.inOut", duration: 0.4 })
       .to(
         ".follow-bottom",
         { height: "50vh", ease: "expo.inOut", duration: 0.4 },
         "-=0.4"
       )
+
+      // Show the logo
       .fromTo(
         ".logo",
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, ease: "expo.inOut", duration: 0.4 }
       )
+
+      // Hide the logo
       .to(".logo", {
         opacity: 0,
         scale: 0.8,
         ease: "expo.inOut",
         duration: 0.3,
-        delay: 0.2,
+        delay: 0.1,
       })
-      .to(".follow-top", { height: "0%", duration: 0.3, ease: "expo.inOut" })
+
+      // 👇 Move this line here so main content appears after logo disappears
+      .set(".main-content", { opacity: 1 })
+
+      // Shrink overlays
+      .to(".follow-top", { height: "0%", duration: 0.4, ease: "expo.inOut" })
       .to(
         ".follow-bottom",
-        { height: "0%", duration: 0.3, ease: "expo.inOut" },
-        "-=0.3"
+        { height: "0%", duration: 0.4, ease: "expo.inOut" },
+        "-=0.4"
       )
+
+      // Fade out the loader overlay
       .to(".loader-container", {
         opacity: 0,
         duration: 0.2,
         ease: "expo.inOut",
       })
-      .set(".loader-container", { display: "none" }); // Instantly hide
+
+      // Completely remove loader from DOM
+      .set(".loader-container", { display: "none" });
   };
 
   const activitiesOutcomesCards = [
@@ -341,7 +357,6 @@ export default function Home() {
     setIndex(newIndex);
   };
 
-  // Intro Animation
   useEffect(() => {
     const interval = setInterval(() => {
       setCounter((prev) => (prev < 100 ? prev + 5 : 100));
@@ -504,446 +519,454 @@ export default function Home() {
 
   return (
     <>
-      {loading ? (
-        <div className="loader-container">
-          <div className="loading">
-            <p className="count">{counter}%</p>
-            <div
-              className="progress-bar-two"
-              style={{ width: `${counter}%` }}
-            ></div>
-          </div>
-          <div className="follow-container">
-            <div className="follow follow-top"></div>
-            <div className="follow follow-bottom"></div>
-          </div>
-          <div className="logo-container">
-            <Image
-              className="logo"
-              src="/white-logo.png"
-              alt="logo"
-              width={200}
-              height={200}
-              unoptimized
-            />
-          </div>
-        </div>
-      ) : (
-        <div className="nav">
-          <div className="intro-container">
-            <Header />
-            <div
-              className="hero-banner"
-              style={{
-                backgroundImage: bgImage ? `url(${bgImage})` : "none",
-              }}
-            >
-              <div className="overlay"></div>
-            </div>
-
-            <div
-              className="animation-slider"
-              onMouseMove={handleMouseMove}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-              onClick={() => {
-                isLeftHalf ? prevSlide() : nextSlide();
-              }}
-            >
+      <div className="main-content">
+        {loading ? (
+          <div className="loader-container">
+            <div className="loading">
+              <p className="count">{counter}%</p>
               <div
-                className="animation-slider-df"
+                className="progress-bar-two"
+                style={{ width: `${counter}%` }}
+              ></div>
+            </div>
+            <div className="follow-container">
+              <div className="follow follow-top"></div>
+              <div className="follow follow-bottom"></div>
+            </div>
+            <div className="logo-container">
+              <Image
+                className="logo"
+                src="/white-logo.png"
+                alt="logo"
+                width={200}
+                height={200}
+                unoptimized
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="nav">
+            <div className="intro-container">
+              <Header />
+              <div
+                className="hero-banner"
                 style={{
-                  transform: `translateX(-${currentSlideHeroBanner * 100}%)`,
+                  backgroundImage: bgImage ? `url(${bgImage})` : "none",
                 }}
               >
-                {slides.map((slide, index) => (
-                  <div
-                    key={index}
-                    className="animate-back-img"
-                    style={{ backgroundImage: `url(${slide.image})` }}
-                  ></div>
-                ))}
+                <div className="overlay"></div>
               </div>
 
-              {showCustomCursor && (
+              <div
+                className="animation-slider"
+                onMouseMove={handleMouseMove}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                onClick={() => {
+                  isLeftHalf ? prevSlide() : nextSlide();
+                }}
+              >
                 <div
-                  className={`custom-cursor ${isLeftHalf ? "left-btn" : "right-btn"}`}
+                  className="animation-slider-df"
                   style={{
-                    left: `${renderCursorPos.x}px`,
-                    top: `${renderCursorPos.y}px`,
-                    transform: "translate(-50%, -50%)",
+                    transform: `translateX(-${currentSlideHeroBanner * 100}%)`,
                   }}
                 >
-                  <span>
-                    {isLeftHalf ? (
-                      <svg
-                        id="left-btn-hero"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        className="bi bi-chevron-left"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
-                        />
-                      </svg>
-                    ) : (
-                      <svg
-                        id="right-btn-hero"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        className="bi bi-chevron-right"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
-                        />
-                      </svg>
-                    )}
-                  </span>
+                  {slides.map((slide, index) => (
+                    <div
+                      key={index}
+                      className="animate-back-img"
+                      style={{ backgroundImage: `url(${slide.image})` }}
+                    ></div>
+                  ))}
                 </div>
-              )}
-              <div className="slider-dots">
-                {slides.map((_, index) => (
-                  <button
-                    key={index}
-                    className={`dot ${index === currentSlideHeroBanner ? "active" : ""}`}
-                    onClick={() => setCurrentSlideHeroBanner(index)}
-                  ></button>
-                ))}
+
+                {showCustomCursor && (
+                  <div
+                    className={`custom-cursor ${isLeftHalf ? "left-btn" : "right-btn"}`}
+                    style={{
+                      left: `${renderCursorPos.x}px`,
+                      top: `${renderCursorPos.y}px`,
+                      transform: "translate(-50%, -50%)",
+                    }}
+                  >
+                    <span>
+                      {isLeftHalf ? (
+                        <svg
+                          id="left-btn-hero"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          className="bi bi-chevron-left"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
+                          />
+                        </svg>
+                      ) : (
+                        <svg
+                          id="right-btn-hero"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          className="bi bi-chevron-right"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+                          />
+                        </svg>
+                      )}
+                    </span>
+                  </div>
+                )}
+                <div className="slider-dots">
+                  {slides.map((_, index) => (
+                    <button
+                      key={index}
+                      className={`dot ${index === currentSlideHeroBanner ? "active" : ""}`}
+                      onClick={() => setCurrentSlideHeroBanner(index)}
+                    ></button>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <div className="feature-section">
-              <div className="feature-section-df">
-                <div className="feature-box">
-                  <h1>{homepageData[0].trustIconsHeading}</h1>
-                  <div className="features-name">
-                    {homepageData[0]?.serviceRelatedIcon?.map(
-                      (related, index) => {
-                        return (
-                          <div key={index} className="service-related-item">
-                            <Image
-                              src={urlFor(related.serviceRelatedImg).url()}
-                              alt={related.serviceRelatedName || "Service Icon"}
-                              width={70}
-                              height={70}
-                              unoptimized
-                              priority
-                            />
+              <div className="feature-section">
+                <div className="feature-section-df">
+                  <div className="feature-box">
+                    <h1>{homepageData[0].trustIconsHeading}</h1>
+                    <div className="features-name">
+                      {homepageData[0]?.serviceRelatedIcon?.map(
+                        (related, index) => {
+                          return (
+                            <div key={index} className="service-related-item">
+                              <Image
+                                src={urlFor(related.serviceRelatedImg).url()}
+                                alt={
+                                  related.serviceRelatedName || "Service Icon"
+                                }
+                                width={70}
+                                height={70}
+                                unoptimized
+                                priority
+                              />
 
-                            <p>{related.serviceRelatedNumber}</p>
-                            <h3>{related.serviceRelatedName}</h3>
+                              <p>{related.serviceRelatedNumber}</p>
+                              <h3>{related.serviceRelatedName}</h3>
+                            </div>
+                          );
+                        }
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="achievements-container">
+                  <div className="achievements-grid">
+                    {homepageData[0]?.achievements?.map((item, index) => (
+                      <div className="achievement-card" key={index}>
+                        <div className="achievement-content">
+                          <div className="achievement-text-home">
+                            <span>
+                              <h3>{item.title}</h3>
+                            </span>
+                            <span className="achievement-numbers">
+                              <p>{item.number}</p>
+                            </span>
                           </div>
-                        );
-                      }
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="home_services">
+                <h1>{homepageData[0].serviceHeading}</h1>
+                <div className="home_services_box">
+                  {homepageData[0].serviceBox?.map((service, index) => (
+                    <Link href="/services" key={index}>
+                      <div className="service-box-home" key={index}>
+                        <div className="service-image">
+                          <Image
+                            src={urlFor(service.serviceBoxImg).url()}
+                            alt={service.serviceBoxTitle}
+                            width={400}
+                            height={200}
+                            unoptimized
+                          ></Image>
+                        </div>
+                        <h2>{service.serviceBoxTitle}</h2>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+
+                <Link className="service-cta-wrap" href={"/servicestwo"}>
+                  <button className="service-cta">
+                    {homepageData[0].home_services_cta}
+                  </button>
+                </Link>
+              </div>
+
+              <div className="technology-we-use">
+                <h1>Technologies We Use</h1>
+                <div className="technology-grid">
+                  {homepageData[0]?.technologyImgs?.length > 0 ? (
+                    homepageData[0].technologyImgs.map((img, index) => {
+                      return (
+                        <span key={index}>
+                          <Image
+                            src={urlFor(img.technologyImage).url()} // Fetch image URL from Sanity
+                            width={500} // Set your preferred width for the image
+                            height={500} // Set your preferred height for the image
+                            alt="img" // Alt text for the image
+                            unoptimized
+                          />
+                        </span>
+                      );
+                    })
+                  ) : (
+                    <p>No images available</p>
+                  )}
+                </div>
+              </div>
+
+              <section className="rto-section">
+                <div className="background-process-img"></div>
+                <h2 className="heading">
+                  {homepageData[0].workingProcessHeading}
+                </h2>
+                <p className="subheading">
+                  {homepageData[0].workingProcessSubHeading}
+                </p>
+
+                <div className="content">
+                  <div className="left">
+                    {homepageData[0]?.processSteps
+                      ?.filter((step) => step.stepTitle && step.stepText)
+                      .map((step, idx) => (
+                        <div
+                          key={idx}
+                          className={`card ${idx === activeIndex ? "active" : ""}`}
+                          onClick={() => handleImageChange(idx)}
+                        >
+                          <div className="number">{idx + 1}</div>
+                          <div>
+                            <h3 className="card-title">{step.stepTitle}</h3>
+                            <p className="card-text-home">{step.stepText}</p>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+
+                  <div className="right">
+                    {homepageData[0]?.processSteps?.[activeIndex]
+                      ?.stepImage && (
+                      <Image
+                        src={urlFor(
+                          homepageData[0]?.processSteps[activeIndex]?.stepImage
+                        ).url()}
+                        alt={
+                          homepageData[0]?.processSteps[activeIndex]
+                            ?.stepTitle || "Step Image"
+                        }
+                        width={500}
+                        height={500}
+                        unoptimized
+                      />
+                    )}
+                  </div>
+                </div>
+              </section>
+
+              <div className="strip-text">
+                <div className="marquee">
+                  <div className="marquee-item">
+                    <h1>{homepageData[0]?.sliderTextOne}</h1>
+                    {homepageData[0]?.sliderImage && (
+                      <Image
+                        src={urlFor(homepageData[0].sliderImage).url()}
+                        alt="Slider Icon"
+                        width="30"
+                        height="30"
+                      />
+                    )}
+                    <h1>{homepageData[0]?.sliderTextTwo}</h1>
+                    {homepageData[0]?.sliderImage && (
+                      <Image
+                        src={urlFor(homepageData[0].sliderImage).url()}
+                        alt="Slider Icon"
+                        width="30"
+                        height="30"
+                      />
+                    )}
+                  </div>
+                  <div className="marquee-item">
+                    <h1>{homepageData[0]?.sliderTextOne}</h1>
+                    {homepageData[0]?.sliderImage && (
+                      <Image
+                        src={urlFor(homepageData[0].sliderImage).url()}
+                        alt="Slider Icon"
+                        width="30"
+                        height="30"
+                        unoptimized
+                      />
+                    )}
+                    <h1>{homepageData[0]?.sliderTextTwo}</h1>
+                    {homepageData[0]?.sliderImage && (
+                      <Image
+                        src={urlFor(homepageData[0].sliderImage).url()}
+                        alt="Slider Icon"
+                        width="30"
+                        height="30"
+                        unoptimized
+                      />
                     )}
                   </div>
                 </div>
               </div>
-              <div className="achievements-container">
-                <div className="achievements-grid">
-                  {homepageData[0]?.achievements?.map((item, index) => (
-                    <div className="achievement-card" key={index}>
-                      <div className="achievement-content">
-                        <div className="achievement-text-home">
-                          <span>
-                            <h3>{item.title}</h3>
-                          </span>
-                          <span className="achievement-numbers">
-                            <p>{item.number}</p>
-                          </span>
-                        </div>
-                      </div>
+
+              <div className="home-about">
+                <div className="about-us">
+                  <h2>{homepageData[0].allowLightHeading}</h2>
+                  <div className="about-us-top">
+                    <div className="about-us-top-left">
+                      <h1>{homepageData[0].allowUsHeading}</h1>
                     </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+                    <div className="about-us-top-right">
+                      <h1>{homepageData[0].allowRightHeading}</h1>
 
-            <div className="home_services">
-              <h1>{homepageData[0].serviceHeading}</h1>
-              <div className="home_services_box">
-                {homepageData[0].serviceBox?.map((service, index) => (
-                  <Link href="/services" key={index}>
-                    <div className="service-box-home" key={index}>
-                      <div className="service-image">
-                        <Image
-                          src={urlFor(service.serviceBoxImg).url()}
-                          alt={service.serviceBoxTitle}
-                          width={400}
-                          height={200}
-                          unoptimized
-                        ></Image>
-                      </div>
-                      <h2>{service.serviceBoxTitle}</h2>
+                      <PortableText value={homepageData[0].paragraph} />
                     </div>
-                  </Link>
-                ))}
-              </div>
-
-              <Link className="service-cta-wrap" href={"/servicestwo"}>
-                <button className="service-cta">
-                  {homepageData[0].home_services_cta}
-                </button>
-              </Link>
-            </div>
-
-            <div className="technology-we-use">
-              <h1>Technologies We Use</h1>
-              <div className="technology-grid">
-                {homepageData[0]?.technologyImgs?.length > 0 ? (
-                  homepageData[0].technologyImgs.map((img, index) => {
-                    return (
-                      <span key={index}>
-                        <Image
-                          src={urlFor(img.technologyImage).url()} // Fetch image URL from Sanity
-                          width={500} // Set your preferred width for the image
-                          height={500} // Set your preferred height for the image
-                          alt="img" // Alt text for the image
-                          unoptimized
-                        />
-                      </span>
-                    );
-                  })
-                ) : (
-                  <p>No images available</p>
-                )}
-              </div>
-            </div>
-
-            <section className="rto-section">
-              <div className="background-process-img"></div>
-              <h2 className="heading">
-                {homepageData[0].workingProcessHeading}
-              </h2>
-              <p className="subheading">
-                {homepageData[0].workingProcessSubHeading}
-              </p>
-
-              <div className="content">
-                <div className="left">
-                  {homepageData[0]?.processSteps
-                    ?.filter((step) => step.stepTitle && step.stepText)
-                    .map((step, idx) => (
-                      <div
-                        key={idx}
-                        className={`card ${idx === activeIndex ? "active" : ""}`}
-                        onClick={() => handleImageChange(idx)}
-                      >
-                        <div className="number">{idx + 1}</div>
-                        <div>
-                          <h3 className="card-title">{step.stepTitle}</h3>
-                          <p className="card-text-home">{step.stepText}</p>
-                        </div>
-                      </div>
-                    ))}
+                  </div>
+                  <div className="who-we-are-btn">
+                    <Link href="/about">
+                      <button>
+                        <span>{homepageData[0].ctaButton}</span>
+                      </button>
+                    </Link>
+                  </div>
                 </div>
 
-                <div className="right">
-                  {homepageData[0]?.processSteps?.[activeIndex]?.stepImage && (
-                    <Image
-                      src={urlFor(
-                        homepageData[0]?.processSteps[activeIndex]?.stepImage
-                      ).url()}
-                      alt={
-                        homepageData[0]?.processSteps[activeIndex]?.stepTitle ||
-                        "Step Image"
-                      }
-                      width={500}
-                      height={500}
-                      unoptimized
-                    />
-                  )}
-                </div>
-              </div>
-            </section>
+                <div className="about-us-video-image">
+                  <div className="about-us-img">
+                    {homepageData?.[0]?.peoplImageOne?.asset && (
+                      <Image
+                        src={urlFor(homepageData[0].peoplImageOne).url()}
+                        width={500}
+                        height={500}
+                        alt="People image"
+                        unoptimized
+                      />
+                    )}
+                    {videos.peopleVideo && (
+                      <video
+                        src={videos.peopleVideo}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        controls={false}
+                        style={{ width: "100%", height: "auto" }}
+                      />
+                    )}
 
-            <div className="strip-text">
-              <div className="marquee">
-                <div className="marquee-item">
-                  <h1>{homepageData[0]?.sliderTextOne}</h1>
-                  {homepageData[0]?.sliderImage && (
-                    <Image
-                      src={urlFor(homepageData[0].sliderImage).url()}
-                      alt="Slider Icon"
-                      width="30"
-                      height="30"
-                    />
-                  )}
-                  <h1>{homepageData[0]?.sliderTextTwo}</h1>
-                  {homepageData[0]?.sliderImage && (
-                    <Image
-                      src={urlFor(homepageData[0].sliderImage).url()}
-                      alt="Slider Icon"
-                      width="30"
-                      height="30"
-                    />
-                  )}
-                </div>
-                <div className="marquee-item">
-                  <h1>{homepageData[0]?.sliderTextOne}</h1>
-                  {homepageData[0]?.sliderImage && (
-                    <Image
-                      src={urlFor(homepageData[0].sliderImage).url()}
-                      alt="Slider Icon"
-                      width="30"
-                      height="30"
-                      unoptimized
-                    />
-                  )}
-                  <h1>{homepageData[0]?.sliderTextTwo}</h1>
-                  {homepageData[0]?.sliderImage && (
-                    <Image
-                      src={urlFor(homepageData[0].sliderImage).url()}
-                      alt="Slider Icon"
-                      width="30"
-                      height="30"
-                      unoptimized
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="about-us">
-              <h2>{homepageData[0].allowLightHeading}</h2>
-              <div className="about-us-top">
-                <div className="about-us-top-left">
-                  <h1>{homepageData[0].allowUsHeading}</h1>
-                </div>
-                <div className="about-us-top-right">
-                  <h1>{homepageData[0].allowRightHeading}</h1>
-
-                  <PortableText value={homepageData[0].paragraph} />
-                </div>
-              </div>
-              <div className="who-we-are-btn">
-                <Link href="/about">
-                  <button>
-                    <span>{homepageData[0].ctaButton}</span>
-                  </button>
-                </Link>
-              </div>
-            </div>
-
-            <div className="about-us-video-image">
-              <div className="about-us-img">
-                {homepageData?.[0]?.peoplImageOne?.asset && (
-                  <Image
-                    src={urlFor(homepageData[0].peoplImageOne).url()}
-                    width={500}
-                    height={500}
-                    alt="People image"
-                    unoptimized
-                  />
-                )}
-                {videos.peopleVideo && (
-                  <video
-                    src={videos.peopleVideo}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    controls={false}
-                    style={{ width: "100%", height: "auto" }}
-                  />
-                )}
-
-                {homepageData?.[0]?.peoplImageTwo?.asset && (
-                  <Image
-                    src={urlFor(homepageData[0].peoplImageTwo).url()}
-                    width={500}
-                    height={500}
-                    alt="People image"
-                    unoptimized
-                  />
-                )}
-              </div>
-              <div className="about-us-video-text">
-                <h1>{homepageData[0].peopleText}</h1>
-              </div>
-              {/* <div className="who-we-are-btn">
+                    {homepageData?.[0]?.peoplImageTwo?.asset && (
+                      <Image
+                        src={urlFor(homepageData[0].peoplImageTwo).url()}
+                        width={500}
+                        height={500}
+                        alt="People image"
+                        unoptimized
+                      />
+                    )}
+                  </div>
+                  <div className="about-us-video-text">
+                    <h1>{homepageData[0].peopleText}</h1>
+                  </div>
+                  {/* <div className="who-we-are-btn">
                 <Link href="#">
                   <button>
                     <span>{homepageData[0].ctaButton}</span>
                   </button>
                 </Link>
               </div> */}
-            </div>
+                </div>
+              </div>
 
-            <div className="reviews-section">
-              <div className="navigation-wrapper">
-                <button
-                  className="prev-button"
-                  onClick={() => instanceRef.current?.prev()}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-chevron-left"
-                    viewBox="0 0 16 16"
+              <div className="reviews-section">
+                <div className="navigation-wrapper">
+                  <button
+                    className="prev-button"
+                    onClick={() => instanceRef.current?.prev()}
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
-                    />
-                  </svg>
-                </button>
-                <div ref={sliderRef} className="keen-slider">
-                  {homepageData[0]?.founderSlider?.map((founder, idx) => (
-                    <div
-                      key={idx}
-                      className={`keen-slider__slide number-slide${idx + 1}`}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      className="bi bi-chevron-left"
+                      viewBox="0 0 16 16"
                     >
+                      <path
+                        fillRule="evenodd"
+                        d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
+                      />
+                    </svg>
+                  </button>
+                  <div ref={sliderRef} className="keen-slider">
+                    {homepageData[0]?.founderSlider?.map((founder, idx) => (
                       <div
-                        className="testimonial-container"
-                        style={{
-                          backgroundImage: founder.founderBackImage
-                            ? `url(${urlFor(founder.founderBackImage).url()})`
-                            : "none", // fallback or handle gracefully
-                        }}
+                        key={idx}
+                        className={`keen-slider__slide number-slide${idx + 1}`}
                       >
-                        <div className="testimonial-box">
-                          <h2>{founder.founderTitle}</h2>
+                        <div
+                          className="testimonial-container"
+                          style={{
+                            backgroundImage: founder.founderBackImage
+                              ? `url(${urlFor(founder.founderBackImage).url()})`
+                              : "none", // fallback or handle gracefully
+                          }}
+                        >
+                          <div className="testimonial-box">
+                            <h2>{founder.founderTitle}</h2>
 
-                          <PortableText value={founder.founderDescription} />
+                            <PortableText value={founder.founderDescription} />
 
-                          <div className="author">
-                            {founder.founderThumbnailImage?.asset?._ref && (
-                              <Image
-                                src={urlFor(
-                                  founder.founderThumbnailImage
-                                ).url()}
-                                alt="Founder Team"
-                                width={400}
-                                height={400}
-                                className="profile-img"
-                                unoptimized
-                              />
-                            )}
-                            <div>
-                              <h4 className="name">{founder.founderName}</h4>
-                              <p className="designation">{founder.position}</p>
-                              <h4 className="p-label">
-                                {founder.partnerLabel}
-                              </h4>
-                              <p className="partner-content">
-                                {founder.partner}
-                              </p>
+                            <div className="author">
+                              {founder.founderThumbnailImage?.asset?._ref && (
+                                <Image
+                                  src={urlFor(
+                                    founder.founderThumbnailImage
+                                  ).url()}
+                                  alt="Founder Team"
+                                  width={400}
+                                  height={400}
+                                  className="profile-img"
+                                  unoptimized
+                                />
+                              )}
+                              <div>
+                                <h4 className="name">{founder.founderName}</h4>
+                                <p className="designation">
+                                  {founder.position}
+                                </p>
+                                <h4 className="p-label">
+                                  {founder.partnerLabel}
+                                </h4>
+                                <p className="partner-content">
+                                  {founder.partner}
+                                </p>
+                              </div>
                             </div>
                           </div>
-                        </div>
 
-                        {/* <div className="testimonial-image">
+                          {/* <div className="testimonial-image">
                           {founder.founderImage?.asset?._ref && (
                             <Image
                               src={urlFor(founder.founderImage).url()}
@@ -957,136 +980,139 @@ export default function Home() {
 
                           <div className="white-box"></div>
                         </div> */}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    className="next-button"
+                    onClick={() => instanceRef.current?.next()}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      className="bi bi-chevron-right"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <section className="contact-us">
+                <div className="contact-container-two">
+                  <div className="contact-us-df">
+                    <div className="contact-left">
+                      {homepageData[0]?.contactUsSectionImg?.asset && (
+                        <Image
+                          src={urlFor(
+                            homepageData[0].contactUsSectionImg
+                          ).url()}
+                          width={500}
+                          height={500}
+                          alt="footer-img"
+                          unoptimized
+                        />
+                      )}
+                    </div>
+                    <div className="contact-right">
+                      <h1>{homepageData[0]?.contactUsTitle}</h1>
+
+                      <div className="contact-form">
+                        <div className="form-fields">
+                          <label htmlFor="fname">Name</label>
+                          <input
+                            type="text"
+                            name="firstName"
+                            id="fname"
+                            placeholder="Your name"
+                          />
+                        </div>
+                        <div className="form-fields">
+                          <label htmlFor="email">Email</label>
+                          <input
+                            type="text"
+                            name="email"
+                            id="email"
+                            placeholder="Your Email"
+                          />
+                        </div>
+                        <div className="form-fields">
+                          <label htmlFor="phone">Phone no</label>
+                          <input
+                            type="text"
+                            name="phone"
+                            id="phone"
+                            placeholder="Your Phone Number"
+                          />
+                        </div>
+                        <div className="form-fields">
+                          <label htmlFor="service">Services</label>
+                          <input
+                            type="text"
+                            name="service"
+                            id="service"
+                            placeholder="Select Service"
+                          />
+                        </div>
+                      </div>
+                      <div className="contact-btn">
+                        <span>
+                          <button>{homepageData[0]?.contactUsButton}</button>
+                        </span>
                       </div>
                     </div>
-                  ))}
+                  </div>
                 </div>
-                <button
-                  className="next-button"
-                  onClick={() => instanceRef.current?.next()}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-chevron-right"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
-                    />
-                  </svg>
-                </button>
-              </div>
+              </section>
+
+              <Footer />
             </div>
 
-            <section className="contact-us">
-              <div className="contact-container-two">
-                <div className="contact-us-df">
-                  <div className="contact-left">
-                    {homepageData[0]?.contactUsSectionImg?.asset && (
-                      <Image
-                        src={urlFor(homepageData[0].contactUsSectionImg).url()}
-                        width={500}
-                        height={500}
-                        alt="footer-img"
-                        unoptimized
-                      />
-                    )}
-                  </div>
-                  <div className="contact-right">
-                    <h1>{homepageData[0]?.contactUsTitle}</h1>
+            <div className="whatsapp">
+              <a
+                className="btn-whatsapp-pulse"
+                target="_blank"
+                href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
+              >
+                <Image
+                  src={"/whatsapp.png"}
+                  width={40}
+                  height={40}
+                  alt="Whatsapp-img"
+                  unoptimized
+                ></Image>
+              </a>
+            </div>
 
-                    <div className="contact-form">
-                      <div className="form-fields">
-                        <label htmlFor="fname">Name</label>
-                        <input
-                          type="text"
-                          name="firstName"
-                          id="fname"
-                          placeholder="Your name"
-                        />
-                      </div>
-                      <div className="form-fields">
-                        <label htmlFor="email">Email</label>
-                        <input
-                          type="text"
-                          name="email"
-                          id="email"
-                          placeholder="Your Email"
-                        />
-                      </div>
-                      <div className="form-fields">
-                        <label htmlFor="phone">Phone no</label>
-                        <input
-                          type="text"
-                          name="phone"
-                          id="phone"
-                          placeholder="Your Phone Number"
-                        />
-                      </div>
-                      <div className="form-fields">
-                        <label htmlFor="service">Services</label>
-                        <input
-                          type="text"
-                          name="service"
-                          id="service"
-                          placeholder="Select Service"
-                        />
-                      </div>
-                    </div>
-                    <div className="contact-btn">
-                      <span>
-                        <button>{homepageData[0]?.contactUsButton}</button>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
+            <div className="enquire">
+              <button>Enquire Now</button>
+            </div>
 
-            <Footer />
+            <div className="upward" onClick={upwardHandler}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-chevron-up"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"
+                />
+              </svg>
+            </div>
           </div>
-
-          <div className="whatsapp">
-            <a
-              className="btn-whatsapp-pulse"
-              target="_blank"
-              href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
-            >
-              <Image
-                src={"/whatsapp.png"}
-                width={40}
-                height={40}
-                alt="Whatsapp-img"
-                unoptimized
-              ></Image>
-            </a>
-          </div>
-
-          <div className="enquire">
-            <button>Enquire Now</button>
-          </div>
-
-          <div className="upward" onClick={upwardHandler}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-chevron-up"
-              viewBox="0 0 16 16"
-            >
-              <path
-                fillRule="evenodd"
-                d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"
-              />
-            </svg>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 }

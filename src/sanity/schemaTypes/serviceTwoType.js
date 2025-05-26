@@ -49,6 +49,12 @@ export const serviceType = defineType({
       ],
     }),
 
+    // Trust Icons
+    defineField({
+      name: "trustIconsHeading",
+      title: "Trust Icon Heading",
+      type: "string",
+    }),
     defineField({
       name: "serviceRelatedIcon",
       title: "Service Related Icons",

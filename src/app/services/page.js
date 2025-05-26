@@ -61,7 +61,6 @@ const ServicesPage = () => {
   // Handle infinite loop reset
   useEffect(() => {
     if (!data?.professionals || !Array.isArray(data.professionals)) return;
-
     const total = data.professionals.length;
 
     if (currentIndex === total) {
@@ -105,6 +104,7 @@ const ServicesPage = () => {
 
   // Create duplicated array for seamless carousel
   const professionals = [...data.professionals, ...data.professionals];
+  console.log("Professionals loaded:", professionals);
 
   return (
     <>
