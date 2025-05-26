@@ -99,16 +99,16 @@ const About = () => {
                   <PortableText value={data.paragraph} />
                 </div>
               </div>
-              <div className="who-we-are-btn">
+              {/* <div className="who-we-are-btn">
                 <Link href="/about">
                   <button>
                     <span>{data.ctaButton}</span>
                   </button>
                 </Link>
-              </div>
+              </div> */}
             </div>
 
-            <div className="about-us-video-image">
+            {/* <div className="about-us-video-image">
               <div className="about-us-img">
                 {data?.peoplImageOne?.asset && (
                   <Image
@@ -121,7 +121,7 @@ const About = () => {
                 )}
                 {data.peopleVideo && data.peopleVideo.asset && (
                   <video
-                    src={data.peopleVideo.asset.url} // use direct URL for video
+                    src={data.peopleVideo.asset.url}
                     autoPlay
                     muted
                     loop
@@ -144,14 +144,7 @@ const About = () => {
               <div className="about-us-video-text">
                 <h1>{data.peopleText}</h1>
               </div>
-              {/* <div className="who-we-are-btn">
-                <Link href="#">
-                  <button>
-                    <span>{homepageData[0].ctaButton}</span>
-                  </button>
-                </Link>
-              </div> */}
-            </div>
+            </div> */}
           </div>
 
           {/* Section Blocks */}

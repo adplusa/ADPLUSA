@@ -59,35 +59,35 @@ export const aboutPage = defineType({
       type: "array",
       of: [{ type: "block" }],
     }),
-    defineField({
-      name: "ctaButton",
-      title: "Button for About us Redirection section",
-      type: "string",
-    }),
-    defineField({
-      name: "peoplImageOne",
-      title: "People Image One",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
-    }),
-    defineField({
-      name: "peoplImageTwo",
-      title: "People Image Two",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
-    }),
-    defineField({
-      name: "peopleVideo",
-      title: "People Video",
-      type: "file",
-      options: {
-        accept: "video/*",
-      },
-    }),
+    // defineField({
+    //   name: "ctaButton",
+    //   title: "Button for About us Redirection section",
+    //   type: "string",
+    // }),
+    // defineField({
+    //   name: "peoplImageOne",
+    //   title: "People Image One",
+    //   type: "image",
+    //   options: {
+    //     hotspot: true,
+    //   },
+    // }),
+    // defineField({
+    //   name: "peoplImageTwo",
+    //   title: "People Image Two",
+    //   type: "image",
+    //   options: {
+    //     hotspot: true,
+    //   },
+    // }),
+    // defineField({
+    //   name: "peopleVideo",
+    //   title: "People Video",
+    //   type: "file",
+    //   options: {
+    //     accept: "video/*",
+    //   },
+    // }),
     defineField({
       name: "peopleText",
       title: "People Image Text",
