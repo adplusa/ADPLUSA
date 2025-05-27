@@ -144,7 +144,7 @@ const ServicesPageSix = () => {
       </section>
 
       <div className="key-container">
-        <h1 className="key-heading">Key Activities and Outcomes</h1>
+        <h1 className="key-heading">Key Activities and Outcome</h1>
         <div className="key-cards-container">
           {data.keyActivities?.map((item, i) => (
             <div key={i} className="key-card">
