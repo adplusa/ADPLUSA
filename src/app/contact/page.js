@@ -56,7 +56,6 @@ export default function ContactForm() {
         <div className="contact-form-section">
           <h1 className="contact-title">Get in touch</h1>
           <div className="title-underline"></div>
-
           <form onSubmit={handleSubmit}>
             <div className="form-field">
               <input
@@ -64,110 +63,45 @@ export default function ContactForm() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                required
                 placeholder="Name"
+                required
               />
             </div>
-
             <div className="form-field">
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                required
                 placeholder="Email"
+                required
               />
             </div>
-
-            <div className="form-field content-field">
+            <div className="form-field">
               <input
                 type="text"
                 name="content"
                 value={formData.content}
                 onChange={handleChange}
+                placeholder="Message"
                 required
-                placeholder="Content"
               />
             </div>
-
-            <div className="checkbox-container">
-              <input
-                type="checkbox"
-                id="newsletter"
-                name="newsletter"
-                checked={formData.newsletter}
-                onChange={handleChange}
-              />
-              <label htmlFor="newsletter">
-                I would like to receive the newsletter.
-              </label>
-            </div>
-
             <button type="submit" className="submit-button">
               Submit
             </button>
           </form>
         </div>
-
         <div className="contact-info-section">
-          <p className="info-text">
-            Connect with us to transform your ideas into reality. Whether you’re
-            seeking expert advice, have project inquiries, or are ready to
-            begin, our dedicated team is here to support and guide you
-            throughout the entire process.
-          </p>
-
           <div className="map-container">
             <Image
               src="/banner-3.jpg"
               width={0}
               height={0}
+              alt="Map"
               unoptimized
-              alt="Location Map"
               className="map-image"
-            ></Image>
-          </div>
-
-          <div className="contact-details">
-            <div className="contact-detail">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                width="24"
-                height="24"
-              >
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-              </svg>
-              <span>Illonios, USA 423 Argyll Ln Schaumburg</span>
-            </div>
-
-            <div className="contact-detail">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                width="24"
-                height="24"
-              >
-                <path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.24l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.59l2.2-2.21c.28-.26.36-.65.25-1C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1zM12 3v10l3-3h6V3h-9z" />
-              </svg>
-              <span>+1 (224) 421-7671</span>
-            </div>
-
-            <div className="contact-detail">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                width="24"
-                height="24"
-              >
-                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-              </svg>
-              <span>info@adplusa.com</span>
-            </div>
+            />
           </div>
         </div>
       </div>
@@ -234,6 +168,45 @@ export default function ContactForm() {
                 height="400"
               />
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="for-map-wrapper">
+        <div className="for-map-container">
+          <div className="for-map-left">
+            <h2 className="for-map-heading">Let’s Talk Ideas</h2>
+            <p className="for-map-description">
+              Connect with us to transform your ideas into reality. Whether
+              you're seeking expert advice, have project inquiries, or are ready
+              to begin, our team is here to guide you every step of the way.
+            </p>
+
+            <div className="for-map-info">
+              <div className="for-map-item">
+                <span className="for-map-label">Address:</span>
+                <span className="for-map-value">
+                  423 Argyll Ln, Schaumburg, Illinois, USA
+                </span>
+              </div>
+              <div className="for-map-item">
+                <span className="for-map-label">Phone:</span>
+                <span className="for-map-value">+1 (224) 421-7671</span>
+              </div>
+              <div className="for-map-item">
+                <span className="for-map-label">Email:</span>
+                <span className="for-map-value">info@adplusa.com</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="for-map-right">
+            <iframe
+              title="Google Map"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2969.528336894264!2d-88.09820568455794!3d42.03336077920973!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880fa385d6f88a8f%3A0x4f276c69f4b8efc!2s423%20Argyll%20Ln%2C%20Schaumburg%2C%20IL%2060173%2C%20USA!5e0!3m2!1sen!2sin!4v1689785104729!5m2!1sen!2sin"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
           </div>
         </div>
       </section>
