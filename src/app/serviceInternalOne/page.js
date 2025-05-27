@@ -6,7 +6,9 @@ import Header from "../Components/Header/page";
 import Footer from "../Components/Footer/page";
 import { client } from "@/sanity/lib/client";
 import urlFor from "../helpers/sanity";
+
 import "./serviceInternalOne.css";
+import { useCallback } from "react";
 
 export const dynamic = "force-dynamic";
 
@@ -36,19 +38,29 @@ const ServicesPage = () => {
     setCurrentIndex((prev) => prev + 1);
   };
 
-  const startAutoPlay = () => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
-      nextSlide();
-    }, 3000);
-  };
+  // const startAutoPlay = () => {
+  //   if (intervalRef.current) clearInterval(intervalRef.current);
+  //   intervalRef.current = setInterval(() => {
+  //     nextSlide();
+  //   }, 3000);
+  // };
 
-  const stopAutoPlay = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-  };
+  // const stopAutoPlay = () => {
+  //   if (intervalRef.current) {
+  //     clearInterval(intervalRef.current);
+  //     intervalRef.current = null;
+  //   }
+  // };
+
+  const startAutoPlay = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(nextSlide, 3000);
+  }, [nextSlide]);
+
+  const stopAutoPlay = useCallback(() => {
+    clearInterval(intervalRef.current);
+    intervalRef.current = null;
+  }, []);
 
   // Start autoplay when data is loaded
   useEffect(() => {

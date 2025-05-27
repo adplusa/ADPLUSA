@@ -178,7 +178,7 @@ export default function ContactForm() {
             <h2 className="for-map-heading">Let’s Talk Ideas</h2>
             <p className="for-map-description">
               Connect with us to transform your ideas into reality. Whether
-              you're seeking expert advice, have project inquiries, or are ready
+              youre seeking expert advice, have project inquiries, or are ready
               to begin, our team is here to guide you every step of the way.
             </p>
 
