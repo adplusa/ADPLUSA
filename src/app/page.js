@@ -585,8 +585,8 @@ export default function Home() {
                       style={{
                         // backgroundImage: `url(${slide.image.asset.url})`,
                         backgroundImage: `url(${urlFor(slide.image.asset).url()})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
+                        backgroundSize: "contain",
+                        // backgroundPosition: "center",
                       }}
                       aria-label={slide.image.alt}
                     ></div>
