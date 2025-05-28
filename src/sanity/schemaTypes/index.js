@@ -11,6 +11,10 @@ import { faqSection } from "./faqType";
 import { projectPage } from "./projectType";
 import { projectInternalPageOne } from "./projectInternalOne";
 import { projectInternalPageTwo } from "./projectInternalTwo";
+import { projectInternalPageThree } from "./projectInternalThree";
+import { projectInternalPageFour } from "./projectInternalFour";
+import { projectInternalPageFive } from "./projectInternalFive";
+import { projectInternalPageSix } from "./projectInternalSix";
 
 export const schema = {
   types: [
@@ -27,5 +31,9 @@ export const schema = {
     projectPage,
     projectInternalPageOne,
     projectInternalPageTwo,
+    projectInternalPageThree,
+    projectInternalPageFour,
+    projectInternalPageFive,
+    projectInternalPageSix,
   ],
 };

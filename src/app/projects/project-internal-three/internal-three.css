@@ -1,0 +1,156 @@
+h1 {
+  font-family: Lato-Bold;
+}
+
+p {
+  color: #575757;
+  font-family: "Lato-regular";
+}
+
+.internal-section-one {
+  margin-top: 6%;
+  padding: 0 2%;
+}
+
+.internal-section-one img {
+  width: 100%;
+  height: 900px;
+  object-fit: cover;
+  margin-top: 4%;
+}
+
+.internal-section-one h1 {
+  font-size: 4.5rem;
+  margin-top: 9%;
+}
+
+.internal-section-one-bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.internal-section-one-bottom-left {
+  margin-top: 3%;
+  flex: 0 0 50%;
+}
+
+.internal-section-one-bottom-left p {
+  font-size: 18px;
+  word-spacing: 1px;
+  line-height: 1.5;
+}
+
+.internal-section-one-bottom-right {
+  flex: 0 0 30%;
+  margin-top: 2%;
+}
+
+.internal-section-one-bottom-right p {
+  font-size: 18px;
+}
+
+.internal-section-one-bottom-right li {
+  font-weight: bold;
+  font-size: 18px;
+  list-style: none;
+  margin-top: 3px;
+}
+
+.internal-section-one-bottom-right li a {
+  text-decoration: underline;
+}
+
+.internal-section-one-bottom-right > div {
+  margin-top: 25px;
+}
+
+.internal-section-one-btn {
+  display: flex;
+  justify-content: center;
+  margin-top: 2%;
+}
+
+.internal-section-one-btn button {
+  background-color: transparent;
+  color: blue;
+  box-shadow: none;
+  border: none;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+}
+
+#internal-line {
+  margin-top: 1%;
+  border: 0.4px solid #000;
+}
+
+#add svg {
+  width: 30px;
+  height: 30px;
+}
+
+#less svg {
+  width: 20px;
+  height: 20px;
+}
+
+#less button {
+  gap: 5px;
+}
+
+.internal-section-one-btn button:hover svg {
+  transform: rotate(-90deg);
+  transition: transform 0.3s ease-in-out;
+}
+
+.internal-section-one-bottom-left p {
+  margin-top: 20px;
+}
+
+.internal-section-one-bottom-left p:first-of-type {
+  margin-top: 0 !important;
+}
+
+.load-content,
+.load-content-li {
+  display: none;
+  height: 0;
+  overflow: hidden;
+  transition: height 0.3s ease;
+}
+
+.load-content.visible,
+.load-content-li.visible {
+  display: block;
+  height: auto;
+}
+
+#less {
+  display: none;
+}
+
+.internal-section-two-top-imgs {
+  display: flex;
+  justify-content: center;
+  gap: 3%;
+  margin-top: 5%;
+}
+
+.internal-section-two-top-imgs img {
+  width: 46%;
+  height: 900px;
+}
+
+.internal-section-two-bottom img,
+.internal-three img {
+  width: 95%;
+  height: 700px;
+  margin-top: 8%;
+}
+
+.internal-section-two-bottom,
+.internal-three {
+  display: flex;
+  justify-content: center;
+}

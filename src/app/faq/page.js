@@ -7,6 +7,7 @@ import Header from "../Components/Header/page";
 import Footer from "../Components/Footer/page";
 import { client } from "../../sanity/lib/client";
 import urlFor from "../helpers/sanity";
+import { Plus, Minus } from "lucide-react";
 
 export default function FAQ() {
   const [faqData, setFaqData] = useState(null);
@@ -64,7 +65,7 @@ export default function FAQ() {
               className={`faq-content ${categoryIndex % 2 === 1 ? "reverse" : ""}`}
             >
               {/* FAQ Text */}
-              <div className="faq-text-content">
+              {/* <div className="faq-text-content">
                 {category.faqs?.map((faq, faqIndex) => {
                   const isOpen = openFaqs[`${categoryIndex}-${faqIndex}`];
                   return (
@@ -78,12 +79,56 @@ export default function FAQ() {
                         </div>
                       </div>
 
-                      {/* Only show the answer if isOpen is true */}
                       {isOpen && (
                         <div
                           className={`faq-answer-container ${isOpen ? "open" : ""}`}
                         >
                           <p className="faq-answer-two">{faq.answer}</p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div> */}
+              <div className="faq-text-content">
+                {category.faqs?.map((faq, faqIndex) => {
+                  const isOpen = openFaqs[`${categoryIndex}-${faqIndex}`];
+                  return (
+                    <div key={faqIndex} className="faq-item">
+                      <div
+                        className="faq-question-container"
+                        onClick={() => toggleFaq(categoryIndex, faqIndex)}
+                      >
+                        <div
+                          className="faq-content-text"
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                          }}
+                        >
+                          {/* Icon that toggles between Plus and Minus */}
+                          {isOpen ? <Minus size={20} /> : <Plus size={20} />}
+                          <h3 className="faq-question-two">{faq.question}</h3>
+                        </div>
+                      </div>
+
+                      {/* Only show the answer if isOpen is true */}
+                      {isOpen && (
+                        <div
+                          className={`faq-answer-container ${isOpen ? "open" : ""}`}
+                        >
+                          <p
+                            className="faq-answer-two"
+                            style={{
+                              display: "flex",
+                              alignItems: "start",
+                              gap: "8px",
+                            }}
+                          >
+                            <span style={{ padding: "0 10px" }}></span>
+                            {faq.answer}
+                          </p>
                         </div>
                       )}
                     </div>

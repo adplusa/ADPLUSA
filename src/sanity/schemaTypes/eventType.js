@@ -5,6 +5,33 @@ export const eventType = defineType({
   title: "Homepage",
   type: "document",
   fields: [
+    // Animate Slider
+    {
+      name: "title",
+      title: "Slider Title",
+      type: "string",
+      description: "Internal title for the slider document",
+    },
+    {
+      name: "slides", // ✅ not "banners"
+      title: "Slides",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "image",
+              title: "Slide Image",
+              type: "image",
+              options: { hotspot: true },
+              fields: [{ name: "alt", title: "Alt Text", type: "string" }],
+            },
+          ],
+        },
+      ],
+    },
+
     // Image for Light and Dark Mode
     defineField({
       name: "lightModeImage",
@@ -58,36 +85,39 @@ export const eventType = defineType({
         },
       ],
     }),
-    defineField({
-      name: "sectionTitle",
-      title: "Achievement Title",
-      type: "string",
-    }),
-    defineField({
-      name: "achievements",
-      title: "Achievements",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          name: "achievementCard",
-          title: "Achievement Card",
-          fields: [
-            defineField({
-              name: "title",
-              title: "Title",
-              type: "string",
-            }),
-            defineField({
-              name: "number",
-              title: "Number",
-              type: "string",
-              description: 'Use string to allow characters like "+"',
-            }),
-          ],
-        },
-      ],
-    }),
+
+    // Achivement Container
+    // defineField({
+    //   name: "sectionTitle",
+    //   title: "Achievement Title",
+    //   type: "string",
+    // }),
+
+    // defineField({
+    //   name: "achievements",
+    //   title: "Achievements",
+    //   type: "array",
+    //   of: [
+    //     {
+    //       type: "object",
+    //       name: "achievementCard",
+    //       title: "Achievement Card",
+    //       fields: [
+    //         defineField({
+    //           name: "title",
+    //           title: "Title",
+    //           type: "string",
+    //         }),
+    //         defineField({
+    //           name: "number",
+    //           title: "Number",
+    //           type: "string",
+    //           description: 'Use string to allow characters like "+"',
+    //         }),
+    //       ],
+    //     },
+    //   ],
+    // }),
 
     // Services
     defineField({

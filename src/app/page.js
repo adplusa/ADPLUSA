@@ -112,12 +112,14 @@ const servicesData = [
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
-  const [currentSlideHeroBanner, setCurrentSlideHeroBanner] = useState(0);
+  // const [currentSlideHeroBanner, setCurrentSlideHeroBanner] = useState(0);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [isLeftHalf, setIsLeftHalf] = useState(true);
   const [showCustomCursor, setShowCustomCursor] = useState(false);
   const [cursorPosSecond, setCursorPosSecond] = useState({ x: 0, y: 0 });
   const [renderCursorPos, setRenderCursorPos] = useState({ x: 0, y: 0 });
+  const [slides, setSlides] = useState([]);
+  const [currentSlideHeroBanner, setCurrentSlideHeroBanner] = useState(0);
 
   const [loading, setLoading] = useState(true);
   const [counter, setCounter] = useState(0);
@@ -301,41 +303,45 @@ export default function Home() {
 
         // Set the fetched data into the state
         setHomepageData(homepageData);
+        // ✅ Set CMS-based slides here
+
+        setSlides(homepageData?.[0]?.slides || []);
       } catch (error) {
         console.error("Error fetching data from Sanity:", error);
       }
     };
+    console.log("Slides:", homepageData?.[0]?.slides);
 
     fetchData();
   }, []);
 
   // Banner for Light and Dark Mode
-  useEffect(() => {
-    if (homepageData?.[0]) {
-      const lightImg = urlFor(homepageData[0].lightModeImage).url();
-      const darkImg = urlFor(homepageData[0].darkModeImage).url();
+  // useEffect(() => {
+  //   if (homepageData?.[0]) {
+  //     const lightImg = urlFor(homepageData[0].lightModeImage).url();
+  //     const darkImg = urlFor(homepageData[0].darkModeImage).url();
 
-      console.log("LIGHT IMG:", lightImg);
-      console.log("DARK IMG:", darkImg);
+  //     console.log("LIGHT IMG:", lightImg);
+  //     console.log("DARK IMG:", darkImg);
 
-      const updateImage = () => {
-        const isDark = document.body.classList.contains("dark-mode");
-        setBgImage(isDark ? darkImg : lightImg);
-      };
+  //     const updateImage = () => {
+  //       const isDark = document.body.classList.contains("dark-mode");
+  //       setBgImage(isDark ? darkImg : lightImg);
+  //     };
 
-      updateImage();
+  //     updateImage();
 
-      const observer = new MutationObserver(updateImage);
-      observer.observe(document.body, {
-        attributes: true,
-        attributeFilter: ["class"],
-      });
+  //     const observer = new MutationObserver(updateImage);
+  //     observer.observe(document.body, {
+  //       attributes: true,
+  //       attributeFilter: ["class"],
+  //     });
 
-      return () => observer.disconnect();
-    } else {
-      console.log("Homepage data missing");
-    }
-  }, [homepageData]);
+  //     return () => observer.disconnect();
+  //   } else {
+  //     console.log("Homepage data missing");
+  //   }
+  // }, [homepageData]);
 
   // Working Process Images Changer
   useEffect(() => {
@@ -576,7 +582,13 @@ export default function Home() {
                     <div
                       key={index}
                       className="animate-back-img"
-                      style={{ backgroundImage: `url(${slide.image})` }}
+                      style={{
+                        // backgroundImage: `url(${slide.image.asset.url})`,
+                        backgroundImage: `url(${urlFor(slide.image.asset).url()})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      }}
+                      aria-label={slide.image.alt}
                     ></div>
                   ))}
                 </div>
