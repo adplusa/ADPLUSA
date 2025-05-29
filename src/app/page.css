@@ -2058,3 +2058,152 @@ span.service-two-bottom-box-logo {
   border: 2px solid white;
   opacity: 1;
 }
+
+.why-work {
+  padding: 80px 5%;
+  background: #fff;
+  font-family: "Geist", sans-serif;
+}
+
+.content-two {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+  justify-content: space-between;
+}
+
+.text {
+  flex: 1 1 500px;
+}
+
+.text h2 {
+  font-size: 2.8rem;
+  color: #1e1e1e;
+  margin-bottom: 40px;
+}
+
+.feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #f0d8d2;
+}
+
+.icon {
+  font-size: 24px;
+  color: #d2a191;
+  background-color: #f5e2db;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info h3 {
+  font-size: 20px;
+  color: #1e1e1e;
+  margin-bottom: 10px;
+}
+
+.info p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.image-wrapper {
+  position: relative;
+  flex: 1 1 400px;
+  margin-left: 10%;
+  margin-top: 5%;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  margin-top: -32%;
+}
+
+.background {
+  /* background: #e08f9d; */
+  background-image: url("/yellow.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 600px;
+  border-radius: 20px;
+  position: absolute;
+  left: 5%;
+  z-index: 1;
+}
+
+.person-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* important! */
+  border-radius: 20px;
+  position: relative;
+  z-index: 2;
+  display: block;
+}
+
+@media screen and (max-width: 768px) {
+  .animate-back-img {
+    height: 250px; /* Reduce height for mobile */
+    background-size: contain; /* Ensure full image fits */
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .animation-slider {
+    margin-top: -7%;
+  }
+
+  .custom-cursor {
+    display: none;
+  }
+
+  .dot.active {
+    background-color: #000;
+  }
+
+  .features-name {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: unset;
+    margin-top: 0;
+  }
+
+  .feature-section {
+    padding: 0;
+  }
+
+  .feature-box h1 {
+    font-size: 20px;
+  }
+
+  .feature-box {
+    width: 90%;
+  }
+
+  .features-name img {
+    width: 45px;
+    height: auto;
+    margin-top: 4%;
+  }
+
+  .features-name p {
+    font-size: 16px;
+    margin-top: 1%;
+  }
+
+  .features-name h3 {
+    font-size: 14px;
+    margin-top: 1%;
+  }
+}

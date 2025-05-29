@@ -67,7 +67,7 @@ const About = () => {
       <div className="about-container">
         <div className="about-content">
           {/* Top Intro Section */}
-          <div className="about-content-first-row">
+          {/* <div className="about-content-first-row">
             <div className="about-content-first-row-left">
               <h1>{data.mainTitle || "About"}</h1>
             </div>
@@ -76,15 +76,8 @@ const About = () => {
               {data.introParagraphs?.map((para, idx) => (
                 <p key={idx}>{para}</p>
               ))}
-              <span className="four-p">
-                {data.anchorLinks?.map((link, idx) => (
-                  <a href={`#${link.targetId}`} key={idx}>
-                    {link.label}
-                  </a>
-                ))}
-              </span>
             </div>
-          </div>
+          </div> */}
 
           <div className="home-about">
             <div className="about-us">
@@ -97,8 +90,16 @@ const About = () => {
                   <h1>{data.allowRightHeading}</h1>
 
                   <PortableText value={data.paragraph} />
+                  <span className="four-p">
+                    {data.anchorLinks?.map((link, idx) => (
+                      <a href={`#${link.targetId}`} key={idx}>
+                        {link.label}
+                      </a>
+                    ))}
+                  </span>
                 </div>
               </div>
+
               {/* <div className="who-we-are-btn">
                 <Link href="/about">
                   <button>

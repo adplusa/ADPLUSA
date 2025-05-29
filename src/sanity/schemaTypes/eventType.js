@@ -12,9 +12,30 @@ export const eventType = defineType({
       type: "string",
       description: "Internal title for the slider document",
     },
+    // Ligh Mode Slides
     {
       name: "slides", // ✅ not "banners"
-      title: "Slides",
+      title: "Slides For Light Mode",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "image",
+              title: "Slide Image",
+              type: "image",
+              options: { hotspot: true },
+              fields: [{ name: "alt", title: "Alt Text", type: "string" }],
+            },
+          ],
+        },
+      ],
+    },
+    // Dark Mode slides
+    {
+      name: "slidesDarkMode", // ✅ not "banners"
+      title: "Slides For Dark Mode",
       type: "array",
       of: [
         {
@@ -33,22 +54,22 @@ export const eventType = defineType({
     },
 
     // Image for Light and Dark Mode
-    defineField({
-      name: "lightModeImage",
-      title: "Banner Image for Light Mode",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
-    }),
-    defineField({
-      name: "darkModeImage",
-      title: "Banner Image for Dark Mode",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
-    }),
+    // defineField({
+    //   name: "lightModeImage",
+    //   title: "Banner Image for Light Mode",
+    //   type: "image",
+    //   options: {
+    //     hotspot: true,
+    //   },
+    // }),
+    // defineField({
+    //   name: "darkModeImage",
+    //   title: "Banner Image for Dark Mode",
+    //   type: "image",
+    //   options: {
+    //     hotspot: true,
+    //   },
+    // }),
 
     // Trust Icons
     defineField({
@@ -136,10 +157,10 @@ export const eventType = defineType({
             {
               name: "boxUrl",
               title: "Service Box URL",
-              type: "url",
+              type: "string", // ✅ change from "url" to "string"
               validation: (Rule) =>
-                Rule.uri({
-                  scheme: ["http", "https", "mailto", "tel"],
+                Rule.required().custom((url) => {
+                  return url.startsWith("/") || "Must start with /";
                 }),
             },
             {
@@ -348,69 +369,125 @@ export const eventType = defineType({
     }),
 
     //Founder Slider
-    defineField({
-      name: "founderSlider",
-      title: "Founder Slider",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            {
-              name: "founderTitle",
-              title: "Founder Title",
-              type: "string",
-            },
+    // defineField({
+    //   name: "founderSlider",
+    //   title: "Founder Slider",
+    //   type: "array",
+    //   of: [
+    //     {
+    //       type: "object",
+    //       fields: [
+    //         {
+    //           name: "founderTitle",
+    //           title: "Founder Title",
+    //           type: "string",
+    //         },
 
-            {
-              name: "founderDescription",
-              title: "Founder Description",
-              type: "array",
-              of: [{ type: "block" }],
-            },
+    //         {
+    //           name: "founderDescription",
+    //           title: "Founder Description",
+    //           type: "array",
+    //           of: [{ type: "block" }],
+    //         },
 
-            {
-              name: "founderThumbnailImage",
-              title: "Founder Thumbnail Image",
-              type: "image",
-              options: {
-                hotspot: true,
-              },
-            },
+    //         {
+    //           name: "founderThumbnailImage",
+    //           title: "Founder Thumbnail Image",
+    //           type: "image",
+    //           options: {
+    //             hotspot: true,
+    //           },
+    //         },
 
-            {
-              name: "founderName",
-              title: "Founder Name",
-              type: "string",
-            },
-            {
-              name: "position",
-              title: "Position",
-              type: "string",
-            },
+    //         {
+    //           name: "founderName",
+    //           title: "Founder Name",
+    //           type: "string",
+    //         },
+    //         {
+    //           name: "position",
+    //           title: "Position",
+    //           type: "string",
+    //         },
 
-            {
-              name: "partnerLabel",
-              title: "Partner Label",
-              type: "string",
-            },
-            {
-              name: "partner",
-              title: "Partner Content",
-              type: "string",
-            },
-            {
-              name: "founderBackImage",
-              title: "Founder Background Image",
-              type: "image",
-              options: {
-                hotspot: true,
-              },
-            },
-          ],
-        },
-      ],
-    }),
+    //         {
+    //           name: "partnerLabel",
+    //           title: "Partner Label",
+    //           type: "string",
+    //         },
+    //         {
+    //           name: "partner",
+    //           title: "Partner Content",
+    //           type: "string",
+    //         },
+    //         {
+    //           name: "founderBackImage",
+    //           title: "Founder Background Image",
+    //           type: "image",
+    //           options: {
+    //             hotspot: true,
+    //           },
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // }),
+
+    // Founder SLider
+    // defineField({
+    //   name: "whyWorkWithUs",
+    //   title: "Why Work With Us",
+    //   type: "array",
+    //   of: [
+    //     {
+    //       type: "object",
+    //       fields: [
+    //         {
+    //           name: "title",
+    //           title: "Section Title",
+    //           type: "string",
+    //         },
+    //         {
+    //           name: "features",
+    //           title: "Features",
+    //           type: "array",
+    //           of: [
+    //             {
+    //               type: "object",
+    //               name: "feature",
+    //               fields: [
+    //                 {
+    //                   name: "icon",
+    //                   title: "Icon (Emoji or Character)",
+    //                   type: "string",
+    //                   description: "Example: 🚀",
+    //                 },
+    //                 {
+    //                   name: "title",
+    //                   title: "Feature Title",
+    //                   type: "string",
+    //                 },
+    //                 {
+    //                   name: "description",
+    //                   title: "Feature Description",
+    //                   type: "text",
+    //                 },
+    //               ],
+    //             },
+    //           ],
+    //         },
+    //         {
+    //           name: "image",
+    //           title: "Image",
+    //           type: "image",
+    //           options: {
+    //             hotspot: true,
+    //           },
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // }),
 
     // Contact us
     defineField({

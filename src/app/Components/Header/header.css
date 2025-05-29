@@ -25,7 +25,6 @@
   width: 100%;
   height: 13%;
   padding: 0 3%;
-  /* background-color: var(--background); */
   background-color: #fff;
   color: #000;
   border-bottom: 1px solid rgb(121, 18, 18);
@@ -44,7 +43,6 @@
 }
 
 .day-night {
-  /* border: 1px solid var(--borderColor); */
   border: 1px solid #000;
   height: 26px;
   width: 60px;
@@ -59,8 +57,10 @@
   position: absolute;
   width: 20px;
   height: 20px;
+  /* background-color: var(--background);
+  border: var(--borderColor); */
   background-color: var(--background);
-  border: var(--borderColor);
+  border: var(--borderColor) #fff;
   border-radius: 50%;
   left: 3px;
   z-index: 1;
@@ -151,4 +151,109 @@
   display: flex;
   align-items: baseline;
   gap: 20px;
+}
+
+.mobile {
+  display: none;
+}
+
+#check {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .mobile {
+    display: flex;
+    position: relative;
+    top: 0;
+  }
+
+  .desktop {
+    display: none;
+  }
+
+  #check {
+    display: none;
+  }
+
+  #ham {
+    cursor: pointer;
+    z-index: 1001;
+    padding: 10px;
+  }
+
+  .second-navbar ul {
+    position: absolute;
+    top: 100%;
+    left: -100%;
+    transition: left 0.3s ease;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    justify-content: flex-start !important;
+    background-color: rgb(239, 239, 239);
+  }
+
+  .second-navbar.mobile-open ul {
+    left: 0;
+  }
+
+  .second-navbar.mobile-open ul li {
+    margin-top: 20px;
+    padding: 0 10px;
+  }
+
+  .flip-logo img {
+    width: 80px;
+    height: auto;
+  }
+
+  .nav {
+    height: 100vh;
+  }
+
+  #ham {
+    background: none;
+    border: none;
+  }
+
+  #ham svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  #ham svg path {
+    fill: #000;
+  }
+
+  .header-right {
+    align-items: center !important;
+  }
+
+  .flip-logo {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .color-changer h3 {
+    font-size: 12px;
+  }
+
+  .day-night {
+    border: 1px solid #000;
+    height: 21px;
+    width: 54px;
+  }
+
+  .rounder-div-changer {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+  }
+
+  .header-df {
+    padding: 0;
+  }
 }

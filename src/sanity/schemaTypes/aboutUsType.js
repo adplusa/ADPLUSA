@@ -5,16 +5,16 @@ export const aboutPage = defineType({
   title: "About Page",
   type: "document",
   fields: [
-    defineField({
-      name: "mainTitle",
-      title: "Main Title",
-      type: "string",
-    }),
-    defineField({
-      name: "subheading",
-      title: "Subheading",
-      type: "string",
-    }),
+    // defineField({
+    //   name: "mainTitle",
+    //   title: "Main Title",
+    //   type: "string",
+    // }),
+    // defineField({
+    //   name: "subheading",
+    //   title: "Subheading",
+    //   type: "string",
+    // }),
     defineField({
       name: "introParagraphs",
       title: "Introduction Paragraphs",

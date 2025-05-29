@@ -6,24 +6,24 @@ export const servicesInternalTwoPage = defineType({
   title: "Services Internal Page Two",
   type: "document",
   fields: [
-    defineField({ name: "bannerTitle", title: "Banner Title", type: "string" }),
-    defineField({
-      name: "bannerTags",
-      title: "Popular Tags",
-      type: "array",
-      of: [{ type: "string" }],
-    }),
-    defineField({
-      name: "trustedStats",
-      title: "Trusted Statistics",
-      type: "array",
-      of: [
-        defineField({
-          type: "object",
-          fields: [{ name: "label", type: "string", title: "Label" }],
-        }),
-      ],
-    }),
+    // defineField({ name: "bannerTitle", title: "Banner Title", type: "string" }),
+    // defineField({
+    //   name: "bannerTags",
+    //   title: "Popular Tags",
+    //   type: "array",
+    //   of: [{ type: "string" }],
+    // }),
+    // defineField({
+    //   name: "trustedStats",
+    //   title: "Trusted Statistics",
+    //   type: "array",
+    //   of: [
+    //     defineField({
+    //       type: "object",
+    //       fields: [{ name: "label", type: "string", title: "Label" }],
+    //     }),
+    //   ],
+    // }),
     defineField({
       name: "servicesList",
       title: "Services Offered",
@@ -64,20 +64,20 @@ export const servicesInternalTwoPage = defineType({
         }),
       ],
     }),
-    defineField({
-      name: "specialization",
-      title: "Specialization CTA Section",
-      type: "object",
-      fields: [
-        { name: "buttonText", type: "string", title: "CTA Button Text" },
-        {
-          name: "image",
-          type: "image",
-          title: "Right Image",
-          options: { hotspot: true },
-        },
-      ],
-    }),
+    // defineField({
+    //   name: "specialization",
+    //   title: "Specialization CTA Section",
+    //   type: "object",
+    //   fields: [
+    //     { name: "buttonText", type: "string", title: "CTA Button Text" },
+    //     {
+    //       name: "image",
+    //       type: "image",
+    //       title: "Right Image",
+    //       options: { hotspot: true },
+    //     },
+    //   ],
+    // }),
     defineField({
       name: "founderImage",
       title: "Founder Image",
@@ -98,15 +98,15 @@ export const servicesInternalTwoPage = defineType({
         }),
       ],
     }),
-    defineField({
-      name: "finalCTA",
-      title: "Final Call To Action",
-      type: "object",
-      fields: [
-        { name: "ctaTitle", type: "string", title: "CTA Title" },
-        { name: "ctaButton", type: "string", title: "Button Text" },
-      ],
-    }),
+    // defineField({
+    //   name: "finalCTA",
+    //   title: "Final Call To Action",
+    //   type: "object",
+    //   fields: [
+    //     { name: "ctaTitle", type: "string", title: "CTA Title" },
+    //     { name: "ctaButton", type: "string", title: "Button Text" },
+    //   ],
+    // }),
     defineField({
       name: "professionals",
       title: "Professional Roles Carousel",

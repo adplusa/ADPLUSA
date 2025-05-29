@@ -106,6 +106,45 @@ export default function ContactForm() {
         </div>
       </div>
 
+      <section className="for-map-wrapper">
+        <div className="for-map-container">
+          <div className="for-map-left">
+            <h2 className="for-map-heading">Let’s Talk Ideas</h2>
+            <p className="for-map-description">
+              Connect with us to transform your ideas into reality. Whether
+              youre seeking expert advice, have project inquiries, or are ready
+              to begin, our team is here to guide you every step of the way.
+            </p>
+
+            <div className="for-map-info">
+              <div className="for-map-item">
+                <span className="for-map-label">Address:</span>
+                <span className="for-map-value">
+                  423 Argyll Ln, Schaumburg, Illinois, USA
+                </span>
+              </div>
+              <div className="for-map-item">
+                <span className="for-map-label">Phone:</span>
+                <span className="for-map-value">+1 (224) 421-7671</span>
+              </div>
+              <div className="for-map-item">
+                <span className="for-map-label">Email:</span>
+                <span className="for-map-value">info@adplusa.com</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="for-map-right">
+            <iframe
+              title="Google Map"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2969.528336894264!2d-88.09820568455794!3d42.03336077920973!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880fa385d6f88a8f%3A0x4f276c69f4b8efc!2s423%20Argyll%20Ln%2C%20Schaumburg%2C%20IL%2060173%2C%20USA!5e0!3m2!1sen!2sin!4v1689785104729!5m2!1sen!2sin"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
       <section className="why-work">
         <div className="content-two">
           {/* Text Section */}
@@ -168,45 +207,6 @@ export default function ContactForm() {
                 height="400"
               />
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="for-map-wrapper">
-        <div className="for-map-container">
-          <div className="for-map-left">
-            <h2 className="for-map-heading">Let’s Talk Ideas</h2>
-            <p className="for-map-description">
-              Connect with us to transform your ideas into reality. Whether
-              youre seeking expert advice, have project inquiries, or are ready
-              to begin, our team is here to guide you every step of the way.
-            </p>
-
-            <div className="for-map-info">
-              <div className="for-map-item">
-                <span className="for-map-label">Address:</span>
-                <span className="for-map-value">
-                  423 Argyll Ln, Schaumburg, Illinois, USA
-                </span>
-              </div>
-              <div className="for-map-item">
-                <span className="for-map-label">Phone:</span>
-                <span className="for-map-value">+1 (224) 421-7671</span>
-              </div>
-              <div className="for-map-item">
-                <span className="for-map-label">Email:</span>
-                <span className="for-map-value">info@adplusa.com</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="for-map-right">
-            <iframe
-              title="Google Map"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2969.528336894264!2d-88.09820568455794!3d42.03336077920973!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880fa385d6f88a8f%3A0x4f276c69f4b8efc!2s423%20Argyll%20Ln%2C%20Schaumburg%2C%20IL%2060173%2C%20USA!5e0!3m2!1sen!2sin!4v1689785104729!5m2!1sen!2sin"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
           </div>
         </div>
       </section>

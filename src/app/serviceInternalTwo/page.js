@@ -87,7 +87,7 @@ const ServicesPageTwo = () => {
       <Header />
 
       <section className="service-container">
-        <div className="banner-text-container">
+        {/* <div className="banner-text-container">
           <h1 className="banner-title">{data.bannerTitle}</h1>
           <button className="button">Hire an architect</button>
           <div className="popular-tags">
@@ -116,7 +116,7 @@ const ServicesPageTwo = () => {
               </p>
             ))}
           </div>
-        </div>
+        </div> */}
       </section>
 
       <section className="service-info">
@@ -156,7 +156,7 @@ const ServicesPageTwo = () => {
         </div>
       </div>
 
-      <section className="sepecialize">
+      {/* <section className="sepecialize">
         <div className="sepecialize-df">
           <div className="specialize-left">
             <button>{data.specialization?.buttonText}</button>
@@ -173,7 +173,7 @@ const ServicesPageTwo = () => {
             )}
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="why-work">
         <div className="content-two">
@@ -202,14 +202,14 @@ const ServicesPageTwo = () => {
         </div>
       </section>
 
-      <div className="cta-container-df">
+      {/* <div className="cta-container-df">
         <div className="cta-container">
           <div className="cta-text">
             <h2>{data.finalCTA?.ctaTitle}</h2>
           </div>
           <button className="cta-button">{data.finalCTA?.ctaButton}</button>
         </div>
-      </div>
+      </div> */}
 
       <div className="professionals-section">
         <h1 className="professionals-heading">

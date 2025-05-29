@@ -94,20 +94,20 @@ export const servicesInternalOnePage = defineType({
     }),
 
     // 💼 Specialization Section
-    defineField({
-      name: "specialization",
-      title: "Specialization CTA Section",
-      type: "object",
-      fields: [
-        { name: "buttonText", type: "string", title: "CTA Button Text" },
-        {
-          name: "image",
-          type: "image",
-          title: "Right Image",
-          options: { hotspot: true },
-        },
-      ],
-    }),
+    // defineField({
+    //   name: "specialization",
+    //   title: "Specialization CTA Section",
+    //   type: "object",
+    //   fields: [
+    //     { name: "buttonText", type: "string", title: "CTA Button Text" },
+    //     {
+    //       name: "image",
+    //       type: "image",
+    //       title: "Right Image",
+    //       options: { hotspot: true },
+    //     },
+    //   ],
+    // }),
 
     // 🚀 Why Work With Us Features
     defineField({
@@ -154,14 +154,14 @@ export const servicesInternalOnePage = defineType({
     // }),
 
     // 💬 Final CTA
-    defineField({
-      name: "finalCTA",
-      title: "Final Call To Action",
-      type: "object",
-      fields: [
-        { name: "ctaTitle", type: "string", title: "CTA Title" },
-        { name: "ctaButton", type: "string", title: "Button Text" },
-      ],
-    }),
+    // defineField({
+    //   name: "finalCTA",
+    //   title: "Final Call To Action",
+    //   type: "object",
+    //   fields: [
+    //     { name: "ctaTitle", type: "string", title: "CTA Title" },
+    //     { name: "ctaButton", type: "string", title: "Button Text" },
+    //   ],
+    // }),
   ],
 });

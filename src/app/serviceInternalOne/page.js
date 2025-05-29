@@ -198,7 +198,7 @@ const ServicesPage = () => {
       </div>
 
       {/* CTA Specialization */}
-      <section className="sepecialize">
+      {/* <section className="sepecialize">
         <div className="sepecialize-df">
           <div className="specialize-left">
             <button>{data.specialization?.buttonText}</button>
@@ -215,7 +215,7 @@ const ServicesPage = () => {
             )}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Why Work With Us */}
       <section className="why-work">
@@ -246,14 +246,14 @@ const ServicesPage = () => {
       </section>
 
       {/* Final CTA */}
-      <div className="cta-container-df">
+      {/* <div className="cta-container-df">
         <div className="cta-container">
           <div className="cta-text">
             <h2>{data.finalCTA?.ctaTitle}</h2>
           </div>
           <button className="cta-button">{data.finalCTA?.ctaButton}</button>
         </div>
-      </div>
+      </div> */}
 
       {/* Carousel */}
       <div className="professionals-section">

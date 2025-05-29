@@ -82,20 +82,20 @@ export const servicesInternalFivePage = defineType({
         }),
       ],
     }),
-    defineField({
-      name: "specialization",
-      title: "Specialization CTA Section",
-      type: "object",
-      fields: [
-        { name: "buttonText", type: "string", title: "CTA Button Text" },
-        {
-          name: "image",
-          type: "image",
-          title: "Right Image",
-          options: { hotspot: true },
-        },
-      ],
-    }),
+    // defineField({
+    //   name: "specialization",
+    //   title: "Specialization CTA Section",
+    //   type: "object",
+    //   fields: [
+    //     { name: "buttonText", type: "string", title: "CTA Button Text" },
+    //     {
+    //       name: "image",
+    //       type: "image",
+    //       title: "Right Image",
+    //       options: { hotspot: true },
+    //     },
+    //   ],
+    // }),
     defineField({
       name: "founderImage",
       title: "Founder Image",
@@ -116,14 +116,14 @@ export const servicesInternalFivePage = defineType({
         }),
       ],
     }),
-    defineField({
-      name: "finalCTA",
-      title: "Final Call To Action",
-      type: "object",
-      fields: [
-        { name: "ctaTitle", type: "string", title: "CTA Title" },
-        { name: "ctaButton", type: "string", title: "Button Text" },
-      ],
-    }),
+    // defineField({
+    //   name: "finalCTA",
+    //   title: "Final Call To Action",
+    //   type: "object",
+    //   fields: [
+    //     { name: "ctaTitle", type: "string", title: "CTA Title" },
+    //     { name: "ctaButton", type: "string", title: "Button Text" },
+    //   ],
+    // }),
   ],
 });
