@@ -6,24 +6,38 @@ export const servicesInternalThreePage = defineType({
   title: "Services Internal Page Three",
   type: "document",
   fields: [
-    defineField({ name: "bannerTitle", title: "Banner Title", type: "string" }),
+    // defineField({ name: "bannerTitle", title: "Banner Title", type: "string" }),
+    // defineField({
+    //   name: "bannerTags",
+    //   title: "Popular Tags",
+    //   type: "array",
+    //   of: [{ type: "string" }],
+    // }),
+    // defineField({
+    //   name: "trustedStats",
+    //   title: "Trusted Statistics",
+    //   type: "array",
+    //   of: [
+    //     defineField({
+    //       type: "object",
+    //       fields: [{ name: "label", type: "string", title: "Label" }],
+    //     }),
+    //   ],
+    // }),
+
     defineField({
-      name: "bannerTags",
-      title: "Popular Tags",
-      type: "array",
-      of: [{ type: "string" }],
+      name: "title",
+      type: "string",
+      title: "Page Title",
     }),
+
     defineField({
-      name: "trustedStats",
-      title: "Trusted Statistics",
-      type: "array",
-      of: [
-        defineField({
-          type: "object",
-          fields: [{ name: "label", type: "string", title: "Label" }],
-        }),
-      ],
+      name: "serviceBannerImage",
+      title: "Select Image For Banner",
+      type: "image",
+      options: { hotspot: true },
     }),
+
     defineField({
       name: "servicesList",
       title: "Services Offered",

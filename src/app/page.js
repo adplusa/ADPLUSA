@@ -21,93 +21,7 @@ import { Fragment } from "react";
 
 gsap.registerPlugin(CSSPlugin);
 
-// const slides = [
-//   {
-//     id: 1,
-//     title: "Slide One",
-//     image: "/project-img3.jpg",
-//   },
-//   {
-//     id: 2,
-//     title: "Slide Two",
-//     image: "/project-img2.jpg",
-//   },
-//   {
-//     id: 3,
-//     title: "Slide Three",
-//     image: "/project-img4.jpg",
-//   },
-// ];
-
-// const steps = [
-//   {
-//     id: "01",
-//     title: "Meet Customers",
-//     description:
-//       "We introduce and present ourselves. Our priority is to listen and understand the client’s vision for clearer insight about the project.",
-//   },
-//   {
-//     id: "02",
-//     title: "Planning & Research",
-//     description:
-//       "With the help of research and critical analysis, we prepare the first set of the drawings taking into account the requirements of the clients.",
-//   },
-//   {
-//     id: "03",
-//     title: "Finalize the Design",
-//     description:
-//       "The feedback of the client is solicited and integrated. The changes are incorporated and the final set of completed drawings are prepared.",
-//   },
-// ];
-
 const images = ["/process-img.jpg", "/process-img2.jpg", "/process-img3.jpg"];
-
-// const servicesData = [
-//   {
-//     title: "Remote Executive Assistant",
-//     category: "Services",
-//     image: "/cad-1.webp",
-//   },
-//   {
-//     title: "MEP Engineer",
-//     category: "Services",
-//     image: "/cad-2.webp",
-//   },
-//   {
-//     title: "Construction Documentation",
-//     category: "Services",
-//     image: "/cad-4.webp",
-//   },
-//   {
-//     title: "CAD Outsourcing",
-//     category: "Services",
-//     image: "/cad-3.webp",
-//   },
-
-//   {
-//     title: "Bim Services",
-//     category: "Services",
-//     image: "/cad-2.webp",
-//   },
-
-//   {
-//     title: "MEP Engineer",
-//     category: "Services",
-//     image: "/cad-3.webp",
-//   },
-
-//   {
-//     title: "Presenting Drawing",
-//     category: "Services",
-//     image: "/cad-4.webp",
-//   },
-
-//   {
-//     title: "3D Visualization",
-//     category: "Services",
-//     image: "/cad-5.webp",
-//   },
-// ];
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -128,6 +42,7 @@ export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imageSrc, setImageSrc] = useState(images[0]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [homepageData, setHomepageData] = useState(null);
   const [index, setIndex] = useState(0);
   const [logo, setLogo] = useState("/red-logo.png");
   const textRef = useRef(null);
@@ -177,7 +92,7 @@ export default function Home() {
           if (mouseOver) return;
           timeout = setTimeout(() => {
             slider.next();
-          }, 2000);
+          }, 2000000000);
         }
         slider.on("created", () => {
           slider.container.addEventListener("mouseover", () => {
@@ -283,52 +198,50 @@ export default function Home() {
     // - loader-container fade out & removal
   };
 
-  const activitiesOutcomesCards = [
-    {
-      icon: "*",
-      title: "BIM Services",
-      description:
-        "Our BIM team consists of architects, engineers and designers offering holistic solutions.",
-    },
-    {
-      icon: "*",
-      title: "CAD Services",
-      description:
-        "Providing extended architectural and structural design and drafting services for all stages of your project",
-    },
-    {
-      icon: "*",
-      title: "Permit Drawings & Documentation",
-      description:
-        "Contact us and save the cumbersome job of authority approvals.",
-    },
-    {
-      icon: "*",
-      title: "3D Visualization",
-      description:
-        "Get the full experience of your building before hand by our 3D experts.",
-    },
-    {
-      icon: "*",
-      title: "Presentation Drawing",
-      description:
-        "We provide comprehensive research data which captivate our clients, at the lowest possible cost.",
-    },
-    {
-      icon: "*",
-      title: "Design Presentations",
-      description:
-        "Share schematic designs with stakeholders for feedback and refinement.",
-    },
-    {
-      icon: "*",
-      title: "MEP Services",
-      description:
-        "We strive to provide high-quality and reliable structural, mechanical and electrical engineering solutions.",
-    },
-  ];
-
-  const [homepageData, setHomepageData] = useState(null);
+  // const activitiesOutcomesCards = [
+  //   {
+  //     icon: "*",
+  //     title: "BIM Services",
+  //     description:
+  //       "Our BIM team consists of architects, engineers and designers offering holistic solutions.",
+  //   },
+  //   {
+  //     icon: "*",
+  //     title: "CAD Services",
+  //     description:
+  //       "Providing extended architectural and structural design and drafting services for all stages of your project",
+  //   },
+  //   {
+  //     icon: "*",
+  //     title: "Permit Drawings & Documentation",
+  //     description:
+  //       "Contact us and save the cumbersome job of authority approvals.",
+  //   },
+  //   {
+  //     icon: "*",
+  //     title: "3D Visualization",
+  //     description:
+  //       "Get the full experience of your building before hand by our 3D experts.",
+  //   },
+  //   {
+  //     icon: "*",
+  //     title: "Presentation Drawing",
+  //     description:
+  //       "We provide comprehensive research data which captivate our clients, at the lowest possible cost.",
+  //   },
+  //   {
+  //     icon: "*",
+  //     title: "Design Presentations",
+  //     description:
+  //       "Share schematic designs with stakeholders for feedback and refinement.",
+  //   },
+  //   {
+  //     icon: "*",
+  //     title: "MEP Services",
+  //     description:
+  //       "We strive to provide high-quality and reliable structural, mechanical and electrical engineering solutions.",
+  //   },
+  // ];
 
   // Home Sanity Fetch Data
   useEffect(() => {
@@ -872,7 +785,7 @@ export default function Home() {
                   ))}
                 </div>
 
-                <Link className="service-cta-wrap" href={"/servicestwo"}>
+                <Link className="service-cta-wrap" href={"/mainservice"}>
                   <button className="service-cta">
                     {homepageData[0].home_services_cta}
                   </button>
@@ -1060,12 +973,26 @@ export default function Home() {
               </div> */}
                 </div>
               </div>
-              {/* <div className="reviews-section">
+              <div className="reviews-section">
                 <div className="navigation-wrapper">
                   <button
                     className="prev-button"
                     onClick={() => instanceRef.current?.prev()}
-                  ></button>
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-arrow-left"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
+                      />
+                    </svg>
+                  </button>
 
                   <div ref={sliderRef} className="keen-slider">
                     {homepageData[0]?.whyWorkWithUs?.map((slide, idx) => (
@@ -1109,9 +1036,23 @@ export default function Home() {
                   <button
                     className="next-button"
                     onClick={() => instanceRef.current?.next()}
-                  ></button>
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-arrow-right"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+                      />
+                    </svg>
+                  </button>
                 </div>
-              </div> */}
+              </div>
               <section className="contact-us">
                 <div className="contact-container-two">
                   <div className="contact-us-df">

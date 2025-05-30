@@ -250,7 +250,7 @@ const ServiceTwo = () => {
           </div>
 
           <div className="image-wrapper">
-            <div className="background">
+            <div className="background-service">
               {data?.whyWorkWithUs?.image && (
                 <Image
                   src={urlFor(data.whyWorkWithUs.image).url()}

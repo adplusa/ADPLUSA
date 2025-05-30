@@ -73,9 +73,7 @@
 }
 
 .service-container {
-  background-image: url("/service-1.webp");
   width: 100%;
-  height: auto;
   background-position: top right;
   background-size: contain;
   background-repeat: no-repeat;
@@ -83,10 +81,10 @@
   align-items: center;
   justify-content: space-between;
   padding: 80px;
-  background-color: #152b29;
   color: white;
   position: relative;
-  margin-top: 6%;
+  margin-top: 5%;
+  aspect-ratio: 15 / 6;
 }
 
 .tick {
@@ -970,7 +968,7 @@ button.next-button:active {
   margin-top: -32%;
 }
 
-.background {
+/* .background {
   background-image: url(/yellow.svg);
   background-repeat: no-repeat;
   background-size: cover;
@@ -978,11 +976,10 @@ button.next-button:active {
   height: 500px;
   border-radius: 20px;
   position: absolute;
-  /* left: 5%; */
   z-index: 1;
   display: flex;
   justify-content: center;
-}
+} */
 
 .person-img {
   width: 100%;

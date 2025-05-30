@@ -434,60 +434,60 @@ export const eventType = defineType({
     // }),
 
     // Founder SLider
-    // defineField({
-    //   name: "whyWorkWithUs",
-    //   title: "Why Work With Us",
-    //   type: "array",
-    //   of: [
-    //     {
-    //       type: "object",
-    //       fields: [
-    //         {
-    //           name: "title",
-    //           title: "Section Title",
-    //           type: "string",
-    //         },
-    //         {
-    //           name: "features",
-    //           title: "Features",
-    //           type: "array",
-    //           of: [
-    //             {
-    //               type: "object",
-    //               name: "feature",
-    //               fields: [
-    //                 {
-    //                   name: "icon",
-    //                   title: "Icon (Emoji or Character)",
-    //                   type: "string",
-    //                   description: "Example: 🚀",
-    //                 },
-    //                 {
-    //                   name: "title",
-    //                   title: "Feature Title",
-    //                   type: "string",
-    //                 },
-    //                 {
-    //                   name: "description",
-    //                   title: "Feature Description",
-    //                   type: "text",
-    //                 },
-    //               ],
-    //             },
-    //           ],
-    //         },
-    //         {
-    //           name: "image",
-    //           title: "Image",
-    //           type: "image",
-    //           options: {
-    //             hotspot: true,
-    //           },
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // }),
+    defineField({
+      name: "whyWorkWithUs",
+      title: "Why Work With Us",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "title",
+              title: "Section Title",
+              type: "string",
+            },
+            {
+              name: "features",
+              title: "Features",
+              type: "array",
+              of: [
+                {
+                  type: "object",
+                  name: "feature",
+                  fields: [
+                    {
+                      name: "icon",
+                      title: "Icon (Emoji or Character)",
+                      type: "string",
+                      description: "Example: 🚀",
+                    },
+                    {
+                      name: "title",
+                      title: "Feature Title",
+                      type: "string",
+                    },
+                    {
+                      name: "description",
+                      title: "Feature Description",
+                      type: "text",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              name: "image",
+              title: "Image",
+              type: "image",
+              options: {
+                hotspot: true,
+              },
+            },
+          ],
+        },
+      ],
+    }),
 
     // Contact us
     defineField({

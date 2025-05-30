@@ -199,7 +199,7 @@ export default function ContactForm() {
 
           {/* Image Section */}
           <div className="image-wrapper">
-            <div className="background">
+            <div className="background-contact">
               <Image
                 src="/abhi.jpg"
                 alt="Why Work With Us"

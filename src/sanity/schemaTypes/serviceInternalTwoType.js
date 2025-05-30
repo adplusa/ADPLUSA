@@ -24,6 +24,20 @@ export const servicesInternalTwoPage = defineType({
     //     }),
     //   ],
     // }),
+
+    defineField({
+      name: "title",
+      type: "string",
+      title: "Page Title",
+    }),
+
+    defineField({
+      name: "serviceBannerImage",
+      title: "Select Image For Banner",
+      type: "image",
+      options: { hotspot: true },
+    }),
+
     defineField({
       name: "servicesList",
       title: "Services Offered",

@@ -40,6 +40,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  align-items: center;
 }
 
 .text {
@@ -99,7 +100,7 @@ body {
   margin-top: -32%;
 }
 
-.background {
+/* .background-contact {
   background-image: url("/yellow.svg");
   background-repeat: no-repeat;
   background-size: cover;
@@ -109,7 +110,7 @@ body {
   position: absolute;
   left: 5%;
   z-index: 1;
-}
+} */
 
 .person-img {
   width: 100%;

@@ -86,38 +86,16 @@ const ServicesPageTwo = () => {
     <>
       <Header />
 
-      <section className="service-container">
-        {/* <div className="banner-text-container">
-          <h1 className="banner-title">{data.bannerTitle}</h1>
-          <button className="button">Hire an architect</button>
-          <div className="popular-tags">
-            <span className="tag" id="popular">
-              Popular:
-            </span>
-            {data.bannerTags?.map((tag, i) => (
-              <span key={i} className="tag">
-                {tag}
-              </span>
-            ))}
-          </div>
-          <div className="stats">
-            {data.trustedStats?.map((stat, i) => (
-              <p key={i}>
-                <svg
-                  className="tick"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                {stat.label}
-              </p>
-            ))}
-          </div>
-        </div> */}
-      </section>
+      {data.serviceBannerImage && (
+        <section
+          className="service-container"
+          style={{
+            backgroundImage: `url(${urlFor(data.serviceBannerImage).url()})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        ></section>
+      )}
 
       <section className="service-info">
         <div className="services-into-df">
