@@ -8,6 +8,7 @@ import { servicesInternalFivePage } from "./serviceInternalFiveType";
 import { servicesInternalSixPage } from "./serviceInternalSixType";
 import { aboutPage } from "./aboutUsType";
 import { faqSection } from "./faqType";
+import { contactPage } from "./contactUsType";
 import { projectPage } from "./projectType";
 import { projectInternalPageOne } from "./projectInternalOne";
 import { projectInternalPageTwo } from "./projectInternalTwo";
@@ -28,6 +29,7 @@ export const schema = {
     servicesInternalFivePage,
     servicesInternalSixPage,
     faqSection,
+    contactPage,
     projectPage,
     projectInternalPageOne,
     projectInternalPageTwo,

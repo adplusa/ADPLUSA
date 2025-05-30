@@ -14,8 +14,8 @@ p {
 
 .internal-section-one img {
   width: 100%;
-  height: 900px;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
   margin-top: 4%;
 }
 
@@ -139,13 +139,15 @@ p {
 
 .internal-section-two-top-imgs img {
   width: 46%;
-  height: 900px;
+  height: auto;
+  object-fit: contain;
 }
 
 .internal-section-two-bottom img,
 .internal-three img {
   width: 95%;
-  height: 700px;
+  height: auto;
+  object-fit: contain;
   margin-top: 8%;
 }
 

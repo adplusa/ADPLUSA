@@ -158,22 +158,14 @@ const ServiceTwo = () => {
     <>
       <Header />
 
-      {/* Hero Section */}
-      <section className="schematic-section">
-        <div className="schematic-content">
-          <h1>{data.hero?.title}</h1>
-          <button className="demo-button">{data.hero?.buttonText}</button>
-
-          <div className="schematic-features">
-            {data.hero?.features?.map((feature, index) => (
-              <div key={index} className="feature-item">
-                <span className="feature-icon">{feature.icon}</span>
-                <span>{feature.text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {data.serviceBannerImage && (
+        <section
+          className="schematic-section"
+          style={{
+            backgroundImage: `url(${urlFor(urlFor(data.serviceBannerImage).url())})`,
+          }}
+        ></section>
+      )}
 
       {/* Trust Section */}
       <section className="comapany-trust">

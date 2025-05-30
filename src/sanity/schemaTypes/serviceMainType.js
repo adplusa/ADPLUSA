@@ -6,36 +6,49 @@ export const mainServiceType = defineType({
   type: "document",
   fields: [
     // Banner
+    // defineField({
+    //   name: "hero",
+    //   title: "Hero Section",
+    //   type: "object",
+    //   fields: [
+    //     defineField({ name: "title", title: "BannerTitle", type: "string" }),
+    //     defineField({
+    //       name: "buttonText",
+    //       title: "Banner Button Text",
+    //       type: "string",
+    //     }),
+    //     defineField({
+    //       name: "features",
+    //       title: "Features",
+    //       type: "array",
+    //       of: [
+    //         defineField({
+    //           type: "object",
+    //           fields: [
+    //             defineField({
+    //               name: "icon",
+    //               title: "Icon Emoji",
+    //               type: "string",
+    //             }),
+    //             defineField({ name: "text", title: "Text", type: "string" }),
+    //           ],
+    //         }),
+    //       ],
+    //     }),
+    //   ],
+    // }),
+
     defineField({
-      name: "hero",
-      title: "Hero Section",
-      type: "object",
-      fields: [
-        defineField({ name: "title", title: "BannerTitle", type: "string" }),
-        defineField({
-          name: "buttonText",
-          title: "Banner Button Text",
-          type: "string",
-        }),
-        defineField({
-          name: "features",
-          title: "Features",
-          type: "array",
-          of: [
-            defineField({
-              type: "object",
-              fields: [
-                defineField({
-                  name: "icon",
-                  title: "Icon Emoji",
-                  type: "string",
-                }),
-                defineField({ name: "text", title: "Text", type: "string" }),
-              ],
-            }),
-          ],
-        }),
-      ],
+      name: "title",
+      type: "string",
+      title: "Page Title",
+    }),
+
+    defineField({
+      name: "serviceBannerImage",
+      title: "Select Image For Banner",
+      type: "image",
+      options: { hotspot: true },
     }),
 
     // Banner Green Box Content

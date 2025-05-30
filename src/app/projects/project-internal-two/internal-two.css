@@ -14,9 +14,9 @@ p {
 
 .internal-section-one img {
   width: 100%;
-  height: 900px;
-  object-fit: cover;
-  margin-top: 4%;
+  height: auto;
+  object-fit: contain;
+  margin-top: 2%;
 }
 
 .internal-section-one h1 {
@@ -137,6 +137,12 @@ p {
   margin-top: 5%;
 }
 
+.internal-section-two-top-imgs img {
+  width: 46%;
+  height: auto;
+  object-fit: contain;
+}
+
 #picak-two-img img {
   width: 46%;
   height: auto;
@@ -145,7 +151,8 @@ p {
 .internal-section-two-bottom img,
 .internal-three img {
   width: 95%;
-  height: 700px;
+  height: auto;
+  object-fit: contain;
   margin-top: 8%;
 }
 

@@ -158,7 +158,8 @@ body {
   margin-bottom: 30px;
 }
 
-.form-field input {
+.form-field input,
+.form-field textarea {
   width: 100%;
   padding: 15px 20px;
   border: 1px solid #ccc;
@@ -169,7 +170,8 @@ body {
   transition: 0.3s ease-in-out;
 }
 
-.form-field input:focus {
+.form-field input:focus,
+.form-field textarea:focus {
   border-color: #8a0b0e;
   outline: none;
 }

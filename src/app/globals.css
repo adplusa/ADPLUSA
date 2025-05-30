@@ -169,6 +169,35 @@ a {
   height: 30px;
 }
 
+@media screen and (max-width: 768px) {
+  .enquire button {
+    background: #000;
+    font-size: 12px !important;
+    right: 3% !important;
+    top: 54% !important;
+  }
+
+  .upward svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .upward {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .whatsapp img {
+    width: 25px !important;
+    height: auto;
+  }
+
+  .btn-whatsapp-pulse {
+    padding: 20px !important;
+    left: 10px !important;
+  }
+}
+
 /* .home_services,
 .technology-we-use,
 .rto-section,
