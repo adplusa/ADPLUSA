@@ -2318,5 +2318,176 @@ span.service-two-bottom-box-logo {
 
   .card {
     flex-direction: column;
+    width: 100%;
+  }
+
+  .card.active {
+    transform: unset !important;
+  }
+
+  .card div:nth-of-type(2) {
+    max-width: 100%;
+  }
+
+  .number {
+    background: #902b2c;
+    height: 30px;
+    width: 30px;
+  }
+
+  .card-title {
+    font-size: 17px;
+    margin-top: 11px;
+  }
+
+  .card-text-home {
+    font-size: 14px;
+  }
+
+  .marquee-item h1 {
+    font-size: 22px;
+  }
+
+  .marquee-item {
+    gap: 10px;
+  }
+
+  /* About us Section */
+  .about-us-top {
+    display: block;
+  }
+
+  .about-us h2 {
+    position: absolute;
+    left: 3%;
+    font-size: 3rem;
+    line-height: normal;
+    text-align: center;
+  }
+
+  .about-us-top-left h1 {
+    font-size: 1.2rem;
+    line-height: normal;
+    margin-bottom: 2rem;
+    margin-top: 13%;
+  }
+
+  .about-us-top-left,
+  .about-us-top-right {
+    max-width: 100%;
+  }
+
+  .about-us-top-left {
+    text-align: center;
+    margin-top: 10%;
+  }
+
+  .about-us-top-right {
+    padding: 0 26px;
+  }
+
+  .about-us-top-left h1:after {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #902b2c;
+  }
+
+  .about-us {
+    position: relative;
+    padding: 5% 1%;
+  }
+
+  .about-us-top-right h1 {
+    font-size: 1.3rem;
+    display: none;
+  }
+
+  .about-us-top-right p {
+    font-size: 14px;
+  }
+
+  .who-we-are-btn button {
+    font-size: 13px;
+    width: 120px;
+    height: 30px;
+  }
+
+  .who-we-are-btn button::before,
+  .who-we-are-btn button::after,
+  .who-we-are-btn button:hover {
+    content: unset;
+  }
+
+  .about-us-img video {
+    margin-top: -3%;
+    width: 150px !important;
+    height: auto !important;
+  }
+
+  .about-us-img img {
+    width: 160px;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .about-us-video-text h1 {
+    font-size: 4rem;
+  }
+
+  .about-us-video-image {
+    margin-top: 5%;
+  }
+
+  .content-two {
+    flex-direction: column-reverse;
+  }
+
+  .text h2 {
+    font-size: 1.4rem;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .info h3 {
+    font-size: 15px;
+  }
+
+  .info p {
+    font-size: 14px;
+  }
+
+  .feature {
+    gap: 10px;
+    padding: 9px 11px;
+  }
+
+  .image-wrapper img {
+    width: 150px;
+  }
+
+  button.prev-button {
+    left: 27%;
+    bottom: -30px;
+  }
+
+  button.next-button {
+    right: 27%;
+    bottom: -30px;
+  }
+
+  button.prev-button,
+  button.next-button {
+    width: 45px;
+    height: 45px;
+  }
+
+  .image-wrapper {
+    margin-top: 15%;
+  }
+
+  .icon {
+    font-size: 15px;
+    width: 47px;
   }
 }
