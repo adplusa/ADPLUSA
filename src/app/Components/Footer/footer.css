@@ -134,3 +134,14 @@
 #footer-right .second-navbar {
   margin-top: 2% !important;
 }
+
+@media screen and (max-width: 768px) {
+  .footer-logo p {
+    font-size: 14px;
+  }
+
+  .copy-designed p {
+    font-size: 13px;
+    margin-left: 10px;
+  }
+}

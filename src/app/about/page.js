@@ -154,7 +154,11 @@ const About = () => {
               className={`about-content-${idx + 2}-row`}
               key={section.sectionId || idx}
             >
-              <div className="people-content" id={section.sectionId}>
+              {/* <div className="people-content" id={section.sectionId}> */}
+              <div
+                className="people-content"
+                id={section.sectionId?.replace(/^#/, "")}
+              >
                 <h1>{section.title}</h1>
                 <p>{section.body}</p>
               </div>
