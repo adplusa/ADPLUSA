@@ -882,7 +882,7 @@ span.service-two-bottom-box-logo {
   display: flex;
   padding-bottom: 2%;
 }
-
+/* 
 .strip-text {
   overflow: hidden;
   color: #000000;
@@ -922,6 +922,56 @@ span.service-two-bottom-box-logo {
   100% {
     transform: translateX(-35%);
   }
+} */
+
+.strip-text {
+  overflow: hidden;
+  color: #000000;
+  padding: 12px 0;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 20s linear infinite;
+  gap: 30px; /* Increased gap for better spacing */
+}
+
+.marquee-item {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.marquee-item h1 {
+  font-size: 2rem;
+  margin: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.marquee-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-40%); /* Move exactly half the width */
+  }
+}
+
+/* Optional: Pause on hover */
+.strip-text:hover .marquee {
+  animation-play-state: paused;
 }
 
 .cirlce-review-df {
@@ -1770,54 +1820,6 @@ span.service-two-bottom-box-logo {
   flex-wrap: wrap;
   padding: 20px;
 }
-/* 
-.service-box {
-  width: 300px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  background: white;
-  text-align: center;
-  transition: transform 0.3s ease;
-}
-
-.service-box:hover {
-  transform: translateY(-5px);
-}
-
-.service-image {
-  width: 200px;
-  height: auto;
-  position: relative;
-}
-
-.service-box h2 {
-  font-size: 17px;
-  margin: 10px 0 5px;
-  padding: 10px;
-  padding-bottom: 20px;
-}
-
-.home_services_box {
-  display: grid;
-  grid-template-columns: auto auto auto auto;
-  justify-content: space-evenly;
-  margin-top: 2%;
-  gap: 3%;
-  padding: 2% 5%;
-}
-
-.home_services h1 {
-  text-align: center;
-}
-
-.home_services {
-  margin-top: 5%;
-}
-
-.service-image img {
-  object-fit: cover;
-} */
 
 .service-box-home {
   width: 100%;
@@ -1867,8 +1869,9 @@ span.service-two-bottom-box-logo {
 }
 
 .service-image img {
-  object-fit: cover;
+  object-fit: contain;
   width: 100%;
+  height: auto;
 }
 
 /* Small devices (tablets, 576px and up) */
@@ -2360,16 +2363,18 @@ span.service-two-bottom-box-logo {
   .about-us h2 {
     position: absolute;
     left: 3%;
-    font-size: 3rem;
+    font-size: 3.5rem;
     line-height: normal;
-    text-align: center;
+    text-align: left;
   }
 
   .about-us-top-left h1 {
-    font-size: 1.2rem;
+    font-size: 1.7rem;
     line-height: normal;
     margin-bottom: 2rem;
-    margin-top: 13%;
+    margin-top: -3%;
+    text-align: left;
+    margin-left: 8%;
   }
 
   .about-us-top-left,
@@ -2388,9 +2393,11 @@ span.service-two-bottom-box-logo {
 
   .about-us-top-left h1:after {
     position: absolute;
-    left: 50%;
+    left: 8%;
     transform: translateX(-50%);
     background-color: #902b2c;
+    bottom: -7px;
+    width: 50px;
   }
 
   .about-us {
@@ -2399,12 +2406,13 @@ span.service-two-bottom-box-logo {
   }
 
   .about-us-top-right h1 {
-    font-size: 1.3rem;
-    display: none;
+    font-size: 1.1rem;
   }
 
   .about-us-top-right p {
     font-size: 14px;
+    font-size: 14px;
+    padding: 0 4px;
   }
 
   .who-we-are-btn button {
@@ -2419,16 +2427,15 @@ span.service-two-bottom-box-logo {
     content: unset;
   }
 
-  .about-us-img video {
-    margin-top: -3%;
-    width: 150px !important;
-    height: auto !important;
-  }
-
   .about-us-img img {
     width: 160px;
     height: auto;
     object-fit: contain;
+    display: none;
+  }
+
+  .about-us-video-text {
+    top: 15%;
   }
 
   .about-us-video-text h1 {
@@ -2437,6 +2444,10 @@ span.service-two-bottom-box-logo {
 
   .about-us-video-image {
     margin-top: 5%;
+    margin-top: 5%;
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
   }
 
   .content-two {
@@ -2463,17 +2474,26 @@ span.service-two-bottom-box-logo {
   }
 
   .image-wrapper img {
-    width: 150px;
+    width: 300px;
+    height: 300px;
+    margin-top: 20px !important;
+  }
+
+  [class^="number-slide"],
+  [class*=" number-slide"] {
+    max-height: unset !important;
   }
 
   button.prev-button {
     left: 27%;
     bottom: -30px;
+    display: none;
   }
 
   button.next-button {
     right: 27%;
     bottom: -30px;
+    display: none;
   }
 
   button.prev-button,

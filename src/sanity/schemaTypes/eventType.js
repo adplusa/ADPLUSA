@@ -239,6 +239,24 @@ export const eventType = defineType({
       description: "Second line of text for the scrolling marquee",
     }),
     defineField({
+      name: "sliderTextThree",
+      title: "Slider Text Three",
+      type: "string",
+      description: "Third line of text for the scrolling marquee",
+    }),
+    defineField({
+      name: "sliderTextFour",
+      title: "Slider Text Four",
+      type: "string",
+      description: "Four line of text for the scrolling marquee",
+    }),
+    defineField({
+      name: "sliderTextFive",
+      title: "Slider Text Five",
+      type: "string",
+      description: "Five line of text for the scrolling marquee",
+    }),
+    defineField({
       name: "sliderImage",
       title: "Slider Icon/Image",
       type: "image",

@@ -141,7 +141,11 @@
   }
 
   .copy-designed p {
-    font-size: 13px;
+    font-size: 11px;
     margin-left: 10px;
+  }
+
+  .copy-designed {
+    align-items: baseline;
   }
 }

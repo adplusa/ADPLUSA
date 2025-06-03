@@ -556,6 +556,32 @@ const Header = () => {
           </svg>
         </button>
 
+        <div
+          id="second-navbar"
+          className={`second-navbar ${isMobileMenuOpen ? "mobile-open" : ""}`}
+        >
+          <ul>
+            <li>
+              <Link href="/">Home</Link>
+            </li>
+            <li>
+              <Link href="/about">About Us</Link>
+            </li>
+            <li>
+              <Link href="/mainservice">Services</Link>
+            </li>
+            <li>
+              <Link href="/projects">Projects</Link>
+            </li>
+            <li>
+              <Link href="/faq">FAQs</Link>
+            </li>
+            <li>
+              <Link href="/contact">Contact Us</Link>
+            </li>
+          </ul>
+        </div>
+
         <Link href="/">
           <div className="flip-logo">
             <span className="flip-container">
@@ -589,35 +615,60 @@ const Header = () => {
             <h3 id="on">ON</h3>
             <div className="day-night">
               <div ref={mobileToggleRef} className="rounder-div-changer"></div>
+              <svg
+                id="night"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-moon-fill"
+                viewBox="0 0 16 16"
+              >
+                <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278" />
+              </svg>
+
+              <svg
+                id="sun"
+                width="17.5"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="8.91082"
+                  cy="8.96563"
+                  r="4.65117"
+                  fill="currentColor"
+                ></circle>
+                <path
+                  d="M8.91089 3.21496L8.91089 0.224609"
+                  stroke="currentColor"
+                  strokeWidth="1.30349"
+                ></path>
+                <path
+                  d="M8.91089 17.7067L8.91089 14.7163"
+                  stroke="currentColor"
+                  strokeWidth="1.30349"
+                ></path>
+                <path
+                  d="M14.6615 8.96582L17.6519 8.96582"
+                  stroke="currentColor"
+                  strokeWidth="1.30349"
+                ></path>
+                <path
+                  d="M0.169923 8.96582L3.16028 8.96582"
+                  stroke="currentColor"
+                  strokeWidth="1.30349"
+                ></path>
+                <path
+                  d="M4.84448 4.89917L2.72998 2.78467M15.0917 15.1464L12.9772 13.0319M12.9772 4.89917L15.0917 2.78467M2.72998 15.1464L4.84448 13.0319"
+                  stroke="currentColor"
+                  strokeWidth="1.30349"
+                ></path>
+              </svg>
             </div>
             <h3 id="off">OFF</h3>
           </div>
-        </div>
-
-        <div
-          id="second-navbar"
-          className={`second-navbar ${isMobileMenuOpen ? "mobile-open" : ""}`}
-        >
-          <ul>
-            <li>
-              <Link href="/">Home</Link>
-            </li>
-            <li>
-              <Link href="/about">About Us</Link>
-            </li>
-            <li>
-              <Link href="/mainservice">Services</Link>
-            </li>
-            <li>
-              <Link href="/projects">Projects</Link>
-            </li>
-            <li>
-              <Link href="/faq">FAQs</Link>
-            </li>
-            <li>
-              <Link href="/contact">Contact Us</Link>
-            </li>
-          </ul>
         </div>
       </div>
     </div>

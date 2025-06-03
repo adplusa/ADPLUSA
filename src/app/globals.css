@@ -123,7 +123,7 @@ a {
 }
 
 .enquire button {
-  background: #000; /* solid black */
+  background: #8a0b10; /* solid black */
   color: #fff; /* white text */
   border: none;
   outline: none;
@@ -171,7 +171,7 @@ a {
 
 @media screen and (max-width: 768px) {
   .enquire button {
-    background: #000;
+    background: #8a0b10;
     font-size: 12px !important;
     right: 3% !important;
     top: 54% !important;

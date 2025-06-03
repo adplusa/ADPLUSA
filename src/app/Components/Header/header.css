@@ -57,9 +57,9 @@
   position: absolute;
   width: 20px;
   height: 20px;
-  /* background-color: var(--background);
-  border: var(--borderColor); */
-  background-color: var(--background);
+
+  /* background-color: var(--background); */
+  background-color: #000;
   border: var(--borderColor) #fff;
   border-radius: 50%;
   left: 3px;
@@ -168,7 +168,7 @@
     top: 0;
   }
 
-  .desktop {
+  .header-df.desktop {
     display: none;
   }
 
@@ -179,17 +179,16 @@
   #ham {
     cursor: pointer;
     z-index: 1001;
-    padding: 10px;
   }
 
   .second-navbar ul {
     position: absolute;
     top: 100%;
     left: -100%;
-    transition: left 0.3s ease;
+    transition: left 0.3s ease-in-out;
     flex-direction: column;
     height: 100vh;
-    width: 100%;
+    width: 50%;
     justify-content: flex-start !important;
     background-color: rgb(239, 239, 239);
   }
@@ -204,7 +203,7 @@
   }
 
   .flip-logo img {
-    width: 80px;
+    width: 70px;
     height: auto;
   }
 
@@ -254,6 +253,15 @@
   }
 
   .header-df {
-    padding: 0;
+    padding: 0 10px;
+  }
+
+  .menu-color svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .color-changer {
+    gap: 2px;
   }
 }

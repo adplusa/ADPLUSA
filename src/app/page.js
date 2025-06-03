@@ -646,7 +646,6 @@ export default function Home() {
                   </div>
                 </div>
               )}
-
               {isDarkMode && (
                 <div
                   className={"animation-slider dark-banner"}
@@ -878,7 +877,7 @@ export default function Home() {
                   </div>
                 </div>
               </section>
-              <div className="strip-text">
+              {/* <div className="strip-text">
                 <div className="marquee">
                   <div className="marquee-item">
                     <h1>{homepageData[0]?.sliderTextOne}</h1>
@@ -891,6 +890,33 @@ export default function Home() {
                       />
                     )}
                     <h1>{homepageData[0]?.sliderTextTwo}</h1>
+                    {homepageData[0]?.sliderImage && (
+                      <Image
+                        src={urlFor(homepageData[0].sliderImage).url()}
+                        alt="Slider Icon"
+                        width="30"
+                        height="30"
+                      />
+                    )}
+                    <h1>{homepageData[0]?.sliderTextThree}</h1>
+                    {homepageData[0]?.sliderImage && (
+                      <Image
+                        src={urlFor(homepageData[0].sliderImage).url()}
+                        alt="Slider Icon"
+                        width="30"
+                        height="30"
+                      />
+                    )}
+                    <h1>{homepageData[0]?.sliderTextFour}</h1>
+                    {homepageData[0]?.sliderImage && (
+                      <Image
+                        src={urlFor(homepageData[0].sliderImage).url()}
+                        alt="Slider Icon"
+                        width="30"
+                        height="30"
+                      />
+                    )}
+                    <h1>{homepageData[0]?.sliderTextFive}</h1>
                     {homepageData[0]?.sliderImage && (
                       <Image
                         src={urlFor(homepageData[0].sliderImage).url()}
@@ -919,6 +945,108 @@ export default function Home() {
                         width="30"
                         height="30"
                         unoptimized
+                      />
+                    )}
+                  </div>
+                </div>
+              </div> */}
+
+              <div className="strip-text">
+                <div className="marquee">
+                  {/* First set of items */}
+                  <div className="marquee-item">
+                    <h1>{homepageData[0]?.sliderTextOne}</h1>
+                    {homepageData[0]?.sliderImage && (
+                      <Image
+                        src={urlFor(homepageData[0].sliderImage).url()}
+                        alt="Slider Icon"
+                        width="30"
+                        height="30"
+                      />
+                    )}
+                    <h1>{homepageData[0]?.sliderTextTwo}</h1>
+                    {homepageData[0]?.sliderImage && (
+                      <Image
+                        src={urlFor(homepageData[0].sliderImage).url()}
+                        alt="Slider Icon"
+                        width="30"
+                        height="30"
+                      />
+                    )}
+                    <h1>{homepageData[0]?.sliderTextThree}</h1>
+                    {homepageData[0]?.sliderImage && (
+                      <Image
+                        src={urlFor(homepageData[0].sliderImage).url()}
+                        alt="Slider Icon"
+                        width="30"
+                        height="30"
+                      />
+                    )}
+                    <h1>{homepageData[0]?.sliderTextFour}</h1>
+                    {homepageData[0]?.sliderImage && (
+                      <Image
+                        src={urlFor(homepageData[0].sliderImage).url()}
+                        alt="Slider Icon"
+                        width="30"
+                        height="30"
+                      />
+                    )}
+                    <h1>{homepageData[0]?.sliderTextFive}</h1>
+                    {homepageData[0]?.sliderImage && (
+                      <Image
+                        src={urlFor(homepageData[0].sliderImage).url()}
+                        alt="Slider Icon"
+                        width="30"
+                        height="30"
+                      />
+                    )}
+                  </div>
+
+                  {/* Duplicate set for seamless loop */}
+                  <div className="marquee-item">
+                    <h1>{homepageData[0]?.sliderTextOne}</h1>
+                    {homepageData[0]?.sliderImage && (
+                      <Image
+                        src={urlFor(homepageData[0].sliderImage).url()}
+                        alt="Slider Icon"
+                        width="30"
+                        height="30"
+                      />
+                    )}
+                    <h1>{homepageData[0]?.sliderTextTwo}</h1>
+                    {homepageData[0]?.sliderImage && (
+                      <Image
+                        src={urlFor(homepageData[0].sliderImage).url()}
+                        alt="Slider Icon"
+                        width="30"
+                        height="30"
+                      />
+                    )}
+                    <h1>{homepageData[0]?.sliderTextThree}</h1>
+                    {homepageData[0]?.sliderImage && (
+                      <Image
+                        src={urlFor(homepageData[0].sliderImage).url()}
+                        alt="Slider Icon"
+                        width="30"
+                        height="30"
+                      />
+                    )}
+                    <h1>{homepageData[0]?.sliderTextFour}</h1>
+                    {homepageData[0]?.sliderImage && (
+                      <Image
+                        src={urlFor(homepageData[0].sliderImage).url()}
+                        alt="Slider Icon"
+                        width="30"
+                        height="30"
+                      />
+                    )}
+                    <h1>{homepageData[0]?.sliderTextFive}</h1>
+                    {homepageData[0]?.sliderImage && (
+                      <Image
+                        src={urlFor(homepageData[0].sliderImage).url()}
+                        alt="Slider Icon"
+                        width="30"
+                        height="30"
                       />
                     )}
                   </div>
