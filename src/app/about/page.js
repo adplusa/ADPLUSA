@@ -66,19 +66,6 @@ const About = () => {
 
       <div className="about-container">
         <div className="about-content">
-          {/* Top Intro Section */}
-          {/* <div className="about-content-first-row">
-            <div className="about-content-first-row-left">
-              <h1>{data.mainTitle || "About"}</h1>
-            </div>
-            <div className="about-content-first-row-right">
-              <h2>{data.subheading}</h2>
-              {data.introParagraphs?.map((para, idx) => (
-                <p key={idx}>{para}</p>
-              ))}
-            </div>
-          </div> */}
-
           <div className="home-about">
             <div className="about-us">
               <h2>{data.allowLightHeading}</h2>
@@ -99,53 +86,7 @@ const About = () => {
                   </span>
                 </div>
               </div>
-
-              {/* <div className="who-we-are-btn">
-                <Link href="/about">
-                  <button>
-                    <span>{data.ctaButton}</span>
-                  </button>
-                </Link>
-              </div> */}
             </div>
-
-            {/* <div className="about-us-video-image">
-              <div className="about-us-img">
-                {data?.peoplImageOne?.asset && (
-                  <Image
-                    src={urlFor(data.peoplImageOne).url()}
-                    width={500}
-                    height={500}
-                    alt="People image"
-                    unoptimized
-                  />
-                )}
-                {data.peopleVideo && data.peopleVideo.asset && (
-                  <video
-                    src={data.peopleVideo.asset.url}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    controls={false}
-                    style={{ width: "100%", height: "auto" }}
-                  />
-                )}
-
-                {data?.peoplImageTwo?.asset && (
-                  <Image
-                    src={urlFor(data.peoplImageTwo).url()}
-                    width={500}
-                    height={500}
-                    alt="People image"
-                    unoptimized
-                  />
-                )}
-              </div>
-              <div className="about-us-video-text">
-                <h1>{data.peopleText}</h1>
-              </div>
-            </div> */}
           </div>
 
           {/* Section Blocks */}
@@ -162,8 +103,8 @@ const About = () => {
                 <h1>{section.title}</h1>
                 <p>{section.body}</p>
               </div>
-              <div className="people-img">
-                {section.image && (
+              {section?.image?.asset && (
+                <div className="people-img">
                   <Image
                     src={urlFor(section.image).url()}
                     alt={`${section.title} image`}
@@ -172,8 +113,8 @@ const About = () => {
                     unoptimized
                     priority
                   />
-                )}
-              </div>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -182,7 +123,7 @@ const About = () => {
       <Footer />
 
       {/* WhatsApp Button */}
-      {data.whatsappNumber && (
+      {data?.whatsappNumber && (
         <div className="whatsapp">
           <a
             className="btn-whatsapp-pulse"

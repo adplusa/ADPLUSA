@@ -30,8 +30,7 @@ const ServicesPageFour = () => {
   }, []);
 
   const nextSlide = () => {
-    if (isTransitioning) return;
-    setCurrentIndex((prev) => prev + 1);
+    if (!isTransitioning) setCurrentIndex((prev) => prev + 1);
   };
 
   const startAutoPlay = () => {
@@ -68,10 +67,7 @@ const ServicesPageFour = () => {
         });
       }, 500);
 
-      return () => {
-        clearTimeout(timer);
-        setIsTransitioning(false);
-      };
+      return () => clearTimeout(timer);
     }
   }, [currentIndex, data]);
 
@@ -86,7 +82,7 @@ const ServicesPageFour = () => {
     <>
       <Header />
 
-      {data.serviceBannerImage && (
+      {data.serviceBannerImage?.asset && (
         <section
           className="service-container"
           style={{
@@ -94,7 +90,7 @@ const ServicesPageFour = () => {
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
-        ></section>
+        />
       )}
 
       <section className="service-info">
@@ -105,14 +101,14 @@ const ServicesPageFour = () => {
                 <h1>{service.title}</h1>
                 <p>{service.description}</p>
               </div>
-              {service.image && (
+              {service.image?.asset && (
                 <div className="service-right">
                   <Image
                     src={urlFor(service.image).url()}
                     width={0}
                     height={0}
                     unoptimized
-                    alt="img"
+                    alt={service.title || "Service Image"}
                   />
                 </div>
               )}
@@ -134,25 +130,6 @@ const ServicesPageFour = () => {
         </div>
       </div>
 
-      {/* <section className="sepecialize">
-        <div className="sepecialize-df">
-          <div className="specialize-left">
-            <button>{data.specialization?.buttonText}</button>
-          </div>
-          <div className="specialize-right">
-            {data.specialization?.image && (
-              <Image
-                src={urlFor(data.specialization.image).url()}
-                width={0}
-                height={0}
-                alt="Specialization"
-                unoptimized
-              />
-            )}
-          </div>
-        </div>
-      </section> */}
-
       <section className="why-work">
         <div className="content-two">
           <div className="text">
@@ -167,27 +144,21 @@ const ServicesPageFour = () => {
               </div>
             ))}
           </div>
-          <div className="image-wrapper">
-            <div className="background">
-              <Image
-                src={urlFor(data.founderImage).url()}
-                alt="Why Work With Us"
-                width={500}
-                height={400}
-              />
+          {data.founderImage?.asset && (
+            <div className="image-wrapper">
+              <div className="background">
+                <Image
+                  src={urlFor(data.founderImage).url()}
+                  alt="Why Work With Us"
+                  width={500}
+                  height={400}
+                  unoptimized
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
-      {/* 
-      <div className="cta-container-df">
-        <div className="cta-container">
-          <div className="cta-text">
-            <h2>{data.finalCTA?.ctaTitle}</h2>
-          </div>
-          <button className="cta-button">{data.finalCTA?.ctaButton}</button>
-        </div>
-      </div> */}
 
       <div className="professionals-section">
         <h1 className="professionals-heading">
@@ -207,7 +178,7 @@ const ServicesPageFour = () => {
               <div key={i} className="carousel-slide">
                 <div className="professional-card">
                   <div className="image-container">
-                    {pro.image ? (
+                    {pro?.image?.asset ? (
                       <Image
                         src={urlFor(pro.image).url()}
                         alt={pro.title || "Professional"}
@@ -221,6 +192,9 @@ const ServicesPageFour = () => {
                           width: 300,
                           height: 200,
                           backgroundColor: "#eee",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
                         }}
                       >
                         <p>No Image</p>

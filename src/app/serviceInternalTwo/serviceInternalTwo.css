@@ -1039,3 +1039,102 @@ button.next-button:active {
     font-size: 1.8rem;
   }
 }
+
+/* === Responsive Tweaks Without Affecting Desktop Layout === */
+@media screen and (max-width: 768px) {
+  .service-container {
+    flex-direction: column;
+    padding: 40px 20px;
+    aspect-ratio: auto;
+    gap: 40px;
+  }
+
+  .image-container-two {
+    width: 100%;
+    height: auto;
+  }
+
+  .service-left {
+    width: 100%;
+    flex: none;
+    text-align: center;
+  }
+
+  .service-right img {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+  }
+
+  .service-left h1 {
+    font-size: 1.8rem;
+  }
+
+  .service-left h4 {
+    font-size: 1rem;
+  }
+
+  .sepecialize-df {
+    flex-direction: column;
+    width: 90%;
+    padding: 30px 20px;
+    gap: 30px;
+    border-radius: 25px;
+  }
+
+  .specialize-right img {
+    width: 160px;
+  }
+
+  .service-info-df {
+    flex-direction: column;
+    gap: 20px;
+    padding: 5% 5%;
+  }
+
+  .service-boxes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .outsourcing-container-two {
+    flex-direction: column;
+    padding: 30px 20px;
+    gap: 20px;
+  }
+
+  .text-container,
+  .image-container {
+    width: 100%;
+    padding: 0;
+  }
+
+  .cta-container {
+    flex-direction: column;
+    width: 90%;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .cta-text {
+    width: 100%;
+  }
+
+  .key-cards-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .content-two {
+    flex-direction: column;
+  }
+
+  .image-wrapper {
+    margin-left: 0;
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  .image-wrapper img {
+    width: 100%;
+    margin-top: 0;
+  }
+}

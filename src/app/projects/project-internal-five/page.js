@@ -4,7 +4,7 @@ import Header from "@/app/Components/Header/page";
 import Footer from "@/app/Components/Footer/page";
 import Image from "next/image";
 import { client } from "@/sanity/lib/client";
-import "./internal-five.css"; // Clone and edit internal-two.css if needed
+import "./internal-five.css";
 import urlFor from "@/app/helpers/sanity";
 
 const InternalFive = () => {
@@ -34,21 +34,24 @@ const InternalFive = () => {
 
       <div className="internal-section-one">
         <div className="internal-section-one-top">
-          <h1>{data[0].title}</h1>
-          <Image
-            src={urlFor(data[0].mainImage).url()}
-            alt="Main image"
-            width={1200}
-            height={600}
-            unoptimized
-            priority
-          />
+          <h1>{data?.[0]?.title}</h1>
+
+          {data?.[0]?.mainImage?.asset && (
+            <Image
+              src={urlFor(data[0].mainImage).url()}
+              alt="Main image"
+              width={1200}
+              height={600}
+              unoptimized
+              priority
+            />
+          )}
         </div>
 
         <div className="internal-section-one-bottom">
           <div className="internal-section-one-bottom-left">
-            <p>{data[0].introText}</p>
-            {data[0].moreContent?.map((paragraph, idx) => (
+            <p>{data?.[0]?.introText}</p>
+            {data?.[0]?.moreContent?.map((paragraph, idx) => (
               <p
                 key={idx}
                 className={`load-content ${isExpanded ? "visible" : "hidden"}`}
@@ -59,16 +62,16 @@ const InternalFive = () => {
           </div>
 
           <div className="internal-section-one-bottom-right">
-            {data[0].projectDetails?.map((detail, idx) => (
+            {data?.[0]?.projectDetails?.map((detail, idx) => (
               <div
                 key={idx}
                 className={`load-content-li ${idx < 4 ? "visible" : isExpanded ? "visible" : ""}`}
               >
-                <p>{detail.label}</p>
+                <p>{detail?.label}</p>
                 <ul>
-                  {detail.items.map((item, itemIdx) => (
+                  {detail?.items?.map((item, itemIdx) => (
                     <li key={itemIdx}>
-                      {item.startsWith("http") ? (
+                      {item?.startsWith?.("http") ? (
                         <a
                           href={item}
                           target="_blank"
@@ -117,21 +120,23 @@ const InternalFive = () => {
       <div className="internal-section-two">
         <div className="internal-section-two-top">
           <div className="internal-section-two-top-imgs">
-            {data[0].projectImages?.topImages?.map((img, idx) => (
-              <Image
-                key={idx}
-                src={urlFor(img).url()}
-                alt={`Top image ${idx + 1}`}
-                width={600}
-                height={400}
-                unoptimized
-              />
-            ))}
+            {data?.[0]?.projectImages?.topImages?.map((img, idx) =>
+              img?.asset ? (
+                <Image
+                  key={idx}
+                  src={urlFor(img).url()}
+                  alt={`Top image ${idx + 1}`}
+                  width={600}
+                  height={400}
+                  unoptimized
+                />
+              ) : null
+            )}
           </div>
         </div>
 
         <div className="internal-section-two-bottom">
-          {data[0].projectImages?.bottomImage && (
+          {data?.[0]?.projectImages?.bottomImage?.asset && (
             <Image
               src={urlFor(data[0].projectImages.bottomImage).url()}
               alt="Bottom image"
@@ -147,21 +152,23 @@ const InternalFive = () => {
       <div className="internal-section-two">
         <div className="internal-section-two-top">
           <div className="internal-section-two-top-imgs">
-            {data[0].projectImagesTwo?.topImagesTwo?.map((img, idx) => (
-              <Image
-                key={idx}
-                src={urlFor(img).url()}
-                alt={`Top image ${idx + 1}`}
-                width={600}
-                height={400}
-                unoptimized
-              />
-            ))}
+            {data?.[0]?.projectImagesTwo?.topImagesTwo?.map((img, idx) =>
+              img?.asset ? (
+                <Image
+                  key={idx}
+                  src={urlFor(img).url()}
+                  alt={`Top image ${idx + 1}`}
+                  width={600}
+                  height={400}
+                  unoptimized
+                />
+              ) : null
+            )}
           </div>
         </div>
 
         <div className="internal-section-two-bottom">
-          {data[0].projectImagesTwo?.bottomImageTwo && (
+          {data?.[0]?.projectImagesTwo?.bottomImageTwo?.asset && (
             <Image
               src={urlFor(data[0].projectImagesTwo.bottomImageTwo).url()}
               alt="Bottom image"

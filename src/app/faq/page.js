@@ -139,10 +139,10 @@ export default function FAQ() {
               {/* FAQ Image */}
               <div className="faq-image-container">
                 <div className="image-wrapper-two">
-                  {category.image && (
+                  {category?.image?.asset && (
                     <Image
                       src={urlFor(category.image).url()}
-                      alt={category.title}
+                      alt={category.title || "FAQ image"}
                       width={500}
                       height={400}
                       className="faq-image"

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import Header from "../Components/Header/page";
 import Footer from "../Components/Footer/page";
@@ -23,31 +23,32 @@ const ServicesPageThree = () => {
         const result = await client.fetch(`*[_type == "servicesThreePage"][0]`);
         setData(result);
       } catch (error) {
-        console.error("Error fetching servicesThreePage:", error);
+        console.error("❌ Error fetching servicesThreePage:", error);
       }
     };
     fetchData();
   }, []);
 
   const nextSlide = () => {
-    if (isTransitioning) return;
-    setCurrentIndex((prev) => prev + 1);
+    if (!isTransitioning) {
+      setCurrentIndex((prev) => prev + 1);
+    }
   };
 
-  const startAutoPlay = () => {
+  const startAutoPlay = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(nextSlide, 3000);
-  };
+  }, []);
 
-  const stopAutoPlay = () => {
+  const stopAutoPlay = useCallback(() => {
     clearInterval(intervalRef.current);
     intervalRef.current = null;
-  };
+  }, []);
 
   useEffect(() => {
     if (data?.professionals?.length > 0) startAutoPlay();
     return () => stopAutoPlay();
-  }, [data]);
+  }, [data, startAutoPlay, stopAutoPlay]);
 
   useEffect(() => {
     if (!data?.professionals) return;
@@ -58,14 +59,18 @@ const ServicesPageThree = () => {
       stopAutoPlay();
 
       const timer = setTimeout(() => {
-        slideRef.current.style.transition = "none";
-        setCurrentIndex(0);
+        if (slideRef.current) {
+          slideRef.current.style.transition = "none";
+          setCurrentIndex(0);
 
-        requestAnimationFrame(() => {
-          slideRef.current.style.transition = "transform 0.5s ease";
-          setIsTransitioning(false);
-          startAutoPlay();
-        });
+          requestAnimationFrame(() => {
+            if (slideRef.current) {
+              slideRef.current.style.transition = "transform 0.5s ease";
+              setIsTransitioning(false);
+              startAutoPlay();
+            }
+          });
+        }
       }, 500);
 
       return () => {
@@ -73,10 +78,12 @@ const ServicesPageThree = () => {
         setIsTransitioning(false);
       };
     }
-  }, [currentIndex, data]);
+  }, [currentIndex, data, stopAutoPlay, startAutoPlay]);
 
   const pauseAutoPlay = () => stopAutoPlay();
-  const resumeAutoPlay = () => !isTransitioning && startAutoPlay();
+  const resumeAutoPlay = () => {
+    if (!isTransitioning) startAutoPlay();
+  };
 
   if (!data) return <div>Loading Services Page Three...</div>;
 
@@ -86,7 +93,8 @@ const ServicesPageThree = () => {
     <>
       <Header />
 
-      {data.serviceBannerImage && (
+      {/* Banner */}
+      {data.serviceBannerImage?.asset && (
         <section
           className="service-container"
           style={{
@@ -94,9 +102,10 @@ const ServicesPageThree = () => {
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
-        ></section>
+        />
       )}
 
+      {/* Services List */}
       <section className="service-info">
         <div className="services-into-df">
           {data.servicesList?.map((service, i) => (
@@ -105,14 +114,14 @@ const ServicesPageThree = () => {
                 <h1>{service.title}</h1>
                 <p>{service.description}</p>
               </div>
-              {service.image && (
+              {service.image?.asset && (
                 <div className="service-right">
                   <Image
                     src={urlFor(service.image).url()}
                     width={0}
                     height={0}
                     unoptimized
-                    alt="img"
+                    alt={service.title || "Service Image"}
                   />
                 </div>
               )}
@@ -121,6 +130,7 @@ const ServicesPageThree = () => {
         </div>
       </section>
 
+      {/* Key Activities */}
       <div className="key-container">
         <h1 className="key-heading">Key Activities and Outcomes</h1>
         <div className="key-cards-container">
@@ -134,25 +144,7 @@ const ServicesPageThree = () => {
         </div>
       </div>
 
-      {/* <section className="sepecialize">
-        <div className="sepecialize-df">
-          <div className="specialize-left">
-            <button>{data.specialization?.buttonText}</button>
-          </div>
-          <div className="specialize-right">
-            {data.specialization?.image && (
-              <Image
-                src={urlFor(data.specialization.image).url()}
-                width={0}
-                height={0}
-                alt="Specialization"
-                unoptimized
-              />
-            )}
-          </div>
-        </div>
-      </section> */}
-
+      {/* Why Work With Us */}
       <section className="why-work">
         <div className="content-two">
           <div className="text">
@@ -167,28 +159,23 @@ const ServicesPageThree = () => {
               </div>
             ))}
           </div>
-          <div className="image-wrapper">
-            <div className="background">
-              <Image
-                src={urlFor(data.founderImage).url()}
-                alt="Why Work With Us"
-                width={500}
-                height={400}
-              />
+          {data.founderImage?.asset && (
+            <div className="image-wrapper">
+              <div className="background">
+                <Image
+                  src={urlFor(data.founderImage).url()}
+                  alt="Why Work With Us"
+                  width={500}
+                  height={400}
+                  unoptimized
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
-      {/* <div className="cta-container-df">
-        <div className="cta-container">
-          <div className="cta-text">
-            <h2>{data.finalCTA?.ctaTitle}</h2>
-          </div>
-          <button className="cta-button">{data.finalCTA?.ctaButton}</button>
-        </div>
-      </div> */}
-
+      {/* Professionals Carousel */}
       <div className="professionals-section">
         <h1 className="professionals-heading">
           Explore Most Wanted Professionals
@@ -207,7 +194,7 @@ const ServicesPageThree = () => {
               <div key={i} className="carousel-slide">
                 <div className="professional-card">
                   <div className="image-container">
-                    {pro.image ? (
+                    {pro.image?.asset ? (
                       <Image
                         src={urlFor(pro.image).url()}
                         alt={pro.title || "Professional"}
@@ -221,6 +208,9 @@ const ServicesPageThree = () => {
                           width: 300,
                           height: 200,
                           backgroundColor: "#eee",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
                         }}
                       >
                         <p>No Image</p>

@@ -1,14 +1,12 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import Header from "../Components/Header/page";
 import Footer from "../Components/Footer/page";
 import { client } from "@/sanity/lib/client";
 import urlFor from "../helpers/sanity";
-
 import "./serviceInternalOne.css";
-import { useCallback } from "react";
 
 export const dynamic = "force-dynamic";
 
@@ -19,12 +17,11 @@ const ServicesPage = () => {
   const slideRef = useRef(null);
   const intervalRef = useRef(null);
 
-  // Fetch data on mount
+  // Fetch data from Sanity
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await client.fetch(`*[_type == "servicesOnePage"][0]`);
-        console.log("✅ Fetched servicesOnePage data:", result);
         setData(result);
       } catch (error) {
         console.error("❌ Error fetching services data:", error);
@@ -33,97 +30,74 @@ const ServicesPage = () => {
     fetchData();
   }, []);
 
+  // Advance carousel slide
   const nextSlide = () => {
-    if (isTransitioning) return;
-    setCurrentIndex((prev) => prev + 1);
+    if (!isTransitioning) setCurrentIndex((prev) => prev + 1);
   };
 
-  // const startAutoPlay = () => {
-  //   if (intervalRef.current) clearInterval(intervalRef.current);
-  //   intervalRef.current = setInterval(() => {
-  //     nextSlide();
-  //   }, 3000);
-  // };
-
-  // const stopAutoPlay = () => {
-  //   if (intervalRef.current) {
-  //     clearInterval(intervalRef.current);
-  //     intervalRef.current = null;
-  //   }
-  // };
-
+  // Start autoplay
   const startAutoPlay = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(nextSlide, 3000);
-  }, [nextSlide]);
+  }, []);
 
+  // Stop autoplay
   const stopAutoPlay = useCallback(() => {
     clearInterval(intervalRef.current);
     intervalRef.current = null;
   }, []);
 
-  // Start autoplay when data is loaded
+  // Begin autoplay on load
   useEffect(() => {
-    if (data?.professionals?.length > 0) {
-      startAutoPlay();
-    }
+    if (data?.professionals?.length > 0) startAutoPlay();
     return () => stopAutoPlay();
-  }, [data]);
+  }, [data, startAutoPlay, stopAutoPlay]);
 
-  // Handle infinite loop reset
+  // Infinite loop transition reset
   useEffect(() => {
-    if (!data?.professionals || !Array.isArray(data.professionals)) return;
+    if (!data?.professionals?.length) return;
     const total = data.professionals.length;
 
     if (currentIndex === total) {
       setIsTransitioning(true);
-      stopAutoPlay(); // Stop autoplay during transition
+      stopAutoPlay();
 
-      // Wait for slide transition to complete
       const transitionTimer = setTimeout(() => {
         if (slideRef.current) {
-          // Remove transition for instant reset
           slideRef.current.style.transition = "none";
           setCurrentIndex(0);
 
-          // Force reflow and restore transition
           requestAnimationFrame(() => {
             if (slideRef.current) {
               slideRef.current.style.transition = "transform 0.5s ease";
               setIsTransitioning(false);
-              startAutoPlay(); // Restart autoplay after reset
+              startAutoPlay();
             }
           });
         }
-      }, 500); // Match your CSS transition duration
+      }, 500);
 
       return () => {
         clearTimeout(transitionTimer);
         setIsTransitioning(false);
       };
     }
-  }, [currentIndex, data]);
+  }, [currentIndex, data, startAutoPlay, stopAutoPlay]);
 
+  // Manual pause/resume
   const pauseAutoPlay = () => stopAutoPlay();
-
-  const resumeAutoPlay = () => {
-    if (!isTransitioning) {
-      startAutoPlay();
-    }
-  };
+  const resumeAutoPlay = () => !isTransitioning && startAutoPlay();
 
   if (!data) return <div>Loading Services Page...</div>;
 
-  // Create duplicated array for seamless carousel
   const professionals = [...data.professionals, ...data.professionals];
-  console.log("Professionals loaded:", professionals);
 
   return (
     <>
       <Header />
 
       {/* Banner */}
-      {data.serviceBannerImage && (
+      {data.serviceBannerImage?.asset && (
         <section
           className="service-container"
           style={{
@@ -131,10 +105,10 @@ const ServicesPage = () => {
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
-        ></section>
+        />
       )}
 
-      {/* Services */}
+      {/* Service Info Section */}
       <section className="service-info">
         <div className="services-into-df">
           {data.servicesList?.map((service, i) => (
@@ -143,14 +117,14 @@ const ServicesPage = () => {
                 <h1>{service.title}</h1>
                 <p>{service.description}</p>
               </div>
-              {service.image && (
+              {service.image?.asset && (
                 <div className="service-right">
                   <Image
                     src={urlFor(service.image).url()}
                     width={0}
                     height={0}
                     unoptimized
-                    alt="img"
+                    alt={service.title || "Service Image"}
                   />
                 </div>
               )}
@@ -173,26 +147,6 @@ const ServicesPage = () => {
         </div>
       </div>
 
-      {/* CTA Specialization */}
-      {/* <section className="sepecialize">
-        <div className="sepecialize-df">
-          <div className="specialize-left">
-            <button>{data.specialization?.buttonText}</button>
-          </div>
-          <div className="specialize-right">
-            {data.specialization?.image && (
-              <Image
-                src={urlFor(data.specialization.image).url()}
-                width={0}
-                height={0}
-                alt="Specialization"
-                unoptimized
-              />
-            )}
-          </div>
-        </div>
-      </section> */}
-
       {/* Why Work With Us */}
       <section className="why-work">
         <div className="content-two">
@@ -208,30 +162,23 @@ const ServicesPage = () => {
               </div>
             ))}
           </div>
-          <div className="image-wrapper">
-            <div className="background">
-              <Image
-                src={urlFor(data.founderImage).url()}
-                alt="Why Work With Us"
-                width={500}
-                height={400}
-              />
+          {data.founderImage?.asset && (
+            <div className="image-wrapper">
+              <div className="background">
+                <Image
+                  src={urlFor(data.founderImage).url()}
+                  alt="Why Work With Us"
+                  width={500}
+                  height={400}
+                  unoptimized
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
-      {/* Final CTA */}
-      {/* <div className="cta-container-df">
-        <div className="cta-container">
-          <div className="cta-text">
-            <h2>{data.finalCTA?.ctaTitle}</h2>
-          </div>
-          <button className="cta-button">{data.finalCTA?.ctaButton}</button>
-        </div>
-      </div> */}
-
-      {/* Carousel */}
+      {/* Carousel Section */}
       <div className="professionals-section">
         <h1 className="professionals-heading">
           Explore Most Wanted Professionals
@@ -250,7 +197,7 @@ const ServicesPage = () => {
               <div key={i} className="carousel-slide">
                 <div className="professional-card">
                   <div className="image-container">
-                    {pro.image ? (
+                    {pro?.image?.asset ? (
                       <Image
                         src={urlFor(pro.image).url()}
                         alt={pro.title || "Professional"}
@@ -264,6 +211,9 @@ const ServicesPage = () => {
                           width: 300,
                           height: 200,
                           backgroundColor: "#eee",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
                         }}
                       >
                         <p>No Image</p>

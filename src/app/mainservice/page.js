@@ -158,11 +158,11 @@ const ServiceTwo = () => {
     <>
       <Header />
 
-      {data.serviceBannerImage && (
+      {data.serviceBannerImage?.asset && (
         <section
           className="schematic-section"
           style={{
-            backgroundImage: `url(${urlFor(urlFor(data.serviceBannerImage).url())})`,
+            backgroundImage: `url(${urlFor(data.serviceBannerImage).url()})`,
           }}
         ></section>
       )}
@@ -178,26 +178,33 @@ const ServiceTwo = () => {
       <div className="feature-section">
         <div className="feature-section-df">
           <div className="feature-box">
-            {/* <h1>{data.serviceRelatedHeading}</h1> */}
             <h1>{data?.trustIconsHeading}</h1>
-            <div className="features-name">
-              {data?.serviceRelatedIcon?.map((related, index) => {
-                return (
-                  <div key={index} className="service-related-item">
-                    <Image
-                      src={urlFor(related.serviceRelatedImg).url()}
-                      alt={related.serviceRelatedName || "Service Icon"}
-                      width={70}
-                      height={70}
-                      unoptimized
-                      priority
-                    />
-                    <p>{related.serviceRelatedNumber}</p>
-                    <h3>{related.serviceRelatedName}</h3>
-                  </div>
-                );
-              })}
-            </div>
+            {data?.serviceRelatedIcon?.length > 0 && (
+              <div className="features-name">
+                {data.serviceRelatedIcon.map((related, index) => {
+                  if (!related?.serviceRelatedImg?.asset) return null; // Skip empty icons
+
+                  return (
+                    <div key={index} className="service-related-item">
+                      <Image
+                        src={urlFor(related.serviceRelatedImg).url()}
+                        alt={related.serviceRelatedName || "Service Icon"}
+                        width={70}
+                        height={70}
+                        unoptimized
+                        priority
+                      />
+                      {related.serviceRelatedNumber && (
+                        <p>{related.serviceRelatedNumber}</p>
+                      )}
+                      {related.serviceRelatedName && (
+                        <h3>{related.serviceRelatedName}</h3>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -206,16 +213,27 @@ const ServiceTwo = () => {
         <h1>{data.serviceHeading}</h1>
         <div className="home_services_box">
           {data.serviceBox?.map((service, index) => (
-            <Link href={service.boxUrl} key={index}>
-              <div className="service-box-home" key={index}>
+            <Link href={service.boxUrl || "#"} key={index}>
+              <div className="service-box-home">
                 <div className="service-image">
-                  <Image
-                    src={urlFor(service.serviceBoxImg).url()}
-                    alt={service.serviceBoxTitle}
-                    width={400}
-                    height={200}
-                    unoptimized
-                  ></Image>
+                  {service?.serviceBoxImg?.asset ? (
+                    <Image
+                      src={urlFor(service.serviceBoxImg).url()}
+                      alt={service.serviceBoxTitle || "Service"}
+                      width={400}
+                      height={200}
+                      unoptimized
+                    />
+                  ) : (
+                    <div
+                      style={{ width: 400, height: 200, background: "#eee" }}
+                    >
+                      {/* Optional fallback or placeholder */}
+                      <p style={{ textAlign: "center", paddingTop: "80px" }}>
+                        No Image
+                      </p>
+                    </div>
+                  )}
                 </div>
                 <h2>{service.serviceBoxTitle}</h2>
               </div>
@@ -243,14 +261,18 @@ const ServiceTwo = () => {
 
           <div className="image-wrapper">
             <div className="background-service">
-              {data?.whyWorkWithUs?.image && (
-                <Image
-                  src={urlFor(data.whyWorkWithUs.image).url()}
-                  alt="Why Work Image"
-                  width={500}
-                  height={400}
-                />
-              )}
+              <div className="image-wrapper">
+                <div className="background-service">
+                  {data?.whyWorkWithUs?.image?.asset && (
+                    <Image
+                      src={urlFor(data.whyWorkWithUs.image).url()}
+                      alt="Why Work Image"
+                      width={500}
+                      height={400}
+                    />
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>

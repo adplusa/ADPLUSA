@@ -29,20 +29,20 @@ const ServicesPageFive = () => {
     fetchData();
   }, []);
 
-  const nextSlide = () => {
-    if (isTransitioning) return;
-    setCurrentIndex((prev) => prev + 1);
-  };
-
   const startAutoPlay = () => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(nextSlide, 3000);
+    stopAutoPlay();
+    intervalRef.current = setInterval(() => {
+      setCurrentIndex((prev) => prev + 1);
+    }, 3000);
   };
 
   const stopAutoPlay = () => {
-    clearInterval(intervalRef.current);
+    if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = null;
   };
+
+  const pauseAutoPlay = () => stopAutoPlay();
+  const resumeAutoPlay = () => !isTransitioning && startAutoPlay();
 
   useEffect(() => {
     if (data?.professionals?.length > 0) startAutoPlay();
@@ -50,10 +50,8 @@ const ServicesPageFive = () => {
   }, [data]);
 
   useEffect(() => {
-    if (!data?.professionals) return;
-    const total = data.professionals.length;
-
-    if (currentIndex === total) {
+    const total = data?.professionals?.length || 0;
+    if (total > 0 && currentIndex === total) {
       setIsTransitioning(true);
       stopAutoPlay();
 
@@ -68,15 +66,9 @@ const ServicesPageFive = () => {
         });
       }, 500);
 
-      return () => {
-        clearTimeout(timer);
-        setIsTransitioning(false);
-      };
+      return () => clearTimeout(timer);
     }
   }, [currentIndex, data]);
-
-  const pauseAutoPlay = () => stopAutoPlay();
-  const resumeAutoPlay = () => !isTransitioning && startAutoPlay();
 
   if (!data) return <div>Loading Services Page Five...</div>;
 
@@ -86,7 +78,7 @@ const ServicesPageFive = () => {
     <>
       <Header />
 
-      {data.serviceBannerImage && (
+      {data?.serviceBannerImage?.asset && (
         <section
           className="service-container"
           style={{
@@ -94,25 +86,25 @@ const ServicesPageFive = () => {
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
-        ></section>
+        />
       )}
 
       <section className="service-info">
         <div className="services-into-df">
-          {data.servicesList?.map((service, i) => (
+          {data?.servicesList?.map((service, i) => (
             <div key={i} className="service-info-df">
               <div className="service-left">
                 <h1>{service.title}</h1>
                 <p>{service.description}</p>
               </div>
-              {service.image && (
+              {service?.image?.asset && (
                 <div className="service-right">
                   <Image
                     src={urlFor(service.image).url()}
                     width={0}
                     height={0}
                     unoptimized
-                    alt="img"
+                    alt="Service"
                   />
                 </div>
               )}
@@ -124,7 +116,7 @@ const ServicesPageFive = () => {
       <div className="key-container">
         <h1 className="key-heading">Key Activities and Outcomes</h1>
         <div className="key-cards-container">
-          {data.keyActivities?.map((item, i) => (
+          {data?.keyActivities?.map((item, i) => (
             <div key={i} className="key-card">
               <div className="key-asterisk">*</div>
               <h3>{item.title}</h3>
@@ -134,30 +126,11 @@ const ServicesPageFive = () => {
         </div>
       </div>
 
-      {/* <section className="sepecialize">
-        <div className="sepecialize-df">
-          <div className="specialize-left">
-            <button>{data.specialization?.buttonText}</button>
-          </div>
-          <div className="specialize-right">
-            {data.specialization?.image && (
-              <Image
-                src={urlFor(data.specialization.image).url()}
-                width={0}
-                height={0}
-                alt="Specialization"
-                unoptimized
-              />
-            )}
-          </div>
-        </div>
-      </section> */}
-
       <section className="why-work">
         <div className="content-two">
           <div className="text">
             <h2>Why Work With Us?</h2>
-            {data.reasonsToWork?.map((reason, i) => (
+            {data?.reasonsToWork?.map((reason, i) => (
               <div className="feature" key={i}>
                 <div className="icon">✔️</div>
                 <div className="info">
@@ -167,27 +140,21 @@ const ServicesPageFive = () => {
               </div>
             ))}
           </div>
-          <div className="image-wrapper">
-            <div className="background-internal">
-              <Image
-                src={urlFor(data.founderImage).url()}
-                alt="Why Work With Us"
-                width={500}
-                height={400}
-              />
+          {data?.founderImage?.asset && (
+            <div className="image-wrapper">
+              <div className="background-internal">
+                <Image
+                  src={urlFor(data.founderImage).url()}
+                  alt="Why Work With Us"
+                  width={500}
+                  height={400}
+                  unoptimized
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
-
-      {/* <div className="cta-container-df">
-        <div className="cta-container">
-          <div className="cta-text">
-            <h2>{data.finalCTA?.ctaTitle}</h2>
-          </div>
-          <button className="cta-button">{data.finalCTA?.ctaButton}</button>
-        </div>
-      </div> */}
 
       <div className="professionals-section">
         <h1 className="professionals-heading">
@@ -203,11 +170,11 @@ const ServicesPageFive = () => {
             ref={slideRef}
             style={{ transform: `translateX(-${currentIndex * 25}%)` }}
           >
-            {professionals.map((pro, i) => (
+            {professionals?.map((pro, i) => (
               <div key={i} className="carousel-slide">
                 <div className="professional-card">
                   <div className="image-container">
-                    {pro.image ? (
+                    {pro?.image?.asset ? (
                       <Image
                         src={urlFor(pro.image).url()}
                         alt={pro.title || "Professional"}
@@ -221,6 +188,10 @@ const ServicesPageFive = () => {
                           width: 300,
                           height: 200,
                           backgroundColor: "#eee",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "#888",
                         }}
                       >
                         <p>No Image</p>

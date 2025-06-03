@@ -1177,6 +1177,75 @@ button.next-button:active {
   .about-content-5-row {
     margin-top: 15%;
   }
+
+  /* .people-img {
+    display: flex;
+    justify-content: center;
+    margin-top: 63%;
+  }
+
+  div#people-box,
+  div#process-box,
+  div#place-box,
+  div#practice-box {
+    position: absolute;
+    max-width: 80%;
+    top: -1%;
+  } */
+
+  .people-img {
+    display: flex;
+    justify-content: center;
+    margin-top: 4rem; /* Reduced from 63% */
+    position: relative;
+    z-index: 1;
+  }
+
+  div#people-box,
+  div#process-box,
+  div#place-box,
+  div#practice-box {
+    position: absolute;
+    max-width: 80%;
+    top: -20%; /* Adjust this based on desired overlap */
+    z-index: 2;
+  }
+
+  #place-box {
+    right: 0;
+  }
+
+  #process-box {
+    left: 0;
+  }
+
+  #practice-box {
+    right: 0;
+  }
+
+  #people-box {
+    left: 0;
+  }
+
+  /* Optional: make position relative on parent for context */
+  .about-content-4-row,
+  .about-content-5-row {
+    position: relative;
+    margin-top: 50%; /* or whatever fits your spacing better */
+  }
+
+  .about-content-3-row,
+  .about-content-2-row {
+    margin-top: 30%;
+  }
+
+  /* Ensure people images are consistent */
+  .people-img img {
+    width: 100%;
+    max-width: 950px;
+    height: auto;
+    object-fit: cover;
+  }
 }
 
 /* Very small screens (480px and below) */

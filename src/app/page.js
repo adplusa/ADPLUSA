@@ -92,7 +92,7 @@ export default function Home() {
           if (mouseOver) return;
           timeout = setTimeout(() => {
             slider.next();
-          }, 2000000000);
+          }, 2000);
         }
         slider.on("created", () => {
           slider.container.addEventListener("mouseover", () => {
@@ -575,17 +575,20 @@ export default function Home() {
                       transform: `translateX(-${currentSlideHeroBanner * 100}%)`,
                     }}
                   >
-                    {slides.map((slide, index) => (
-                      <div
-                        key={index}
-                        className="animate-back-img"
-                        style={{
-                          backgroundImage: `url(${urlFor(slide.image.asset).url()})`,
-                          backgroundSize: "contain",
-                        }}
-                        aria-label={slide.image.alt}
-                      ></div>
-                    ))}
+                    {slides.map(
+                      (slide, index) =>
+                        slide?.image?.asset && (
+                          <div
+                            key={index}
+                            className="animate-back-img"
+                            style={{
+                              backgroundImage: `url(${urlFor(slide.image.asset).url()})`,
+                              backgroundSize: "contain",
+                            }}
+                            aria-label={slide.image?.alt || "Slide Image"}
+                          ></div>
+                        )
+                    )}
                   </div>
 
                   {/* Custom Cursor Only on Desktop */}
@@ -664,17 +667,20 @@ export default function Home() {
                       transform: `translateX(-${currentSlideHeroBanner * 100}%)`,
                     }}
                   >
-                    {slidesDarkMode.map((slide, index) => (
-                      <div
-                        key={index}
-                        className="animate-back-img"
-                        style={{
-                          backgroundImage: `url(${urlFor(slide.image.asset).url()})`,
-                          backgroundSize: "contain",
-                        }}
-                        aria-label={slide.image.alt}
-                      ></div>
-                    ))}
+                    {slidesDarkMode.map(
+                      (slide, index) =>
+                        slide?.image?.asset && (
+                          <div
+                            key={index}
+                            className="animate-back-img"
+                            style={{
+                              backgroundImage: `url(${urlFor(slide.image.asset).url()})`,
+                              backgroundSize: "contain",
+                            }}
+                            aria-label={slide.image?.alt || "Slide Image"}
+                          ></div>
+                        )
+                    )}
                   </div>
 
                   {isDesktop && showCustomCursor && (
@@ -739,8 +745,8 @@ export default function Home() {
                     <h1>{homepageData[0].trustIconsHeading}</h1>
                     <div className="features-name">
                       {homepageData[0]?.serviceRelatedIcon?.map(
-                        (related, index) => {
-                          return (
+                        (related, index) =>
+                          related?.serviceRelatedImg?.asset && (
                             <div key={index} className="service-related-item">
                               <Image
                                 src={urlFor(related.serviceRelatedImg).url()}
@@ -752,12 +758,10 @@ export default function Home() {
                                 unoptimized
                                 priority
                               />
-
                               <p>{related.serviceRelatedNumber}</p>
                               <h3>{related.serviceRelatedName}</h3>
                             </div>
-                          );
-                        }
+                          )
                       )}
                     </div>
                   </div>
@@ -784,22 +788,25 @@ export default function Home() {
               <div className="home_services">
                 <h1>{homepageData[0].serviceHeading}</h1>
                 <div className="home_services_box">
-                  {homepageData[0].serviceBox?.map((service, index) => (
-                    <Link href={service.boxUrl} key={index}>
-                      <div className="service-box-home" key={index}>
-                        <div className="service-image">
-                          <Image
-                            src={urlFor(service.serviceBoxImg).url()}
-                            alt={service.serviceBoxTitle}
-                            width={400}
-                            height={200}
-                            unoptimized
-                          ></Image>
-                        </div>
-                        <h2>{service.serviceBoxTitle}</h2>
-                      </div>
-                    </Link>
-                  ))}
+                  {homepageData[0].serviceBox?.map(
+                    (service, index) =>
+                      service?.serviceBoxImg?.asset && (
+                        <Link href={service.boxUrl} key={index}>
+                          <div className="service-box-home">
+                            <div className="service-image">
+                              <Image
+                                src={urlFor(service.serviceBoxImg).url()}
+                                alt={service.serviceBoxTitle}
+                                width={400}
+                                height={200}
+                                unoptimized
+                              />
+                            </div>
+                            <h2>{service.serviceBoxTitle}</h2>
+                          </div>
+                        </Link>
+                      )
+                  )}
                 </div>
 
                 <Link className="service-cta-wrap" href={"/mainservice"}>
@@ -812,19 +819,19 @@ export default function Home() {
                 <h1>Technologies We Use</h1>
                 <div className="technology-grid">
                   {homepageData[0]?.technologyImgs?.length > 0 ? (
-                    homepageData[0].technologyImgs.map((img, index) => {
-                      return (
+                    homepageData[0].technologyImgs.map((img, index) =>
+                      img?.technologyImage?.asset ? (
                         <span key={index}>
                           <Image
-                            src={urlFor(img.technologyImage).url()} // Fetch image URL from Sanity
-                            width={500} // Set your preferred width for the image
-                            height={500} // Set your preferred height for the image
-                            alt="img" // Alt text for the image
+                            src={urlFor(img.technologyImage).url()}
+                            width={500}
+                            height={500}
+                            alt="Technology image"
                             unoptimized
                           />
                         </span>
-                      );
-                    })
+                      ) : null
+                    )
                   ) : (
                     <p>No images available</p>
                   )}
@@ -859,14 +866,14 @@ export default function Home() {
                   </div>
 
                   <div className="right">
-                    {homepageData[0]?.processSteps?.[activeIndex]
-                      ?.stepImage && (
+                    {homepageData[0]?.processSteps?.[activeIndex]?.stepImage
+                      ?.asset && (
                       <Image
                         src={urlFor(
-                          homepageData[0]?.processSteps[activeIndex]?.stepImage
+                          homepageData[0].processSteps[activeIndex].stepImage
                         ).url()}
                         alt={
-                          homepageData[0]?.processSteps[activeIndex]
+                          homepageData[0].processSteps[activeIndex]
                             ?.stepTitle || "Step Image"
                         }
                         width={500}
@@ -877,79 +884,6 @@ export default function Home() {
                   </div>
                 </div>
               </section>
-              {/* <div className="strip-text">
-                <div className="marquee">
-                  <div className="marquee-item">
-                    <h1>{homepageData[0]?.sliderTextOne}</h1>
-                    {homepageData[0]?.sliderImage && (
-                      <Image
-                        src={urlFor(homepageData[0].sliderImage).url()}
-                        alt="Slider Icon"
-                        width="30"
-                        height="30"
-                      />
-                    )}
-                    <h1>{homepageData[0]?.sliderTextTwo}</h1>
-                    {homepageData[0]?.sliderImage && (
-                      <Image
-                        src={urlFor(homepageData[0].sliderImage).url()}
-                        alt="Slider Icon"
-                        width="30"
-                        height="30"
-                      />
-                    )}
-                    <h1>{homepageData[0]?.sliderTextThree}</h1>
-                    {homepageData[0]?.sliderImage && (
-                      <Image
-                        src={urlFor(homepageData[0].sliderImage).url()}
-                        alt="Slider Icon"
-                        width="30"
-                        height="30"
-                      />
-                    )}
-                    <h1>{homepageData[0]?.sliderTextFour}</h1>
-                    {homepageData[0]?.sliderImage && (
-                      <Image
-                        src={urlFor(homepageData[0].sliderImage).url()}
-                        alt="Slider Icon"
-                        width="30"
-                        height="30"
-                      />
-                    )}
-                    <h1>{homepageData[0]?.sliderTextFive}</h1>
-                    {homepageData[0]?.sliderImage && (
-                      <Image
-                        src={urlFor(homepageData[0].sliderImage).url()}
-                        alt="Slider Icon"
-                        width="30"
-                        height="30"
-                      />
-                    )}
-                  </div>
-                  <div className="marquee-item">
-                    <h1>{homepageData[0]?.sliderTextOne}</h1>
-                    {homepageData[0]?.sliderImage && (
-                      <Image
-                        src={urlFor(homepageData[0].sliderImage).url()}
-                        alt="Slider Icon"
-                        width="30"
-                        height="30"
-                        unoptimized
-                      />
-                    )}
-                    <h1>{homepageData[0]?.sliderTextTwo}</h1>
-                    {homepageData[0]?.sliderImage && (
-                      <Image
-                        src={urlFor(homepageData[0].sliderImage).url()}
-                        alt="Slider Icon"
-                        width="30"
-                        height="30"
-                        unoptimized
-                      />
-                    )}
-                  </div>
-                </div>
-              </div> */}
 
               <div className="strip-text">
                 <div className="marquee">
@@ -1005,7 +939,7 @@ export default function Home() {
                   {/* Duplicate set for seamless loop */}
                   <div className="marquee-item">
                     <h1>{homepageData[0]?.sliderTextOne}</h1>
-                    {homepageData[0]?.sliderImage && (
+                    {homepageData[0]?.sliderImage?.asset && (
                       <Image
                         src={urlFor(homepageData[0].sliderImage).url()}
                         alt="Slider Icon"
@@ -1014,7 +948,7 @@ export default function Home() {
                       />
                     )}
                     <h1>{homepageData[0]?.sliderTextTwo}</h1>
-                    {homepageData[0]?.sliderImage && (
+                    {homepageData[0]?.sliderImage?.asset && (
                       <Image
                         src={urlFor(homepageData[0].sliderImage).url()}
                         alt="Slider Icon"
@@ -1023,7 +957,7 @@ export default function Home() {
                       />
                     )}
                     <h1>{homepageData[0]?.sliderTextThree}</h1>
-                    {homepageData[0]?.sliderImage && (
+                    {homepageData[0]?.sliderImage?.asset && (
                       <Image
                         src={urlFor(homepageData[0].sliderImage).url()}
                         alt="Slider Icon"
@@ -1032,7 +966,7 @@ export default function Home() {
                       />
                     )}
                     <h1>{homepageData[0]?.sliderTextFour}</h1>
-                    {homepageData[0]?.sliderImage && (
+                    {homepageData[0]?.sliderImage?.asset && (
                       <Image
                         src={urlFor(homepageData[0].sliderImage).url()}
                         alt="Slider Icon"
@@ -1041,7 +975,7 @@ export default function Home() {
                       />
                     )}
                     <h1>{homepageData[0]?.sliderTextFive}</h1>
-                    {homepageData[0]?.sliderImage && (
+                    {homepageData[0]?.sliderImage?.asset && (
                       <Image
                         src={urlFor(homepageData[0].sliderImage).url()}
                         alt="Slider Icon"
@@ -1076,15 +1010,16 @@ export default function Home() {
 
                 <div className="about-us-video-image">
                   <div className="about-us-img">
-                    {homepageData?.[0]?.peoplImageOne?.asset && (
+                    {homepageData[0]?.peoplImageOne?.asset && (
                       <Image
                         src={urlFor(homepageData[0].peoplImageOne).url()}
                         width={500}
                         height={500}
-                        alt="People image"
+                        alt="People image one"
                         unoptimized
                       />
                     )}
+
                     {videos.peopleVideo && (
                       <video
                         src={videos.peopleVideo}
@@ -1110,13 +1045,6 @@ export default function Home() {
                   <div className="about-us-video-text">
                     <h1>{homepageData[0].peopleText}</h1>
                   </div>
-                  {/* <div className="who-we-are-btn">
-                <Link href="#">
-                  <button>
-                    <span>{homepageData[0].ctaButton}</span>
-                  </button>
-                </Link>
-              </div> */}
                 </div>
               </div>
               <div className="reviews-section">
@@ -1163,7 +1091,7 @@ export default function Home() {
 
                             <div className="image-wrapper">
                               <div className="background">
-                                {slide.image && (
+                                {slide?.image?.asset && (
                                   <Image
                                     src={urlFor(slide.image).url()}
                                     alt="Why Work Image"

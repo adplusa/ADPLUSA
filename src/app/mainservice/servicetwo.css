@@ -4,7 +4,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
-  display: flex; /* Optional: if you want to place content inside */
+  display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 5%;
@@ -242,52 +242,6 @@
   background-repeat: no-repeat;
   position: relative;
 }
-/* 
-.visual-concepts {
-  padding: 60px 5%;
-  font-family: "Geist", sans-serif;
-  background: #fff;
-}
-
-.row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 50px;
-  margin-bottom: 80px;
-}
-
-.reverse {
-  flex-direction: row-reverse;
-}
-
-.text {
-  flex: 1;
-  max-width: 500px;
-}
-
-.text h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-  color: #1e1e1e;
-  max-width: 500px;
-}
-
-.text p {
-  font-size: 17px;
-  line-height: 1.6;
-  color: #444;
-}
-
-.image {
-  flex: 1;
-}
-
-.image img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-} */
 
 .activities-outcomes {
   padding: 60px 5%;
@@ -347,107 +301,6 @@
   color: #444;
   line-height: 1.5;
 }
-/* 
-.card-cta {
-  display: flex;
-  justify-content: center;
-}
-
-.card-cta-df img {
-  width: 70%;
-  height: auto;
-}
-
-.card-cta-df {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  background-image: url(/service-img-3.svg);
-  width: 65%;
-  height: 170px;
-  background-size: cover;
-  background-color: #142d2b;
-  border-radius: 10px;
-}
-
-.card-cta-df img {
-  width: 255px;
-  height: auto;
-}
-
-.card-cta-df button {
-  color: #131313;
-  background: #d0ef76;
-  font-weight: 500;
-  border-top-left-radius: 50px;
-  border-top-right-radius: 50px;
-  border-bottom-right-radius: 50px;
-  border-bottom-left-radius: 50px;
-  border-top: 2px solid #d0ef76;
-  border-right: 2px solid #d0ef76;
-  border-bottom: 2px solid #d0ef76;
-  border-left: 2px solid #d0ef76;
-  padding-top: 10px;
-  padding-right: 26px;
-  padding-bottom: 10px;
-  padding-left: 26px;
-  font-size: 18px;
-  font-weight: bolder;
-  margin-left: 5px;
-  transition: all 0.3s ease;
-}
-
-.card-cta-df button:hover {
-  background-color: #000;
-  color: #d0ef76;
-}
-
-.card-cta {
-  padding: 5%;
-} */
-/* 
-.following-steps {
-  background-color: #fff7f2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 5% 0;
-}
-
-.following-steps h2 {
-  font-size: 28px;
-  font-weight: bolder;
-}
-
-.following-steps p {
-  max-width: 50%;
-  font-size: 17px;
-  margin-top: 40px;
-  line-height: 1.4;
-}
-
-.following-steps span button {
-  color: #131313;
-  background: #ffbdf4;
-  font-size: 17px;
-  padding: 12px 15px;
-  font-weight: 600;
-  border: none;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-}
-
-.following-steps span button:hover {
-  color: #ffbdf4;
-  background: #131313;
-}
-
-.following-steps span {
-  display: flex;
-  gap: 15px;
-  margin-top: 2%;
-} */
 
 .why-work {
   padding: 80px 5%;
@@ -519,22 +372,10 @@
   margin-top: -32%;
 }
 
-/* .background-sevice {
-  background-image: url("/yellow.svg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  width: 100%;
-  height: 600px;
-  border-radius: 20px;
-  position: absolute;
-  left: 5%;
-  z-index: 1;
-} */
-
 .person-img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* important! */
+  object-fit: cover;
   border-radius: 20px;
   position: relative;
   z-index: 2;
@@ -723,7 +564,6 @@
   background-color: #f2e9e4;
 }
 
-/* Responsive styles */
 @media (max-width: 1024px) {
   .professional-card {
     flex: 0 0 50%;
@@ -767,9 +607,7 @@
 
 .service-image {
   width: 100%;
-  /* max-width: 200px; */
   height: auto;
-  /* margin: 0 auto; */
   position: relative;
 }
 
@@ -782,7 +620,6 @@
 
 .home_services_box {
   display: grid;
-  /* Mobile first: show 1 column by default */
   grid-template-columns: 1fr;
   justify-content: space-evenly;
   margin-top: 2%;
@@ -803,30 +640,144 @@
   width: 100%;
 }
 
-/* Small devices (tablets, 576px and up) */
 @media (min-width: 576px) {
   .home_services_box {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
   .home_services_box {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
   .home_services_box {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-/* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
   .home_services_box {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .feature-section {
+    padding: 0;
+    margin-top: 38%;
+  }
+  .feature-section-df {
+    margin-top: 10%;
+  }
+
+  .feature-box {
+    width: 90%;
+  }
+
+  .feature-box h1 {
+    font-size: 20px;
+  }
+
+  .features-name {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: unset;
+    margin-top: 0;
+    padding: 15px;
+  }
+
+  .features-name img {
+    width: 45px;
+    height: auto;
+    margin-top: 4%;
+  }
+
+  .features-name p {
+    font-size: 16px;
+    margin-top: 1%;
+  }
+  .features-name h3 {
+    font-size: 14px;
+    margin-top: 1%;
+  }
+
+  .home_services h1 {
+    font-size: 22px;
+    margin-top: 15%;
+  }
+
+  .home_services_box:first-of-type {
+    margin-left: 5%;
+  }
+
+  .home_services_box {
+    display: flex;
+    overflow-x: auto;
+    gap: 30px;
+    margin-top: 15px;
+  }
+
+  .service-box-home {
+    width: 250px;
+  }
+
+  .service-image img {
+    object-fit: contain;
+    width: 100%;
+    height: auto;
+  }
+
+  .content-two {
+    flex-direction: column-reverse;
+  }
+
+  .text h2 {
+    font-size: 1.4rem;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .feature {
+    gap: 10px;
+    padding: 9px 11px;
+  }
+
+  .icon {
+    font-size: 15px;
+    width: 47px;
+  }
+
+  .info h3 {
+    font-size: 15px;
+  }
+
+  .info p {
+    font-size: 14px;
+  }
+
+  .image-wrapper {
+    margin-top: 15%;
+  }
+
+  .image-wrapper img {
+    width: 250px;
+    height: 300px;
+    margin-top: 20px !important;
+  }
+
+  .image-wrapper {
+    flex: unset;
+    margin-top: 0;
+  }
+
+  .comapany-trust-df h1 {
+    font-size: 2rem;
+  }
+
+  .comapany-trust {
+    height: auto;
   }
 }

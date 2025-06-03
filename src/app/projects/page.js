@@ -59,24 +59,27 @@ const Project = () => {
           </div>
 
           <div className="project-grid">
-            {data[0].projects?.map((item, index) => (
-              <Link
-                href={item.link || "#"}
-                key={index}
-                className="project-tile"
-              >
-                <div className="image-wrapper-pr">
-                  <Image
-                    src={urlFor(item.image).url()}
-                    alt={item.title}
-                    fill
-                    unoptimized
-                    priority
-                  />
-                </div>
-                <p className="image-title">{item.title}</p>
-              </Link>
-            ))}
+            {data[0]?.projects?.map(
+              (item, index) =>
+                item?.image?.asset && (
+                  <Link
+                    href={item.link || "#"}
+                    key={index}
+                    className="project-tile"
+                  >
+                    <div className="image-wrapper-pr">
+                      <Image
+                        src={urlFor(item.image).url()}
+                        alt={item.title || "Project Image"}
+                        fill
+                        unoptimized
+                        priority
+                      />
+                    </div>
+                    <p className="image-title">{item.title}</p>
+                  </Link>
+                )
+            )}
           </div>
         </div>
 
