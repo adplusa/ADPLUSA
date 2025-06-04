@@ -35,7 +35,7 @@ const Footer = () => {
         <div className="footer-logo">
           <Image
             // src={whiteLogo ? "/white-logo.png" : "/red-logo.png"}
-            src={whiteLogo ? "/white-logo.png" : "/consulting.png"}
+            src="/footer-logo.png"
             alt="Footer-logo"
             id="footer-logo"
             width={0}

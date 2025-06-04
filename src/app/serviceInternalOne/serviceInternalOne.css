@@ -829,7 +829,7 @@ button.next-button:active {
 .key-heading {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: var(--foreground);
 }
 
 .key-subheading {
@@ -900,7 +900,7 @@ button.next-button:active {
 
 .why-work {
   padding: 80px 5%;
-  background: #fff;
+  background: var(--backgroundColor);
   font-family: "Geist", sans-serif;
   margin-top: 5%;
 }
@@ -917,7 +917,7 @@ button.next-button:active {
 
 .text h2 {
   font-size: 2.8rem;
-  color: #1e1e1e;
+  color: var(--foreground);
   margin-bottom: 40px;
 }
 
@@ -944,13 +944,13 @@ button.next-button:active {
 
 .info h3 {
   font-size: 20px;
-  color: #1e1e1e;
+  color: var(--foreground);
   margin-bottom: 10px;
 }
 
 .info p {
   font-size: 16px;
-  color: #555;
+  color: var(--foreground);
   line-height: 1.5;
 }
 
@@ -997,7 +997,7 @@ button.next-button:active {
 .professionals-heading {
   font-size: 2.5rem;
   margin-bottom: 40px;
-  color: #333;
+  color: var(--foreground);
   text-align: center;
 }
 
@@ -1012,7 +1012,6 @@ button.next-button:active {
 .carousel-slides {
   display: flex;
   transition: transform 0.5s ease;
-  overflow-x: hidden;
 }
 
 .carousel-slide {
@@ -1020,6 +1019,7 @@ button.next-button:active {
   flex: 0 0 25%;
   padding: 0 10px;
   box-sizing: border-box;
+  width: 100px;
 }
 
 .professional-card {

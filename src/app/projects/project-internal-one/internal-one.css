@@ -3,7 +3,6 @@ h1 {
 }
 
 p {
-  color: #575757;
   font-family: "Lato-regular";
 }
 
@@ -106,6 +105,7 @@ p {
 
 .internal-section-one-bottom-left p {
   margin-top: 20px;
+  color: var(--foreground);
 }
 
 .internal-section-one-bottom-left p:first-of-type {

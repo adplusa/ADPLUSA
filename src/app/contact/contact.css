@@ -32,7 +32,8 @@ body {
 
 .why-work {
   padding: 80px 5%;
-  background: #fff;
+  /* background: #fff; */
+  background-color: var(--backgroundColor);
   font-family: "Geist", sans-serif;
 }
 
@@ -49,7 +50,7 @@ body {
 
 .text h2 {
   font-size: 2.8rem;
-  color: #1e1e1e;
+  color: var(--foreground);
   margin-bottom: 40px;
 }
 
@@ -76,13 +77,13 @@ body {
 
 .info h3 {
   font-size: 20px;
-  color: #1e1e1e;
+  color: var(--foreground);
   margin-bottom: 10px;
 }
 
 .info p {
   font-size: 16px;
-  color: #555;
+  color: var(--foreground);
   line-height: 1.5;
 }
 
@@ -229,7 +230,8 @@ body {
 }
 
 .for-map-wrapper {
-  background-color: #f0f4f8;
+  background-color: var(--backgroundColor);
+  /* background-color: #f0f4f8; */
   padding: 60px 20px;
 }
 
@@ -249,13 +251,13 @@ body {
 
 .for-map-heading {
   font-size: 32px;
-  color: #1a1a1a;
+  color: var(--foreground);
   margin-bottom: 20px;
 }
 
 .for-map-description {
   font-size: 16px;
-  color: #444;
+  color: var(--foreground);
   line-height: 1.6;
   margin-bottom: 30px;
 }

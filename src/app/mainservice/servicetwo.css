@@ -104,9 +104,13 @@
 .features-name p {
   line-height: 1.4;
   font-size: 28px;
-  color: #902b2c;
+  color: var(--redWhiteColor);
   font-weight: bold;
   margin-top: 12%;
+}
+
+.service-related-item img {
+  filter: var(--imageColor);
 }
 
 .features-name h3 {
@@ -241,6 +245,7 @@
   background-attachment: scroll;
   background-repeat: no-repeat;
   position: relative;
+  display: none;
 }
 
 .activities-outcomes {
@@ -304,7 +309,7 @@
 
 .why-work {
   padding: 80px 5%;
-  background: #fff;
+  background: var(--backgroundColor);
   font-family: "Geist", sans-serif;
 }
 
@@ -321,7 +326,7 @@
 
 .text h2 {
   font-size: 2.8rem;
-  color: #1e1e1e;
+  color: var(--foreGround);
   margin-bottom: 40px;
 }
 
@@ -348,13 +353,13 @@
 
 .info h3 {
   font-size: 20px;
-  color: #1e1e1e;
+  color: var(--foreGround);
   margin-bottom: 10px;
 }
 
 .info p {
   font-size: 16px;
-  color: #555;
+  color: var(--foreGround);
   line-height: 1.5;
 }
 
@@ -616,6 +621,7 @@
   margin: 10px 0 5px;
   padding: 10px;
   padding-bottom: 20px;
+  color: #000;
 }
 
 .home_services_box {

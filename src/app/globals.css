@@ -4,6 +4,11 @@
   --borderColor: #000;
   --backgroundContact: #e2dbdb;
   --backgroundTechnology: rgb(236, 236, 236);
+  --enquireNowBackgroundColor: #8a0b10;
+  --enquireNowButtonColor: #fbfbfb;
+  --redWhiteColor: #8a0b10;
+  --imageColor: brightness(0) saturate(100%) invert(16%) sepia(88%)
+    saturate(1642%) hue-rotate(343deg) brightness(90%) contrast(90%);
 }
 
 .dark-mode {
@@ -12,6 +17,10 @@
   --borderColor: #fff;
   --backgroundContact: #6c6c6c;
   --backgroundTechnology: #b9b9b9;
+  --enquireNowBackgroundColor: #ffffff;
+  --enquireNowButtonColor: #000000;
+  --redWhiteColor: #ffffff;
+  --imageColor: brightness(0) invert(1);
 }
 
 @font-face {
@@ -123,8 +132,8 @@ a {
 }
 
 .enquire button {
-  background: #8a0b10; /* solid black */
-  color: #fff; /* white text */
+  background-color: var(--enquireNowBackgroundColor);
+  color: var(--enquireNowButtonColor);
   border: none;
   outline: none;
   font-size: 16px; /* slightly smaller for better fit */

@@ -1,11 +1,11 @@
 #footer-logo {
-  width: 100px;
+  width: 150px;
   height: auto;
 }
 
 .footer {
   margin-top: 6%;
-  border-top: 2px solid #ca4c4d;
+  border-top: 1px solid var(--foreground);
   padding-top: 5%;
   /* background-color: #f9f9f9; */
   background-color: var(--backgroundColor);
@@ -47,12 +47,13 @@
 }
 
 .social-media span {
-  background-color: #8b0d0e;
+  /* background-color: #8b0d0e; */
+  background-color: var(--redWhiteColor);
   width: 40px;
   height: 40px;
   border-radius: 50%;
   border: none;
-  color: #ffffff;
+  color: var(--background);
   margin: 10px;
   display: flex;
   justify-content: center;
@@ -133,6 +134,10 @@
 
 #footer-right .second-navbar {
   margin-top: 2% !important;
+}
+
+.footer-logo img {
+  filter: var(--imageColor);
 }
 
 @media screen and (max-width: 768px) {

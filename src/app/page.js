@@ -92,7 +92,7 @@ export default function Home() {
           if (mouseOver) return;
           timeout = setTimeout(() => {
             slider.next();
-          }, 2000);
+          }, 20000000);
         }
         slider.on("created", () => {
           slider.container.addEventListener("mouseover", () => {
@@ -282,50 +282,6 @@ export default function Home() {
     fetchData();
   }, []);
 
-  // Banner for Light and Dark Mode
-  // useEffect(() => {
-  //   if (homepageData?.[0]) {
-  //     const lightImg = urlFor(homepageData[0].lightModeImage).url();
-  //     const darkImg = urlFor(homepageData[0].darkModeImage).url();
-
-  //     console.log("LIGHT IMG:", lightImg);
-  //     console.log("DARK IMG:", darkImg);
-
-  //     const updateImage = () => {
-  //       const isDark = document.body.classList.contains("dark-mode");
-  //       setBgImage(isDark ? darkImg : lightImg);
-  //     };
-
-  //     updateImage();
-
-  //     const observer = new MutationObserver(updateImage);
-  //     observer.observe(document.body, {
-  //       attributes: true,
-  //       attributeFilter: ["class"],
-  //     });
-
-  //     return () => observer.disconnect();
-  //   } else {
-  //     console.log("Homepage data missing");
-  //   }
-  // }, [homepageData]);
-
-  // Working Process Images Changer
-
-  // useEffect(() => {
-  //   if (window.innerWidth <= 768) {
-  //     const interval = setInterval(() => {
-  //       setIndex((prevIndex) => {
-  //         const newIndex = (prevIndex + 1) % images.length;
-  //         setImageSrc(images[newIndex]);
-  //         setActiveIndex(newIndex); // ✅ Correctly update activeIndex
-  //         return newIndex;
-  //       });
-  //     }, 4000); // Change image every 3 seconds
-
-  //     return () => clearInterval(interval);
-  //   }
-  // }, []);
   useEffect(() => {
     // Only run this effect on screens <= 768px
     if (window.innerWidth >= 768) {
@@ -1077,8 +1033,8 @@ export default function Home() {
                         <section className="why-work">
                           <div className="content-two">
                             <div className="text">
-                              <h2>{slide.title}</h2>
-                              {slide.features?.map((feature, fidx) => (
+                              <h3>{slide.title}</h3>
+                              {/* {slide.features?.map((feature, fidx) => (
                                 <div key={fidx} className="feature">
                                   <div className="icon">{feature.icon}</div>
                                   <div className="info">
@@ -1086,7 +1042,36 @@ export default function Home() {
                                     <p>{feature.description}</p>
                                   </div>
                                 </div>
-                              ))}
+                              ))} */}
+                              <p>
+                                Ar. Abhishek Aggarwal, an award-winning
+                                architect from New Delhi, is the founder of ADPL
+                                Consulting LLC. With over 29 years of
+                                experience, including nine years in the US, he
+                                blends global insights with local understanding.
+                                He created ADPL as a collaborative space for
+                                creative architectural talent to thrive.
+                              </p>
+                              <br />
+                              <p>
+                                His expertise covers Architecture, Interior
+                                Design, and Consulting Engineering. Inspired by
+                                his travels, Abhishek designs spaces that are
+                                original, functional, and contextually relevant.
+                                Known for his passion and forward-thinking
+                                approach, he creates timeless, meaningful
+                                designs
+                              </p>
+                              <br />
+                              <h5>
+                                <b>Abhishek Aggarwal</b>
+                              </h5>
+                              <p>B.Arch, M.Arch, MCA, AlIA, MCRP, FIIV</p>
+                              <br />
+                              <h5>
+                                <b>Partner</b>
+                              </h5>
+                              <p>ADPL Consulting LLC, USA</p>
                             </div>
 
                             <div className="image-wrapper">

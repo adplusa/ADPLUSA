@@ -264,4 +264,14 @@
   .color-changer {
     gap: 2px;
   }
+
+  .color-changer h3 {
+    display: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .color-changer h3 {
+    display: none;
+  }
 }
