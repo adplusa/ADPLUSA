@@ -181,7 +181,6 @@ a {
 
 @media screen and (max-width: 768px) {
   .enquire button {
-    background: #8a0b10;
     font-size: 12px !important;
     right: 3% !important;
     top: 54% !important;

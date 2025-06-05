@@ -1760,7 +1760,7 @@ span.service-two-bottom-box-logo {
 }
 
 .service-box-home h2 {
-  font-size: 17px;
+  font-size: 17px !important;
   margin: 10px 0 5px;
   padding: 10px;
   padding-bottom: 20px;
@@ -2089,7 +2089,7 @@ span.service-two-bottom-box-logo {
   }
 
   .features-name h3 {
-    font-size: 14px;
+    font-size: 14px !important;
     margin-top: 1%;
   }
 
