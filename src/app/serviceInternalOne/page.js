@@ -179,24 +179,24 @@ const ServicesPage = () => {
       </section>
 
       {/* Carousel Section */}
-      <div className="professionals-section">
-        <h1 className="professionals-heading">
-          Explore Most Wanted Professionals
+      <div className="professionals-section-internals">
+        <h1 className="professionals-heading-internals">
+          Explore More Services
         </h1>
         <div
-          className="carousel-container"
+          className="carousel-container-internals"
           onMouseEnter={pauseAutoPlay}
           onMouseLeave={resumeAutoPlay}
         >
           <div
-            className="carousel-slides"
+            className="carousel-slides-internals"
             ref={slideRef}
             style={{ transform: `translateX(-${currentIndex * 25}%)` }}
           >
             {professionals.map((pro, i) => (
-              <div key={i} className="carousel-slide">
-                <div className="professional-card">
-                  <div className="image-container">
+              <div key={i} className="carousel-slide-internals">
+                <div className="professional-card-internals">
+                  <div className="image-container-internals">
                     {pro?.image?.asset ? (
                       <Image
                         src={urlFor(pro.image).url()}

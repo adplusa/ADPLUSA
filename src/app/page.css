@@ -169,7 +169,6 @@
   position: relative;
   z-index: 1;
   margin-bottom: 4rem;
-  font-size: 2.4rem;
   line-height: 3.1rem;
   font-family: "Lato-Bold";
   margin-left: 4%;
@@ -186,7 +185,6 @@
 }
 
 .about-us-top-right h1 {
-  font-size: 2.3rem;
   font-family: "Lato-Bold";
 }
 
@@ -1138,7 +1136,7 @@ span.service-two-bottom-box-logo {
 }
 
 .heading {
-  font-size: 2.4rem;
+  font-size: 2rem;
   font-weight: bold;
 }
 
@@ -2014,49 +2012,9 @@ span.service-two-bottom-box-logo {
   margin-bottom: 40px;
 }
 
-/* .feature {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  padding-bottom: 15px;
-  margin-bottom: 15px;
-  border-bottom: 1px solid #f0d8d2;
-}
-
-.icon {
-  font-size: 24px;
-  color: #d2a191;
-  background-color: #f5e2db;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.info h3 {
-  font-size: 20px;
-  color: var(--foreground);
-  margin-bottom: 10px;
-}
-
-.info p {
-  font-size: 16px;
-  color: var(--foreground);
-  line-height: 1.5;
-} */
-
 .image-wrapper {
   margin-top: 8%;
 }
-
-/* .image-wrapper {
-  position: relative;
-  flex: 1 1 400px;
-  margin-left: 10%;
-  margin-top: 5%;
-} */
 
 .image-wrapper img {
   width: 100%;
@@ -2065,17 +2023,9 @@ span.service-two-bottom-box-logo {
   margin-top: -32%;
 }
 
-/* .background {
-  background-image: url("/yellow.svg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  width: 100%;
-  height: 600px;
-  border-radius: 20px;
-  position: absolute;
-  left: 5%;
-  z-index: 1;
-} */
+.author-p {
+  margin-top: 5px;
+}
 
 .person-img {
   width: 100%;

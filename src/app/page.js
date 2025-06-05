@@ -1066,12 +1066,16 @@ export default function Home() {
                               <h5>
                                 <b>Abhishek Aggarwal</b>
                               </h5>
-                              <p>B.Arch, M.Arch, MCA, AlIA, MCRP, FIIV</p>
+                              <p className="author-p">
+                                B.Arch, M.Arch, MCA, AlIA, MCRP, FIIV
+                              </p>
                               <br />
                               <h5>
                                 <b>Partner</b>
                               </h5>
-                              <p>ADPL Consulting LLC, USA</p>
+                              <p className="author-p">
+                                ADPL Consulting LLC, USA
+                              </p>
                             </div>
 
                             <div className="image-wrapper">

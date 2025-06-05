@@ -10,6 +10,7 @@ import { client } from "../../sanity/lib/client";
 import urlFor from "../helpers/sanity";
 import { PortableText } from "@portabletext/react";
 import Link from "next/link";
+import Head from "next/head";
 
 const About = () => {
   const textRef = useRef(null);
@@ -62,6 +63,26 @@ const About = () => {
 
   return (
     <div>
+      <Head>
+        <title>{data.pageTitle || "About Us - My Website"}</title>
+        <meta
+          name="description"
+          content={
+            data.pageDescription || "Learn more about our company and mission."
+          }
+        />
+        <meta name="robots" content="index, follow" />
+        <meta
+          property="og:title"
+          content={data.pageTitle || "About Us - My Website"}
+        />
+        <meta
+          property="og:description"
+          content={
+            data.pageDescription || "Learn more about our company and mission."
+          }
+        />
+      </Head>
       <Header />
 
       <div className="about-container">
