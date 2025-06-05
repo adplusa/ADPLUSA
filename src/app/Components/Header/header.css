@@ -254,6 +254,8 @@
 
   .header-df {
     padding: 0 10px;
+    position: fixed;
+    height: 50px;
   }
 
   .menu-color svg {

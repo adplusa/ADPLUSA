@@ -17,6 +17,8 @@ const ServicesPage = () => {
   const slideRef = useRef(null);
   const intervalRef = useRef(null);
 
+  const isMobile = window.innerWidth <= 768;
+
   // Fetch data from Sanity
   useEffect(() => {
     const fetchData = async () => {
@@ -191,7 +193,10 @@ const ServicesPage = () => {
           <div
             className="carousel-slides-internals"
             ref={slideRef}
-            style={{ transform: `translateX(-${currentIndex * 25}%)` }}
+            // style={{ transform: `translateX(-${currentIndex * 25}%)` }}
+            style={{
+              transform: `translateX(-${currentIndex * (isMobile ? 100 : 25)}%)`,
+            }}
           >
             {professionals.map((pro, i) => (
               <div key={i} className="carousel-slide-internals">
