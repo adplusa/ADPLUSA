@@ -185,7 +185,7 @@
     position: absolute;
     top: 100%;
     left: -100%;
-    transition: left 0.3s ease-in-out;
+    transition: left 0.8s ease;
     flex-direction: column;
     height: 100vh;
     width: 50%;
@@ -205,6 +205,11 @@
   .flip-logo img {
     width: 70px;
     height: auto;
+  }
+
+  #ham,
+  #cancel {
+    transition: all 0.4s step-end;
   }
 
   .nav {

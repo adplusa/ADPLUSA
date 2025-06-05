@@ -16,8 +16,21 @@ const ServicesPage = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const slideRef = useRef(null);
   const intervalRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const isMobile = window.innerWidth <= 768;
+  // const isMobile = window.innerWidth <= 768;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Set mobile state based on window width
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize); // Add resize event listener
+
+    // Cleanup on unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Fetch data from Sanity
   useEffect(() => {
@@ -194,8 +207,12 @@ const ServicesPage = () => {
             className="carousel-slides-internals"
             ref={slideRef}
             // style={{ transform: `translateX(-${currentIndex * 25}%)` }}
+            // style={{
+            //   transform: `translateX(-${currentIndex * (isMobile ? 100 : 25)}%)`,
+            // }}
             style={{
               transform: `translateX(-${currentIndex * (isMobile ? 100 : 25)}%)`,
+              transition: "transform 0.5s ease", // Smooth transition
             }}
           >
             {professionals.map((pro, i) => (
