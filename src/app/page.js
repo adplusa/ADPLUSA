@@ -75,6 +75,7 @@ export default function Home() {
     return () => observer.disconnect(); // Cleanup
   }, []);
 
+  // Keen Slider
   const [sliderRef, instanceRef] = useKeenSlider(
     {
       loop: true,
@@ -92,7 +93,7 @@ export default function Home() {
           if (mouseOver) return;
           timeout = setTimeout(() => {
             slider.next();
-          }, 20000000);
+          }, 4000);
         }
         slider.on("created", () => {
           slider.container.addEventListener("mouseover", () => {
@@ -112,60 +113,7 @@ export default function Home() {
     ]
   );
 
-  // const revealAnimation = () => {
-  //   const t1 = gsap.timeline({
-  //     onComplete: () => setLoading(false),
-  //   });
-
-  //   t1.to(".count", { opacity: 0, duration: 0.1 })
-  //     .to(".progress-bar-two", { opacity: 0, duration: 0.1 })
-
-  //     // Split open the top and bottom covers
-  //     .to(".follow-top", { height: "50vh", ease: "expo.inOut", duration: 0.4 })
-  //     .to(
-  //       ".follow-bottom",
-  //       { height: "50vh", ease: "expo.inOut", duration: 0.4 },
-  //       "-=0.4"
-  //     )
-
-  //     // Show the logo
-  //     .fromTo(
-  //       ".logo",
-  //       { opacity: 0, scale: 0.8 },
-  //       { opacity: 1, scale: 1, ease: "expo.inOut", duration: 0.4 }
-  //     )
-
-  //     // Hide the logo
-  //     .to(".logo", {
-  //       opacity: 0,
-  //       scale: 0.8,
-  //       ease: "expo.inOut",
-  //       duration: 0.3,
-  //       delay: 0.1,
-  //     })
-
-  //     // 👇 Move this line here so main content appears after logo disappears
-  //     .set(".main-content", { opacity: 1 })
-
-  //     // Shrink overlays
-  //     .to(".follow-top", { height: "0%", duration: 0.4, ease: "expo.inOut" })
-  //     .to(
-  //       ".follow-bottom",
-  //       { height: "0%", duration: 0.4, ease: "expo.inOut" },
-  //       "-=0.4"
-  //     )
-
-  //     // Fade out the loader overlay
-  //     .to(".loader-container", {
-  //       opacity: 0,
-  //       duration: 0.2,
-  //       ease: "expo.inOut",
-  //     })
-
-  //     // Completely remove loader from DOM
-  //     .set(".loader-container", { display: "none" });
-  // };
-
+  // Reveal Animation Intro
   const revealAnimation = () => {
     const t1 = gsap.timeline({
       onComplete: () => setLoading(false),
@@ -197,51 +145,6 @@ export default function Home() {
     // - follow-top/follow-bottom shrink
     // - loader-container fade out & removal
   };
-
-  // const activitiesOutcomesCards = [
-  //   {
-  //     icon: "*",
-  //     title: "BIM Services",
-  //     description:
-  //       "Our BIM team consists of architects, engineers and designers offering holistic solutions.",
-  //   },
-  //   {
-  //     icon: "*",
-  //     title: "CAD Services",
-  //     description:
-  //       "Providing extended architectural and structural design and drafting services for all stages of your project",
-  //   },
-  //   {
-  //     icon: "*",
-  //     title: "Permit Drawings & Documentation",
-  //     description:
-  //       "Contact us and save the cumbersome job of authority approvals.",
-  //   },
-  //   {
-  //     icon: "*",
-  //     title: "3D Visualization",
-  //     description:
-  //       "Get the full experience of your building before hand by our 3D experts.",
-  //   },
-  //   {
-  //     icon: "*",
-  //     title: "Presentation Drawing",
-  //     description:
-  //       "We provide comprehensive research data which captivate our clients, at the lowest possible cost.",
-  //   },
-  //   {
-  //     icon: "*",
-  //     title: "Design Presentations",
-  //     description:
-  //       "Share schematic designs with stakeholders for feedback and refinement.",
-  //   },
-  //   {
-  //     icon: "*",
-  //     title: "MEP Services",
-  //     description:
-  //       "We strive to provide high-quality and reliable structural, mechanical and electrical engineering solutions.",
-  //   },
-  // ];
 
   // Home Sanity Fetch Data
   useEffect(() => {
@@ -282,6 +185,7 @@ export default function Home() {
     fetchData();
   }, []);
 
+  // Process Steps Image
   useEffect(() => {
     // Only run this effect on screens <= 768px
     if (window.innerWidth >= 768) {
@@ -316,22 +220,6 @@ export default function Home() {
 
     return () => clearInterval(interval);
   }, [counter]);
-
-  // useEffect(() => {
-  //   const interval = setInterval(nextSlide, 5000);
-  //   return () => clearInterval(interval);
-  // }, []);
-
-  // useEffect(() => {
-  //   const slider = document.querySelector(".testimonial-slider");
-  //   if (slider) {
-  //     slider.style.transition = "all 0.5s ease";
-  //   }
-  // }, [current]);
-
-  // const handleClick = () => {
-  //   setActive(!active);
-  // };
 
   const toggle = (index) => {
     setOpen(open === index ? null : index);
@@ -374,28 +262,6 @@ export default function Home() {
       }
     });
   }, []);
-
-  // useEffect(() => {
-  //   const updateLogo = () => {
-  //     setLogo(
-  //       document.body.classList.contains("dark-mode")
-  //         ? "/white-logo.png"
-  //         : "/red-logo.png"
-  //     );
-  //   };
-
-  //   // Run on mount
-  //   updateLogo();
-
-  //   // Observe for changes
-  //   const observer = new MutationObserver(() => {
-  //     updateLogo();
-  //   });
-
-  //   observer.observe(document.body, { attributes: true });
-
-  //   return () => observer.disconnect(); // Cleanup observer
-  // }, []);
 
   useEffect(() => {
     gsap.to(textRef.current, {

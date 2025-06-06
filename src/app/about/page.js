@@ -11,6 +11,12 @@ import urlFor from "../helpers/sanity";
 import { PortableText } from "@portabletext/react";
 import Link from "next/link";
 import Head from "next/head";
+// import { metadata } from "../layout";
+
+// export const metadata = {
+//   title: "About Us",
+//   description: "Learn about our mission and team",
+// };
 
 const About = () => {
   const textRef = useRef(null);

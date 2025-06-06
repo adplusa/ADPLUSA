@@ -107,6 +107,7 @@ div#practice-box {
 .about-content-5-row {
   margin-top: 20%;
   position: relative;
+  z-index: -1;
 }
 
 .about-content-5-row .people-img {
@@ -570,6 +571,10 @@ button.next-button:active {
 @media (max-width: 768px) {
   .about-container {
     padding: 0 5%;
+  }
+
+  .home-about {
+    margin-top: 28%;
   }
 
   .about-content-first-row-left h1 {

@@ -2089,7 +2089,9 @@ span.service-two-bottom-box-logo {
   }
 
   .features-name h3 {
-    font-size: 14px !important;
+    font-size: 14px !important
+    
+     ;
     margin-top: 1%;
   }
 

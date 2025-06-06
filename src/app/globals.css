@@ -152,8 +152,7 @@ a {
 }
 
 .upward {
-  background: #000;
-  /* background-color: var(--backgroundColor); */
+  background-color: var(--foreground);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -170,8 +169,8 @@ a {
 }
 
 .upward svg path {
-  fill: #fff;
-  stroke: #fff;
+  fill: var(--background);
+  stroke: var(--background);
 }
 
 .upward svg {
