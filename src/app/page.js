@@ -185,6 +185,25 @@ export default function Home() {
     fetchData();
   }, []);
 
+  // MetaData
+  useEffect(() => {
+    if (!homepageData || homepageData.length === 0) return;
+
+    const pageData = homepageData[0]; // Extract the object from the array
+
+    document.title = pageData.seoTitle;
+
+    const metaDesc = document.querySelector("meta[name='description']");
+    if (metaDesc) {
+      metaDesc.setAttribute("content", pageData.seoDescription);
+    } else {
+      const meta = document.createElement("meta");
+      meta.name = "description";
+      meta.content = "Learn about our mission and team";
+      document.head.appendChild(meta);
+    }
+  }, [homepageData]);
+
   // Process Steps Image
   useEffect(() => {
     // Only run this effect on screens <= 768px

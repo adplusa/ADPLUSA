@@ -6,24 +6,16 @@ export const servicesInternalSixPage = defineType({
   title: "Services Internal Page Six",
   type: "document",
   fields: [
-    // defineField({ name: "bannerTitle", title: "Banner Title", type: "string" }),
-    // defineField({
-    //   name: "bannerTags",
-    //   title: "Popular Tags",
-    //   type: "array",
-    //   of: [{ type: "string" }],
-    // }),
-    // defineField({
-    //   name: "trustedStats",
-    //   title: "Trusted Statistics",
-    //   type: "array",
-    //   of: [
-    //     defineField({
-    //       type: "object",
-    //       fields: [{ name: "label", type: "string", title: "Label" }],
-    //     }),
-    //   ],
-    // }),
+    defineField({
+      name: "seoTitle",
+      title: "SEO Title",
+      type: "string",
+    }),
+    defineField({
+      name: "seoDescription",
+      title: "SEO Description",
+      type: "string",
+    }),
 
     defineField({
       name: "title",

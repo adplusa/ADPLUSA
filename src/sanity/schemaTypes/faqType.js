@@ -6,6 +6,17 @@ export const faqSection = defineType({
   type: "document",
   fields: [
     defineField({
+      name: "seoTitle",
+      title: "SEO Title",
+      type: "string",
+    }),
+    defineField({
+      name: "seoDescription",
+      title: "SEO Description",
+      type: "string",
+    }),
+
+    defineField({
       name: "title",
       title: "Page Title",
       type: "string",

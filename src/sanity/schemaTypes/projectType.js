@@ -6,6 +6,17 @@ export const projectPage = defineType({
   title: "Project Page",
   type: "document",
   fields: [
+    defineField({
+      name: "seoTitle",
+      title: "SEO Title",
+      type: "string",
+    }),
+    defineField({
+      name: "seoDescription",
+      title: "SEO Description",
+      type: "string",
+    }),
+
     // Heading
     defineField({
       name: "heading",

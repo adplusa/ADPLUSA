@@ -18,52 +18,52 @@ const ServiceTwo = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const carouselRef = useRef(null);
 
-  const servicesData = [
-    {
-      title: "Remote Executive Assistant",
-      category: "Services",
-      image: "/cad-1.webp",
-    },
-    {
-      title: "MEP Engineer",
-      category: "Services",
-      image: "/cad-2.webp",
-    },
-    {
-      title: "Construction Documentation",
-      category: "Services",
-      image: "/cad-4.webp",
-    },
-    {
-      title: "CAD Outsourcing",
-      category: "Services",
-      image: "/cad-3.webp",
-    },
+  // const servicesData = [
+  //   {
+  //     title: "Remote Executive Assistant",
+  //     category: "Services",
+  //     image: "/cad-1.webp",
+  //   },
+  //   {
+  //     title: "MEP Engineer",
+  //     category: "Services",
+  //     image: "/cad-2.webp",
+  //   },
+  //   {
+  //     title: "Construction Documentation",
+  //     category: "Services",
+  //     image: "/cad-4.webp",
+  //   },
+  //   {
+  //     title: "CAD Outsourcing",
+  //     category: "Services",
+  //     image: "/cad-3.webp",
+  //   },
 
-    {
-      title: "Bim Services",
-      category: "Services",
-      image: "/cad-2.webp",
-    },
+  //   {
+  //     title: "Bim Services",
+  //     category: "Services",
+  //     image: "/cad-2.webp",
+  //   },
 
-    {
-      title: "MEP Engineer",
-      category: "Services",
-      image: "/cad-3.webp",
-    },
+  //   {
+  //     title: "MEP Engineer",
+  //     category: "Services",
+  //     image: "/cad-3.webp",
+  //   },
 
-    {
-      title: "Presenting Drawing",
-      category: "Services",
-      image: "/cad-4.webp",
-    },
+  //   {
+  //     title: "Presenting Drawing",
+  //     category: "Services",
+  //     image: "/cad-4.webp",
+  //   },
 
-    {
-      title: "3D Visualization",
-      category: "Services",
-      image: "/cad-5.webp",
-    },
-  ];
+  //   {
+  //     title: "3D Visualization",
+  //     category: "Services",
+  //     image: "/cad-5.webp",
+  //   },
+  // ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,6 +90,23 @@ const ServiceTwo = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (!data) return; // Prevent null error
+
+    document.title = data.seoTitle;
+
+    const metaDesc = document.querySelector("meta[name='description']");
+    if (metaDesc) {
+      metaDesc.setAttribute("content", data.seoDescription);
+    } else {
+      const meta = document.createElement("meta");
+      meta.name = "description";
+      meta.content = "Learn about our mission and team";
+      document.head.appendChild(meta);
+    }
+  }, [data]); // Re-run when `data` becomes available
+
   useEffect(() => {
     if (textRef.current) {
       gsap.to(textRef.current, {

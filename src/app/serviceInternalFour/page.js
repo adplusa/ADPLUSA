@@ -42,6 +42,22 @@ const ServicesPageFour = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (!data) return; // Prevent null error
+
+    document.title = data.seoTitle;
+
+    const metaDesc = document.querySelector("meta[name='description']");
+    if (metaDesc) {
+      metaDesc.setAttribute("content", data.seoDescription);
+    } else {
+      const meta = document.createElement("meta");
+      meta.name = "description";
+      meta.content = "Learn about our mission and team";
+      document.head.appendChild(meta);
+    }
+  }, [data]); // Re-run when `data` becomes available
+
   const nextSlide = () => {
     if (!isTransitioning) setCurrentIndex((prev) => prev + 1);
   };

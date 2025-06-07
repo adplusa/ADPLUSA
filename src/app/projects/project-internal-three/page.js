@@ -26,6 +26,23 @@ const InternalThree = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (!data) return;
+
+    const pageData = data[0];
+    document.title = pageData.seoTitle;
+
+    const metaDesc = document.querySelector("meta[name='description']");
+    if (metaDesc) {
+      metaDesc.setAttribute("content", pageData.seoDescription);
+    } else {
+      const meta = document.createElement("meta");
+      meta.name = "description";
+      meta.content = "Learn about our mission and team";
+      document.head.appendChild(meta);
+    }
+  }, [data]);
+
   const upwardHandler = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };

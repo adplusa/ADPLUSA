@@ -27,6 +27,24 @@ export default function FAQ() {
     fetchFaq();
   }, []);
 
+  useEffect(() => {
+    if (!faqData || faqData.length === 0) return;
+
+    const pageData = faqData[0]; // Get the first item in the array
+
+    document.title = pageData.seoTitle;
+
+    const metaDesc = document.querySelector("meta[name='description']");
+    if (metaDesc) {
+      metaDesc.setAttribute("content", pageData.seoDescription);
+    } else {
+      const meta = document.createElement("meta");
+      meta.name = "description";
+      meta.content = "Learn about our mission and team";
+      document.head.appendChild(meta);
+    }
+  }, [faqData]);
+
   const toggleFaq = (categoryIndex, faqIndex) => {
     const key = `${categoryIndex}-${faqIndex}`;
     setOpenFaqs((prev) => ({

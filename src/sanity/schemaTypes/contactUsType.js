@@ -5,6 +5,16 @@ export const contactPage = defineType({
   title: "Contact Page",
   type: "document",
   fields: [
+    defineField({
+      name: "seoTitle",
+      title: "SEO Title",
+      type: "string",
+    }),
+    defineField({
+      name: "seoDescription",
+      title: "SEO Description",
+      type: "string",
+    }),
     // Hero section / heading
     defineField({
       name: "mainHeading",

@@ -5,6 +5,17 @@ export const eventType = defineType({
   title: "Homepage",
   type: "document",
   fields: [
+    defineField({
+      name: "seoTitle",
+      title: "SEO Title",
+      type: "string",
+    }),
+    defineField({
+      name: "seoDescription",
+      title: "SEO Description",
+      type: "string",
+    }),
+
     // Animate Slider
     {
       name: "title",
