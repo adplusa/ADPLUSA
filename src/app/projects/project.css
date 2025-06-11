@@ -35,6 +35,10 @@
   .project-grid {
     grid-template-columns: 1fr;
   }
+
+  .project-container {
+    margin-top: 27%;
+  }
 }
 
 .project-tile {

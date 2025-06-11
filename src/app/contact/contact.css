@@ -298,6 +298,14 @@ body {
     flex-direction: column-reverse;
   }
 
+  .icon {
+    background-color: unset;
+  }
+
+  .why-work {
+    padding: 0 10px;
+  }
+
   .contact-container {
     flex-direction: column;
     margin: 40px 20px;

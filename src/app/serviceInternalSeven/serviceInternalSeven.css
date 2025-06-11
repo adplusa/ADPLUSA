@@ -1103,6 +1103,11 @@ button.next-button:active {
     margin-top: 13%;
   }
 
+  .image-container-internals img {
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+  }
+
   .image-container-two {
     width: 100%;
     height: auto;
