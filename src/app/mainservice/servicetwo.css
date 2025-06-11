@@ -203,6 +203,7 @@
   .schematic-section {
     flex-direction: column;
     text-align: center;
+    margin-top: 13%;
   }
 
   .schematic-content,
@@ -342,6 +343,10 @@
 }
 
 .icon {
+  margin-top: 7px;
+}
+
+/* .icon {
   font-size: 24px;
   color: #d2a191;
   background-color: #f5e2db;
@@ -351,7 +356,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
+} */
 
 .info h3 {
   font-size: 20px;
@@ -674,7 +679,7 @@
 @media (max-width: 768px) {
   .feature-section {
     padding: 0;
-    margin-top: 38%;
+    margin-top: 17%;
   }
   .feature-section-df {
     margin-top: 10%;
@@ -758,11 +763,19 @@
   }
 
   .info h3 {
-    font-size: 15px;
+    font-size: 15px !important;
   }
 
   .info p {
-    font-size: 14px;
+    font-size: 12px;
+  }
+
+  .why-work {
+    padding: 30px 2%;
+  }
+
+  .image-wrapper {
+    margin-left: 0;
   }
 
   .image-wrapper {

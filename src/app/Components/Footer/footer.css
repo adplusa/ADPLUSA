@@ -146,6 +146,10 @@
     max-width: 80%;
   }
 
+  .footer {
+    padding-bottom: 14%;
+  }
+
   .copy-designed p {
     font-size: 11px;
     margin-left: 10px;

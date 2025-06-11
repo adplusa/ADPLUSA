@@ -163,6 +163,10 @@ p {
     margin-top: 12%;
   }
 
+  .internal-section-one {
+    margin-top: 22%;
+  }
+
   .internal-section-one-bottom {
     flex-direction: column;
     gap: 20px;

@@ -2054,7 +2054,7 @@ span.service-two-bottom-box-logo {
   }
 
   .animation-slider {
-    margin-top: -7%;
+    margin-top: 13%;
   }
 
   .custom-cursor {
@@ -2247,7 +2247,7 @@ span.service-two-bottom-box-logo {
   .about-us h2 {
     position: absolute;
     left: 3%;
-    font-size: 3.5rem;
+    font-size: 3.5rem !important;
     line-height: normal;
     text-align: left;
   }
@@ -2259,6 +2259,7 @@ span.service-two-bottom-box-logo {
     margin-top: -3%;
     text-align: left;
     margin-left: 8%;
+    font-family: unset;
   }
 
   .about-us-top-left,
@@ -2291,6 +2292,28 @@ span.service-two-bottom-box-logo {
 
   .about-us-top-right h1 {
     font-size: 1.1rem;
+    font-family: unset;
+  }
+
+  .founder-description p,
+  .founder-description-two p {
+    font-size: 12px !important;
+  }
+
+  .text {
+    padding: 20px;
+  }
+
+  .contact-us {
+    padding-top: 0;
+  }
+
+  .navigation-wrapper {
+    height: 750px;
+  }
+
+  .text h3 {
+    margin-bottom: 0;
   }
 
   .about-us-top-right p {

@@ -13,6 +13,7 @@ import "./project.css";
 const Project = () => {
   const textRef = useRef(null);
   const [data, setData] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
   // 🧠 Fetch Sanity CMS data
   useEffect(() => {
@@ -121,8 +122,53 @@ const Project = () => {
 
         {/* Enquire Button */}
         <div className="enquire">
-          <button>Enquire Now</button>
+          <button onClick={() => setShowForm(true)}>Enquire Now</button>
         </div>
+        {showForm && (
+          <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
+            <div
+              className="enquiry-container"
+              onClick={(e) => e.stopPropagation()} // Prevent close on form click
+            >
+              <div className="enquiry-box">
+                <div className="close-icon" onClick={() => setShowForm(false)}>
+                  ✕
+                </div>
+                <h2 className="title">Quick Query</h2>
+                <p className="subtitle">
+                  If you have any queries, we will be pleased to assist you.
+                </p>
+                <form>
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    className="form-input"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Mobile No."
+                    className="form-input"
+                  />
+                  <select className="form-input">
+                    <option>Select Type</option>
+                    <option>General</option>
+                    <option>Support</option>
+                    <option>Sales</option>
+                  </select>
+                  <textarea
+                    placeholder="Query"
+                    className="form-input"
+                    rows="3"
+                  ></textarea>
+
+                  <button type="submit" className="submit-button">
+                    Submit
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Scroll Up Button */}
         <div className="upward" onClick={upwardHandler}>

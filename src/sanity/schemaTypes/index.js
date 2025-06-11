@@ -6,6 +6,8 @@ import { servicesInternalThreePage } from "./serviceInternalThreeType";
 import { servicesInternalFourPage } from "./serviceInternalFourType";
 import { servicesInternalFivePage } from "./serviceInternalFiveType";
 import { servicesInternalSixPage } from "./serviceInternalSixType";
+import serviceInternalSevenType from "./serviceInternalSevenType";
+import serviceInternalEightType from "./serviceInternalEightType";
 import { aboutPage } from "./aboutUsType";
 import { faqSection } from "./faqType";
 import { contactPage } from "./contactUsType";
@@ -28,6 +30,8 @@ export const schema = {
     servicesInternalFourPage,
     servicesInternalFivePage,
     servicesInternalSixPage,
+    serviceInternalSevenType,
+    serviceInternalEightType,
     faqSection,
     contactPage,
     projectPage,

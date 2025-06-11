@@ -191,6 +191,26 @@
   transition: all 0.3s ease;
 }
 
+@media screen and (max-width: 768px) {
+  .faq-head {
+    margin-top: 30%;
+  }
+
+  .faq-container {
+    padding-top: 20px;
+    padding-bottom: 0;
+  }
+
+  .faq-section {
+    margin-top: 0;
+    margin-top: -15%;
+  }
+
+  .faq-section:first-of-type {
+    margin-top: 5%;
+  }
+}
+
 @media screen and (max-width: 992px) {
   .faq-head h1 {
     font-size: 2.2rem;
