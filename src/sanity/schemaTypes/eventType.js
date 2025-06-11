@@ -397,117 +397,61 @@ export const eventType = defineType({
       type: "string",
     }),
 
-    //Founder Slider
+    // Founder Slider
     // defineField({
-    //   name: "founderSlider",
-    //   title: "Founder Slider",
-    //   type: "array",
-    //   of: [
-    //     {
-    //       type: "object",
-    //       fields: [
-    //         {
-    //           name: "founderTitle",
-    //           title: "Founder Title",
-    //           type: "string",
-    //         },
-
-    //         {
-    //           name: "founderDescription",
-    //           title: "Founder Description",
-    //           type: "array",
-    //           of: [{ type: "block" }],
-    //         },
-
-    //         {
-    //           name: "founderThumbnailImage",
-    //           title: "Founder Thumbnail Image",
-    //           type: "image",
-    //           options: {
-    //             hotspot: true,
-    //           },
-    //         },
-
-    //         {
-    //           name: "founderName",
-    //           title: "Founder Name",
-    //           type: "string",
-    //         },
-    //         {
-    //           name: "position",
-    //           title: "Position",
-    //           type: "string",
-    //         },
-
-    //         {
-    //           name: "partnerLabel",
-    //           title: "Partner Label",
-    //           type: "string",
-    //         },
-    //         {
-    //           name: "partner",
-    //           title: "Partner Content",
-    //           type: "string",
-    //         },
-    //         {
-    //           name: "founderBackImage",
-    //           title: "Founder Background Image",
-    //           type: "image",
-    //           options: {
-    //             hotspot: true,
-    //           },
-    //         },
-    //       ],
-    //     },
-    //   ],
+    //   name: "sliderTitle",
+    //   title: "Slide Title",
+    //   type: "string",
     // }),
 
-    // Founder SLider
     defineField({
-      name: "whyWorkWithUs",
-      title: "Why Work With Us",
+      name: "founderSlider",
+      title: "Founder Slider",
       type: "array",
       of: [
         {
           type: "object",
           fields: [
             {
-              name: "title",
-              title: "Section Title",
+              name: "founderTitle",
+              title: "Founder Title",
               type: "string",
             },
             {
-              name: "features",
-              title: "Features",
+              name: "founderDescription",
+              title: "Founder Description",
               type: "array",
-              of: [
-                {
-                  type: "object",
-                  name: "feature",
-                  fields: [
-                    {
-                      name: "icon",
-                      title: "Icon (Emoji or Character)",
-                      type: "string",
-                      description: "Example: 🚀",
-                    },
-                    {
-                      name: "title",
-                      title: "Feature Title",
-                      type: "string",
-                    },
-                    {
-                      name: "description",
-                      title: "Feature Description",
-                      type: "text",
-                    },
-                  ],
-                },
-              ],
+              of: [{ type: "block" }],
             },
             {
-              name: "image",
-              title: "Image",
+              name: "founderDescriptionTwo",
+              title: "Founder Description",
+              type: "array",
+              of: [{ type: "block" }],
+            },
+            {
+              name: "founderName",
+              title: "Founder Name",
+              type: "string",
+            },
+            {
+              name: "founderAchievements",
+              title: "Founder Achievements",
+              type: "string",
+            },
+            {
+              name: "partnerLabel",
+              title: "Partner Label",
+              type: "string",
+            },
+            {
+              name: "partner",
+              title: "Partner Content",
+              type: "string",
+            },
+            {
+              name: "image", // ✅ Add this field
+              title: "Founder Image",
               type: "image",
               options: {
                 hotspot: true,
@@ -517,6 +461,15 @@ export const eventType = defineType({
         },
       ],
     }),
+
+    // defineField({
+    //   name: "slideImage",
+    //   title: "Slide Image",
+    //   type: "image",
+    //   options: {
+    //     hotspot: true,
+    //   },
+    // }),
 
     // Contact us
     defineField({

@@ -1999,6 +1999,7 @@ span.service-two-bottom-box-logo {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 5%;
 }
 
 .text {
@@ -2035,6 +2036,13 @@ span.service-two-bottom-box-logo {
   position: relative;
   z-index: 2;
   display: block;
+}
+
+.founder-description p,
+.founder-description-two p {
+  margin-top: 15px;
+  font-family: "Geist";
+  font-weight: normal;
 }
 
 @media screen and (max-width: 768px) {

@@ -45,11 +45,11 @@ body {
 }
 
 .text {
-  flex: 1 1 500px;
+  flex: 1 1 300px;
 }
 
 .text h2 {
-  font-size: 2.8rem;
+  font-size: 2rem;
   color: var(--foreground);
   margin-bottom: 40px;
 }
@@ -58,8 +58,8 @@ body {
   display: flex;
   align-items: flex-start;
   gap: 20px;
-  padding-bottom: 30px;
-  margin-bottom: 30px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
   border-bottom: 1px solid #f0d8d2;
 }
 
@@ -82,23 +82,22 @@ body {
 }
 
 .info p {
-  font-size: 16px;
+  font-size: 14px;
   color: var(--foreground);
   line-height: 1.5;
 }
 
 .image-wrapper {
   position: relative;
-  flex: 1 1 400px;
+  flex: 1 1 200px;
   margin-left: 10%;
   margin-top: 5%;
 }
 
 .image-wrapper img {
-  width: 420px;
+  width: 100%;
   height: auto;
-  object-fit: cover;
-  margin-top: -32%;
+  object-fit: contain;
 }
 
 /* .background-contact {
@@ -138,11 +137,11 @@ body {
 .contact-form-section {
   flex: 1;
   background-color: #fafafa;
-  padding: 60px 50px;
+  padding: 20px 20px;
 }
 
 .contact-title {
-  font-size: 48px;
+  font-size: 28px;
   font-weight: 700;
   margin-bottom: 10px;
   color: #222;
@@ -161,8 +160,8 @@ body {
 
 .form-field input,
 .form-field textarea {
-  width: 100%;
-  padding: 15px 20px;
+  width: 90%;
+  padding: 8px 15px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 16px;
@@ -178,10 +177,10 @@ body {
 }
 
 .submit-button {
-  width: 100%;
+  width: 100px;
   background-color: #8a0b0e;
   color: #fff;
-  padding: 15px;
+  padding: 5px 15px;
   border: none;
   font-size: 18px;
   border-radius: 6px;

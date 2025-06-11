@@ -102,6 +102,7 @@ export default function Home() {
     ]
   );
 
+  // Fetching CMS
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -122,6 +123,7 @@ export default function Home() {
             homepageData?.[0]?.serviceCirclVideo?.asset?._ref
           ),
         });
+        console.log(homepageData);
 
         setHomepageData(homepageData);
         setSlides(homepageData?.[0]?.slides || []);
@@ -911,7 +913,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-                <div className="reviews-section">
+                {/* <div className="reviews-section">
                   <div className="navigation-wrapper">
                     <button
                       className="prev-button"
@@ -942,49 +944,24 @@ export default function Home() {
                             <div className="content-two">
                               <div className="text">
                                 <h3>{slide.title}</h3>
-                                {/* {slide.features?.map((feature, fidx) => (
-                                <div key={fidx} className="feature">
-                                  <div className="icon">{feature.icon}</div>
-                                  <div className="info">
-                                    <h3>{feature.title}</h3>
-                                    <p>{feature.description}</p>
-                                  </div>
-                                </div>
-                              ))} */}
-                                <p>
-                                  Ar. Abhishek Aggarwal, an award-winning
-                                  architect from New Delhi, is the founder of
-                                  ADPL Consulting LLC. With over 29 years of
-                                  experience, including nine years in the US, he
-                                  blends global insights with local
-                                  understanding. He created ADPL as a
-                                  collaborative space for creative architectural
-                                  talent to thrive.
-                                </p>
+
+                                <p>{slide.descriptionOne}</p>
                                 <br />
                                 <p>
-                                  His expertise covers Architecture, Interior
-                                  Design, and Consulting Engineering. Inspired
-                                  by his travels, Abhishek designs spaces that
-                                  are original, functional, and contextually
-                                  relevant. Known for his passion and
-                                  forward-thinking approach, he creates
-                                  timeless, meaningful designs
+                                  <p>{slide.descriptionOne}</p>
                                 </p>
                                 <br />
                                 <h5>
-                                  <b>Abhishek Aggarwal</b>
+                                  <b>{slide.founderName}</b>
                                 </h5>
                                 <p className="author-p">
-                                  B.Arch, M.Arch, MCA, AlIA, MCRP, FIIV
+                                  {slide.founderAchievements}
                                 </p>
                                 <br />
                                 <h5>
-                                  <b>Partner</b>
+                                  <b>{slide.post}</b>
                                 </h5>
-                                <p className="author-p">
-                                  ADPL Consulting LLC, USA
-                                </p>
+                                <p className="author-p">{slide.llcPart}</p>
                               </div>
 
                               <div className="image-wrapper">
@@ -1024,7 +1001,112 @@ export default function Home() {
                       </svg>
                     </button>
                   </div>
+                </div> */}
+
+                <div className="reviews-section">
+                  <div className="navigation-wrapper">
+                    <button
+                      className="prev-button"
+                      onClick={() => instanceRef.current?.prev()}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="bi bi-arrow-left"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
+                        />
+                      </svg>
+                    </button>
+
+                    <div ref={sliderRef} className="keen-slider">
+                      {homepageData?.[0]?.founderSlider?.map((slide, idx) => (
+                        <div
+                          key={slide._key || idx}
+                          className={`keen-slider__slide number-slide${idx + 1}`}
+                        >
+                          <section className="why-work">
+                            <div className="content-two">
+                              <div className="text">
+                                <h3>{slide.founderTitle}</h3>
+
+                                {/* Render rich text content properly */}
+                                {slide.founderDescription && (
+                                  <div className="founder-description">
+                                    <PortableText
+                                      value={slide.founderDescription}
+                                    />
+                                  </div>
+                                )}
+
+                                {slide.founderDescriptionTwo && (
+                                  <div className="founder-description-two">
+                                    <PortableText
+                                      value={slide.founderDescriptionTwo}
+                                    />
+                                  </div>
+                                )}
+
+                                <br />
+
+                                <h5>
+                                  <b>{slide.founderName}</b>
+                                </h5>
+                                <p className="author-p">
+                                  {slide.founderAchievements}
+                                </p>
+                                <br />
+                                <h5>
+                                  <b>{slide.partnerLabel}</b>
+                                </h5>
+                                <p className="author-p">{slide.partner}</p>
+                              </div>
+
+                              <div className="image-wrapper">
+                                <div className="background">
+                                  {slide?.image?.asset && (
+                                    <Image
+                                      src={urlFor(slide.image).url()}
+                                      alt={slide.founderTitle || "Slide Image"}
+                                      width={400}
+                                      height={300}
+                                      priority={idx === 0}
+                                    />
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                        </div>
+                      ))}
+                    </div>
+
+                    <button
+                      className="next-button"
+                      onClick={() => instanceRef.current?.next()}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="bi bi-arrow-right"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
+
                 <section className="contact-us">
                   <div className="contact-container-two">
                     <div className="contact-us-df">
