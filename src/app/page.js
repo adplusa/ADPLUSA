@@ -296,7 +296,7 @@ export default function Home() {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [[icons.length]]);
 
   useEffect(() => {
     textRefs.current.forEach((el) => {

@@ -63,7 +63,7 @@ const ServicesPageEight = () => {
   const startAutoPlay = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(nextSlide, 3000);
-  }, []);
+  }, [nextSlide]);
 
   const stopAutoPlay = useCallback(() => {
     clearInterval(intervalRef.current);

@@ -1,4 +1,4 @@
-export default {
+const serviceInternalSevenPage = {
   name: "serviceInternalSevenPage",
   title: "Services Internal Page Seven",
   type: "document",
@@ -94,3 +94,5 @@ export default {
     },
   ],
 };
+
+export default serviceInternalSevenPage;

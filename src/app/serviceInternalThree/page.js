@@ -253,7 +253,7 @@ const ServicesPageThree = () => {
                 <h3>Growth Acceleration</h3>
                 <p>
                   Accelerate your growth with our proven methodologies. From
-                  market expansion to operational excellence, we've got you
+                  market expansion to operational excellence, we ve got you
                   covered.
                 </p>
               </div>
