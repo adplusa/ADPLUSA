@@ -19,6 +19,10 @@ const ServicesPageSeven = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
+  const upwardHandler = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -28,14 +32,15 @@ const ServicesPageSeven = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const upwardHandler = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await client.fetch(`*[_type == "servicesSevenPage"][0]`);
+        const result = await client.fetch(
+          `*[_type == "serviceInternalSevenPage"][0]`
+        );
+        if (!result) {
+          console.error("No data found for servicesSevenPage");
+        }
         setData(result);
       } catch (error) {
         console.error("❌ Error fetching services data:", error);

@@ -28,6 +28,10 @@ const ServicesPageEight = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const upwardHandler = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
