@@ -1375,6 +1375,19 @@ select#service {
   color: rgb(117, 117, 117);
 }
 
+.form-fields.message {
+  grid-column: 1 / -1; /* Span full width across all grid columns */
+}
+
+.form-fields.message textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 10px;
+  font-size: 1rem;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
 .form-fields input:focus {
   border-color: #902b2c;
   box-shadow: 0 0 6px rgba(144, 43, 44, 0.3);

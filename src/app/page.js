@@ -1058,56 +1058,6 @@ export default function Home() {
                       <div className="contact-right">
                         <h1>{homepageData[0]?.contactUsTitle}</h1>
 
-                        {/* <div className="contact-form">
-                          <div className="form-fields">
-                            <label htmlFor="fname">Name</label>
-                            <input
-                              required
-                              type="text"
-                              name="firstName"
-                              id="fname"
-                              placeholder="Your name"
-                            />
-                          </div>
-                          <div className="form-fields">
-                            <label htmlFor="email">Email</label>
-                            <input
-                              type="text"
-                              name="email"
-                              id="email"
-                              placeholder="Your Email"
-                            />
-                          </div>
-                          <div className="form-fields">
-                            <label htmlFor="phone">Phone no</label>
-                            <input
-                              required
-                              type="text"
-                              name="phone"
-                              id="phone"
-                              placeholder="Your Phone Number"
-                            />
-                          </div>
-                          <div className="form-fields">
-                            <label htmlFor="service">Services</label>
-                            <input
-                              type="dropdown"
-                              name="service"
-                              id="service"
-                              placeholder="Select Service"
-                            />
-                            category
-                          </div>
-                          <div className="form-fields">
-                            <label htmlFor="service">Message</label>
-                            <input
-                              type="textarea"
-                              name="service"
-                              id="message"
-                              placeholder="Send Your Message"
-                            />
-                          </div>
-                        </div> */}
                         <form
                           id="contactform"
                           className="contact-form"
@@ -1168,7 +1118,7 @@ export default function Home() {
                             </select>
                           </div>
 
-                          <div className="form-fields">
+                          <div className="form-fields message">
                             <label htmlFor="message">Message</label>
                             <textarea
                               name="message"
