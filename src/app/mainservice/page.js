@@ -268,7 +268,17 @@ const ServiceTwo = () => {
 
             {data?.whyWorkWithUs?.features?.map((feature, idx) => (
               <div key={idx} className="feature">
-                <div className="icon">{feature.icon}</div>
+                {/* <div className="icon">{feature.icon}</div> */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-check2"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"></path>
+                </svg>
                 <div className="info">
                   <h3>{feature.title}</h3>
                   <p>{feature.description}</p>
@@ -277,7 +287,7 @@ const ServiceTwo = () => {
             ))}
           </div>
 
-          <div className="image-wrapper">
+          <div className="image-wrapper-main-service">
             <div className="background-service">
               <div className="image-wrapper">
                 <div className="background-service">

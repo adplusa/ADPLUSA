@@ -308,8 +308,18 @@
   line-height: 1.5;
 }
 
+.feature svg {
+  width: 24px; /* or some larger size */
+  height: 24px;
+  stroke: #000;
+}
+
+.feature:nth-child(2) svg {
+  width: 32px; /* inconsistent override */
+}
+
 .why-work {
-  padding: 80px 5%;
+  padding: 40px 5%;
   background: var(--backgroundColor);
   font-family: "Geist", sans-serif;
 }
@@ -370,14 +380,14 @@
   line-height: 1.5;
 }
 
-.image-wrapper {
+.image-wrapper-main-service {
   position: relative;
-  flex: 1 1 200px;
+  flex: 1 1 100px;
   margin-left: 10%;
   margin-top: -5%;
 }
 
-.image-wrapper img {
+.image-wrapper-main-service img {
   width: 100%;
   height: auto;
   object-fit: contain;

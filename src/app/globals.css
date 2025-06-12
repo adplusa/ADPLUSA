@@ -363,3 +363,14 @@ h1 {
     margin-top: 25% !important;
   }
 }
+
+.feature svg {
+  width: 24px; /* or some larger size */
+  height: 24px;
+  stroke: #000;
+  margin-top: 5px;
+}
+
+.feature:nth-child(2) svg {
+  width: 32px; /* inconsistent override */
+}

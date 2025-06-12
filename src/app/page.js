@@ -1031,7 +1031,7 @@ export default function Home() {
                           key={slide._key || idx}
                           className={`keen-slider__slide number-slide${idx + 1}`}
                         >
-                          <section className="why-work">
+                          <section className="why-work-home">
                             <div className="content-two">
                               <div className="text">
                                 <h3>{slide.founderTitle}</h3>
@@ -1068,7 +1068,7 @@ export default function Home() {
                                 <p className="author-p">{slide.partner}</p>
                               </div>
 
-                              <div className="image-wrapper">
+                              <div className="image-wrapper-home">
                                 <div className="background">
                                   {slide?.image?.asset && (
                                     <Image

@@ -1988,7 +1988,7 @@ span.service-two-bottom-box-logo {
   opacity: 1;
 }
 
-.why-work {
+.why-work-home {
   /* background: #fff; */
   background-color: var(--backgroundColor);
   font-family: "Geist", sans-serif;
@@ -2013,11 +2013,16 @@ span.service-two-bottom-box-logo {
   margin-bottom: 40px;
 }
 
-.image-wrapper {
+.text h5 {
+  font-weight: bolder;
+  font-size: 14px;
+}
+
+.image-wrapper-home {
   margin-top: 8%;
 }
 
-.image-wrapper img {
+.image-wrapper-home img {
   width: 100%;
   height: auto;
   object-fit: cover;
@@ -2051,6 +2056,22 @@ span.service-two-bottom-box-logo {
     background-size: contain; /* Ensure full image fits */
     background-repeat: no-repeat;
     background-position: center;
+  }
+
+  .why-work-home {
+    margin-top: 55%;
+  }
+
+  .image-wrapper-home img {
+    width: 250px;
+    height: auto;
+    object-fit: cover;
+    margin-top: -32%;
+  }
+
+  .service-box-home h2 {
+    height: 60px;
+    padding-bottom: 30px;
   }
 
   .animation-slider {
@@ -2154,7 +2175,7 @@ span.service-two-bottom-box-logo {
   }
 
   .technology-grid img {
-    width: 100px;
+    width: 130px;
     height: auto;
   }
 
@@ -2306,6 +2327,7 @@ span.service-two-bottom-box-logo {
 
   .contact-us {
     padding-top: 0;
+    margin-top: 10%;
   }
 
   .navigation-wrapper {

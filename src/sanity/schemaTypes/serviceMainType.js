@@ -30,15 +30,15 @@ export const mainServiceType = defineType({
     }),
 
     // Banner Green Box Content
-    defineField({
-      name: "trustSection",
-      title: "Trust Section",
-      type: "object",
-      fields: [
-        defineField({ name: "title", title: "Title", type: "string" }),
-        defineField({ name: "subtitle", title: "Subtitle", type: "string" }),
-      ],
-    }),
+    // defineField({
+    //   name: "trustSection",
+    //   title: "Trust Section",
+    //   type: "object",
+    //   fields: [
+    //     defineField({ name: "title", title: "Title", type: "string" }),
+    //     defineField({ name: "subtitle", title: "Subtitle", type: "string" }),
+    //   ],
+    // }),
 
     // Trust Icons
     defineField({
@@ -183,11 +183,11 @@ export const mainServiceType = defineType({
             defineField({
               type: "object",
               fields: [
-                defineField({
-                  name: "icon",
-                  title: "Icon Emoji",
-                  type: "string",
-                }),
+                // defineField({
+                //   name: "icon",
+                //   title: "Icon Emoji",
+                //   type: "string",
+                // }),
                 defineField({
                   name: "title",
                   title: "Feature Title",
