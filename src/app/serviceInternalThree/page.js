@@ -165,47 +165,7 @@ const ServicesPageThree = () => {
       </section>
 
       {/* Seprate Boxes */}
-      {/* <section className="seprate-div">
-        <h1>Heading</h1>
-        <div className="seprate-div-df">
-          <div className="service-three-seprated-div">
-            <div className="">
-              <span>
-                <Image
-                  src={"./process-img.jpg"}
-                  alt=""
-                  width={500}
-                  height={400}
-                  unoptimized
-                ></Image>
-              </span>
-              <span>
-                <h3>Title</h3>
-                <p>Description</p>
-              </span>
-            </div>
-          </div>
-          <div className="service-three-seprated-div">
-            <div className="">
-              <span>
-                <Image
-                  src={"./process-img.jpg"}
-                  alt=""
-                  width={500}
-                  height={400}
-                  unoptimized
-                ></Image>
-              </span>
-              <span>
-                <h3>Title</h3>
-                <p>Description</p>
-              </span>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
-      <section className="separate-div">
+      {/* <section className="separate-div">
         <h1>Our Premium Services</h1>
         <div className="separate-div-df">
           <div className="service-three-separated-div">
@@ -219,9 +179,6 @@ const ServicesPageThree = () => {
                   height={0}
                   unoptimized
                 />
-                <div className="image-overlay">
-                  <div className="overlay-icon">🚀</div>
-                </div>
               </div>
               <div className="text-content">
                 <h3>Digital Innovation</h3>
@@ -245,9 +202,6 @@ const ServicesPageThree = () => {
                   height={0}
                   unoptimized
                 />
-                <div className="image-overlay">
-                  <div className="overlay-icon">📈</div>
-                </div>
               </div>
               <div className="text-content">
                 <h3>Growth Acceleration</h3>
@@ -259,6 +213,35 @@ const ServicesPageThree = () => {
               </div>
             </div>
           </div>
+        </div>
+      </section> */}
+
+      <section className="separate-div">
+        <h1>{data.sectionTitle}</h1>
+        <div className="separate-div-df">
+          {data?.services?.length > 0 &&
+            data.services.map((service, idx) => (
+              <div className="service-three-separated-div" key={idx}>
+                <div className="service-content">
+                  <div className="image-container">
+                    {service.image && (
+                      <Image
+                        src={urlFor(service.image).url()}
+                        alt={service.title}
+                        className="service-image"
+                        width={500}
+                        height={400}
+                        unoptimized
+                      />
+                    )}
+                  </div>
+                  <div className="text-content">
+                    <h3>{service.title}</h3>
+                    <p>{service.description}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
         </div>
       </section>
 

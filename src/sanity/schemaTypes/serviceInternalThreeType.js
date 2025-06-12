@@ -51,6 +51,45 @@ export const servicesInternalThreePage = defineType({
         }),
       ],
     }),
+
+    // Seprate Boxes
+    {
+      name: "sectionTitle",
+      title: "Section Title",
+      type: "string",
+    },
+    {
+      name: "services",
+      title: "Services",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "image",
+              title: "Service Image",
+              type: "image",
+              options: {
+                hotspot: true,
+              },
+            },
+            {
+              name: "title",
+              title: "Service Title",
+              type: "string",
+            },
+            {
+              name: "description",
+              title: "Service Description",
+              type: "text",
+            },
+          ],
+        },
+      ],
+    },
+
+    // Professional Carousel
     defineField({
       name: "professionals",
       title: "Professional Roles Carousel",

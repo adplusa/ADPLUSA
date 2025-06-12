@@ -1135,28 +1135,6 @@ button.next-button:active {
   transform: scale(1.05);
 }
 
-.image-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    45deg,
-    rgba(102, 126, 234, 0.8),
-    rgba(118, 75, 162, 0.8)
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.service-three-separated-div:hover .image-overlay {
-  opacity: 1;
-}
-
 .overlay-icon {
   color: white;
   font-size: 3rem;
