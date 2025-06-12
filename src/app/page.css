@@ -343,15 +343,16 @@ button.next-button {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
   cursor: pointer;
-  z-index: 5;
+  /* z-index: 5; */
 }
 
 button.prev-button {
-  left: 1%;
+  left: 5%;
+  z-index: 1;
 }
 
 button.next-button {
-  right: 1%;
+  right: 5%;
 }
 
 button.prev-button:hover,
@@ -371,6 +372,7 @@ button.next-button:active {
   display: flex;
   align-items: center;
   position: relative;
+  /* z-index: -1; */
 }
 
 .navigation-wrapper svg {
@@ -1279,6 +1281,12 @@ span.service-two-bottom-box-logo {
   }
 }
 
+span.error {
+  color: tomato;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
 .contact-us {
   display: flex;
   justify-content: center;
@@ -1347,7 +1355,9 @@ span.service-two-bottom-box-logo {
   color: var(--foreground);
 }
 
-.form-fields input {
+.form-fields input,
+textarea#message,
+select#service {
   color: var(--foreground);
   padding: 12px;
   font-size: 16px;
@@ -1357,6 +1367,12 @@ span.service-two-bottom-box-logo {
   transition:
     border 0.3s ease,
     box-shadow 0.3s ease;
+}
+
+textarea#message,
+select#service {
+  font-size: 13px;
+  color: rgb(117, 117, 117);
 }
 
 .form-fields input:focus {
@@ -2027,6 +2043,7 @@ span.service-two-bottom-box-logo {
   height: auto;
   object-fit: cover;
   margin-top: -32%;
+  border-radius: 8px;
 }
 
 .author-p {

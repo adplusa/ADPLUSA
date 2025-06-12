@@ -54,6 +54,7 @@ export default function Home() {
 
   // Add this state to track if we should show animation
   const [shouldAnimate, setShouldAnimate] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const updateMode = () => {
@@ -381,6 +382,25 @@ export default function Home() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.firstName.value.trim();
+    const phone = form.phone.value.trim();
+
+    let formErrors = {};
+
+    if (!name) formErrors.firstName = "Name is required.";
+    if (!phone) formErrors.phone = "Phone number is required.";
+
+    setErrors(formErrors);
+
+    if (Object.keys(formErrors).length === 0) {
+      // proceed with form submission
+      console.log("Form submitted");
+    }
+  };
 
   return (
     <>
@@ -914,95 +934,6 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-                {/* <div className="reviews-section">
-                  <div className="navigation-wrapper">
-                    <button
-                      className="prev-button"
-                      onClick={() => instanceRef.current?.prev()}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        className="bi bi-arrow-left"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
-                        />
-                      </svg>
-                    </button>
-
-                    <div ref={sliderRef} className="keen-slider">
-                      {homepageData[0]?.whyWorkWithUs?.map((slide, idx) => (
-                        <div
-                          key={idx}
-                          className={`keen-slider__slide number-slide${idx + 1}`}
-                        >
-                          <section className="why-work">
-                            <div className="content-two">
-                              <div className="text">
-                                <h3>{slide.title}</h3>
-
-                                <p>{slide.descriptionOne}</p>
-                                <br />
-                                <p>
-                                  <p>{slide.descriptionOne}</p>
-                                </p>
-                                <br />
-                                <h5>
-                                  <b>{slide.founderName}</b>
-                                </h5>
-                                <p className="author-p">
-                                  {slide.founderAchievements}
-                                </p>
-                                <br />
-                                <h5>
-                                  <b>{slide.post}</b>
-                                </h5>
-                                <p className="author-p">{slide.llcPart}</p>
-                              </div>
-
-                              <div className="image-wrapper">
-                                <div className="background">
-                                  {slide?.image?.asset && (
-                                    <Image
-                                      src={urlFor(slide.image).url()}
-                                      alt="Why Work Image"
-                                      width={500}
-                                      height={400}
-                                    />
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          </section>
-                        </div>
-                      ))}
-                    </div>
-
-                    <button
-                      className="next-button"
-                      onClick={() => instanceRef.current?.next()}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        className="bi bi-arrow-right"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div> */}
 
                 <div className="reviews-section">
                   <div className="navigation-wrapper">
@@ -1127,10 +1058,11 @@ export default function Home() {
                       <div className="contact-right">
                         <h1>{homepageData[0]?.contactUsTitle}</h1>
 
-                        <div className="contact-form">
+                        {/* <div className="contact-form">
                           <div className="form-fields">
                             <label htmlFor="fname">Name</label>
                             <input
+                              required
                               type="text"
                               name="firstName"
                               id="fname"
@@ -1149,6 +1081,7 @@ export default function Home() {
                           <div className="form-fields">
                             <label htmlFor="phone">Phone no</label>
                             <input
+                              required
                               type="text"
                               name="phone"
                               id="phone"
@@ -1158,16 +1091,97 @@ export default function Home() {
                           <div className="form-fields">
                             <label htmlFor="service">Services</label>
                             <input
-                              type="text"
+                              type="dropdown"
                               name="service"
                               id="service"
                               placeholder="Select Service"
                             />
+                            category
                           </div>
-                        </div>
+                          <div className="form-fields">
+                            <label htmlFor="service">Message</label>
+                            <input
+                              type="textarea"
+                              name="service"
+                              id="message"
+                              placeholder="Send Your Message"
+                            />
+                          </div>
+                        </div> */}
+                        <form
+                          id="contactform"
+                          className="contact-form"
+                          onSubmit={handleSubmit}
+                        >
+                          <div className="form-fields">
+                            <label htmlFor="fname">Name</label>
+                            <input
+                              type="text"
+                              name="firstName"
+                              id="fname"
+                              placeholder="Your name"
+                            />
+                            {errors.firstName && (
+                              <span className="error">{errors.firstName}</span>
+                            )}
+                          </div>
+
+                          <div className="form-fields">
+                            <label htmlFor="email">Email</label>
+                            <input
+                              type="email"
+                              name="email"
+                              id="email"
+                              placeholder="Your Email"
+                            />
+                          </div>
+
+                          <div className="form-fields">
+                            <label htmlFor="phone">Phone no</label>
+                            <input
+                              type="text"
+                              name="phone"
+                              id="phone"
+                              placeholder="Your Phone Number"
+                            />
+                            {errors.phone && (
+                              <span className="error">{errors.phone}</span>
+                            )}
+                          </div>
+
+                          <div className="form-fields">
+                            <label htmlFor="service">Services</label>
+                            <select name="service" id="service" defaultValue="">
+                              <option value="" disabled>
+                                Select Service
+                              </option>
+                              <option>Drafting to CAD (PDF to CAD)</option>
+                              <option>Permit Drawing and Documentation</option>
+                              <option>Working Drawing and Detailing</option>
+                              <option>
+                                3D Modelling, Rendering and Walkthrough
+                              </option>
+                              <option>360 Degree Views</option>
+                              <option>BIM Services</option>
+                              <option>Bill of Quantities (BOQ)</option>
+                              <option>MEP Drafting</option>
+                            </select>
+                          </div>
+
+                          <div className="form-fields">
+                            <label htmlFor="message">Message</label>
+                            <textarea
+                              name="message"
+                              id="message"
+                              placeholder="Send Your Message"
+                            ></textarea>
+                          </div>
+                        </form>
                         <div className="contact-btn">
                           <span>
-                            <button>{homepageData[0]?.contactUsButton}</button>
+                            <button type="submit" form="contactform">
+                              {homepageData[0]?.contactUsButton}
+                            </button>
                           </span>
                         </div>
                       </div>
