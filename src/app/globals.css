@@ -374,3 +374,15 @@ h1 {
 .feature:nth-child(2) svg {
   width: 32px; /* inconsistent override */
 }
+
+.key-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.key-card p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #555;
+}
