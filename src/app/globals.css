@@ -386,3 +386,7 @@ h1 {
   line-height: 1.5;
   color: #555;
 }
+
+.feature {
+  border-bottom: 0.5px solid #8a0b10 !important;
+}
