@@ -16,7 +16,6 @@ export const servicesInternalFourPage = defineType({
       title: "SEO Description",
       type: "string",
     }),
-
     defineField({
       name: "title",
       type: "string",
@@ -30,6 +29,7 @@ export const servicesInternalFourPage = defineType({
       options: { hotspot: true },
     }),
 
+    // 🛠️ Services List with Link Options
     defineField({
       name: "servicesList",
       title: "Services Offered",
@@ -47,10 +47,27 @@ export const servicesInternalFourPage = defineType({
               options: { hotspot: true },
               fields: [{ name: "alt", type: "string", title: "Alt Text" }],
             },
+            {
+              name: "link",
+              type: "string",
+              title: "Link URL",
+              description:
+                "Optional: Add a link to redirect when clicked (e.g., /services/web-design or https://example.com)",
+            },
+            {
+              name: "isExternal",
+              type: "boolean",
+              title: "Is External Link?",
+              description:
+                "Check if this is an external link (opens in new tab)",
+              initialValue: false,
+            },
           ],
         }),
       ],
     }),
+
+    // 🎠 Carousel Professionals with Link Options
     defineField({
       name: "professionals",
       title: "Professional Roles Carousel",
@@ -66,10 +83,27 @@ export const servicesInternalFourPage = defineType({
               title: "Image",
               options: { hotspot: true },
             },
+            {
+              name: "link",
+              type: "string",
+              title: "Link URL",
+              description:
+                "Optional: Add a link to redirect when clicked (e.g., /services/consulting or https://example.com)",
+            },
+            {
+              name: "isExternal",
+              type: "boolean",
+              title: "Is External Link?",
+              description:
+                "Check if this is an external link (opens in new tab)",
+              initialValue: false,
+            },
           ],
         }),
       ],
     }),
+
+    // 🎯 Key Activities in Schematic Design
     defineField({
       name: "keyActivities",
       title: "Key Activities",
@@ -88,20 +122,8 @@ export const servicesInternalFourPage = defineType({
         }),
       ],
     }),
-    // defineField({
-    //   name: "specialization",
-    //   title: "Specialization CTA Section",
-    //   type: "object",
-    //   fields: [
-    //     { name: "buttonText", type: "string", title: "CTA Button Text" },
-    //     {
-    //       name: "image",
-    //       type: "image",
-    //       title: "Right Image",
-    //       options: { hotspot: true },
-    //     },
-    //   ],
-    // }),
+
+    // 🚀 Why Work With Us Features
     defineField({
       name: "founderImage",
       title: "Founder Image",
@@ -122,14 +144,5 @@ export const servicesInternalFourPage = defineType({
         }),
       ],
     }),
-    // defineField({
-    //   name: "finalCTA",
-    //   title: "Final Call To Action",
-    //   type: "object",
-    //   fields: [
-    //     { name: "ctaTitle", type: "string", title: "CTA Title" },
-    //     { name: "ctaButton", type: "string", title: "Button Text" },
-    //   ],
-    // }),
   ],
 });

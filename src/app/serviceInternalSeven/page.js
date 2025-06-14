@@ -6,7 +6,7 @@ import Header from "../Components/Header/page";
 import Footer from "../Components/Footer/page";
 import { client } from "@/sanity/lib/client";
 import urlFor from "../helpers/sanity";
-import "./serviceInternalSeven.css"; // New CSS for Seven
+import "./serviceInternalSeven.css";
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +18,12 @@ const ServicesPageSeven = () => {
   const intervalRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
   const [showForm, setShowForm] = useState(false);
+
+  // ✅ Drag state
+  const [isDragging, setIsDragging] = useState(false);
+  const [startPos, setStartPos] = useState({ x: 0 });
+  const [currentTranslate, setCurrentTranslate] = useState(0);
+  const [prevTranslate, setPrevTranslate] = useState(0);
 
   const upwardHandler = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -94,11 +100,9 @@ const ServicesPageSeven = () => {
           slideRef.current.style.transition = "none";
           setCurrentIndex(0);
           requestAnimationFrame(() => {
-            if (slideRef.current) {
-              slideRef.current.style.transition = "transform 0.5s ease";
-              setIsTransitioning(false);
-              startAutoPlay();
-            }
+            slideRef.current.style.transition = "transform 0.5s ease";
+            setIsTransitioning(false);
+            startAutoPlay();
           });
         }
       }, 500);
@@ -112,6 +116,72 @@ const ServicesPageSeven = () => {
 
   const pauseAutoPlay = () => stopAutoPlay();
   const resumeAutoPlay = () => !isTransitioning && startAutoPlay();
+
+  // ✅ Drag handlers
+  const getPositionX = (event) =>
+    event.type.includes("mouse") ? event.clientX : event.touches[0].clientX;
+
+  const dragStart = (event) => {
+    if (event.type === "mousedown") event.preventDefault();
+    setIsDragging(true);
+    stopAutoPlay();
+    const posX = getPositionX(event);
+    setStartPos({ x: posX });
+    setCurrentTranslate(prevTranslate);
+    slideRef.current.style.transition = "none";
+  };
+
+  const dragMove = (event) => {
+    if (!isDragging) return;
+    const currentPosition = getPositionX(event);
+    const diff = currentPosition - startPos.x;
+    setCurrentTranslate(prevTranslate + diff);
+    const slideWidth = isMobile ? 100 : 25;
+    const baseTransform = -currentIndex * slideWidth;
+    const dragOffset = (diff / slideRef.current.offsetWidth) * slideWidth;
+    slideRef.current.style.transform = `translateX(${baseTransform + dragOffset}%)`;
+  };
+
+  const dragEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    const movedBy = currentTranslate - prevTranslate;
+    const threshold = 50;
+    if (Math.abs(movedBy) > threshold) {
+      if (movedBy < 0 && currentIndex < data.professionals.length - 1) {
+        setCurrentIndex((prev) => prev + 1);
+      } else if (movedBy > 0 && currentIndex > 0) {
+        setCurrentIndex((prev) => prev - 1);
+      }
+    }
+    setCurrentTranslate(0);
+    setPrevTranslate(0);
+    slideRef.current.style.transition = "transform 0.5s ease";
+    setTimeout(() => {
+      if (!isTransitioning) startAutoPlay();
+    }, 1000);
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e) => dragMove(e);
+    const handleMouseUp = () => dragEnd();
+    const handleTouchMove = (e) => dragMove(e);
+    const handleTouchEnd = () => dragEnd();
+
+    if (isDragging) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      document.addEventListener("touchmove", handleTouchMove);
+      document.addEventListener("touchend", handleTouchEnd);
+    }
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [isDragging, dragMove, dragEnd]);
 
   if (!data) return <div>Loading Services Page...</div>;
 
@@ -175,7 +245,6 @@ const ServicesPageSeven = () => {
             <h2>Why Work With Us?</h2>
             {data.reasonsToWork?.map((reason, i) => (
               <div className="feature" key={i}>
-                {/* <div className="icon">✔️</div> */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -223,8 +292,11 @@ const ServicesPageSeven = () => {
             ref={slideRef}
             style={{
               transform: `translateX(-${currentIndex * (isMobile ? 100 : 25)}%)`,
-              transition: "transform 0.5s ease",
+              transition: isDragging ? "none" : "transform 0.5s ease",
+              cursor: isDragging ? "grabbing" : "grab",
             }}
+            onMouseDown={dragStart}
+            onTouchStart={dragStart}
           >
             {professionals.map((pro, i) => (
               <div key={i} className="carousel-slide-internals">
@@ -237,6 +309,7 @@ const ServicesPageSeven = () => {
                         width={300}
                         height={200}
                         unoptimized
+                        draggable={false}
                       />
                     ) : (
                       <div
@@ -273,7 +346,7 @@ const ServicesPageSeven = () => {
             height={40}
             alt="Whatsapp-img"
             unoptimized
-          ></Image>
+          />
         </a>
       </div>
 
@@ -284,7 +357,7 @@ const ServicesPageSeven = () => {
         <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
           <div
             className="enquiry-container"
-            onClick={(e) => e.stopPropagation()} // Prevent close on form click
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="enquiry-box">
               <div className="close-icon" onClick={() => setShowForm(false)}>
@@ -312,7 +385,6 @@ const ServicesPageSeven = () => {
                   className="form-input"
                   rows="3"
                 ></textarea>
-
                 <button type="submit" className="submit-button">
                   Submit
                 </button>

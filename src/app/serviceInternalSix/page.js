@@ -19,15 +19,18 @@ const ServicesPageSix = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
+  // ✅ Drag state
+  const [isDragging, setIsDragging] = useState(false);
+  const [startPos, setStartPos] = useState({ x: 0 });
+  const [currentTranslate, setCurrentTranslate] = useState(0);
+  const [prevTranslate, setPrevTranslate] = useState(0);
+
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Set mobile state based on window width
+      setIsMobile(window.innerWidth <= 768);
     };
-
-    handleResize(); // Initial check
-    window.addEventListener("resize", handleResize); // Add resize event listener
-
-    // Cleanup on unmount
+    handleResize();
+    window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -35,7 +38,6 @@ const ServicesPageSix = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Fetch data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -49,10 +51,8 @@ const ServicesPageSix = () => {
   }, []);
 
   useEffect(() => {
-    if (!data) return; // Prevent null error
-
+    if (!data) return;
     document.title = data.seoTitle;
-
     const metaDesc = document.querySelector("meta[name='description']");
     if (metaDesc) {
       metaDesc.setAttribute("content", data.seoDescription);
@@ -62,12 +62,10 @@ const ServicesPageSix = () => {
       meta.content = "Learn about our mission and team";
       document.head.appendChild(meta);
     }
-  }, [data]); // Re-run when `data` becomes available
+  }, [data]);
 
   const nextSlide = () => {
-    if (!isTransitioning) {
-      setCurrentIndex((prev) => prev + 1);
-    }
+    if (!isTransitioning) setCurrentIndex((prev) => prev + 1);
   };
 
   const startAutoPlay = useCallback(() => {
@@ -80,13 +78,11 @@ const ServicesPageSix = () => {
     intervalRef.current = null;
   }, []);
 
-  // Start autoplay on load
   useEffect(() => {
     if (data?.professionals?.length > 0) startAutoPlay();
     return () => stopAutoPlay();
   }, [data, startAutoPlay, stopAutoPlay]);
 
-  // Handle infinite scroll logic
   useEffect(() => {
     if (!data?.professionals?.length) return;
     const total = data.professionals.length;
@@ -94,33 +90,87 @@ const ServicesPageSix = () => {
     if (currentIndex === total) {
       setIsTransitioning(true);
       stopAutoPlay();
-
       const timer = setTimeout(() => {
-        if (slideRef.current) {
-          slideRef.current.style.transition = "none";
-          setCurrentIndex(0);
-
-          requestAnimationFrame(() => {
-            if (slideRef.current) {
-              slideRef.current.style.transition = "transform 0.5s ease";
-              setIsTransitioning(false);
-              startAutoPlay();
-            }
-          });
-        }
-      }, 500); // Duration should match CSS transition
-
-      return () => {
-        clearTimeout(timer);
-        setIsTransitioning(false);
-      };
+        slideRef.current.style.transition = "none";
+        setCurrentIndex(0);
+        requestAnimationFrame(() => {
+          slideRef.current.style.transition = "transform 0.5s ease";
+          setIsTransitioning(false);
+          startAutoPlay();
+        });
+      }, 500);
+      return () => clearTimeout(timer);
     }
   }, [currentIndex, data, stopAutoPlay, startAutoPlay]);
 
   const pauseAutoPlay = () => stopAutoPlay();
-  const resumeAutoPlay = () => {
-    if (!isTransitioning) startAutoPlay();
+  const resumeAutoPlay = () => !isTransitioning && startAutoPlay();
+
+  // ✅ Drag handlers
+  const getPositionX = (event) =>
+    event.type.includes("mouse") ? event.clientX : event.touches[0].clientX;
+
+  const dragStart = (event) => {
+    if (event.type === "mousedown") event.preventDefault();
+    setIsDragging(true);
+    stopAutoPlay();
+    const posX = getPositionX(event);
+    setStartPos({ x: posX });
+    setCurrentTranslate(prevTranslate);
+    slideRef.current.style.transition = "none";
   };
+
+  const dragMove = (event) => {
+    if (!isDragging) return;
+    const currentPosition = getPositionX(event);
+    const diff = currentPosition - startPos.x;
+    setCurrentTranslate(prevTranslate + diff);
+    const slideWidth = isMobile ? 100 : 25;
+    const baseTransform = -currentIndex * slideWidth;
+    const dragOffset = (diff / slideRef.current.offsetWidth) * slideWidth;
+    slideRef.current.style.transform = `translateX(${baseTransform + dragOffset}%)`;
+  };
+
+  const dragEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    const movedBy = currentTranslate - prevTranslate;
+    const threshold = 50;
+    if (Math.abs(movedBy) > threshold) {
+      if (movedBy < 0 && currentIndex < data.professionals.length - 1) {
+        setCurrentIndex((prev) => prev + 1);
+      } else if (movedBy > 0 && currentIndex > 0) {
+        setCurrentIndex((prev) => prev - 1);
+      }
+    }
+    setCurrentTranslate(0);
+    setPrevTranslate(0);
+    slideRef.current.style.transition = "transform 0.5s ease";
+    setTimeout(() => {
+      if (!isTransitioning) startAutoPlay();
+    }, 1000);
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e) => dragMove(e);
+    const handleMouseUp = () => dragEnd();
+    const handleTouchMove = (e) => dragMove(e);
+    const handleTouchEnd = () => dragEnd();
+
+    if (isDragging) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      document.addEventListener("touchmove", handleTouchMove);
+      document.addEventListener("touchend", handleTouchEnd);
+    }
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [isDragging, dragMove, dragEnd]);
 
   if (!data) return <div>Loading Services Page Six...</div>;
 
@@ -130,7 +180,6 @@ const ServicesPageSix = () => {
     <>
       <Header />
 
-      {/* Banner */}
       {data.serviceBannerImage?.asset && (
         <section
           className="service-container"
@@ -142,7 +191,6 @@ const ServicesPageSix = () => {
         />
       )}
 
-      {/* Service Info */}
       <section className="service-info">
         <div className="services-into-df">
           {data.servicesList?.map((service, i) => (
@@ -167,7 +215,6 @@ const ServicesPageSix = () => {
         </div>
       </section>
 
-      {/* Key Activities */}
       <div className="key-container">
         <h1 className="key-heading">Key Activities and Outcome</h1>
         <div className="key-cards-container">
@@ -181,14 +228,12 @@ const ServicesPageSix = () => {
         </div>
       </div>
 
-      {/* Why Work With Us */}
       <section className="why-work">
         <div className="content-two">
           <div className="text">
             <h2>Why Work With Us?</h2>
             {data.reasonsToWork?.map((reason, i) => (
               <div className="feature" key={i}>
-                {/* <div className="icon">✔️</div> */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -222,7 +267,7 @@ const ServicesPageSix = () => {
         </div>
       </section>
 
-      {/* Carousel */}
+      {/* Carousel with drag */}
       <div className="professionals-section-internals">
         <h1 className="professionals-heading-internals">
           Explore More Services
@@ -235,11 +280,13 @@ const ServicesPageSix = () => {
           <div
             className="carousel-slides-internals"
             ref={slideRef}
-            // style={{ transform: `translateX(-${currentIndex * 25}%)` }}
             style={{
               transform: `translateX(-${currentIndex * (isMobile ? 100 : 25)}%)`,
-              transition: "transform 0.5s ease", // Smooth transition
+              transition: isDragging ? "none" : "transform 0.5s ease",
+              cursor: isDragging ? "grabbing" : "grab",
             }}
+            onMouseDown={dragStart}
+            onTouchStart={dragStart}
           >
             {professionals.map((pro, i) => (
               <div key={i} className="carousel-slide-internals">
@@ -252,6 +299,7 @@ const ServicesPageSix = () => {
                         width={300}
                         height={200}
                         unoptimized
+                        draggable={false}
                       />
                     ) : (
                       <div
@@ -288,7 +336,7 @@ const ServicesPageSix = () => {
             height={40}
             alt="Whatsapp-img"
             unoptimized
-          ></Image>
+          />
         </a>
       </div>
 
@@ -299,7 +347,7 @@ const ServicesPageSix = () => {
         <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
           <div
             className="enquiry-container"
-            onClick={(e) => e.stopPropagation()} // Prevent close on form click
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="enquiry-box">
               <div className="close-icon" onClick={() => setShowForm(false)}>
@@ -327,7 +375,6 @@ const ServicesPageSix = () => {
                   className="form-input"
                   rows="3"
                 ></textarea>
-
                 <button type="submit" className="submit-button">
                   Submit
                 </button>
@@ -352,6 +399,7 @@ const ServicesPageSix = () => {
           />
         </svg>
       </div>
+
       <Footer />
     </>
   );

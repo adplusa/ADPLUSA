@@ -19,6 +19,12 @@ const ServicesPageEight = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
+  // ✅ Drag state
+  const [isDragging, setIsDragging] = useState(false);
+  const [startPos, setStartPos] = useState({ x: 0 });
+  const [currentTranslate, setCurrentTranslate] = useState(0);
+  const [prevTranslate, setPrevTranslate] = useState(0);
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -67,7 +73,7 @@ const ServicesPageEight = () => {
   const startAutoPlay = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(nextSlide, 3000);
-  }, [nextSlide]);
+  }, []);
 
   const stopAutoPlay = useCallback(() => {
     clearInterval(intervalRef.current);
@@ -91,11 +97,9 @@ const ServicesPageEight = () => {
           slideRef.current.style.transition = "none";
           setCurrentIndex(0);
           requestAnimationFrame(() => {
-            if (slideRef.current) {
-              slideRef.current.style.transition = "transform 0.5s ease";
-              setIsTransitioning(false);
-              startAutoPlay();
-            }
+            slideRef.current.style.transition = "transform 0.5s ease";
+            setIsTransitioning(false);
+            startAutoPlay();
           });
         }
       }, 500);
@@ -109,6 +113,72 @@ const ServicesPageEight = () => {
 
   const pauseAutoPlay = () => stopAutoPlay();
   const resumeAutoPlay = () => !isTransitioning && startAutoPlay();
+
+  // ✅ Drag handlers
+  const getPositionX = (event) =>
+    event.type.includes("mouse") ? event.clientX : event.touches[0].clientX;
+
+  const dragStart = (event) => {
+    if (event.type === "mousedown") event.preventDefault();
+    setIsDragging(true);
+    stopAutoPlay();
+    const posX = getPositionX(event);
+    setStartPos({ x: posX });
+    setCurrentTranslate(prevTranslate);
+    slideRef.current.style.transition = "none";
+  };
+
+  const dragMove = (event) => {
+    if (!isDragging) return;
+    const currentPosition = getPositionX(event);
+    const diff = currentPosition - startPos.x;
+    setCurrentTranslate(prevTranslate + diff);
+    const slideWidth = isMobile ? 100 : 25;
+    const baseTransform = -currentIndex * slideWidth;
+    const dragOffset = (diff / slideRef.current.offsetWidth) * slideWidth;
+    slideRef.current.style.transform = `translateX(${baseTransform + dragOffset}%)`;
+  };
+
+  const dragEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    const movedBy = currentTranslate - prevTranslate;
+    const threshold = 50;
+    if (Math.abs(movedBy) > threshold) {
+      if (movedBy < 0 && currentIndex < data.professionals.length - 1) {
+        setCurrentIndex((prev) => prev + 1);
+      } else if (movedBy > 0 && currentIndex > 0) {
+        setCurrentIndex((prev) => prev - 1);
+      }
+    }
+    setCurrentTranslate(0);
+    setPrevTranslate(0);
+    slideRef.current.style.transition = "transform 0.5s ease";
+    setTimeout(() => {
+      if (!isTransitioning) startAutoPlay();
+    }, 1000);
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e) => dragMove(e);
+    const handleMouseUp = () => dragEnd();
+    const handleTouchMove = (e) => dragMove(e);
+    const handleTouchEnd = () => dragEnd();
+
+    if (isDragging) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      document.addEventListener("touchmove", handleTouchMove);
+      document.addEventListener("touchend", handleTouchEnd);
+    }
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [isDragging]);
 
   if (!data) return <div>Loading Services Page...</div>;
 
@@ -166,13 +236,13 @@ const ServicesPageEight = () => {
         </div>
       </div>
 
-      <section className="why-work">
-        <div className="content-two">
-          <div className="text">
-            <h2>Why Work With Us?</h2>
-            {data.reasonsToWork?.map((reason, i) => (
-              <div className="feature" key={i}>
-                {/* <div className="icon">✔️</div> */}
+      <section className="why-work-main-service-page">
+        <div className="content-two-main-service-page">
+          <div className="text-main-service-page">
+            <h2>{data?.whyWorkWithUs?.title}</h2>
+
+            {data?.whyWorkWithUs?.features?.map((feature, idx) => (
+              <div key={idx} className="feature-main-service-page">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -183,26 +253,24 @@ const ServicesPageEight = () => {
                 >
                   <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"></path>
                 </svg>
-                <div className="info">
-                  <h3>{reason.title}</h3>
-                  <p>{reason.description}</p>
+                <div className="info-main-service-page">
+                  <h3>{feature.title}</h3>
+                  <p>{feature.description}</p>
                 </div>
               </div>
             ))}
           </div>
-          {data.founderImage?.asset && (
-            <div className="image-wrapper">
-              <div className="background">
-                <Image
-                  src={urlFor(data.founderImage).url()}
-                  alt="Why Work With Us"
-                  width={500}
-                  height={400}
-                  unoptimized
-                />
-              </div>
-            </div>
-          )}
+
+          <div className="image-wrapper-main-service-page">
+            {data?.whyWorkWithUs?.image?.asset && (
+              <Image
+                src={urlFor(data.whyWorkWithUs.image).url()}
+                alt="Why Work Image"
+                width={500}
+                height={400}
+              />
+            )}
+          </div>
         </div>
       </section>
 
@@ -220,8 +288,11 @@ const ServicesPageEight = () => {
             ref={slideRef}
             style={{
               transform: `translateX(-${currentIndex * (isMobile ? 100 : 25)}%)`,
-              transition: "transform 0.5s ease",
+              transition: isDragging ? "none" : "transform 0.5s ease",
+              cursor: isDragging ? "grabbing" : "grab",
             }}
+            onMouseDown={dragStart}
+            onTouchStart={dragStart}
           >
             {professionals.map((pro, i) => (
               <div key={i} className="carousel-slide-internals">
@@ -234,6 +305,7 @@ const ServicesPageEight = () => {
                         width={300}
                         height={200}
                         unoptimized
+                        draggable={false}
                       />
                     ) : (
                       <div
@@ -270,7 +342,7 @@ const ServicesPageEight = () => {
             height={40}
             alt="Whatsapp-img"
             unoptimized
-          ></Image>
+          />
         </a>
       </div>
 
@@ -281,7 +353,7 @@ const ServicesPageEight = () => {
         <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
           <div
             className="enquiry-container"
-            onClick={(e) => e.stopPropagation()} // Prevent close on form click
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="enquiry-box">
               <div className="close-icon" onClick={() => setShowForm(false)}>
@@ -309,7 +381,6 @@ const ServicesPageEight = () => {
                   className="form-input"
                   rows="3"
                 ></textarea>
-
                 <button type="submit" className="submit-button">
                   Submit
                 </button>
@@ -334,6 +405,7 @@ const ServicesPageEight = () => {
           />
         </svg>
       </div>
+
       <Footer />
     </>
   );

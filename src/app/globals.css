@@ -390,3 +390,251 @@ h1 {
 .feature {
   border-bottom: 0.5px solid #8a0b10 !important;
 }
+
+/* Additional CSS for drag functionality and links */
+
+/* Service Link Styles */
+.service-link-container {
+  margin-top: 20px;
+}
+
+.service-link-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.service-link-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.service-image-link {
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.service-image-link:hover {
+  transform: scale(1.05);
+}
+
+/* Professional Card Link Styles */
+.professional-image-link {
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.professional-image-link:hover {
+  transform: scale(1.05);
+}
+
+.professional-title-link {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s ease;
+}
+
+.professional-title-link:hover {
+  color: #007bff;
+}
+
+.professional-title-link h3 {
+  transition: color 0.3s ease;
+}
+
+.professional-title-link:hover h3 {
+  color: #007bff;
+}
+
+/* Carousel Drag Functionality */
+.carousel-slides-internals {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.carousel-slides-internals img {
+  pointer-events: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+
+/* Improve carousel container for better drag experience */
+.carousel-container-internals {
+  overflow: hidden;
+  position: relative;
+  touch-action: pan-y; /* Allow vertical scrolling but handle horizontal drag */
+}
+
+/* Professional card hover effects */
+.professional-card-internals {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.professional-card-internals:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Service info hover effects */
+.service-info-df {
+  transition: transform 0.3s ease;
+}
+
+.service-info-df:hover {
+  transform: translateY(-3px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .service-link-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .carousel-slides-internals {
+    touch-action: pan-y;
+  }
+}
+
+/* Loading state improvements */
+.carousel-slides-internals.loading {
+  pointer-events: none;
+}
+
+/* Drag cursor styles */
+.carousel-slides-internals[style*="cursor: grabbing"] {
+  cursor: grabbing !important;
+}
+
+.carousel-slides-internals[style*="cursor: grab"] {
+  cursor: grab !important;
+}
+
+.service-image img {
+  height: 100% !important;
+}
+
+.why-work-main-service-page {
+  padding: 40px 5%;
+  background: var(--backgroundColor);
+  font-family: "Geist", sans-serif;
+}
+
+.content-two-main-service-page {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5%;
+}
+
+.text-main-service-page {
+  flex: 1 1 300px;
+}
+
+.text-main-service-page h2 {
+  font-size: 2rem;
+  color: var(--foreGround);
+  margin-bottom: 40px;
+}
+
+.feature-main-service-page {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f0d8d2;
+}
+
+.feature-main-service-page svg {
+  width: 24px;
+  height: 24px;
+  stroke: #000;
+}
+
+.info-main-service-page h3 {
+  font-size: 20px;
+  color: var(--foreGround);
+  margin-bottom: 10px;
+}
+
+.info-main-service-page p {
+  font-size: 14px;
+  color: var(--foreGround);
+  line-height: 1.5;
+}
+
+.image-wrapper-main-service-page {
+  position: relative;
+  flex: 1 1 100px;
+  margin-left: 10%;
+  margin-top: -5%;
+}
+
+.image-wrapper-main-service-page img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .content-two-main-service-page {
+    flex-direction: column-reverse;
+  }
+
+  .text-main-service-page h2 {
+    font-size: 1.4rem;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .feature-main-service-page {
+    gap: 10px;
+    padding: 9px 11px;
+  }
+
+  .info-main-service-page h3 {
+    font-size: 15px !important;
+  }
+
+  .info-main-service-page p {
+    font-size: 12px;
+  }
+
+  .image-wrapper-main-service-page {
+    margin: 0;
+    margin-top: 15%;
+  }
+
+  .image-wrapper-main-service-page img {
+    width: 250px;
+    height: 300px;
+  }
+}
+
+.feature-main-service-page svg {
+  width: 30px; /* or some larger size */
+  height: 30px;
+  stroke: #000;
+}
+
+.feature-main-service-page:nth-child(2) svg {
+  width: 32px;
+}

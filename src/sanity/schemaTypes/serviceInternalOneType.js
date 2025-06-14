@@ -4,6 +4,7 @@ export const servicesInternalOnePage = defineType({
   name: "servicesOnePage",
   title: "Services Internal Page One",
   type: "document",
+
   fields: [
     defineField({
       name: "seoTitle",
@@ -28,7 +29,7 @@ export const servicesInternalOnePage = defineType({
       options: { hotspot: true },
     }),
 
-    // 🛠️ Services List
+    // 🛠️ Services List with Link Options
     defineField({
       name: "servicesList",
       title: "Services Offered",
@@ -46,12 +47,27 @@ export const servicesInternalOnePage = defineType({
               options: { hotspot: true },
               fields: [{ name: "alt", type: "string", title: "Alt Text" }],
             },
+            {
+              name: "link",
+              type: "string",
+              title: "Link URL",
+              description:
+                "Optional: Add a link to redirect when clicked (e.g., /services/web-design or https://example.com)",
+            },
+            {
+              name: "isExternal",
+              type: "boolean",
+              title: "Is External Link?",
+              description:
+                "Check if this is an external link (opens in new tab)",
+              initialValue: false,
+            },
           ],
         }),
       ],
     }),
 
-    // 🎠 Carousel Professionals
+    // 🎠 Carousel Professionals with Link Options
     defineField({
       name: "professionals",
       title: "Professional Roles Carousel",
@@ -66,6 +82,21 @@ export const servicesInternalOnePage = defineType({
               type: "image",
               title: "Image",
               options: { hotspot: true },
+            },
+            {
+              name: "link",
+              type: "string",
+              title: "Link URL",
+              description:
+                "Optional: Add a link to redirect when clicked (e.g., /services/consulting or https://example.com)",
+            },
+            {
+              name: "isExternal",
+              type: "boolean",
+              title: "Is External Link?",
+              description:
+                "Check if this is an external link (opens in new tab)",
+              initialValue: false,
             },
           ],
         }),
@@ -92,22 +123,6 @@ export const servicesInternalOnePage = defineType({
       ],
     }),
 
-    // 💼 Specialization Section
-    // defineField({
-    //   name: "specialization",
-    //   title: "Specialization CTA Section",
-    //   type: "object",
-    //   fields: [
-    //     { name: "buttonText", type: "string", title: "CTA Button Text" },
-    //     {
-    //       name: "image",
-    //       type: "image",
-    //       title: "Right Image",
-    //       options: { hotspot: true },
-    //     },
-    //   ],
-    // }),
-
     // 🚀 Why Work With Us Features
     defineField({
       name: "founderImage",
@@ -129,38 +144,5 @@ export const servicesInternalOnePage = defineType({
         }),
       ],
     }),
-
-    // 📰 Article/Blog Section
-    // defineField({
-    //   name: "articles",
-    //   title: "Informational Articles",
-    //   type: "array",
-    //   of: [
-    //     defineField({
-    //       type: "object",
-    //       fields: [
-    //         { name: "title", type: "string", title: "Title" },
-    //         {
-    //           name: "image",
-    //           type: "image",
-    //           title: "Image",
-    //           options: { hotspot: true },
-    //         },
-    //         { name: "alt", type: "string", title: "Alt Text" },
-    //       ],
-    //     }),
-    //   ],
-    // }),
-
-    // 💬 Final CTA
-    // defineField({
-    //   name: "finalCTA",
-    //   title: "Final Call To Action",
-    //   type: "object",
-    //   fields: [
-    //     { name: "ctaTitle", type: "string", title: "CTA Title" },
-    //     { name: "ctaButton", type: "string", title: "Button Text" },
-    //   ],
-    // }),
   ],
 });

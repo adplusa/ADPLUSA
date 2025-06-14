@@ -1,195 +1,149 @@
-// export default {
-//   name: "serviceInternalEightPage",
-//   title: "Services Internal Page Eight",
-//   type: "document",
-//   fields: [
-//     {
-//       name: "seoTitle",
-//       title: "SEO Title",
-//       type: "string",
-//     },
-//     {
-//       name: "seoDescription",
-//       title: "SEO Description",
-//       type: "text",
-//     },
-//     {
-//       name: "serviceBannerImage",
-//       title: "Banner Image",
-//       type: "image",
-//       options: { hotspot: true },
-//     },
-//     {
-//       name: "servicesList",
-//       title: "Services List",
-//       type: "array",
-//       of: [
-//         {
-//           type: "object",
-//           fields: [
-//             { name: "title", title: "Title", type: "string" },
-//             { name: "description", title: "Description", type: "text" },
-//             {
-//               name: "image",
-//               title: "Service Image",
-//               type: "image",
-//               options: { hotspot: true },
-//             },
-//           ],
-//         },
-//       ],
-//     },
-//     {
-//       name: "keyActivities",
-//       title: "Key Activities and Outcomes",
-//       type: "array",
-//       of: [
-//         {
-//           type: "object",
-//           fields: [
-//             { name: "title", title: "Title", type: "string" },
-//             { name: "description", title: "Description", type: "text" },
-//           ],
-//         },
-//       ],
-//     },
-//     {
-//       name: "reasonsToWork",
-//       title: "Reasons to Work With Us",
-//       type: "array",
-//       of: [
-//         {
-//           type: "object",
-//           fields: [
-//             { name: "title", title: "Reason Title", type: "string" },
-//             { name: "description", title: "Reason Description", type: "text" },
-//           ],
-//         },
-//       ],
-//     },
-//     {
-//       name: "founderImage",
-//       title: "Image for 'Why Work With Us' Section",
-//       type: "image",
-//       options: { hotspot: true },
-//     },
-//     {
-//       name: "professionals",
-//       title: "Explore More Services - Professionals Carousel",
-//       type: "array",
-//       of: [
-//         {
-//           type: "object",
-//           fields: [
-//             { name: "title", title: "Professional Title", type: "string" },
-//             {
-//               name: "image",
-//               title: "Professional Image",
-//               type: "image",
-//               options: { hotspot: true },
-//             },
-//           ],
-//         },
-//       ],
-//     },
-//   ],
-// };
+import { defineField, defineType } from "sanity";
 
-const serviceInternalEightPage = {
+export const serviceInternalEightPage = defineType({
   name: "serviceInternalEightPage",
   title: "Services Internal Page Eight",
   type: "document",
   fields: [
-    {
+    defineField({
       name: "seoTitle",
       title: "SEO Title",
       type: "string",
-    },
-    {
+    }),
+    defineField({
       name: "seoDescription",
       title: "SEO Description",
-      type: "text",
-    },
-    {
+      type: "string",
+    }),
+    defineField({
+      name: "title",
+      type: "string",
+      title: "Page Title",
+    }),
+
+    defineField({
       name: "serviceBannerImage",
-      title: "Banner Image",
+      title: "Select Image For Banner",
       type: "image",
       options: { hotspot: true },
-    },
-    {
+    }),
+
+    // 🛠️ Services List with Link Options
+    defineField({
       name: "servicesList",
-      title: "Services List",
+      title: "Services Offered",
       type: "array",
       of: [
-        {
+        defineField({
           type: "object",
           fields: [
-            { name: "title", title: "Title", type: "string" },
-            { name: "description", title: "Description", type: "text" },
+            { name: "title", type: "string", title: "Service Title" },
+            { name: "description", type: "text", title: "Service Description" },
             {
               name: "image",
-              title: "Service Image",
               type: "image",
+              title: "Service Image",
               options: { hotspot: true },
+              fields: [{ name: "alt", type: "string", title: "Alt Text" }],
+            },
+            {
+              name: "link",
+              type: "string",
+              title: "Link URL",
+              description:
+                "Optional: Add a link to redirect when clicked (e.g., /services/web-design or https://example.com)",
+            },
+            {
+              name: "isExternal",
+              type: "boolean",
+              title: "Is External Link?",
+              description:
+                "Check if this is an external link (opens in new tab)",
+              initialValue: false,
             },
           ],
-        },
+        }),
       ],
-    },
-    {
+    }),
+
+    // 🎠 Carousel Professionals with Link Options
+    defineField({
+      name: "professionals",
+      title: "Professional Roles Carousel",
+      type: "array",
+      of: [
+        defineField({
+          type: "object",
+          fields: [
+            { name: "title", type: "string", title: "Title" },
+            {
+              name: "image",
+              type: "image",
+              title: "Image",
+              options: { hotspot: true },
+            },
+            {
+              name: "link",
+              type: "string",
+              title: "Link URL",
+              description:
+                "Optional: Add a link to redirect when clicked (e.g., /services/consulting or https://example.com)",
+            },
+            {
+              name: "isExternal",
+              type: "boolean",
+              title: "Is External Link?",
+              description:
+                "Check if this is an external link (opens in new tab)",
+              initialValue: false,
+            },
+          ],
+        }),
+      ],
+    }),
+
+    // 🎯 Key Activities in Schematic Design
+    defineField({
       name: "keyActivities",
-      title: "Key Activities and Outcomes",
+      title: "Key Activities",
       type: "array",
       of: [
-        {
+        defineField({
           type: "object",
           fields: [
-            { name: "title", title: "Title", type: "string" },
-            { name: "description", title: "Description", type: "text" },
+            { name: "title", type: "string", title: "Activity Title" },
+            {
+              name: "description",
+              type: "text",
+              title: "Activity Description",
+            },
           ],
-        },
+        }),
       ],
-    },
-    {
-      name: "reasonsToWork",
-      title: "Reasons to Work With Us",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            { name: "title", title: "Reason Title", type: "string" },
-            { name: "description", title: "Reason Description", type: "text" },
-          ],
-        },
-      ],
-    },
-    {
+    }),
+
+    // 🚀 Why Work With Us Features
+    defineField({
       name: "founderImage",
-      title: "Image for 'Why Work With Us' Section",
+      title: "Founder Image",
       type: "image",
       options: { hotspot: true },
-    },
-    {
-      name: "professionals",
-      title: "Explore More Services - Professionals Carousel",
+    }),
+    defineField({
+      name: "reasonsToWork",
+      title: "Reasons To Work With Us",
       type: "array",
       of: [
-        {
+        defineField({
           type: "object",
           fields: [
-            { name: "title", title: "Professional Title", type: "string" },
-            {
-              name: "image",
-              title: "Professional Image",
-              type: "image",
-              options: { hotspot: true },
-            },
+            { name: "title", type: "string", title: "Title" },
+            { name: "description", type: "text", title: "Description" },
           ],
-        },
+        }),
       ],
-    },
+    }),
   ],
-};
+});
 
 export default serviceInternalEightPage;

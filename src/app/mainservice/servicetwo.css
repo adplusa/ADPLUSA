@@ -318,13 +318,13 @@
   width: 32px; /* inconsistent override */
 }
 
-.why-work {
+.why-work-main-service {
   padding: 40px 5%;
   background: var(--backgroundColor);
   font-family: "Geist", sans-serif;
 }
 
-.content-two {
+.why-work-main-service .content-two {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
@@ -333,17 +333,17 @@
   margin-top: 5%;
 }
 
-.text {
+.why-work-main-service .text {
   flex: 1 1 300px;
 }
 
-.text h2 {
+.why-work-main-service .text h2 {
   font-size: 2rem;
   color: var(--foreGround);
   margin-bottom: 40px;
 }
 
-.feature {
+.why-work-main-service .feature {
   display: flex;
   align-items: flex-start;
   gap: 20px;
@@ -351,22 +351,6 @@
   margin-bottom: 20px;
   border-bottom: 1px solid #f0d8d2;
 }
-
-.icon {
-  margin-top: 7px;
-}
-
-/* .icon {
-  font-size: 24px;
-  color: #d2a191;
-  background-color: #f5e2db;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-} */
 
 .info h3 {
   font-size: 20px;
@@ -686,128 +670,102 @@
   }
 }
 
+.why-work-main-service-page {
+  padding: 40px 5%;
+  background: var(--backgroundColor);
+  font-family: "Geist", sans-serif;
+}
+
+.content-two-main-service-page {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5%;
+}
+
+.text-main-service-page {
+  flex: 1 1 300px;
+}
+
+.text-main-service-page h2 {
+  font-size: 2rem;
+  color: var(--foreGround);
+  margin-bottom: 40px;
+}
+
+.feature-main-service-page {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f0d8d2;
+}
+
+.feature-main-service-page svg {
+  width: 24px;
+  height: 24px;
+  stroke: #000;
+}
+
+.info-main-service-page h3 {
+  font-size: 20px;
+  color: var(--foreGround);
+  margin-bottom: 10px;
+}
+
+.info-main-service-page p {
+  font-size: 14px;
+  color: var(--foreGround);
+  line-height: 1.5;
+}
+
+.image-wrapper-main-service-page {
+  position: relative;
+  flex: 1 1 100px;
+  margin-left: 10%;
+  margin-top: -5%;
+}
+
+.image-wrapper-main-service-page img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
 @media (max-width: 768px) {
-  .feature-section {
-    padding: 0;
-    margin-top: 17%;
-  }
-  .feature-section-df {
-    margin-top: 10%;
-  }
-
-  .feature-box {
-    width: 90%;
-  }
-
-  .feature-box h1 {
-    font-size: 20px;
-  }
-
-  .features-name {
-    display: grid;
-    grid-template-columns: auto auto;
-    justify-content: unset;
-    margin-top: 0;
-    padding: 15px;
-  }
-
-  .features-name img {
-    width: 45px;
-    height: auto;
-    margin-top: 4%;
-  }
-
-  .features-name p {
-    font-size: 16px;
-    margin-top: 1%;
-  }
-  .features-name h3 {
-    font-size: 14px;
-    margin-top: 1%;
-  }
-
-  .home_services h1 {
-    font-size: 22px;
-    margin-top: 15%;
-  }
-
-  .home_services_box:first-of-type {
-    margin-left: 5%;
-  }
-
-  .home_services_box {
-    display: flex;
-    overflow-x: auto;
-    gap: 30px;
-    margin-top: 15px;
-  }
-
-  .service-box-home {
-    width: 250px;
-  }
-
-  .service-image img {
-    object-fit: contain;
-    width: 100%;
-    height: auto;
-  }
-
-  .content-two {
+  .content-two-main-service-page {
     flex-direction: column-reverse;
   }
 
-  .text h2 {
+  .text-main-service-page h2 {
     font-size: 1.4rem;
     text-align: center;
     margin-bottom: 10px;
   }
 
-  .feature {
+  .feature-main-service-page {
     gap: 10px;
     padding: 9px 11px;
   }
 
-  .icon {
-    font-size: 15px;
-    width: 47px;
-  }
-
-  .info h3 {
+  .info-main-service-page h3 {
     font-size: 15px !important;
   }
 
-  .info p {
+  .info-main-service-page p {
     font-size: 12px;
   }
 
-  .why-work {
-    padding: 30px 2%;
-  }
-
-  .image-wrapper {
-    margin-left: 0;
-  }
-
-  .image-wrapper {
+  .image-wrapper-main-service-page {
+    margin: 0;
     margin-top: 15%;
   }
 
-  .image-wrapper img {
+  .image-wrapper-main-service-page img {
     width: 250px;
     height: 300px;
-    margin-top: 20px !important;
-  }
-
-  .image-wrapper {
-    flex: unset;
-    margin-top: 0;
-  }
-
-  .comapany-trust-df h1 {
-    font-size: 2rem;
-  }
-
-  .comapany-trust {
-    height: auto;
   }
 }

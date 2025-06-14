@@ -261,14 +261,13 @@ const ServiceTwo = () => {
       </div>
 
       {/* Why Work With Us */}
-      <section className="why-work">
-        <div className="content-two">
-          <div className="text">
+      <section className="why-work-main-service-page">
+        <div className="content-two-main-service-page">
+          <div className="text-main-service-page">
             <h2>{data?.whyWorkWithUs?.title}</h2>
 
             {data?.whyWorkWithUs?.features?.map((feature, idx) => (
-              <div key={idx} className="feature">
-                {/* <div className="icon">{feature.icon}</div> */}
+              <div key={idx} className="feature-main-service-page">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -279,7 +278,7 @@ const ServiceTwo = () => {
                 >
                   <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"></path>
                 </svg>
-                <div className="info">
+                <div className="info-main-service-page">
                   <h3>{feature.title}</h3>
                   <p>{feature.description}</p>
                 </div>
@@ -287,21 +286,15 @@ const ServiceTwo = () => {
             ))}
           </div>
 
-          <div className="image-wrapper-main-service">
-            <div className="background-service">
-              <div className="image-wrapper">
-                <div className="background-service">
-                  {data?.whyWorkWithUs?.image?.asset && (
-                    <Image
-                      src={urlFor(data.whyWorkWithUs.image).url()}
-                      alt="Why Work Image"
-                      width={500}
-                      height={400}
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
+          <div className="image-wrapper-main-service-page">
+            {data?.whyWorkWithUs?.image?.asset && (
+              <Image
+                src={urlFor(data.whyWorkWithUs.image).url()}
+                alt="Why Work Image"
+                width={500}
+                height={400}
+              />
+            )}
           </div>
         </div>
       </section>

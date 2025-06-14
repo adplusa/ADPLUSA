@@ -15,20 +15,38 @@ export const contactPage = defineType({
       title: "SEO Description",
       type: "string",
     }),
-    // Hero section / heading
-    defineField({
-      name: "mainHeading",
-      title: "Main Heading",
-      type: "string",
-      description: "Main title on the contact page (e.g., 'Get in touch')",
-    }),
-    defineField({
-      name: "introText",
-      title: "Introductory Text",
-      type: "array",
-      of: [{ type: "block" }],
-    }),
 
+    // Contact Form Configuration
+    // defineField({
+    //   name: "formFields",
+    //   title: "Form Fields",
+    //   type: "array",
+    //   of: [
+    //     defineField({
+    //       type: "object",
+    //       name: "formField",
+    //       title: "Form Field",
+    //       fields: [
+    //         defineField({ name: "label", title: "Label", type: "string" }),
+    //         defineField({ name: "name", title: "Field Name", type: "string" }),
+    //         defineField({
+    //           name: "type",
+    //           title: "Field Type",
+    //           type: "string",
+    //           options: {
+    //             list: ["text", "email", "textarea", "checkbox"],
+    //           },
+    //         }),
+    //         defineField({
+    //           name: "required",
+    //           title: "Required",
+    //           type: "boolean",
+    //           initialValue: true,
+    //         }),
+    //       ],
+    //     }),
+    //   ],
+    // }),
     // Contact Form Configuration
     defineField({
       name: "formFields",
@@ -47,7 +65,7 @@ export const contactPage = defineType({
               title: "Field Type",
               type: "string",
               options: {
-                list: ["text", "email", "textarea", "checkbox"],
+                list: ["text", "email", "phone", "textarea", "checkbox"], // added "phone"
               },
             }),
             defineField({
@@ -59,6 +77,25 @@ export const contactPage = defineType({
           ],
         }),
       ],
+    }),
+
+    // Hero section / heading
+    defineField({
+      name: "mainHeading",
+      title: "Main Heading",
+      type: "string",
+      description: "Main title on the contact page (e.g., 'Get in touch')",
+    }),
+    defineField({
+      name: "contactImage",
+      title: "Contact Image",
+      type: "image",
+    }),
+    defineField({
+      name: "introText",
+      title: "Introductory Text",
+      type: "array",
+      of: [{ type: "block" }],
     }),
 
     // Contact Info Block

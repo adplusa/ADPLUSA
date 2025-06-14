@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Header from "../Components/Header/page";
 import Footer from "../Components/Footer/page";
 import { client } from "@/sanity/lib/client";
@@ -19,17 +20,20 @@ const ServicesPage = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  // const isMobile = window.innerWidth <= 768;
+  // Drag functionality state
+  const [isDragging, setIsDragging] = useState(false);
+  const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+  const [currentTranslate, setCurrentTranslate] = useState(0);
+  const [prevTranslate, setPrevTranslate] = useState(0);
+  const [animationId, setAnimationId] = useState(null);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Set mobile state based on window width
+      setIsMobile(window.innerWidth <= 768);
     };
 
-    handleResize(); // Initial check
-    window.addEventListener("resize", handleResize); // Add resize event listener
-
-    // Cleanup on unmount
+    handleResize();
+    window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -51,7 +55,7 @@ const ServicesPage = () => {
   }, []);
 
   useEffect(() => {
-    if (!data) return; // Prevent null error
+    if (!data) return;
 
     document.title = data.seoTitle;
 
@@ -64,7 +68,7 @@ const ServicesPage = () => {
       meta.content = "Learn about our mission and team";
       document.head.appendChild(meta);
     }
-  }, [data]); // Re-run when `data` becomes available
+  }, [data]);
 
   // Advance carousel slide
   const nextSlide = () => {
@@ -124,6 +128,109 @@ const ServicesPage = () => {
   const pauseAutoPlay = () => stopAutoPlay();
   const resumeAutoPlay = () => !isTransitioning && startAutoPlay();
 
+  // Drag functionality
+  const getPositionX = (event) => {
+    return event.type.includes("mouse")
+      ? event.clientX
+      : event.touches[0].clientX;
+  };
+
+  const dragStart = (event) => {
+    if (event.type === "mousedown") {
+      event.preventDefault();
+    }
+
+    setIsDragging(true);
+    stopAutoPlay();
+
+    const posX = getPositionX(event);
+    setStartPos({ x: posX, y: 0 });
+    setCurrentTranslate(prevTranslate);
+
+    if (slideRef.current) {
+      slideRef.current.style.transition = "none";
+    }
+  };
+
+  const dragMove = (event) => {
+    if (!isDragging) return;
+
+    const currentPosition = getPositionX(event);
+    const diff = currentPosition - startPos.x;
+    setCurrentTranslate(prevTranslate + diff);
+
+    if (slideRef.current) {
+      const slideWidth = isMobile ? 100 : 25;
+      const baseTransform = -currentIndex * slideWidth;
+      const dragOffset = (diff / slideRef.current.offsetWidth) * slideWidth;
+      slideRef.current.style.transform = `translateX(${baseTransform + dragOffset}%)`;
+    }
+  };
+
+  const dragEnd = () => {
+    if (!isDragging) return;
+
+    setIsDragging(false);
+
+    const movedBy = currentTranslate - prevTranslate;
+    const threshold = 50; // Minimum drag distance to trigger slide change
+
+    if (Math.abs(movedBy) > threshold) {
+      if (movedBy < 0 && currentIndex < data.professionals.length - 1) {
+        // Dragged left, go to next slide
+        setCurrentIndex((prev) => prev + 1);
+      } else if (movedBy > 0 && currentIndex > 0) {
+        // Dragged right, go to previous slide
+        setCurrentIndex((prev) => prev - 1);
+      }
+    }
+
+    // Reset drag state
+    setCurrentTranslate(0);
+    setPrevTranslate(0);
+
+    if (slideRef.current) {
+      slideRef.current.style.transition = "transform 0.5s ease";
+    }
+
+    // Resume autoplay after a delay
+    setTimeout(() => {
+      if (!isTransitioning) startAutoPlay();
+    }, 1000);
+  };
+
+  // Add event listeners for drag functionality
+  useEffect(() => {
+    const carousel = slideRef.current;
+    if (!carousel) return;
+
+    const handleMouseMove = (e) => dragMove(e);
+    const handleMouseUp = () => dragEnd();
+    const handleTouchMove = (e) => dragMove(e);
+    const handleTouchEnd = () => dragEnd();
+
+    if (isDragging) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      document.addEventListener("touchmove", handleTouchMove);
+      document.addEventListener("touchend", handleTouchEnd);
+    }
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [
+    isDragging,
+    startPos,
+    currentTranslate,
+    prevTranslate,
+    currentIndex,
+    data,
+  ]);
+
   if (!data) return <div>Loading Services Page...</div>;
 
   const professionals = [...data.professionals, ...data.professionals];
@@ -152,16 +259,63 @@ const ServicesPage = () => {
               <div className="service-left">
                 <h1>{service.title}</h1>
                 <p>{service.description}</p>
+                {service.link && (
+                  <div className="service-link-container">
+                    {service.isExternal ? (
+                      <a
+                        href={service.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="service-link-btn"
+                      >
+                        Learn More →
+                      </a>
+                    ) : (
+                      <Link href={service.link} className="service-link-btn">
+                        Learn More →
+                      </Link>
+                    )}
+                  </div>
+                )}
               </div>
               {service.image?.asset && (
                 <div className="service-right">
-                  <Image
-                    src={urlFor(service.image).url()}
-                    width={0}
-                    height={0}
-                    unoptimized
-                    alt={service.title || "Service Image"}
-                  />
+                  {service.link ? (
+                    service.isExternal ? (
+                      <a
+                        href={service.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="service-image-link"
+                      >
+                        <Image
+                          src={urlFor(service.image).url()}
+                          width={0}
+                          height={0}
+                          unoptimized
+                          alt={service.title || "Service Image"}
+                        />
+                      </a>
+                    ) : (
+                      <Link href={service.link} className="service-image-link">
+                        <Image
+                          src={urlFor(service.image).url()}
+                          width={0}
+                          height={0}
+                          unoptimized
+                          alt={service.title || "Service Image"}
+                        />
+                      </Link>
+                    )
+                  ) : (
+                    <Image
+                      src={urlFor(service.image).url()}
+                      width={0}
+                      height={0}
+                      unoptimized
+                      alt={service.title || "Service Image"}
+                    />
+                  )}
                 </div>
               )}
             </div>
@@ -190,7 +344,6 @@ const ServicesPage = () => {
             <h2>Why Work With Us?</h2>
             {data.reasonsToWork?.map((reason, i) => (
               <div className="feature" key={i}>
-                {/* <div className="icon">✔️</div> */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -224,7 +377,7 @@ const ServicesPage = () => {
         </div>
       </section>
 
-      {/* Carousel Section */}
+      {/* Carousel Section with Drag Functionality */}
       <div className="professionals-section-internals">
         <h1 className="professionals-heading-internals">
           Explore More Services
@@ -237,27 +390,61 @@ const ServicesPage = () => {
           <div
             className="carousel-slides-internals"
             ref={slideRef}
-            // style={{ transform: `translateX(-${currentIndex * 25}%)` }}
-            // style={{
-            //   transform: `translateX(-${currentIndex * (isMobile ? 100 : 25)}%)`,
-            // }}
             style={{
               transform: `translateX(-${currentIndex * (isMobile ? 100 : 25)}%)`,
-              transition: "transform 0.5s ease", // Smooth transition
+              transition: isDragging ? "none" : "transform 0.5s ease",
+              cursor: isDragging ? "grabbing" : "grab",
             }}
+            onMouseDown={dragStart}
+            onTouchStart={dragStart}
           >
             {professionals.map((pro, i) => (
               <div key={i} className="carousel-slide-internals">
                 <div className="professional-card-internals">
                   <div className="image-container-internals">
                     {pro?.image?.asset ? (
-                      <Image
-                        src={urlFor(pro.image).url()}
-                        alt={pro.title || "Professional"}
-                        width={300}
-                        height={200}
-                        unoptimized
-                      />
+                      pro.link ? (
+                        pro.isExternal ? (
+                          <a
+                            href={pro.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="professional-image-link"
+                          >
+                            <Image
+                              src={urlFor(pro.image).url()}
+                              alt={pro.title || "Professional"}
+                              width={300}
+                              height={200}
+                              unoptimized
+                              draggable={false}
+                            />
+                          </a>
+                        ) : (
+                          <Link
+                            href={pro.link}
+                            className="professional-image-link"
+                          >
+                            <Image
+                              src={urlFor(pro.image).url()}
+                              alt={pro.title || "Professional"}
+                              width={300}
+                              height={200}
+                              unoptimized
+                              draggable={false}
+                            />
+                          </Link>
+                        )
+                      ) : (
+                        <Image
+                          src={urlFor(pro.image).url()}
+                          alt={pro.title || "Professional"}
+                          width={300}
+                          height={200}
+                          unoptimized
+                          draggable={false}
+                        />
+                      )
                     ) : (
                       <div
                         style={{
@@ -273,13 +460,31 @@ const ServicesPage = () => {
                       </div>
                     )}
                   </div>
-                  <h3>{pro.title}</h3>
+                  {pro.link ? (
+                    pro.isExternal ? (
+                      <a
+                        href={pro.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="professional-title-link"
+                      >
+                        <h3>{pro.title}</h3>
+                      </a>
+                    ) : (
+                      <Link href={pro.link} className="professional-title-link">
+                        <h3>{pro.title}</h3>
+                      </Link>
+                    )
+                  ) : (
+                    <h3>{pro.title}</h3>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         </div>
       </div>
+
       <div className="whatsapp">
         <a
           className="btn-whatsapp-pulse"
@@ -303,7 +508,7 @@ const ServicesPage = () => {
         <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
           <div
             className="enquiry-container"
-            onClick={(e) => e.stopPropagation()} // Prevent close on form click
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="enquiry-box">
               <div className="close-icon" onClick={() => setShowForm(false)}>

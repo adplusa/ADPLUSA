@@ -83,7 +83,7 @@ const ContactPage = () => {
           </h1>
           <div className="title-underline"></div>
 
-          <form onSubmit={handleSubmit}>
+          {/* <form onSubmit={handleSubmit}>
             {data.formFields?.map((field, idx) => (
               <div className="form-field" key={idx}>
                 {field.type === "textarea" ? (
@@ -108,13 +108,44 @@ const ContactPage = () => {
             <button type="submit" className="submit-button">
               Submit
             </button>
+          </form> */}
+          <form onSubmit={handleSubmit}>
+            {data.formFields?.map((field, idx) => (
+              <div className="form-field" key={idx}>
+                {field.type === "textarea" ? (
+                  <textarea
+                    name={field.name}
+                    placeholder={field.label}
+                    required={
+                      field.required || ["name", "phone"].includes(field.name)
+                    }
+                    onChange={handleChange}
+                  />
+                ) : (
+                  <input
+                    type={field.type}
+                    name={field.name}
+                    placeholder={field.label}
+                    required={
+                      field.required || ["name", "phone"].includes(field.name)
+                    }
+                    onChange={handleChange}
+                  />
+                )}
+              </div>
+            ))}
+
+            <button type="submit" className="submit-button">
+              Submit
+            </button>
           </form>
         </div>
 
         <div className="contact-info-section">
           <div className="map-container">
             <Image
-              src="/banner-3.jpg"
+              // src="/banner-3.jpg"
+              src={urlFor(data.contactImage).url()}
               width={0}
               height={0}
               alt="Map"
@@ -195,7 +226,7 @@ const ContactPage = () => {
             ))}
           </div>
 
-          <div className="image-wrapper">
+          <div className="image-wrapper-contact">
             <div className="background-contact">
               {data?.rightImage?.asset && (
                 <Image

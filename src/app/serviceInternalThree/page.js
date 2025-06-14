@@ -19,19 +19,22 @@ const ServicesPageThree = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
+  // ✅ Drag states
+  const [isDragging, setIsDragging] = useState(false);
+  const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+  const [currentTranslate, setCurrentTranslate] = useState(0);
+  const [prevTranslate, setPrevTranslate] = useState(0);
+
   const upwardHandler = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Set mobile state based on window width
+      setIsMobile(window.innerWidth <= 768);
     };
-
-    handleResize(); // Initial check
-    window.addEventListener("resize", handleResize); // Add resize event listener
-
-    // Cleanup on unmount
+    handleResize();
+    window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -48,10 +51,8 @@ const ServicesPageThree = () => {
   }, []);
 
   useEffect(() => {
-    if (!data) return; // Prevent null error
-
+    if (!data) return;
     document.title = data.seoTitle;
-
     const metaDesc = document.querySelector("meta[name='description']");
     if (metaDesc) {
       metaDesc.setAttribute("content", data.seoDescription);
@@ -61,12 +62,10 @@ const ServicesPageThree = () => {
       meta.content = "Learn about our mission and team";
       document.head.appendChild(meta);
     }
-  }, [data]); // Re-run when `data` becomes available
+  }, [data]);
 
   const nextSlide = () => {
-    if (!isTransitioning) {
-      setCurrentIndex((prev) => prev + 1);
-    }
+    if (!isTransitioning) setCurrentIndex((prev) => prev + 1);
   };
 
   const startAutoPlay = useCallback(() => {
@@ -87,16 +86,13 @@ const ServicesPageThree = () => {
   useEffect(() => {
     if (!data?.professionals) return;
     const total = data.professionals.length;
-
     if (currentIndex === total) {
       setIsTransitioning(true);
       stopAutoPlay();
-
       const timer = setTimeout(() => {
         if (slideRef.current) {
           slideRef.current.style.transition = "none";
           setCurrentIndex(0);
-
           requestAnimationFrame(() => {
             if (slideRef.current) {
               slideRef.current.style.transition = "transform 0.5s ease";
@@ -106,7 +102,6 @@ const ServicesPageThree = () => {
           });
         }
       }, 500);
-
       return () => {
         clearTimeout(timer);
         setIsTransitioning(false);
@@ -115,9 +110,77 @@ const ServicesPageThree = () => {
   }, [currentIndex, data, stopAutoPlay, startAutoPlay]);
 
   const pauseAutoPlay = () => stopAutoPlay();
-  const resumeAutoPlay = () => {
-    if (!isTransitioning) startAutoPlay();
+  const resumeAutoPlay = () => !isTransitioning && startAutoPlay();
+
+  // ✅ Drag handlers
+  const getPositionX = (event) =>
+    event.type.includes("mouse") ? event.clientX : event.touches[0].clientX;
+
+  const dragStart = (event) => {
+    if (event.type === "mousedown") event.preventDefault();
+    setIsDragging(true);
+    stopAutoPlay();
+    const posX = getPositionX(event);
+    setStartPos({ x: posX, y: 0 });
+    setCurrentTranslate(prevTranslate);
+    if (slideRef.current) slideRef.current.style.transition = "none";
   };
+
+  const dragMove = (event) => {
+    if (!isDragging) return;
+    const currentPosition = getPositionX(event);
+    const diff = currentPosition - startPos.x;
+    setCurrentTranslate(prevTranslate + diff);
+    if (slideRef.current) {
+      const slideWidth = isMobile ? 100 : 25;
+      const baseTransform = -currentIndex * slideWidth;
+      const dragOffset = (diff / slideRef.current.offsetWidth) * slideWidth;
+      slideRef.current.style.transform = `translateX(${baseTransform + dragOffset}%)`;
+    }
+  };
+
+  const dragEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    const movedBy = currentTranslate - prevTranslate;
+    const threshold = 50;
+    if (Math.abs(movedBy) > threshold) {
+      if (movedBy < 0 && currentIndex < data.professionals.length - 1) {
+        setCurrentIndex((prev) => prev + 1);
+      } else if (movedBy > 0 && currentIndex > 0) {
+        setCurrentIndex((prev) => prev - 1);
+      }
+    }
+    setCurrentTranslate(0);
+    setPrevTranslate(0);
+    if (slideRef.current)
+      slideRef.current.style.transition = "transform 0.5s ease";
+    setTimeout(() => {
+      if (!isTransitioning) startAutoPlay();
+    }, 1000);
+  };
+
+  // ✅ Event listeners for drag
+  useEffect(() => {
+    const handleMouseMove = (e) => dragMove(e);
+    const handleMouseUp = () => dragEnd();
+    const handleTouchMove = (e) => dragMove(e);
+    const handleTouchEnd = () => dragEnd();
+
+    if (isDragging) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      document.addEventListener("touchmove", handleTouchMove);
+      document.addEventListener("touchend", handleTouchEnd);
+    }
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [isDragging, dragMove, dragEnd]);
 
   if (!data) return <div>Loading Services Page Three...</div>;
 
@@ -126,7 +189,6 @@ const ServicesPageThree = () => {
   return (
     <>
       <Header />
-
       {/* Banner */}
       {data.serviceBannerImage?.asset && (
         <section
@@ -164,58 +226,7 @@ const ServicesPageThree = () => {
         </div>
       </section>
 
-      {/* Seprate Boxes */}
-      {/* <section className="separate-div">
-        <h1>Our Premium Services</h1>
-        <div className="separate-div-df">
-          <div className="service-three-separated-div">
-            <div className="service-content">
-              <div className="image-container">
-                <Image
-                  src="https://images.unsplash.com/photo-1553484771-371a605b060b?w=500&h=400&fit=crop"
-                  alt="Growth Service"
-                  className="service-image"
-                  width={0}
-                  height={0}
-                  unoptimized
-                />
-              </div>
-              <div className="text-content">
-                <h3>Digital Innovation</h3>
-                <p>
-                  Stay ahead of the curve with cutting-edge digital solutions.
-                  Our innovation team helps you leverage the latest technologies
-                  for maximum impact.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="service-three-separated-div">
-            <div className="service-content">
-              <div className="image-container">
-                <Image
-                  src="https://images.unsplash.com/photo-1553484771-371a605b060b?w=500&h=400&fit=crop"
-                  alt="Growth Service"
-                  className="service-image"
-                  width={0}
-                  height={0}
-                  unoptimized
-                />
-              </div>
-              <div className="text-content">
-                <h3>Growth Acceleration</h3>
-                <p>
-                  Accelerate your growth with our proven methodologies. From
-                  market expansion to operational excellence, we ve got you
-                  covered.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
+      {/* Separated Boxes */}
       <section className="separate-div">
         <h1>{data.sectionTitle}</h1>
         <div className="separate-div-df">
@@ -266,7 +277,6 @@ const ServicesPageThree = () => {
             <h2>Why Work With Us?</h2>
             {data.reasonsToWork?.map((reason, i) => (
               <div className="feature" key={i}>
-                {/* <div className="icon">✔️</div> */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -300,7 +310,7 @@ const ServicesPageThree = () => {
         </div>
       </section>
 
-      {/* Professionals Carousel */}
+      {/* Professionals Carousel WITH DRAG */}
       <div className="professionals-section-internals">
         <h1 className="professionals-heading-internals">
           Explore More Services
@@ -313,11 +323,13 @@ const ServicesPageThree = () => {
           <div
             className="carousel-slides-internals"
             ref={slideRef}
-            // style={{ transform: `translateX(-${currentIndex * 25}%)` }}
             style={{
               transform: `translateX(-${currentIndex * (isMobile ? 100 : 25)}%)`,
-              transition: "transform 0.5s ease", // Smooth transition
+              transition: isDragging ? "none" : "transform 0.5s ease",
+              cursor: isDragging ? "grabbing" : "grab",
             }}
+            onMouseDown={dragStart}
+            onTouchStart={dragStart}
           >
             {professionals.map((pro, i) => (
               <div key={i} className="carousel-slide-internals">
@@ -330,6 +342,7 @@ const ServicesPageThree = () => {
                         width={300}
                         height={200}
                         unoptimized
+                        draggable={false}
                       />
                     ) : (
                       <div
@@ -354,6 +367,7 @@ const ServicesPageThree = () => {
         </div>
       </div>
 
+      {/* Whatsapp & Enquire */}
       <div className="whatsapp">
         <a
           className="btn-whatsapp-pulse"
@@ -366,7 +380,7 @@ const ServicesPageThree = () => {
             height={40}
             alt="Whatsapp-img"
             unoptimized
-          ></Image>
+          />
         </a>
       </div>
 
@@ -377,7 +391,7 @@ const ServicesPageThree = () => {
         <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
           <div
             className="enquiry-container"
-            onClick={(e) => e.stopPropagation()} // Prevent close on form click
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="enquiry-box">
               <div className="close-icon" onClick={() => setShowForm(false)}>
@@ -405,7 +419,6 @@ const ServicesPageThree = () => {
                   className="form-input"
                   rows="3"
                 ></textarea>
-
                 <button type="submit" className="submit-button">
                   Submit
                 </button>

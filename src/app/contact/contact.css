@@ -98,14 +98,14 @@ body {
   line-height: 1.5;
 }
 
-.image-wrapper {
+.image-wrapper-contact {
   position: relative;
-  flex: 1 1 10px;
+  flex: 1 1 100px;
   margin-left: 10%;
   margin-top: -5%;
 }
 
-.image-wrapper img {
+.image-wrapper-contact img {
   width: 100%;
   height: auto;
   object-fit: contain;
