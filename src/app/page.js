@@ -407,7 +407,7 @@ export default function Home() {
   return (
     <>
       {!homepageData || !homepageData[0] ? (
-        <div>Loading homepage content...</div>
+        <div>Loading homepage content.....</div>
       ) : (
         <div className="main-content">
           {loading && shouldAnimate ? (
@@ -722,7 +722,7 @@ export default function Home() {
                         ) : null
                       )
                     ) : (
-                      <p>No images available</p>
+                      <p>No image available</p>
                     )}
                   </div>
                 </div>
