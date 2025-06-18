@@ -441,7 +441,7 @@ const ServicesPageTwo = () => {
             src={"/whatsapp.png"}
             width={40}
             height={40}
-            alt="Whatsapp-imgs"
+            alt="Whatsapp-img"
             unoptimized
           />
         </a>
