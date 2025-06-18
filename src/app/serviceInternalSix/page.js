@@ -282,7 +282,7 @@ const ServicesPageSix = () => {
           >
             {slidesToShow.map((service, i) => (
               <Link key={i} id="redirection-service" href={service.boxUrl}>
-                <div key={i} className="carousel-slide-internals">
+                <div className="carousel-slide-internals">
                   <div className="professional-card-internals">
                     <div className="image-container-internals">
                       {service?.serviceBoxImg?.asset ? (

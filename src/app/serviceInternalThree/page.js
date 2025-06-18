@@ -402,7 +402,7 @@ const ServicesPageThree = () => {
             onTouchStart={handleDragStart}
           >
             {slidesToShow.map((service, i) => (
-              <Link id="redirection-service" key={i} href={service.boxUrl}>
+              <Link key={i} id="redirection-service" href={service.boxUrl}>
                 <div className="carousel-slide-internals">
                   <div className="professional-card-internals">
                     <div className="image-container-internals">

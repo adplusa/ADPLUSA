@@ -286,8 +286,8 @@ const ServicesPageFour = () => {
             onTouchStart={handleDragStart}
           >
             {slidesToShow.map((service, i) => (
-              <Link id="redirection-service" href={service.boxUrl}>
-                <div key={i} className="carousel-slide-internals">
+              <Link key={i} id="redirection-service" href={service.boxUrl}>
+                <div className="carousel-slide-internals">
                   <div className="professional-card-internals">
                     <div className="image-container-internals">
                       {service?.serviceBoxImg?.asset ? (
