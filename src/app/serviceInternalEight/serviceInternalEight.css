@@ -1016,7 +1016,7 @@ button.next-button:active {
   transition: transform 0.5s ease;
 }
 
-.carousel-slide-internals {
+#redirection-service {
   min-width: 25%;
   flex: 0 0 25%;
   padding: 0 10px;

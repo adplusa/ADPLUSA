@@ -630,11 +630,33 @@ h1 {
 }
 
 .feature-main-service-page svg {
-  width: 30px; /* or some larger size */
-  height: 30px;
+  width: 22px;
+  height: 22px;
   stroke: #000;
 }
 
 .feature-main-service-page:nth-child(2) svg {
   width: 32px;
+}
+
+.feature svg {
+  width: 30px; /* or some larger size */
+  height: 30px;
+  stroke: #000;
+}
+
+.feature:nth-child(2) svg {
+  width: 32px;
+}
+
+#redirection-service {
+  min-width: 24%;
+  flex: 0 0 24%;
+  padding: 0 10px;
+  box-sizing: border-box;
+  width: 100px;
+}
+
+.professional-card-internals {
+  height: 250px !important;
 }

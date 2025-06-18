@@ -1,361 +1,3 @@
-// "use client";
-
-// import React, { useEffect, useState, useRef, useCallback } from "react";
-// import Image from "next/image";
-// import Header from "../Components/Header/page";
-// import Footer from "../Components/Footer/page";
-// import { client } from "@/sanity/lib/client";
-// import urlFor from "../helpers/sanity";
-// import "./serviceInternalTwo.css";
-
-// export const dynamic = "force-dynamic";
-
-// const ServicesPageTwo = () => {
-//   const [data, setData] = useState(null);
-//   const [currentIndex, setCurrentIndex] = useState(0);
-//   const [isTransitioning, setIsTransitioning] = useState(false);
-//   const slideRef = useRef(null);
-//   const intervalRef = useRef(null);
-//   const [isMobile, setIsMobile] = useState(false);
-//   const [showForm, setShowForm] = useState(false);
-
-//   useEffect(() => {
-//     const handleResize = () => {
-//       setIsMobile(window.innerWidth <= 768); // Set mobile state based on window width
-//     };
-
-//     handleResize(); // Initial check
-//     window.addEventListener("resize", handleResize); // Add resize event listener
-
-//     // Cleanup on unmount
-//     return () => window.removeEventListener("resize", handleResize);
-//   }, []);
-
-//   const upwardHandler = () => {
-//     window.scrollTo({ top: 0, behavior: "smooth" });
-//   };
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const result = await client.fetch(`*[_type == "servicesTwoPage"][0]`);
-//         setData(result);
-//       } catch (error) {
-//         console.error("❌ Error fetching servicesTwoPage:", error);
-//       }
-//     };
-//     fetchData();
-//   }, []);
-
-//   useEffect(() => {
-//     if (!data) return; // Prevent null error
-
-//     document.title = data.seoTitle;
-
-//     const metaDesc = document.querySelector("meta[name='description']");
-//     if (metaDesc) {
-//       metaDesc.setAttribute("content", data.seoDescription);
-//     } else {
-//       const meta = document.createElement("meta");
-//       meta.name = "description";
-//       meta.content = "Learn about our mission and team";
-//       document.head.appendChild(meta);
-//     }
-//   }, [data]); // Re-run when `data` becomes available
-
-//   const nextSlide = () => {
-//     if (!isTransitioning) {
-//       setCurrentIndex((prev) => prev + 1);
-//     }
-//   };
-
-//   const startAutoPlay = useCallback(() => {
-//     if (intervalRef.current) clearInterval(intervalRef.current);
-//     intervalRef.current = setInterval(nextSlide, 3000);
-//   }, []);
-
-//   const stopAutoPlay = useCallback(() => {
-//     clearInterval(intervalRef.current);
-//     intervalRef.current = null;
-//   }, []);
-
-//   useEffect(() => {
-//     if (data?.professionals?.length > 0) startAutoPlay();
-//     return () => stopAutoPlay();
-//   }, [data, startAutoPlay, stopAutoPlay]);
-
-//   useEffect(() => {
-//     if (!data?.professionals) return;
-//     const total = data.professionals.length;
-
-//     if (currentIndex === total) {
-//       setIsTransitioning(true);
-//       stopAutoPlay();
-
-//       const timer = setTimeout(() => {
-//         if (slideRef.current) {
-//           slideRef.current.style.transition = "none";
-//           setCurrentIndex(0);
-
-//           requestAnimationFrame(() => {
-//             if (slideRef.current) {
-//               slideRef.current.style.transition = "transform 0.5s ease";
-//               setIsTransitioning(false);
-//               startAutoPlay();
-//             }
-//           });
-//         }
-//       }, 500);
-
-//       return () => {
-//         clearTimeout(timer);
-//         setIsTransitioning(false);
-//       };
-//     }
-//   }, [currentIndex, data, stopAutoPlay, startAutoPlay]);
-
-//   const pauseAutoPlay = () => stopAutoPlay();
-//   const resumeAutoPlay = () => {
-//     if (!isTransitioning) startAutoPlay();
-//   };
-
-//   if (!data) return <div>Loading Services Page Two...</div>;
-
-//   const professionals = [...data.professionals, ...data.professionals];
-
-//   return (
-//     <>
-//       <Header />
-
-//       {/* Banner Image */}
-//       {data.serviceBannerImage?.asset && (
-//         <section
-//           className="service-container"
-//           style={{
-//             backgroundImage: `url(${urlFor(data.serviceBannerImage).url()})`,
-//             backgroundSize: "cover",
-//             backgroundPosition: "center",
-//           }}
-//         />
-//       )}
-
-//       {/* Service Info */}
-//       <section className="service-info">
-//         <div className="services-into-df">
-//           {data.servicesList?.map((service, i) => (
-//             <div key={i} className="service-info-df">
-//               <div className="service-left">
-//                 <h1>{service.title}</h1>
-//                 <p>{service.description}</p>
-//               </div>
-//               {service.image?.asset && (
-//                 <div className="service-right">
-//                   <Image
-//                     src={urlFor(service.image).url()}
-//                     width={0}
-//                     height={0}
-//                     unoptimized
-//                     alt={service.title || "Service Image"}
-//                   />
-//                 </div>
-//               )}
-//             </div>
-//           ))}
-//         </div>
-//       </section>
-
-//       {/* Key Activities */}
-//       <div className="key-container">
-//         <h1 className="key-heading">Key Activities and Outcomes</h1>
-//         <div className="key-cards-container">
-//           {data.keyActivities?.map((item, i) => (
-//             <div key={i} className="key-card">
-//               <div className="key-asterisk">*</div>
-//               <h3>{item.title}</h3>
-//               <p>{item.description}</p>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-
-//       {/* Why Work With Us */}
-//       <section className="why-work">
-//         <div className="content-two">
-//           <div className="text">
-//             <h2>Why Work With Us?</h2>
-//             {data.reasonsToWork?.map((reason, i) => (
-//               <div className="feature" key={i}>
-//                 {/* <div className="icon">✔️</div> */}
-//                 <svg
-//                   xmlns="http://www.w3.org/2000/svg"
-//                   width="16"
-//                   height="16"
-//                   fill="currentColor"
-//                   className="bi bi-check2"
-//                   viewBox="0 0 16 16"
-//                 >
-//                   <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"></path>
-//                 </svg>
-//                 <div className="info">
-//                   <h3>{reason.title}</h3>
-//                   <p>{reason.description}</p>
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//           {data.founderImage?.asset && (
-//             <div className="image-wrapper">
-//               <div className="background">
-//                 <Image
-//                   src={urlFor(data.founderImage).url()}
-//                   alt="Why Work With Us"
-//                   width={500}
-//                   height={400}
-//                   unoptimized
-//                 />
-//               </div>
-//             </div>
-//           )}
-//         </div>
-//       </section>
-
-//       {/* Professionals Carousel */}
-//       <div className="professionals-section-internals">
-//         <h1 className="professionals-heading-internals">
-//           Explore More Services
-//         </h1>
-//         <div
-//           className="carousel-container-internals"
-//           onMouseEnter={pauseAutoPlay}
-//           onMouseLeave={resumeAutoPlay}
-//         >
-//           <div
-//             className="carousel-slides-internals"
-//             ref={slideRef}
-//             // style={{ transform: `translateX(-${currentIndex * 25}%)` }}
-//             style={{
-//               transform: `translateX(-${currentIndex * (isMobile ? 100 : 25)}%)`,
-//               transition: "transform 0.5s ease", // Smooth transition
-//             }}
-//           >
-//             {professionals.map((pro, i) => (
-//               <div key={i} className="carousel-slide-internals">
-//                 <div className="professional-card-internals">
-//                   <div className="image-container-internals">
-//                     {pro?.image?.asset ? (
-//                       <Image
-//                         src={urlFor(pro.image).url()}
-//                         alt={pro.title || "Professional"}
-//                         width={300}
-//                         height={200}
-//                         unoptimized
-//                       />
-//                     ) : (
-//                       <div
-//                         style={{
-//                           width: 300,
-//                           height: 200,
-//                           backgroundColor: "#eee",
-//                           display: "flex",
-//                           alignItems: "center",
-//                           justifyContent: "center",
-//                         }}
-//                       >
-//                         <p>No Image</p>
-//                       </div>
-//                     )}
-//                   </div>
-//                   <h3>{pro.title}</h3>
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-//       </div>
-
-//       <div className="whatsapp">
-//         <a
-//           className="btn-whatsapp-pulse"
-//           target="_blank"
-//           href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
-//         >
-//           <Image
-//             src={"/whatsapp.png"}
-//             width={40}
-//             height={40}
-//             alt="Whatsapp-img"
-//             unoptimized
-//           ></Image>
-//         </a>
-//       </div>
-
-//       <div className="enquire">
-//         <button onClick={() => setShowForm(true)}>Enquire Now</button>
-//       </div>
-//       {showForm && (
-//         <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
-//           <div
-//             className="enquiry-container"
-//             onClick={(e) => e.stopPropagation()} // Prevent close on form click
-//           >
-//             <div className="enquiry-box">
-//               <div className="close-icon" onClick={() => setShowForm(false)}>
-//                 ✕
-//               </div>
-//               <h2 className="title">Quick Query</h2>
-//               <p className="subtitle">
-//                 If you have any queries, we will be pleased to assist you.
-//               </p>
-//               <form>
-//                 <input type="text" placeholder="Name" className="form-input" />
-//                 <input
-//                   type="text"
-//                   placeholder="Mobile No."
-//                   className="form-input"
-//                 />
-//                 <select className="form-input">
-//                   <option>Select Type</option>
-//                   <option>General</option>
-//                   <option>Support</option>
-//                   <option>Sales</option>
-//                 </select>
-//                 <textarea
-//                   placeholder="Query"
-//                   className="form-input"
-//                   rows="3"
-//                 ></textarea>
-
-//                 <button type="submit" className="submit-button">
-//                   Submit
-//                 </button>
-//               </form>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-
-//       <div className="upward" onClick={upwardHandler}>
-//         <svg
-//           xmlns="http://www.w3.org/2000/svg"
-//           width="16"
-//           height="16"
-//           fill="currentColor"
-//           className="bi bi-chevron-up"
-//           viewBox="0 0 16 16"
-//         >
-//           <path
-//             fillRule="evenodd"
-//             d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"
-//           />
-//         </svg>
-//       </div>
-//       <Footer />
-//     </>
-//   );
-// };
-
-// export default ServicesPageTwo;
-
 "use client";
 
 import React, { useEffect, useState, useRef, useCallback } from "react";
@@ -365,6 +7,7 @@ import Footer from "../Components/Footer/page";
 import { client } from "@/sanity/lib/client";
 import urlFor from "../helpers/sanity";
 import "./serviceInternalTwo.css";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -377,12 +20,13 @@ const ServicesPageTwo = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  // ✅ Drag states
+  // Drag states
   const [isDragging, setIsDragging] = useState(false);
-  const [startPos, setStartPos] = useState({ x: 0, y: 0 });
-  const [currentTranslate, setCurrentTranslate] = useState(0);
-  const [prevTranslate, setPrevTranslate] = useState(0);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const [filteredServices, setFilteredServices] = useState([]);
 
+  // Resize check
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -392,166 +36,249 @@ const ServicesPageTwo = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const upwardHandler = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  // Scroll to top
+  const upwardHandler = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
+  // Fetch data
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await client.fetch(`*[_type == "servicesTwoPage"][0]`);
         setData(result);
-      } catch (error) {
-        console.error("❌ Error fetching servicesTwoPage:", error);
+
+        const homepage = await client.fetch(`*[_type == "homepage"][0]`);
+        const currentPath = window.location.pathname;
+        const others = homepage.serviceBox?.filter(
+          (service) => service.boxUrl !== currentPath
+        );
+        setFilteredServices(others || []);
+      } catch (err) {
+        console.error("Error fetching:", err);
       }
     };
     fetchData();
   }, []);
 
+  // SEO
   useEffect(() => {
     if (!data) return;
     document.title = data.seoTitle;
-    const metaDesc = document.querySelector("meta[name='description']");
-    if (metaDesc) {
-      metaDesc.setAttribute("content", data.seoDescription);
-    } else {
-      const meta = document.createElement("meta");
-      meta.name = "description";
-      meta.content = "Learn about our mission and team";
-      document.head.appendChild(meta);
+    const meta = document.querySelector("meta[name='description']");
+    if (meta) meta.content = data.seoDescription;
+    else {
+      const newMeta = document.createElement("meta");
+      newMeta.name = "description";
+      newMeta.content = data.seoDescription || "";
+      document.head.appendChild(newMeta);
     }
   }, [data]);
 
-  const nextSlide = () => {
-    if (!isTransitioning) setCurrentIndex((prev) => prev + 1);
-  };
+  // Carousel total slides
+  const totalSlides = filteredServices.length || 1;
+  const slidesToShow = [...filteredServices, ...filteredServices];
+
+  // Auto-play
+  const nextSlide = useCallback(() => {
+    if (!isTransitioning && !isDragging) {
+      setCurrentIndex((prev) => prev + 1);
+    }
+  }, [isTransitioning, isDragging]);
 
   const startAutoPlay = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(nextSlide, 3000);
-  }, []);
+  }, [nextSlide]);
 
   const stopAutoPlay = useCallback(() => {
-    clearInterval(intervalRef.current);
-    intervalRef.current = null;
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
   }, []);
 
   useEffect(() => {
-    if (data?.professionals?.length > 0) startAutoPlay();
+    if (filteredServices.length > 0 && !isDragging) {
+      startAutoPlay();
+    }
     return () => stopAutoPlay();
-  }, [data, startAutoPlay, stopAutoPlay]);
+  }, [filteredServices, startAutoPlay, stopAutoPlay, isDragging]);
 
+  // Handle infinite loop
   useEffect(() => {
-    if (!data?.professionals) return;
-    const total = data.professionals.length;
-    if (currentIndex === total) {
+    if (currentIndex >= totalSlides && totalSlides > 0) {
       setIsTransitioning(true);
       stopAutoPlay();
+
       const timer = setTimeout(() => {
         if (slideRef.current) {
           slideRef.current.style.transition = "none";
           setCurrentIndex(0);
+
           requestAnimationFrame(() => {
             if (slideRef.current) {
-              slideRef.current.style.transition = "transform 0.5s ease";
+              slideRef.current.style.transition = "transform 0.5s ease-in-out";
               setIsTransitioning(false);
-              startAutoPlay();
+              if (!isDragging) startAutoPlay();
             }
           });
         }
       }, 500);
+
       return () => {
         clearTimeout(timer);
         setIsTransitioning(false);
       };
     }
-  }, [currentIndex, data, stopAutoPlay, startAutoPlay]);
+  }, [currentIndex, totalSlides, stopAutoPlay, startAutoPlay, isDragging]);
 
-  const pauseAutoPlay = () => stopAutoPlay();
-  const resumeAutoPlay = () => !isTransitioning && startAutoPlay();
+  // Get position helper
+  const getPositionX = (e) => {
+    return e.type.includes("mouse") ? e.clientX : e.touches[0].clientX;
+  };
 
-  // ✅ Drag handlers
-  const getPositionX = (event) =>
-    event.type.includes("mouse") ? event.clientX : event.touches[0].clientX;
+  // Drag handlers
+  const handleDragStart = (e) => {
+    if (e.type === "mousedown") {
+      e.preventDefault();
+    }
 
-  const dragStart = (event) => {
-    if (event.type === "mousedown") event.preventDefault();
     setIsDragging(true);
     stopAutoPlay();
-    const posX = getPositionX(event);
-    setStartPos({ x: posX, y: 0 });
-    setCurrentTranslate(prevTranslate);
-    if (slideRef.current) slideRef.current.style.transition = "none";
-  };
 
-  const dragMove = (event) => {
-    if (!isDragging) return;
-    const currentPosition = getPositionX(event);
-    const diff = currentPosition - startPos.x;
-    setCurrentTranslate(prevTranslate + diff);
+    const x = getPositionX(e);
+    setStartX(x);
+
     if (slideRef.current) {
-      const slideWidth = isMobile ? 100 : 25;
-      const baseTransform = -currentIndex * slideWidth;
-      const dragOffset = (diff / slideRef.current.offsetWidth) * slideWidth;
-      slideRef.current.style.transform = `translateX(${baseTransform + dragOffset}%)`;
+      slideRef.current.style.transition = "none";
+      slideRef.current.style.cursor = "grabbing";
     }
   };
 
-  const dragEnd = () => {
-    if (!isDragging) return;
+  const handleDragMove = useCallback(
+    (e) => {
+      if (!isDragging || !slideRef.current) return;
+
+      e.preventDefault();
+      const x = getPositionX(e);
+      const diff = x - startX;
+
+      // Calculate current position
+      const slideWidth = isMobile ? 100 : 25;
+      const currentTransform = -currentIndex * slideWidth;
+      const dragOffset = (diff / slideRef.current.offsetWidth) * slideWidth;
+
+      // Apply transform with drag offset
+      slideRef.current.style.transform = `translateX(${currentTransform + dragOffset}%)`;
+    },
+    [isDragging, startX, currentIndex, isMobile]
+  );
+
+  const handleDragEnd = useCallback(() => {
+    if (!isDragging || !slideRef.current) return;
+
     setIsDragging(false);
-    const movedBy = currentTranslate - prevTranslate;
-    const threshold = 50;
-    if (Math.abs(movedBy) > threshold) {
-      if (movedBy < 0 && currentIndex < data.professionals.length - 1) {
-        setCurrentIndex((prev) => prev + 1);
-      } else if (movedBy > 0 && currentIndex > 0) {
-        setCurrentIndex((prev) => prev - 1);
+
+    // Calculate drag distance
+    const slideWidth = slideRef.current.offsetWidth;
+    const dragThreshold = slideWidth * 0.2; // 20% of slide width
+
+    // Get current transform value
+    const transform = slideRef.current.style.transform;
+    const currentTransform = transform.match(/-?\d+\.?\d*/);
+    const currentPos = currentTransform ? parseFloat(currentTransform[0]) : 0;
+
+    // Calculate expected position
+    const expectedPos = -currentIndex * (isMobile ? 100 : 25);
+    const dragDistance = currentPos - expectedPos;
+
+    // Determine direction and update index
+    let newIndex = currentIndex;
+
+    if (Math.abs(dragDistance) > (isMobile ? 20 : 5)) {
+      // Threshold in percentage
+      if (dragDistance > 0 && currentIndex > 0) {
+        // Dragged right, go to previous
+        newIndex = currentIndex - 1;
+      } else if (dragDistance < 0 && currentIndex < totalSlides - 1) {
+        // Dragged left, go to next
+        newIndex = currentIndex + 1;
       }
     }
-    setCurrentTranslate(0);
-    setPrevTranslate(0);
-    if (slideRef.current)
-      slideRef.current.style.transition = "transform 0.5s ease";
+
+    // Reset styles
+    slideRef.current.style.transition = "transform 0.3s ease-out";
+    slideRef.current.style.cursor = "grab";
+
+    // Update index
+    setCurrentIndex(newIndex);
+
+    // Restart autoplay after delay
     setTimeout(() => {
-      if (!isTransitioning) startAutoPlay();
-    }, 1000);
+      if (!isTransitioning) {
+        startAutoPlay();
+      }
+    }, 300);
+  }, [
+    isDragging,
+    currentIndex,
+    totalSlides,
+    isMobile,
+    isTransitioning,
+    startAutoPlay,
+  ]);
+
+  // Event listeners for drag
+  useEffect(() => {
+    if (isDragging) {
+      const handleMouseMove = (e) => handleDragMove(e);
+      const handleMouseUp = () => handleDragEnd();
+      const handleTouchMove = (e) => handleDragMove(e);
+      const handleTouchEnd = () => handleDragEnd();
+
+      document.addEventListener("mousemove", handleMouseMove, {
+        passive: false,
+      });
+      document.addEventListener("mouseup", handleMouseUp);
+      document.addEventListener("touchmove", handleTouchMove, {
+        passive: false,
+      });
+      document.addEventListener("touchend", handleTouchEnd);
+
+      return () => {
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+        document.removeEventListener("touchmove", handleTouchMove);
+        document.removeEventListener("touchend", handleTouchEnd);
+      };
+    }
+  }, [isDragging, handleDragMove, handleDragEnd]);
+
+  // Prevent context menu on long press
+  useEffect(() => {
+    const preventContextMenu = (e) => {
+      if (isDragging) {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener("contextmenu", preventContextMenu);
+    return () =>
+      document.removeEventListener("contextmenu", preventContextMenu);
+  }, [isDragging]);
+
+  const pauseAutoPlay = () => stopAutoPlay();
+  const resumeAutoPlay = () => {
+    if (!isTransitioning && !isDragging) {
+      startAutoPlay();
+    }
   };
 
-  // ✅ Event listeners for drag
-  useEffect(() => {
-    const carousel = slideRef.current;
-    if (!carousel) return;
-
-    const handleMouseMove = (e) => dragMove(e);
-    const handleMouseUp = () => dragEnd();
-    const handleTouchMove = (e) => dragMove(e);
-    const handleTouchEnd = () => dragEnd();
-
-    if (isDragging) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-      document.addEventListener("touchmove", handleTouchMove);
-      document.addEventListener("touchend", handleTouchEnd);
-    }
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-      document.removeEventListener("touchmove", handleTouchMove);
-      document.removeEventListener("touchend", handleTouchEnd);
-    };
-  }, [isDragging, dragMove, dragEnd]);
-
   if (!data) return <div>Loading Services Page Two...</div>;
-
-  const professionals = [...data.professionals, ...data.professionals];
 
   return (
     <>
       <Header />
 
-      {/* Banner */}
       {data.serviceBannerImage?.asset && (
         <section
           className="service-container"
@@ -563,7 +290,6 @@ const ServicesPageTwo = () => {
         />
       )}
 
-      {/* Service Info */}
       <section className="service-info">
         <div className="services-into-df">
           {data.servicesList?.map((service, i) => (
@@ -579,7 +305,7 @@ const ServicesPageTwo = () => {
                     width={0}
                     height={0}
                     unoptimized
-                    alt={service.title || "Service Image"}
+                    alt={service.title}
                   />
                 </div>
               )}
@@ -588,7 +314,6 @@ const ServicesPageTwo = () => {
         </div>
       </section>
 
-      {/* Key Activities */}
       <div className="key-container">
         <h1 className="key-heading">Key Activities and Outcomes</h1>
         <div className="key-cards-container">
@@ -602,7 +327,6 @@ const ServicesPageTwo = () => {
         </div>
       </div>
 
-      {/* Why Work With Us */}
       <section className="why-work">
         <div className="content-two">
           <div className="text">
@@ -614,10 +338,8 @@ const ServicesPageTwo = () => {
                   width="16"
                   height="16"
                   fill="currentColor"
-                  className="bi bi-check2"
-                  viewBox="0 0 16 16"
                 >
-                  <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"></path>
+                  <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
                 </svg>
                 <div className="info">
                   <h3>{reason.title}</h3>
@@ -628,21 +350,18 @@ const ServicesPageTwo = () => {
           </div>
           {data.founderImage?.asset && (
             <div className="image-wrapper">
-              <div className="background">
-                <Image
-                  src={urlFor(data.founderImage).url()}
-                  alt="Why Work With Us"
-                  width={500}
-                  height={400}
-                  unoptimized
-                />
-              </div>
+              <Image
+                src={urlFor(data.founderImage).url()}
+                alt="Why Work With Us"
+                width={500}
+                height={400}
+                unoptimized
+              />
             </div>
           )}
         </div>
       </section>
 
-      {/* Professionals Carousel with DRAG */}
       <div className="professionals-section-internals">
         <h1 className="professionals-heading-internals">
           Explore More Services
@@ -657,49 +376,61 @@ const ServicesPageTwo = () => {
             ref={slideRef}
             style={{
               transform: `translateX(-${currentIndex * (isMobile ? 100 : 25)}%)`,
-              transition: isDragging ? "none" : "transform 0.5s ease",
+              transition: isDragging ? "none" : "transform 0.5s ease-in-out",
               cursor: isDragging ? "grabbing" : "grab",
+              userSelect: "none",
+              WebkitUserSelect: "none",
+              MozUserSelect: "none",
+              msUserSelect: "none",
             }}
-            onMouseDown={dragStart}
-            onTouchStart={dragStart}
+            onMouseDown={handleDragStart}
+            onTouchStart={handleDragStart}
           >
-            {professionals.map((pro, i) => (
-              <div key={i} className="carousel-slide-internals">
-                <div className="professional-card-internals">
-                  <div className="image-container-internals">
-                    {pro?.image?.asset ? (
-                      <Image
-                        src={urlFor(pro.image).url()}
-                        alt={pro.title || "Professional"}
-                        width={300}
-                        height={200}
-                        unoptimized
-                        draggable={false}
-                      />
-                    ) : (
-                      <div
-                        style={{
-                          width: 300,
-                          height: 200,
-                          backgroundColor: "#eee",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <p>No Image</p>
-                      </div>
-                    )}
+            {slidesToShow.map((service, i) => (
+              <Link key={i} id="redirection-service" href={service.boxUrl}>
+                <div className="carousel-slide-internals">
+                  <div className="professional-card-internals">
+                    <div className="image-container-internals">
+                      {service?.serviceBoxImg?.asset ? (
+                        <Image
+                          src={urlFor(service.serviceBoxImg).url()}
+                          alt={service.serviceBoxTitle}
+                          width={300}
+                          height={200}
+                          unoptimized
+                          draggable={false}
+                          style={{
+                            pointerEvents: isDragging ? "none" : "auto",
+                            userSelect: "none",
+                          }}
+                        />
+                      ) : (
+                        <div
+                          style={{
+                            width: 300,
+                            height: 200,
+                            background: "#eee",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            userSelect: "none",
+                          }}
+                        >
+                          <p>No Image</p>
+                        </div>
+                      )}
+                    </div>
+                    <h3 style={{ userSelect: "none" }}>
+                      {service.serviceBoxTitle}
+                    </h3>
                   </div>
-                  <h3>{pro.title}</h3>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Whatsapp & Enquire */}
       <div className="whatsapp">
         <a
           className="btn-whatsapp-pulse"
@@ -766,6 +497,83 @@ const ServicesPageTwo = () => {
           width="16"
           height="16"
           fill="currentColor"
+        >
+          <path
+            fillRule="evenodd"
+            d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"
+          />
+        </svg>
+      </div>
+
+      <Footer />
+
+      <div className="whatsapp">
+        <a
+          className="btn-whatsapp-pulse"
+          target="_blank"
+          href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
+        >
+          <Image
+            src={"/whatsapp.png"}
+            width={40}
+            height={40}
+            alt="Whatsapp-img"
+            unoptimized
+          ></Image>
+        </a>
+      </div>
+
+      <div className="enquire">
+        <button onClick={() => setShowForm(true)}>Enquire Now</button>
+      </div>
+      {showForm && (
+        <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
+          <div
+            className="enquiry-container"
+            onClick={(e) => e.stopPropagation()} // Prevent close on form click
+          >
+            <div className="enquiry-box">
+              <div className="close-icon" onClick={() => setShowForm(false)}>
+                ✕
+              </div>
+              <h2 className="title">Quick Query</h2>
+              <p className="subtitle">
+                If you have any queries, we will be pleased to assist you.
+              </p>
+              <form>
+                <input type="text" placeholder="Name" className="form-input" />
+                <input
+                  type="text"
+                  placeholder="Mobile No."
+                  className="form-input"
+                />
+                <select className="form-input">
+                  <option>Select Type</option>
+                  <option>General</option>
+                  <option>Support</option>
+                  <option>Sales</option>
+                </select>
+                <textarea
+                  placeholder="Query"
+                  className="form-input"
+                  rows="3"
+                ></textarea>
+
+                <button type="submit" className="submit-button">
+                  Submit
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="upward" onClick={upwardHandler}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
           className="bi bi-chevron-up"
           viewBox="0 0 16 16"
         >
@@ -775,7 +583,6 @@ const ServicesPageTwo = () => {
           />
         </svg>
       </div>
-      <Footer />
     </>
   );
 };

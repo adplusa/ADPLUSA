@@ -704,11 +704,11 @@
   border-bottom: 1px solid #f0d8d2;
 }
 
-.feature-main-service-page svg {
+/* .feature-main-service-page svg {
   width: 24px;
   height: 24px;
   stroke: #000;
-}
+} */
 
 .info-main-service-page h3 {
   font-size: 20px;
