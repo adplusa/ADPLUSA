@@ -1112,24 +1112,6 @@ span.service-two-bottom-box-logo {
   }
 }
 
-@media (max-width: 768px) {
-  .process-steps-df {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .process-steps-box::before {
-    width: 2px;
-    height: 50px;
-    left: 50%;
-    top: 100%;
-  }
-
-  .process-steps-box:last-child::before {
-    display: none;
-  }
-}
-
 .rto-section {
   padding: 60px 9%;
   position: relative;
@@ -2468,5 +2450,73 @@ select#service {
   .icon {
     font-size: 15px;
     width: 47px;
+  }
+
+  .process-steps-df {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .process-steps-box::before {
+    width: 2px;
+    height: 50px;
+    left: 50%;
+    top: 100%;
+  }
+
+  .process-steps-box:last-child::before {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1000px) and (max-width: 1400px) {
+  .text {
+    max-width: 50 x0px !important;
+  }
+
+  button.prev-button,
+  button.next-button {
+    width: 35px;
+    height: 35px;
+  }
+
+  button.prev-button svg,
+  button.next-button svg {
+    width: 13px;
+    height: 13px;
+  }
+  .founder-description p,
+  .founder-description-two p {
+    font-size: 15px;
+  }
+
+  .image-wrapper-home img {
+    width: 350px;
+  }
+}
+
+@media screen and (min-width: 770px) and (max-width: 1000px) {
+  .text {
+    max-width: 400px !important;
+  }
+
+  button.prev-button,
+  button.next-button {
+    width: 35px;
+    height: 35px;
+  }
+
+  button.prev-button svg,
+  button.next-button svg {
+    width: 13px;
+    height: 13px;
+  }
+  .founder-description p,
+  .founder-description-two p {
+    font-size: 14px;
+  }
+
+  .image-wrapper-home img {
+    width: 300px;
   }
 }

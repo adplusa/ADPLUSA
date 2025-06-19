@@ -246,6 +246,7 @@ export default function Home() {
     checkAndAnimate();
   };
 
+  // Meta Description
   useEffect(() => {
     if (!homepageData || homepageData.length === 0) return;
 
