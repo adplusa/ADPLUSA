@@ -179,7 +179,7 @@
   position: absolute;
   bottom: -10px;
   left: 0;
-  background-color: #902b2c;
+  background-color: var(--redWhiteColor);
   width: 150px;
   height: 2px;
 }
@@ -2314,7 +2314,7 @@ select#service {
     position: absolute;
     left: 8%;
     transform: translateX(-50%);
-    background-color: #902b2c;
+    background-color: var(--redWhiteColor);
     bottom: -7px;
     width: 50px;
   }
