@@ -207,11 +207,8 @@ const ContactPage = () => {
             <h2>{data?.whyWorkWithUsHeading}</h2>
             {data?.whyWorkWithUsItems?.map((item, idx) => (
               <div className="feature" key={idx}>
-                {/* <div className="icon">{item.icon}</div> */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
                   fill="currentColor"
                   className="bi bi-check2"
                   viewBox="0 0 16 16"
@@ -243,29 +240,22 @@ const ContactPage = () => {
 
       <Footer />
 
-      {/* WhatsApp CTA */}
-      {data?.whatsappNumber && (
-        <div className="whatsapp">
-          <a
-            className="btn-whatsapp-pulse"
-            target="_blank"
-            rel="noopener noreferrer"
-            href={`https://wa.me/${data.whatsappNumber}?text=${encodeURIComponent(
-              data.whatsappText || ""
-            )}`}
-          >
-            <Image
-              src="/whatsapp.png"
-              width={40}
-              height={40}
-              alt="WhatsApp"
-              unoptimized
-            />
-          </a>
-        </div>
-      )}
+      <div className="whatsapp">
+        <a
+          className="btn-whatsapp-pulse"
+          target="_blank"
+          href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
+        >
+          <Image
+            src={"/whatsapp.png"}
+            width={40}
+            height={40}
+            alt="Whatsapp-img"
+            unoptimized
+          ></Image>
+        </a>
+      </div>
 
-      {/* Enquire Button */}
       <div className="enquire">
         <button onClick={() => setShowForm(true)}>Enquire Now</button>
       </div>
@@ -311,24 +301,21 @@ const ContactPage = () => {
         </div>
       )}
 
-      {/* Upward Scroll */}
-      {data.showScrollToTop && (
-        <div className="upward" onClick={upwardHandler}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            className="bi bi-chevron-up"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fillRule="evenodd"
-              d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"
-            />
-          </svg>
-        </div>
-      )}
+      <div className="upward" onClick={upwardHandler}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          className="bi bi-chevron-up"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fillRule="evenodd"
+            d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"
+          />
+        </svg>
+      </div>
     </>
   );
 };

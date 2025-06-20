@@ -14,7 +14,7 @@
 
 .faq-head hr {
   width: 40%;
-  border: 1px solid #8b0d0a;
+  border: 1px solid var(--redWhiteColor);
   margin-top: 2%;
 }
 
@@ -80,7 +80,7 @@
 }
 
 .chat-link {
-  color: #8a0d0f;
+  color: var(--redWhiteColor);
   text-decoration: underline;
   cursor: pointer;
 }

@@ -6,6 +6,7 @@ export const servicesInternalFourPage = defineType({
   title: "Services Internal Page Four",
   type: "document",
   fields: [
+    // ✅ SEO fields
     defineField({
       name: "seoTitle",
       title: "SEO Title",
@@ -16,26 +17,29 @@ export const servicesInternalFourPage = defineType({
       title: "SEO Description",
       type: "string",
     }),
+
+    // ✅ Page title (optional)
     defineField({
       name: "title",
-      type: "string",
       title: "Page Title",
+      type: "string",
     }),
 
+    // ✅ Banner image
     defineField({
       name: "serviceBannerImage",
-      title: "Select Image For Banner",
+      title: "Banner Image",
       type: "image",
       options: { hotspot: true },
     }),
 
-    // 🛠️ Services List with Link Options
+    // ✅ Services list (used in .service-info section)
     defineField({
       name: "servicesList",
       title: "Services Offered",
       type: "array",
       of: [
-        defineField({
+        {
           type: "object",
           fields: [
             { name: "title", type: "string", title: "Service Title" },
@@ -47,69 +51,18 @@ export const servicesInternalFourPage = defineType({
               options: { hotspot: true },
               fields: [{ name: "alt", type: "string", title: "Alt Text" }],
             },
-            {
-              name: "link",
-              type: "string",
-              title: "Link URL",
-              description:
-                "Optional: Add a link to redirect when clicked (e.g., /services/web-design or https://example.com)",
-            },
-            {
-              name: "isExternal",
-              type: "boolean",
-              title: "Is External Link?",
-              description:
-                "Check if this is an external link (opens in new tab)",
-              initialValue: false,
-            },
           ],
-        }),
+        },
       ],
     }),
 
-    // 🎠 Carousel Professionals with Link Options
-    // defineField({
-    //   name: "professionals",
-    //   title: "Professional Roles Carousel",
-    //   type: "array",
-    //   of: [
-    //     defineField({
-    //       type: "object",
-    //       fields: [
-    //         { name: "title", type: "string", title: "Title" },
-    //         {
-    //           name: "image",
-    //           type: "image",
-    //           title: "Image",
-    //           options: { hotspot: true },
-    //         },
-    //         {
-    //           name: "link",
-    //           type: "string",
-    //           title: "Link URL",
-    //           description:
-    //             "Optional: Add a link to redirect when clicked (e.g., /services/consulting or https://example.com)",
-    //         },
-    //         {
-    //           name: "isExternal",
-    //           type: "boolean",
-    //           title: "Is External Link?",
-    //           description:
-    //             "Check if this is an external link (opens in new tab)",
-    //           initialValue: false,
-    //         },
-    //       ],
-    //     }),
-    //   ],
-    // }),
-
-    // 🎯 Key Activities in Schematic Design
+    // ✅ Key activities section
     defineField({
       name: "keyActivities",
       title: "Key Activities",
       type: "array",
       of: [
-        defineField({
+        {
           type: "object",
           fields: [
             { name: "title", type: "string", title: "Activity Title" },
@@ -119,14 +72,14 @@ export const servicesInternalFourPage = defineType({
               title: "Activity Description",
             },
           ],
-        }),
+        },
       ],
     }),
 
-    // 🚀 Why Work With Us Features
+    // ✅ Why Work With Us section
     defineField({
       name: "founderImage",
-      title: "Founder Image",
+      title: "Why Work With Us Image",
       type: "image",
       options: { hotspot: true },
     }),
@@ -135,13 +88,13 @@ export const servicesInternalFourPage = defineType({
       title: "Reasons To Work With Us",
       type: "array",
       of: [
-        defineField({
+        {
           type: "object",
           fields: [
-            { name: "title", type: "string", title: "Title" },
-            { name: "description", type: "text", title: "Description" },
+            { name: "title", type: "string", title: "Reason Title" },
+            { name: "description", type: "text", title: "Reason Description" },
           ],
-        }),
+        },
       ],
     }),
   ],

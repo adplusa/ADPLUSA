@@ -308,16 +308,6 @@
   line-height: 1.5;
 }
 
-.feature svg {
-  width: 24px; /* or some larger size */
-  height: 24px;
-  stroke: #000;
-}
-
-.feature:nth-child(2) svg {
-  width: 32px; /* inconsistent override */
-}
-
 .why-work-main-service {
   padding: 40px 5%;
   background: var(--backgroundColor);

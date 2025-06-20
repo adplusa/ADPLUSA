@@ -4,8 +4,8 @@ export const servicesInternalOnePage = defineType({
   name: "servicesOnePage",
   title: "Services Internal Page One",
   type: "document",
-
   fields: [
+    // ✅ SEO
     defineField({
       name: "seoTitle",
       title: "SEO Title",
@@ -16,20 +16,23 @@ export const servicesInternalOnePage = defineType({
       title: "SEO Description",
       type: "string",
     }),
+
+    // ✅ Optional Page Title (not used in code but good to have)
     defineField({
       name: "title",
-      type: "string",
       title: "Page Title",
+      type: "string",
     }),
 
+    // ✅ Hero Banner Image
     defineField({
       name: "serviceBannerImage",
-      title: "Select Image For Banner",
+      title: "Banner Image",
       type: "image",
       options: { hotspot: true },
     }),
 
-    // 🛠️ Services List with Link Options
+    // ✅ Services List
     defineField({
       name: "servicesList",
       title: "Services Offered",
@@ -52,14 +55,13 @@ export const servicesInternalOnePage = defineType({
               type: "string",
               title: "Link URL",
               description:
-                "Optional: Add a link to redirect when clicked (e.g., /services/web-design or https://example.com)",
+                "Optional: Internal (/page) or External (https://...)",
             },
             {
               name: "isExternal",
               type: "boolean",
               title: "Is External Link?",
-              description:
-                "Check if this is an external link (opens in new tab)",
+              description: "Open in new tab if external",
               initialValue: false,
             },
           ],
@@ -67,43 +69,7 @@ export const servicesInternalOnePage = defineType({
       ],
     }),
 
-    // 🎠 Carousel Professionals with Link Options
-    // defineField({
-    //   name: "professionals",
-    //   title: "Professional Roles Carousel",
-    //   type: "array",
-    //   of: [
-    //     defineField({
-    //       type: "object",
-    //       fields: [
-    //         { name: "title", type: "string", title: "Title" },
-    //         {
-    //           name: "image",
-    //           type: "image",
-    //           title: "Image",
-    //           options: { hotspot: true },
-    //         },
-    //         {
-    //           name: "link",
-    //           type: "string",
-    //           title: "Link URL",
-    //           description:
-    //             "Optional: Add a link to redirect when clicked (e.g., /services/consulting or https://example.com)",
-    //         },
-    //         {
-    //           name: "isExternal",
-    //           type: "boolean",
-    //           title: "Is External Link?",
-    //           description:
-    //             "Check if this is an external link (opens in new tab)",
-    //           initialValue: false,
-    //         },
-    //       ],
-    //     }),
-    //   ],
-    // }),
-
-    // 🎯 Key Activities in Schematic Design
+    // ✅ Key Activities Section
     defineField({
       name: "keyActivities",
       title: "Key Activities",
@@ -123,10 +89,10 @@ export const servicesInternalOnePage = defineType({
       ],
     }),
 
-    // 🚀 Why Work With Us Features
+    // ✅ Why Work With Us Section
     defineField({
       name: "founderImage",
-      title: "Founder Image",
+      title: "Why Work With Us Image",
       type: "image",
       options: { hotspot: true },
     }),
@@ -138,8 +104,8 @@ export const servicesInternalOnePage = defineType({
         defineField({
           type: "object",
           fields: [
-            { name: "title", type: "string", title: "Title" },
-            { name: "description", type: "text", title: "Description" },
+            { name: "title", type: "string", title: "Reason Title" },
+            { name: "description", type: "text", title: "Reason Description" },
           ],
         }),
       ],

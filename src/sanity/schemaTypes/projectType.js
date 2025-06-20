@@ -1,4 +1,5 @@
-// schemas/projectPage.ts (or .js)
+// schemas/projectPage.js (or .ts)
+
 import { defineField, defineType } from "sanity";
 
 export const projectPage = defineType({
@@ -16,18 +17,14 @@ export const projectPage = defineType({
       title: "SEO Description",
       type: "string",
     }),
-
-    // Heading
     defineField({
       name: "heading",
       title: "Main Heading",
       type: "string",
     }),
-
-    // Project Grid Section
     defineField({
       name: "projects",
-      title: "Project Grid",
+      title: "Projects Grid",
       type: "array",
       of: [
         defineField({
@@ -45,18 +42,10 @@ export const projectPage = defineType({
               options: { hotspot: true },
             }),
             defineField({
-              name: "slug",
-              title: "Slug",
-              type: "slug",
-              options: {
-                source: "title",
-                maxLength: 96,
-              },
-            }),
-            defineField({
               name: "link",
               title: "Project Link",
               type: "url",
+              description: "Can be internal or external URL",
               validation: (Rule) =>
                 Rule.uri({
                   allowRelative: true,
@@ -69,3 +58,5 @@ export const projectPage = defineType({
     }),
   ],
 });
+
+export default projectPage;

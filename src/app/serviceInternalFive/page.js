@@ -258,6 +258,54 @@ const ServicesPageFive = () => {
         </div>
       </section>
 
+      <div className="key-container">
+        <h1 className="key-heading">Key Activities and Outcomes</h1>
+        <div className="key-cards-container">
+          {data.keyActivities?.map((item, i) => (
+            <div key={i} className="key-card">
+              <div className="key-asterisk">*</div>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <section className="why-work">
+        <div className="content-two">
+          <div className="text">
+            <h2>Why Work With Us?</h2>
+            {data.reasonsToWork?.map((reason, i) => (
+              <div className="feature" key={i}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                >
+                  <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
+                </svg>
+                <div className="info">
+                  <h3>{reason.title}</h3>
+                  <p>{reason.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          {data.founderImage?.asset && (
+            <div className="image-wrapper">
+              <Image
+                src={urlFor(data.founderImage).url()}
+                alt="Founder Image"
+                width={500}
+                height={500}
+                unoptimized
+              />
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* Carousel */}
       <div className="professionals-section-internals">
         <h1 className="professionals-heading-internals">

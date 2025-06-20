@@ -293,7 +293,7 @@
   top: 0;
   width: 2%;
   height: 100%;
-  background-color: #902b2c;
+  background-color: var(--redWhiteColor);
   transition: all 0.8s cubic-bezier(0.7, -0.5, 0.2, 2);
   z-index: 0;
 }
@@ -310,7 +310,7 @@
 }
 
 .who-we-are-btn button:hover span {
-  color: white;
+  color: var(--enquireNowButtonColor);
 }
 
 .who-we-are-btn button:hover {
@@ -1172,8 +1172,8 @@ span.service-two-bottom-box-logo {
 }
 
 .number {
-  background: #902b2c;
-  color: white;
+  background: var(--redWhiteColor);
+  color: var(--enquireNowButtonColor);
   font-size: 18px;
   font-weight: bold;
   height: 40px;
@@ -1383,8 +1383,8 @@ select#service {
 }
 
 .contact-btn span:first-of-type button {
-  background-color: #902b2c;
-  color: #fff;
+  background-color: var(--redWhiteColor);
+  color: var(--enquireNowButtonColor);
   border: none;
   border-radius: 8px;
   padding: 12px 24px;
@@ -1858,7 +1858,7 @@ select#service {
   top: 0;
   width: 2%;
   height: 100%;
-  background-color: #902b2c;
+  background-color: var(--redWhiteColor);
   transition: all 0.8s cubic-bezier(0.7, -0.5, 0.2, 2);
   z-index: -1;
 }
@@ -1867,12 +1867,13 @@ select#service {
   width: 100%;
 }
 
-.service-cta:hover {
-  color: white;
+.service-cta:hover span {
+  color: var(--enquireNowButtonColor);
 }
 
 .service-cta:hover {
-  border-color: white;
+  /* border-color: var(--foreground);  */
+  color: #fff;
 }
 
 #practice-content {
@@ -2165,8 +2166,8 @@ select#service {
     font-size: 13px;
     width: 118px;
     height: 32px;
-    background-color: #902b2c;
-    color: #fff;
+    background-color: var(--redWhiteColor);
+    color: var(--foreground);
     border: none;
     margin-top: 6%;
   }
@@ -2250,7 +2251,7 @@ select#service {
   }
 
   .number {
-    background: #902b2c;
+    background: var(--foreground);
     height: 30px;
     width: 30px;
   }

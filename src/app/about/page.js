@@ -160,29 +160,22 @@ const About = () => {
 
       <Footer />
 
-      {/* WhatsApp Button */}
-      {data?.whatsappNumber && (
-        <div className="whatsapp">
-          <a
-            className="btn-whatsapp-pulse"
-            target="_blank"
-            rel="noopener noreferrer"
-            href={`https://wa.me/${data.whatsappNumber}/?text=${encodeURIComponent(
-              data.whatsappText || ""
-            )}`}
-          >
-            <Image
-              src="/whatsapp.png"
-              width={40}
-              height={40}
-              alt="Whatsapp icon"
-              unoptimized
-            />
-          </a>
-        </div>
-      )}
+      <div className="whatsapp">
+        <a
+          className="btn-whatsapp-pulse"
+          target="_blank"
+          href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
+        >
+          <Image
+            src={"/whatsapp.png"}
+            width={40}
+            height={40}
+            alt="Whatsapp-img"
+            unoptimized
+          ></Image>
+        </a>
+      </div>
 
-      {/* Enquire Button */}
       <div className="enquire">
         <button onClick={() => setShowForm(true)}>Enquire Now</button>
       </div>
@@ -228,7 +221,6 @@ const About = () => {
         </div>
       )}
 
-      {/* Upward Scroll Button */}
       <div className="upward" onClick={upwardHandler}>
         <svg
           xmlns="http://www.w3.org/2000/svg"

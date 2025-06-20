@@ -517,12 +517,15 @@ button.next-button:active {
 
 .image-container {
   width: 45%;
-  background-color: #f4b7e4;
-  border-radius: 15px;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 0 !important;
+}
+
+.image-container img {
+  object-fit: contain;
 }
 
 .outsourcing-image-one {

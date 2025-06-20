@@ -186,12 +186,12 @@ const ServiceTwo = () => {
       )}
 
       {/* Trust Section */}
-      <section className="comapany-trust">
+      {/* <section className="comapany-trust">
         <div className="comapany-trust-df">
           <h1>{data?.trustSection?.title}</h1>
           <p>{data?.trustSection?.subtitle}</p>
         </div>
-      </section>
+      </section> */}
 
       <div className="feature-section">
         <div className="feature-section-df">
@@ -269,6 +269,7 @@ const ServiceTwo = () => {
             {data?.whyWorkWithUs?.features?.map((feature, idx) => (
               <div key={idx} className="feature-main-service-page">
                 <svg
+                  id="tick"
                   xmlns="http://www.w3.org/2000/svg"
                   // width="16"
                   // height="16"

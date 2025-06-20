@@ -97,7 +97,7 @@ div#practice-box {
 
 .four-p a {
   font-size: 18px;
-  color: #8a0b10;
+  color: var(--redWhiteColor);
   font-weight: bold;
 }
 

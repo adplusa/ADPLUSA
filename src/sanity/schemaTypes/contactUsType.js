@@ -1,3 +1,4 @@
+// /schemas/contactPage.js
 import { defineType, defineField } from "sanity";
 
 export const contactPage = defineType({
@@ -5,6 +6,7 @@ export const contactPage = defineType({
   title: "Contact Page",
   type: "document",
   fields: [
+    // SEO
     defineField({
       name: "seoTitle",
       title: "SEO Title",
@@ -16,38 +18,7 @@ export const contactPage = defineType({
       type: "string",
     }),
 
-    // Contact Form Configuration
-    // defineField({
-    //   name: "formFields",
-    //   title: "Form Fields",
-    //   type: "array",
-    //   of: [
-    //     defineField({
-    //       type: "object",
-    //       name: "formField",
-    //       title: "Form Field",
-    //       fields: [
-    //         defineField({ name: "label", title: "Label", type: "string" }),
-    //         defineField({ name: "name", title: "Field Name", type: "string" }),
-    //         defineField({
-    //           name: "type",
-    //           title: "Field Type",
-    //           type: "string",
-    //           options: {
-    //             list: ["text", "email", "textarea", "checkbox"],
-    //           },
-    //         }),
-    //         defineField({
-    //           name: "required",
-    //           title: "Required",
-    //           type: "boolean",
-    //           initialValue: true,
-    //         }),
-    //       ],
-    //     }),
-    //   ],
-    // }),
-    // Contact Form Configuration
+    // Contact Form Fields
     defineField({
       name: "formFields",
       title: "Form Fields",
@@ -65,7 +36,7 @@ export const contactPage = defineType({
               title: "Field Type",
               type: "string",
               options: {
-                list: ["text", "email", "phone", "textarea", "checkbox"], // added "phone"
+                list: ["text", "email", "phone", "textarea", "checkbox"],
               },
             }),
             defineField({
@@ -79,7 +50,7 @@ export const contactPage = defineType({
       ],
     }),
 
-    // Hero section / heading
+    // Main Hero
     defineField({
       name: "mainHeading",
       title: "Main Heading",
@@ -90,6 +61,7 @@ export const contactPage = defineType({
       name: "contactImage",
       title: "Contact Image",
       type: "image",
+      options: { hotspot: true },
     }),
     defineField({
       name: "introText",
@@ -122,15 +94,15 @@ export const contactPage = defineType({
       ],
     }),
 
-    // Google Map
+    // Google Map Embed
     defineField({
       name: "googleMapEmbedUrl",
       title: "Google Map Embed URL",
       type: "url",
-      description: "Paste the embed iframe URL (only the src part)",
+      description: "Paste only the iframe `src` URL here.",
     }),
 
-    // Additional Info Section
+    // Why Work With Us
     defineField({
       name: "whyWorkWithUsHeading",
       title: "Why Work With Us - Heading",
@@ -150,7 +122,11 @@ export const contactPage = defineType({
               title: "Icon (Emoji or Text)",
               type: "string",
             }),
-            defineField({ name: "title", title: "Title", type: "string" }),
+            defineField({
+              name: "title",
+              title: "Title",
+              type: "string",
+            }),
             defineField({
               name: "description",
               title: "Description",
@@ -161,40 +137,12 @@ export const contactPage = defineType({
       ],
     }),
 
-    // Optional Section with Image
+    // Optional Right Section Image
     defineField({
       name: "rightImage",
       title: "Right Section Image",
       type: "image",
       options: { hotspot: true },
-    }),
-
-    // WhatsApp CTA Button
-    defineField({
-      name: "whatsappNumber",
-      title: "WhatsApp Number",
-      type: "string",
-    }),
-    defineField({
-      name: "whatsappText",
-      title: "WhatsApp Pre-filled Text",
-      type: "string",
-    }),
-
-    // Enquiry Button
-    defineField({
-      name: "enquiryButtonText",
-      title: "Enquiry Button Text",
-      type: "string",
-      initialValue: "Enquire Now",
-    }),
-
-    // Optional Upward Arrow Scroll Element
-    defineField({
-      name: "showScrollToTop",
-      title: "Enable Scroll-to-Top Button",
-      type: "boolean",
-      initialValue: true,
     }),
   ],
 });

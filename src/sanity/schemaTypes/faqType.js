@@ -1,3 +1,5 @@
+// schemas/faqSection.js (or .ts)
+
 import { defineType, defineField } from "sanity";
 
 export const faqSection = defineType({
@@ -15,23 +17,21 @@ export const faqSection = defineType({
       title: "SEO Description",
       type: "string",
     }),
-
     defineField({
       name: "title",
       title: "Page Title",
       type: "string",
       initialValue: "Frequently Asked Questions",
     }),
-
     defineField({
       name: "categories",
       title: "FAQ Categories",
       type: "array",
       of: [
         defineField({
-          type: "object",
           name: "faqCategory",
           title: "FAQ Category",
+          type: "object",
           fields: [
             defineField({
               name: "title",
@@ -47,8 +47,8 @@ export const faqSection = defineType({
               name: "chatLink",
               title: "Chat Link URL",
               type: "url",
+              description: "Link to chat or contact page",
               initialValue: "/contact",
-              description: "Optional link to contact or chat support page",
             }),
             defineField({
               name: "image",
@@ -62,16 +62,10 @@ export const faqSection = defineType({
               type: "array",
               of: [
                 defineField({
-                  type: "object",
                   name: "faqItem",
                   title: "FAQ Item",
+                  type: "object",
                   fields: [
-                    defineField({
-                      name: "icon",
-                      title: "Icon Keyword",
-                      type: "string",
-                      description: "e.g. heart, refresh, calendar, globe etc.",
-                    }),
                     defineField({
                       name: "question",
                       title: "Question",
@@ -92,3 +86,5 @@ export const faqSection = defineType({
     }),
   ],
 });
+
+export default faqSection;

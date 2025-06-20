@@ -23,6 +23,7 @@ const ServicesPageEight = () => {
   const [filteredServices, setFilteredServices] = useState([]);
   const [showForm, setShowForm] = useState(false);
 
+  // ✅ Handle screen size changes
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     handleResize();
@@ -32,6 +33,7 @@ const ServicesPageEight = () => {
 
   const upwardHandler = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
+  // ✅ Fetch page + related services
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,32 +41,38 @@ const ServicesPageEight = () => {
           `*[_type == "serviceInternalEightPage"][0]`
         );
         setData(result);
+
         const homepage = await client.fetch(`*[_type == "homepage"][0]`);
         const currentPath = window.location.pathname;
-        const others = homepage.serviceBox?.filter(
-          (service) => service.boxUrl !== currentPath
-        );
-        setFilteredServices(others || []);
-      } catch (error) {
-        console.error("❌ Error fetching services data:", error);
+        const others =
+          homepage.serviceBox?.filter(
+            (service) => service.boxUrl !== currentPath
+          ) || [];
+        setFilteredServices(others);
+      } catch (err) {
+        console.error("❌ Error fetching data:", err);
       }
     };
     fetchData();
   }, []);
 
+  // ✅ Inject SEO meta
   useEffect(() => {
-    if (!data) return;
-    document.title = data.seoTitle;
-    const meta = document.querySelector("meta[name='description']");
-    if (meta) meta.setAttribute("content", data.seoDescription);
-    else {
-      const m = document.createElement("meta");
-      m.name = "description";
-      m.content = data.seoDescription || "";
-      document.head.appendChild(m);
+    if (data) {
+      document.title = data.seoTitle || "";
+      let meta = document.querySelector("meta[name='description']");
+      if (meta) {
+        meta.setAttribute("content", data.seoDescription || "");
+      } else {
+        meta = document.createElement("meta");
+        meta.name = "description";
+        meta.content = data.seoDescription || "";
+        document.head.appendChild(meta);
+      }
     }
   }, [data]);
 
+  // ✅ Carousel autoplay logic
   const totalSlides = filteredServices.length || 1;
   const slidesToShow = [...filteredServices, ...filteredServices];
 
@@ -75,7 +83,7 @@ const ServicesPageEight = () => {
   }, [isTransitioning, isDragging]);
 
   const startAutoPlay = useCallback(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
+    stopAutoPlay();
     intervalRef.current = setInterval(nextSlide, 3000);
   }, [nextSlide]);
 
@@ -89,6 +97,7 @@ const ServicesPageEight = () => {
     return () => stopAutoPlay();
   }, [filteredServices, startAutoPlay, stopAutoPlay, isDragging]);
 
+  // ✅ Loop slides
   useEffect(() => {
     if (currentIndex >= totalSlides && totalSlides > 0) {
       setIsTransitioning(true);
@@ -104,13 +113,11 @@ const ServicesPageEight = () => {
           });
         }
       }, 500);
-      return () => {
-        clearTimeout(timer);
-        setIsTransitioning(false);
-      };
+      return () => clearTimeout(timer);
     }
   }, [currentIndex, totalSlides, stopAutoPlay, startAutoPlay, isDragging]);
 
+  // ✅ Drag to slide
   const getPositionX = (e) =>
     e.type.includes("mouse") ? e.clientX : e.touches[0].clientX;
 
@@ -142,6 +149,7 @@ const ServicesPageEight = () => {
   const handleDragEnd = useCallback(() => {
     if (!isDragging || !slideRef.current) return;
     setIsDragging(false);
+
     const transform = slideRef.current.style.transform;
     const currentTransform = transform.match(/-?\d+\.?\d*/);
     const currentPos = currentTransform ? parseFloat(currentTransform[0]) : 0;
@@ -160,7 +168,6 @@ const ServicesPageEight = () => {
     slideRef.current.style.transition = "transform 0.3s ease-out";
     slideRef.current.style.cursor = "grab";
     setCurrentIndex(newIndex);
-
     setTimeout(() => {
       if (!isTransitioning) startAutoPlay();
     }, 300);
@@ -173,40 +180,35 @@ const ServicesPageEight = () => {
     startAutoPlay,
   ]);
 
+  // ✅ Add drag listeners when dragging
   useEffect(() => {
     if (isDragging) {
       const move = (e) => handleDragMove(e);
       const up = () => handleDragEnd();
-      const tMove = (e) => handleDragMove(e);
-      const tEnd = () => handleDragEnd();
-
       document.addEventListener("mousemove", move, { passive: false });
       document.addEventListener("mouseup", up);
-      document.addEventListener("touchmove", tMove, { passive: false });
-      document.addEventListener("touchend", tEnd);
-
+      document.addEventListener("touchmove", move, { passive: false });
+      document.addEventListener("touchend", up);
       return () => {
         document.removeEventListener("mousemove", move);
         document.removeEventListener("mouseup", up);
-        document.removeEventListener("touchmove", tMove);
-        document.removeEventListener("touchend", tEnd);
+        document.removeEventListener("touchmove", move);
+        document.removeEventListener("touchend", up);
       };
     }
   }, [isDragging, handleDragMove, handleDragEnd]);
 
+  // ✅ Prevent context menu while dragging
   useEffect(() => {
-    const preventContextMenu = (e) => {
-      if (isDragging) e.preventDefault();
-    };
+    const preventContextMenu = (e) => isDragging && e.preventDefault();
     document.addEventListener("contextmenu", preventContextMenu);
     return () =>
       document.removeEventListener("contextmenu", preventContextMenu);
   }, [isDragging]);
 
   const pauseAutoPlay = () => stopAutoPlay();
-  const resumeAutoPlay = () => {
-    if (!isTransitioning && !isDragging) startAutoPlay();
-  };
+  const resumeAutoPlay = () =>
+    !isTransitioning && !isDragging && startAutoPlay();
 
   if (!data) return <div>Loading Services Page...</div>;
 
@@ -214,7 +216,98 @@ const ServicesPageEight = () => {
     <>
       <Header />
 
-      {/* other content remains the same */}
+      {data.serviceBannerImage?.asset && (
+        <section
+          className="service-container"
+          style={{
+            backgroundImage: `url(${urlFor(data.serviceBannerImage).url()})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+      )}
+
+      <section className="service-info">
+        <div className="services-into-df">
+          {data.servicesList?.map((service, i) => (
+            <div key={i} className="service-info-df">
+              <div className="service-left">
+                <h1>{service.title}</h1>
+                <p>{service.description}</p>
+                {service.link && (
+                  <Link
+                    href={service.link}
+                    target={service.isExternal ? "_blank" : "_self"}
+                    rel={service.isExternal ? "noopener noreferrer" : ""}
+                    className="service-link"
+                  >
+                    Learn More
+                  </Link>
+                )}
+              </div>
+              {service.image?.asset && (
+                <div className="service-right">
+                  <Image
+                    src={urlFor(service.image).url()}
+                    width={600}
+                    height={400}
+                    alt={service.image.alt || service.title}
+                    unoptimized
+                  />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <div className="key-container">
+        <h1 className="key-heading">Key Activities and Outcomes</h1>
+        <div className="key-cards-container">
+          {data.keyActivities?.map((item, i) => (
+            <div key={i} className="key-card">
+              <div className="key-asterisk">*</div>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <section className="why-work">
+        <div className="content-two">
+          <div className="text">
+            <h2>Why Work With Us?</h2>
+            {data.reasonsToWork?.map((reason, i) => (
+              <div className="feature" key={i}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                >
+                  <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
+                </svg>
+                <div className="info">
+                  <h3>{reason.title}</h3>
+                  <p>{reason.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          {data.founderImage?.asset && (
+            <div className="image-wrapper">
+              <Image
+                src={urlFor(data.founderImage).url()}
+                alt="Founder Image"
+                width={500}
+                height={500}
+                unoptimized
+              />
+            </div>
+          )}
+        </div>
+      </section>
 
       <div className="professionals-section-internals">
         <h1 className="professionals-heading-internals">
@@ -238,7 +331,11 @@ const ServicesPageEight = () => {
             onTouchStart={handleDragStart}
           >
             {slidesToShow.map((service, i) => (
-              <Link key={i} id="redirection-service" href={service.boxUrl}>
+              <Link
+                key={i}
+                href={service.boxUrl || "#"}
+                id="redirection-service"
+              >
                 <div className="carousel-slide-internals">
                   <div className="professional-card-internals">
                     <div className="image-container-internals">
@@ -289,25 +386,27 @@ const ServicesPageEight = () => {
           className="btn-whatsapp-pulse"
           target="_blank"
           href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
+          rel="noopener noreferrer"
         >
           <Image
-            src={"/whatsapp.png"}
+            src="/whatsapp.png"
             width={40}
             height={40}
-            alt="Whatsapp-img"
+            alt="Whatsapp"
             unoptimized
-          ></Image>
+          />
         </a>
       </div>
 
       <div className="enquire">
         <button onClick={() => setShowForm(true)}>Enquire Now</button>
       </div>
+
       {showForm && (
         <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
           <div
             className="enquiry-container"
-            onClick={(e) => e.stopPropagation()} // Prevent close on form click
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="enquiry-box">
               <div className="close-icon" onClick={() => setShowForm(false)}>
@@ -335,7 +434,6 @@ const ServicesPageEight = () => {
                   className="form-input"
                   rows="3"
                 ></textarea>
-
                 <button type="submit" className="submit-button">
                   Submit
                 </button>
@@ -351,8 +449,6 @@ const ServicesPageEight = () => {
           width="16"
           height="16"
           fill="currentColor"
-          className="bi bi-chevron-up"
-          viewBox="0 0 16 16"
         >
           <path
             fillRule="evenodd"

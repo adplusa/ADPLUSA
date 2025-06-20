@@ -5,6 +5,7 @@ export const mainServiceType = defineType({
   title: "Service Main Page",
   type: "document",
   fields: [
+    // ✅ SEO Meta
     defineField({
       name: "seoTitle",
       title: "SEO Title",
@@ -16,20 +17,22 @@ export const mainServiceType = defineType({
       type: "string",
     }),
 
+    // ✅ Main Title
     defineField({
       name: "title",
-      type: "string",
       title: "Page Title",
+      type: "string",
     }),
 
+    // ✅ Hero Banner
     defineField({
       name: "serviceBannerImage",
-      title: "Select Image For Banner",
+      title: "Banner Image",
       type: "image",
       options: { hotspot: true },
     }),
 
-    // Banner Green Box Content
+    // ✅ Trust Section
     // defineField({
     //   name: "trustSection",
     //   title: "Trust Section",
@@ -40,10 +43,10 @@ export const mainServiceType = defineType({
     //   ],
     // }),
 
-    // Trust Icons
+    // ✅ Trust Icons Grid
     defineField({
       name: "trustIconsHeading",
-      title: "Trust Icon Heading",
+      title: "Trust Icons Heading",
       type: "string",
     }),
     defineField({
@@ -51,72 +54,30 @@ export const mainServiceType = defineType({
       title: "Service Related Icons",
       type: "array",
       of: [
-        defineField({
+        {
           type: "object",
           fields: [
             defineField({
               name: "serviceRelatedImg",
-              title: "Service Icon Image",
+              title: "Icon Image",
               type: "image",
             }),
             defineField({
               name: "serviceRelatedNumber",
-              title: "Service Number",
+              title: "Number",
               type: "string",
             }),
             defineField({
               name: "serviceRelatedName",
-              title: "Service Name",
+              title: "Name",
               type: "string",
             }),
           ],
-        }),
+        },
       ],
     }),
 
-    // defineField({
-    //   name: "activitiesOutcomes",
-    //   title: "Activities and Outcomes",
-    //   type: "object",
-    //   fields: [
-    //     defineField({ name: "heading", title: "Heading", type: "string" }),
-    //     defineField({
-    //       name: "subheading",
-    //       title: "Subheading",
-    //       type: "string",
-    //     }),
-    //     defineField({
-    //       name: "cards",
-    //       title: "Cards",
-    //       type: "array",
-    //       of: [
-    //         defineField({
-    //           type: "object",
-    //           fields: [
-    //             defineField({
-    //               name: "icon",
-    //               title: "Icon Emoji",
-    //               type: "string",
-    //             }),
-    //             defineField({ name: "title", title: "Title", type: "string" }),
-    //             defineField({
-    //               name: "description",
-    //               title: "Description",
-    //               type: "text",
-    //             }),
-    //             defineField({
-    //               name: "cardlink",
-    //               title: "Card Link",
-    //               type: "string",
-    //             }),
-    //           ],
-    //         }),
-    //       ],
-    //     }),
-    //   ],
-    // }),
-
-    //Service Box
+    // ✅ Services Boxes
     defineField({
       name: "serviceHeading",
       title: "Service Heading",
@@ -124,33 +85,24 @@ export const mainServiceType = defineType({
     }),
     defineField({
       name: "serviceBox",
-      title: "Service Box",
+      title: "Service Boxes",
       type: "array",
       of: [
         {
           type: "object",
           fields: [
-            // {
-            //   name: "boxUrl",
-            //   title: "Service Box URL",
-            //   type: "url",
-            //   validation: (Rule) =>
-            //     Rule.uri({
-            //       scheme: ["http", "https", "mailto", "tel"],
-            //     }),
-            // },
             {
               name: "boxUrl",
               title: "Service Box URL",
-              type: "string", // ✅ change from "url" to "string"
+              type: "string",
               validation: (Rule) =>
-                Rule.required().custom((url) => {
-                  return url.startsWith("/") || "Must start with /";
-                }),
+                Rule.required().custom((url) =>
+                  url.startsWith("/") ? true : "Must start with /"
+                ),
             },
             {
               name: "serviceBoxImg",
-              title: "Service Box Img",
+              title: "Service Box Image",
               type: "image",
             },
             {
@@ -162,16 +114,11 @@ export const mainServiceType = defineType({
         },
       ],
     }),
-    defineField({
-      name: "home_services_cta",
-      title: "Service CTA",
-      type: "string",
-    }),
 
-    // Why Work With us
+    // ✅ Why Work With Us
     defineField({
       name: "whyWorkWithUs",
-      title: "Why Work With Us Section",
+      title: "Why Work With Us",
       type: "object",
       fields: [
         defineField({ name: "title", title: "Title", type: "string" }),
@@ -180,14 +127,9 @@ export const mainServiceType = defineType({
           title: "Features",
           type: "array",
           of: [
-            defineField({
+            {
               type: "object",
               fields: [
-                // defineField({
-                //   name: "icon",
-                //   title: "Icon Emoji",
-                //   type: "string",
-                // }),
                 defineField({
                   name: "title",
                   title: "Feature Title",
@@ -199,10 +141,14 @@ export const mainServiceType = defineType({
                   type: "text",
                 }),
               ],
-            }),
+            },
           ],
         }),
-        defineField({ name: "image", title: "Image", type: "image" }),
+        defineField({
+          name: "image",
+          title: "Image",
+          type: "image",
+        }),
       ],
     }),
   ],

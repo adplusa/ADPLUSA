@@ -5,6 +5,7 @@ export const aboutPage = defineType({
   title: "About Page",
   type: "document",
   fields: [
+    // 1️⃣ SEO
     defineField({
       name: "seoTitle",
       title: "SEO Title",
@@ -15,29 +16,8 @@ export const aboutPage = defineType({
       title: "SEO Description",
       type: "string",
     }),
-    defineField({
-      name: "introParagraphs",
-      title: "Introduction Paragraphs",
-      type: "array",
-      of: [{ type: "text" }],
-    }),
-    defineField({
-      name: "anchorLinks",
-      title: "Anchor Links",
-      type: "array",
-      of: [
-        defineField({
-          type: "object",
-          fields: [
-            { name: "label", title: "Link Label", type: "string" },
-            { name: "targetId", title: "Target Section ID", type: "string" },
-          ],
-        }),
-      ],
-      description: "Navigation anchors: People, Place, Process, Practice",
-    }),
 
-    // About-us Section
+    // 2️⃣ Main intro / hero
     defineField({
       name: "allowLightHeading",
       title: "Light Background Heading",
@@ -55,108 +35,56 @@ export const aboutPage = defineType({
     }),
     defineField({
       name: "paragraph",
-      title: "paragraph",
+      title: "Paragraph",
       type: "array",
       of: [{ type: "block" }],
     }),
-    // defineField({
-    //   name: "ctaButton",
-    //   title: "Button for About us Redirection section",
-    //   type: "string",
-    // }),
-    // defineField({
-    //   name: "peoplImageOne",
-    //   title: "People Image One",
-    //   type: "image",
-    //   options: {
-    //     hotspot: true,
-    //   },
-    // }),
-    // defineField({
-    //   name: "peoplImageTwo",
-    //   title: "People Image Two",
-    //   type: "image",
-    //   options: {
-    //     hotspot: true,
-    //   },
-    // }),
-    // defineField({
-    //   name: "peopleVideo",
-    //   title: "People Video",
-    //   type: "file",
-    //   options: {
-    //     accept: "video/*",
-    //   },
-    // }),
+
+    // 3️⃣ Anchor links (for nav scroll)
     defineField({
-      name: "peopleText",
-      title: "People Image Text",
-      type: "string",
+      name: "anchorLinks",
+      title: "Anchor Links",
+      description: "Navigation anchors: People, Place, Process, Practice",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            { name: "label", title: "Link Label", type: "string" },
+            { name: "targetId", title: "Target Section ID", type: "string" },
+          ],
+        },
+      ],
     }),
 
-    // Section Blocks
+    // 4️⃣ Dynamic Sections
     defineField({
       name: "sections",
       title: "Sections",
+      description: "Flexible section blocks with title, content, image",
       type: "array",
       of: [
-        defineField({
+        {
           type: "object",
           name: "aboutSection",
           title: "About Section",
           fields: [
-            defineField({
-              name: "title",
-              title: "Section Title",
+            {
+              name: "sectionId",
+              title: "Section ID (for anchor)",
               type: "string",
-            }),
-            defineField({
-              name: "body",
-              title: "Section Content",
-              type: "text",
-            }),
-            defineField({
+            },
+            { name: "title", title: "Section Title", type: "string" },
+            { name: "body", title: "Section Content", type: "text" },
+            {
               name: "image",
               title: "Section Image",
               type: "image",
               options: { hotspot: true },
-            }),
-            defineField({
-              name: "sectionId",
-              title: "Section ID (for anchor)",
-              type: "string",
-              description: "Used for in-page navigation (e.g. people-box)",
-            }),
+            },
           ],
-        }),
+        },
       ],
-    }),
-
-    // Optional WhatsApp / Enquiry Button text (if needed)
-    defineField({
-      name: "whatsappNumber",
-      title: "WhatsApp Number",
-      type: "string",
-      description: "WhatsApp number with country code",
-    }),
-    defineField({
-      name: "whatsappText",
-      title: "WhatsApp Default Message",
-      type: "string",
-    }),
-    defineField({
-      name: "enquiryButtonText",
-      title: "Enquiry Button Text",
-      type: "string",
-      initialValue: "Enquire Now",
-    }),
-
-    // Optional rotating element (if needed)
-    defineField({
-      name: "rotatingText",
-      title: "Rotating Text",
-      type: "string",
-      description: "Optional animated text for decoration",
     }),
   ],
 });

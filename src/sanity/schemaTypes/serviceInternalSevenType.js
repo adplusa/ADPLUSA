@@ -1,10 +1,13 @@
+// schemas/serviceInternalSevenPage.js
+
 import { defineField, defineType } from "sanity";
 
-const serviceInternalSevenPage = {
+const serviceInternalSevenPage = defineType({
   name: "serviceInternalSevenPage",
   title: "Services Internal Page Seven",
   type: "document",
   fields: [
+    // ✅ SEO fields
     defineField({
       name: "seoTitle",
       title: "SEO Title",
@@ -15,20 +18,23 @@ const serviceInternalSevenPage = {
       title: "SEO Description",
       type: "string",
     }),
+
+    // ✅ Optional Page Title
     defineField({
       name: "title",
-      type: "string",
       title: "Page Title",
+      type: "string",
     }),
 
+    // ✅ Banner Image
     defineField({
       name: "serviceBannerImage",
-      title: "Select Image For Banner",
+      title: "Banner Image",
       type: "image",
       options: { hotspot: true },
     }),
 
-    // 🛠️ Services List with Link Options
+    // ✅ Services List (with link)
     defineField({
       name: "servicesList",
       title: "Services Offered",
@@ -51,14 +57,13 @@ const serviceInternalSevenPage = {
               type: "string",
               title: "Link URL",
               description:
-                "Optional: Add a link to redirect when clicked (e.g., /services/web-design or https://example.com)",
+                "Optional: Redirect URL (e.g., /services/design or https://external.com)",
             },
             {
               name: "isExternal",
               type: "boolean",
               title: "Is External Link?",
-              description:
-                "Check if this is an external link (opens in new tab)",
+              description: "Check if this link is external (opens in new tab)",
               initialValue: false,
             },
           ],
@@ -66,43 +71,7 @@ const serviceInternalSevenPage = {
       ],
     }),
 
-    // 🎠 Carousel Professionals with Link Options
-    // defineField({
-    //   name: "professionals",
-    //   title: "Professional Roles Carousel",
-    //   type: "array",
-    //   of: [
-    //     defineField({
-    //       type: "object",
-    //       fields: [
-    //         { name: "title", type: "string", title: "Title" },
-    //         {
-    //           name: "image",
-    //           type: "image",
-    //           title: "Image",
-    //           options: { hotspot: true },
-    //         },
-    //         {
-    //           name: "link",
-    //           type: "string",
-    //           title: "Link URL",
-    //           description:
-    //             "Optional: Add a link to redirect when clicked (e.g., /services/consulting or https://example.com)",
-    //         },
-    //         {
-    //           name: "isExternal",
-    //           type: "boolean",
-    //           title: "Is External Link?",
-    //           description:
-    //             "Check if this is an external link (opens in new tab)",
-    //           initialValue: false,
-    //         },
-    //       ],
-    //     }),
-    //   ],
-    // }),
-
-    // 🎯 Key Activities in Schematic Design
+    // ✅ Key Activities
     defineField({
       name: "keyActivities",
       title: "Key Activities",
@@ -122,7 +91,7 @@ const serviceInternalSevenPage = {
       ],
     }),
 
-    // 🚀 Why Work With Us Features
+    // ✅ Why Work With Us
     defineField({
       name: "founderImage",
       title: "Founder Image",
@@ -137,13 +106,13 @@ const serviceInternalSevenPage = {
         defineField({
           type: "object",
           fields: [
-            { name: "title", type: "string", title: "Title" },
-            { name: "description", type: "text", title: "Description" },
+            { name: "title", type: "string", title: "Reason Title" },
+            { name: "description", type: "text", title: "Reason Description" },
           ],
         }),
       ],
     }),
   ],
-};
+});
 
 export default serviceInternalSevenPage;

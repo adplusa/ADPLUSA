@@ -64,24 +64,6 @@ export const eventType = defineType({
       ],
     },
 
-    // Image for Light and Dark Mode
-    // defineField({
-    //   name: "lightModeImage",
-    //   title: "Banner Image for Light Mode",
-    //   type: "image",
-    //   options: {
-    //     hotspot: true,
-    //   },
-    // }),
-    // defineField({
-    //   name: "darkModeImage",
-    //   title: "Banner Image for Dark Mode",
-    //   type: "image",
-    //   options: {
-    //     hotspot: true,
-    //   },
-    // }),
-
     // Trust Icons
     defineField({
       name: "trustIconsHeading",
@@ -117,39 +99,6 @@ export const eventType = defineType({
         },
       ],
     }),
-
-    // Achivement Container
-    // defineField({
-    //   name: "sectionTitle",
-    //   title: "Achievement Title",
-    //   type: "string",
-    // }),
-
-    // defineField({
-    //   name: "achievements",
-    //   title: "Achievements",
-    //   type: "array",
-    //   of: [
-    //     {
-    //       type: "object",
-    //       name: "achievementCard",
-    //       title: "Achievement Card",
-    //       fields: [
-    //         defineField({
-    //           name: "title",
-    //           title: "Title",
-    //           type: "string",
-    //         }),
-    //         defineField({
-    //           name: "number",
-    //           title: "Number",
-    //           type: "string",
-    //           description: 'Use string to allow characters like "+"',
-    //         }),
-    //       ],
-    //     },
-    //   ],
-    // }),
 
     // Services
     defineField({
@@ -192,6 +141,38 @@ export const eventType = defineType({
       name: "home_services_cta",
       title: "Service CTA",
       type: "string",
+    }),
+
+    // Technology We used
+    defineField({
+      name: "technologyHeading",
+      title: "Technology Heading",
+      type: "string",
+    }),
+    defineField({
+      name: "technologyImgs",
+      title: "Technology used images",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "technologyImage",
+              title: "Image",
+              type: "image",
+              options: {
+                hotspot: true,
+              },
+            },
+          ],
+          preview: {
+            select: {
+              media: "technologyImage",
+            },
+          },
+        },
+      ],
     }),
 
     // Working Process
@@ -238,6 +219,16 @@ export const eventType = defineType({
 
     // TEXT SLIDER
     defineField({
+      name: "sliderImage",
+      title: "Slider Icon/Image",
+      type: "image",
+      description:
+        "Optional image that appears after each text item in the marquee",
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
       name: "sliderTextOne",
       title: "Slider Text One",
       type: "string",
@@ -267,78 +258,36 @@ export const eventType = defineType({
       type: "string",
       description: "Five line of text for the scrolling marquee",
     }),
-    defineField({
-      name: "sliderImage",
-      title: "Slider Icon/Image",
-      type: "image",
-      description:
-        "Optional image that appears after each text item in the marquee",
-      options: {
-        hotspot: true,
-      },
-    }),
 
     // FAQ Section
-    defineField({
-      name: "faqHeading",
-      title: "Faq Heading",
-      type: "string",
-    }),
-    defineField({
-      name: "faq",
-      title: "FAQ",
-      type: "array",
-      of: [
-        {
-          name: "faqItems",
-          type: "object",
-          fields: [
-            {
-              name: "question",
-              title: "Question",
-              type: "string",
-            },
-            {
-              name: "answer",
-              title: "Answer",
-              type: "string",
-            },
-          ],
-        },
-      ],
-    }),
-
-    // Technology We used
-    defineField({
-      name: "technologyHeading",
-      title: "Technology Heading",
-      type: "string",
-    }),
-    defineField({
-      name: "technologyImgs",
-      title: "Technology used images",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            {
-              name: "technologyImage",
-              title: "Image",
-              type: "image",
-              options: {
-                hotspot: true,
-              },
-            },
-          ],
-          preview: {
-            select: {
-              media: "technologyImage",
-            },
-          },
-        },
-      ],
-    }),
+    // defineField({
+    //   name: "faqHeading",
+    //   title: "Faq Heading",
+    //   type: "string",
+    // }),
+    // defineField({
+    //   name: "faq",
+    //   title: "FAQ",
+    //   type: "array",
+    //   of: [
+    //     {
+    //       name: "faqItems",
+    //       type: "object",
+    //       fields: [
+    //         {
+    //           name: "question",
+    //           title: "Question",
+    //           type: "string",
+    //         },
+    //         {
+    //           name: "answer",
+    //           title: "Answer",
+    //           type: "string",
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // }),
 
     // About-us Section
     defineField({
@@ -396,13 +345,6 @@ export const eventType = defineType({
       title: "People Image Text",
       type: "string",
     }),
-
-    // Founder Slider
-    // defineField({
-    //   name: "sliderTitle",
-    //   title: "Slide Title",
-    //   type: "string",
-    // }),
 
     defineField({
       name: "founderSlider",

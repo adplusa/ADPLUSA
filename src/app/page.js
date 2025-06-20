@@ -52,6 +52,7 @@ export default function Home() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showIntro, setShowIntro] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [showScrollUp, setShowScrollUp] = useState(false);
 
   // Add this state to track if we should show animation
   const [shouldAnimate, setShouldAnimate] = useState(false);
@@ -335,10 +336,30 @@ export default function Home() {
     }
   }, []);
 
+  // upward handler
+  useEffect(() => {
+    const handleScroll = () => {
+      const hero = document.querySelector(".hero-banner");
+      if (!hero) return;
+
+      const rect = hero.getBoundingClientRect();
+      if (rect.bottom <= 0) {
+        setShowScrollUp(true);
+      } else {
+        setShowScrollUp(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // ✅ your existing upwardHandler stays same
   const upwardHandler = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // prev
   const prevSlide = () => {
     setCurrentSlideHeroBanner(
       (prev) => (prev - 1 + slides.length) % slides.length
@@ -1216,21 +1237,23 @@ export default function Home() {
                 </div>
               )}
 
-              <div className="upward" onClick={upwardHandler}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-chevron-up"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"
-                  />
-                </svg>
-              </div>
+              {showScrollUp && (
+                <div className="upward" onClick={upwardHandler}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-chevron-up"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"
+                    />
+                  </svg>
+                </div>
+              )}
             </div>
           )}
         </div>
