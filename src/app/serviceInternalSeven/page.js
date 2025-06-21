@@ -12,6 +12,8 @@ import Link from "next/link";
 export const dynamic = "force-dynamic";
 
 const ServicesPageSeven = () => {
+  const [mainServiceData, setMainServiceData] = useState(null);
+
   const [data, setData] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -48,6 +50,11 @@ const ServicesPageSeven = () => {
           (service) => service.boxUrl !== currentPath
         );
         setFilteredServices(others || []);
+
+        const mainServiceData = await client.fetch(
+          `*[_type == "serviceTwoPage"][0]`
+        );
+        setMainServiceData(mainServiceData);
       } catch (err) {
         console.error("❌ Error fetching ServicesPageSeven:", err);
       }
@@ -274,34 +281,36 @@ const ServicesPageSeven = () => {
         <div className="content-two">
           <div className="text">
             <h2>Why Work With Us?</h2>
-            {data.reasonsToWork?.map((reason, i) => (
-              <div className="feature" key={i}>
+            {mainServiceData?.whyWorkWithUs?.features?.map((feature, idx) => (
+              <div key={idx} className="feature-main-service-page">
                 <svg
+                  id="tick"
                   xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
+                  // width="16"
+                  // height="16"
                   fill="currentColor"
+                  className="bi bi-check2"
+                  viewBox="0 0 16 16"
                 >
-                  <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
+                  <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"></path>
                 </svg>
-                <div className="info">
-                  <h3>{reason.title}</h3>
-                  <p>{reason.description}</p>
+                <div className="info-main-service-page">
+                  <h3>{feature.title}</h3>
+                  <p>{feature.description}</p>
                 </div>
               </div>
             ))}
           </div>
-          {data.founderImage?.asset && (
-            <div className="image-wrapper">
+          <div className="image-wrapper-main-service-page">
+            {mainServiceData?.whyWorkWithUs?.image?.asset && (
               <Image
-                src={urlFor(data.founderImage).url()}
-                alt="Founder Image"
+                src={urlFor(mainServiceData.whyWorkWithUs.image).url()}
+                alt="Why Work Image"
                 width={500}
-                height={500}
-                unoptimized
+                height={400}
               />
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </section>
 

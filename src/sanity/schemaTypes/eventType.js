@@ -137,6 +137,40 @@ export const eventType = defineType({
         },
       ],
     }),
+
+    // Dark Mode Images for Services image
+    defineField({
+      name: "serviceBoxDarkMode",
+      title: "Service Box Dark Mode",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "boxUrl",
+              title: "Service Box URL",
+              type: "string",
+              validation: (Rule) =>
+                Rule.required().custom((url) => {
+                  return url.startsWith("/") || "Must Have start with /";
+                }),
+            },
+            {
+              name: "serviceBoxImg",
+              title: "Service Box Img",
+              type: "image",
+            },
+            {
+              name: "serviceBoxTitle",
+              title: "Service Box Title",
+              type: "string",
+            },
+          ],
+        },
+      ],
+    }),
+
     defineField({
       name: "home_services_cta",
       title: "Service CTA",
@@ -151,7 +185,33 @@ export const eventType = defineType({
     }),
     defineField({
       name: "technologyImgs",
-      title: "Technology used images",
+      title: "Technologies images Light Mode",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "technologyImage",
+              title: "Image",
+              type: "image",
+              options: {
+                hotspot: true,
+              },
+            },
+          ],
+          preview: {
+            select: {
+              media: "technologyImage",
+            },
+          },
+        },
+      ],
+    }),
+    // Dark mode
+    defineField({
+      name: "technologyImgsDarkMode",
+      title: "Technologies images For Dark Mode",
       type: "array",
       of: [
         {
@@ -217,6 +277,28 @@ export const eventType = defineType({
       ],
     }),
 
+    // Process Image for Dark Mode
+    defineField({
+      name: "processStepsDarkMode",
+      title: "Process Steps",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "stepImage",
+              title: "Step Image",
+              type: "image",
+              options: {
+                hotspot: true,
+              },
+            },
+          ],
+        },
+      ],
+    }),
+
     // TEXT SLIDER
     defineField({
       name: "sliderImage",
@@ -259,36 +341,6 @@ export const eventType = defineType({
       description: "Five line of text for the scrolling marquee",
     }),
 
-    // FAQ Section
-    // defineField({
-    //   name: "faqHeading",
-    //   title: "Faq Heading",
-    //   type: "string",
-    // }),
-    // defineField({
-    //   name: "faq",
-    //   title: "FAQ",
-    //   type: "array",
-    //   of: [
-    //     {
-    //       name: "faqItems",
-    //       type: "object",
-    //       fields: [
-    //         {
-    //           name: "question",
-    //           title: "Question",
-    //           type: "string",
-    //         },
-    //         {
-    //           name: "answer",
-    //           title: "Answer",
-    //           type: "string",
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // }),
-
     // About-us Section
     defineField({
       name: "allowLightHeading",
@@ -316,6 +368,7 @@ export const eventType = defineType({
       title: "Button for About us Redirection section",
       type: "string",
     }),
+
     defineField({
       name: "peoplImageOne",
       title: "People Image One",
@@ -340,6 +393,33 @@ export const eventType = defineType({
         accept: "video/*",
       },
     }),
+
+    // About us Image Dark Mode
+    defineField({
+      name: "peoplImageOneDarkMode",
+      title: "People Image One Dark Mode",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: "peoplImageTwoDarkMode",
+      title: "People Image Two Dark Mode",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: "peopleVideoDarkMode",
+      title: "People Video Dark Mode",
+      type: "file",
+      options: {
+        accept: "video/*",
+      },
+    }),
+
     defineField({
       name: "peopleText",
       title: "People Image Text",

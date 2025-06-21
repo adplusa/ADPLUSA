@@ -44,76 +44,76 @@ export const mainServiceType = defineType({
     // }),
 
     // ✅ Trust Icons Grid
-    defineField({
-      name: "trustIconsHeading",
-      title: "Trust Icons Heading",
-      type: "string",
-    }),
-    defineField({
-      name: "serviceRelatedIcon",
-      title: "Service Related Icons",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            defineField({
-              name: "serviceRelatedImg",
-              title: "Icon Image",
-              type: "image",
-            }),
-            defineField({
-              name: "serviceRelatedNumber",
-              title: "Number",
-              type: "string",
-            }),
-            defineField({
-              name: "serviceRelatedName",
-              title: "Name",
-              type: "string",
-            }),
-          ],
-        },
-      ],
-    }),
+    // defineField({
+    //   name: "trustIconsHeading",
+    //   title: "Trust Icons Heading",
+    //   type: "string",
+    // }),
+    // defineField({
+    //   name: "serviceRelatedIcon",
+    //   title: "Service Related Icons",
+    //   type: "array",
+    //   of: [
+    //     {
+    //       type: "object",
+    //       fields: [
+    //         defineField({
+    //           name: "serviceRelatedImg",
+    //           title: "Icon Image",
+    //           type: "image",
+    //         }),
+    //         defineField({
+    //           name: "serviceRelatedNumber",
+    //           title: "Number",
+    //           type: "string",
+    //         }),
+    //         defineField({
+    //           name: "serviceRelatedName",
+    //           title: "Name",
+    //           type: "string",
+    //         }),
+    //       ],
+    //     },
+    //   ],
+    // }),
 
     // ✅ Services Boxes
-    defineField({
-      name: "serviceHeading",
-      title: "Service Heading",
-      type: "string",
-    }),
-    defineField({
-      name: "serviceBox",
-      title: "Service Boxes",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            {
-              name: "boxUrl",
-              title: "Service Box URL",
-              type: "string",
-              validation: (Rule) =>
-                Rule.required().custom((url) =>
-                  url.startsWith("/") ? true : "Must start with /"
-                ),
-            },
-            {
-              name: "serviceBoxImg",
-              title: "Service Box Image",
-              type: "image",
-            },
-            {
-              name: "serviceBoxTitle",
-              title: "Service Box Title",
-              type: "string",
-            },
-          ],
-        },
-      ],
-    }),
+    // defineField({
+    //   name: "serviceHeading",
+    //   title: "Service Heading",
+    //   type: "string",
+    // }),
+    // defineField({
+    //   name: "serviceBox",
+    //   title: "Service Boxes",
+    //   type: "array",
+    //   of: [
+    //     {
+    //       type: "object",
+    //       fields: [
+    //         {
+    //           name: "boxUrl",
+    //           title: "Service Box URL",
+    //           type: "string",
+    //           validation: (Rule) =>
+    //             Rule.required().custom((url) =>
+    //               url.startsWith("/") ? true : "Must start with /"
+    //             ),
+    //         },
+    //         {
+    //           name: "serviceBoxImg",
+    //           title: "Service Box Image",
+    //           type: "image",
+    //         },
+    //         {
+    //           name: "serviceBoxTitle",
+    //           title: "Service Box Title",
+    //           type: "string",
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // }),
 
     // ✅ Why Work With Us
     defineField({

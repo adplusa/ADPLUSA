@@ -13,6 +13,7 @@ import gsap from "gsap";
 const ServiceTwo = () => {
   const textRef = useRef(null);
 
+  const [homepageData, setHomepageData] = useState(null);
   const [data, setData] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -71,6 +72,9 @@ const ServiceTwo = () => {
       try {
         const fetchedData = await client.fetch('*[_type == "serviceTwoPage"]');
         console.log("Fetched Service Two Data:", fetchedData);
+
+        const homepageData = await client.fetch(`*[_type == "homepage"][0]`);
+        setHomepageData(homepageData);
 
         const resolveVideo = (ref) => {
           if (!ref) return null;
@@ -185,24 +189,14 @@ const ServiceTwo = () => {
         ></section>
       )}
 
-      {/* Trust Section */}
-      {/* <section className="comapany-trust">
-        <div className="comapany-trust-df">
-          <h1>{data?.trustSection?.title}</h1>
-          <p>{data?.trustSection?.subtitle}</p>
-        </div>
-      </section> */}
-
       <div className="feature-section">
         <div className="feature-section-df">
           <div className="feature-box">
-            <h1>{data?.trustIconsHeading}</h1>
-            {data?.serviceRelatedIcon?.length > 0 && (
-              <div className="features-name">
-                {data.serviceRelatedIcon.map((related, index) => {
-                  if (!related?.serviceRelatedImg?.asset) return null; // Skip empty icons
-
-                  return (
+            <h1>{homepageData.trustIconsHeading}</h1>
+            <div className="features-name">
+              {homepageData?.serviceRelatedIcon?.map(
+                (related, index) =>
+                  related?.serviceRelatedImg?.asset && (
                     <div key={index} className="service-related-item">
                       <Image
                         src={urlFor(related.serviceRelatedImg).url()}
@@ -212,26 +206,21 @@ const ServiceTwo = () => {
                         unoptimized
                         priority
                       />
-                      {related.serviceRelatedNumber && (
-                        <p>{related.serviceRelatedNumber}</p>
-                      )}
-                      {related.serviceRelatedName && (
-                        <h3>{related.serviceRelatedName}</h3>
-                      )}
+                      <p>{related.serviceRelatedNumber}</p>
+                      <h3>{related.serviceRelatedName}</h3>
                     </div>
-                  );
-                })}
-              </div>
-            )}
+                  )
+              )}
+            </div>
           </div>
         </div>
       </div>
 
       <div className="home_services">
-        <h1>{data.serviceHeading}</h1>
+        <h1>{homepageData.serviceHeading}</h1>
         <div className="home_services_box">
-          {data.serviceBox?.map((service, index) => (
-            <Link href={service.boxUrl || "#"} key={index}>
+          {homepageData?.serviceBox?.map((service, i) => (
+            <Link key={i} href={service.boxUrl}>
               <div className="service-box-home">
                 <div className="service-image">
                   {service?.serviceBoxImg?.asset ? (
@@ -246,7 +235,6 @@ const ServiceTwo = () => {
                     <div
                       style={{ width: 400, height: 200, background: "#eee" }}
                     >
-                      {/* Optional fallback or placeholder */}
                       <p style={{ textAlign: "center", paddingTop: "80px" }}>
                         No Image
                       </p>

@@ -696,7 +696,8 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-                <div className="home_services">
+
+                {/* <div className="home_services">
                   <h1>{homepageData[0].serviceHeading}</h1>
                   <div className="home_services_box">
                     {homepageData[0].serviceBox?.map(
@@ -725,12 +726,47 @@ export default function Home() {
                       {homepageData[0].home_services_cta}
                     </button>
                   </Link>
+                </div> */}
+
+                <div className="home_services">
+                  <h1>{homepageData[0].serviceHeading}</h1>
+                  <div className="home_services_box">
+                    {(isDarkMode
+                      ? homepageData[0].serviceBoxDarkMode
+                      : homepageData[0].serviceBox
+                    )?.map(
+                      (service, index) =>
+                        service?.serviceBoxImg?.asset && (
+                          <Link href={service.boxUrl} key={index}>
+                            <div className="service-box-home">
+                              <div className="service-image">
+                                <Image
+                                  src={urlFor(service.serviceBoxImg).url()}
+                                  alt={service.serviceBoxTitle}
+                                  width={400}
+                                  height={200}
+                                  unoptimized
+                                />
+                              </div>
+                              <h2>{service.serviceBoxTitle}</h2>
+                            </div>
+                          </Link>
+                        )
+                    )}
+                  </div>
                 </div>
+
                 <div className="technology-we-use">
                   <h1>Technologies We Use</h1>
                   <div className="technology-grid">
-                    {homepageData[0]?.technologyImgs?.length > 0 ? (
-                      homepageData[0].technologyImgs.map((img, index) =>
+                    {(isDarkMode
+                      ? homepageData[0]?.technologyImgsDarkMode
+                      : homepageData[0]?.technologyImgs
+                    )?.length > 0 ? (
+                      (isDarkMode
+                        ? homepageData[0].technologyImgsDarkMode
+                        : homepageData[0].technologyImgs
+                      ).map((img, index) =>
                         img?.technologyImage?.asset ? (
                           <span key={index}>
                             <Image
@@ -777,15 +813,27 @@ export default function Home() {
                     </div>
 
                     <div className="right">
-                      {homepageData[0]?.processSteps?.[activeIndex]?.stepImage
-                        ?.asset && (
+                      {(isDarkMode
+                        ? homepageData[0]?.processStepsDarkMode?.[activeIndex]
+                            ?.stepImage?.asset
+                        : homepageData[0]?.processSteps?.[activeIndex]
+                            ?.stepImage?.asset) && (
                         <Image
                           src={urlFor(
-                            homepageData[0].processSteps[activeIndex].stepImage
+                            isDarkMode
+                              ? homepageData[0].processStepsDarkMode[
+                                  activeIndex
+                                ].stepImage
+                              : homepageData[0].processSteps[activeIndex]
+                                  .stepImage
                           ).url()}
                           alt={
-                            homepageData[0].processSteps[activeIndex]
-                              ?.stepTitle || "Step Image"
+                            isDarkMode
+                              ? homepageData[0].processStepsDarkMode[
+                                  activeIndex
+                                ]?.stepTitle || "Step Image"
+                              : homepageData[0].processSteps[activeIndex]
+                                  ?.stepTitle || "Step Image"
                           }
                           width={500}
                           height={500}
@@ -921,7 +969,9 @@ export default function Home() {
 
                   <div className="about-us-video-image">
                     <div className="about-us-img">
-                      {homepageData[0]?.peoplImageOne?.asset && (
+                      {(isDarkMode
+                        ? homepageData[0]?.peoplImageOneDarkMode?.asset
+                        : homepageData[0]?.peoplImageOne?.asset) && (
                         <Image
                           src={urlFor(homepageData[0].peoplImageOne).url()}
                           width={500}
@@ -930,10 +980,15 @@ export default function Home() {
                           unoptimized
                         />
                       )}
-
-                      {videos.peopleVideo && (
+                      {(isDarkMode
+                        ? videos.peopleVideoDarkMode
+                        : videos.peopleVideo) && (
                         <video
-                          src={videos.peopleVideo}
+                          src={
+                            isDarkMode
+                              ? videos.peopleVideoDarkMode
+                              : videos.peopleVideo
+                          }
                           autoPlay
                           muted
                           loop
@@ -942,13 +997,18 @@ export default function Home() {
                           style={{ width: "100%", height: "auto" }}
                         />
                       )}
-
-                      {homepageData?.[0]?.peoplImageTwo?.asset && (
+                      {(isDarkMode
+                        ? homepageData[0]?.peoplImageTwoDarkMode?.asset
+                        : homepageData[0]?.peoplImageTwo?.asset) && (
                         <Image
-                          src={urlFor(homepageData[0].peoplImageTwo).url()}
+                          src={urlFor(
+                            isDarkMode
+                              ? homepageData[0].peoplImageTwoDarkMode
+                              : homepageData[0].peoplImageTwo
+                          ).url()}
                           width={500}
                           height={500}
-                          alt="People image"
+                          alt="People image two"
                           unoptimized
                         />
                       )}

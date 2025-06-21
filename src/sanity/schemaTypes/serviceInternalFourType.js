@@ -75,27 +75,5 @@ export const servicesInternalFourPage = defineType({
         },
       ],
     }),
-
-    // ✅ Why Work With Us section
-    defineField({
-      name: "founderImage",
-      title: "Why Work With Us Image",
-      type: "image",
-      options: { hotspot: true },
-    }),
-    defineField({
-      name: "reasonsToWork",
-      title: "Reasons To Work With Us",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            { name: "title", type: "string", title: "Reason Title" },
-            { name: "description", type: "text", title: "Reason Description" },
-          ],
-        },
-      ],
-    }),
   ],
 });

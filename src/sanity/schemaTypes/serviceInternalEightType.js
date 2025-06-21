@@ -85,28 +85,6 @@ export const serviceInternalEightPage = defineType({
         }),
       ],
     }),
-
-    // 🚀 Why Work With Us Features
-    defineField({
-      name: "founderImage",
-      title: "Founder Image",
-      type: "image",
-      options: { hotspot: true },
-    }),
-    defineField({
-      name: "reasonsToWork",
-      title: "Reasons To Work With Us",
-      type: "array",
-      of: [
-        defineField({
-          type: "object",
-          fields: [
-            { name: "title", type: "string", title: "Title" },
-            { name: "description", type: "text", title: "Description" },
-          ],
-        }),
-      ],
-    }),
   ],
 });
 

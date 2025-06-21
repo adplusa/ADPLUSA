@@ -417,7 +417,10 @@ const InternalOne = () => {
               service?.link ? (
                 <Link key={i} href={service.link} id="redirection-service">
                   <div className="carousel-slide-internals">
-                    <div className="professional-card-internals">
+                    <div
+                      className="professional-card-internals"
+                      id="project-caraousel"
+                    >
                       <div className="image-container-internals">
                         {service?.image?.asset ? (
                           <Image

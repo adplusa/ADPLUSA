@@ -7,6 +7,7 @@
   --enquireNowBackgroundColor: #8a0b10;
   --enquireNowButtonColor: #fbfbfb;
   --redWhiteColor: #8a0b10;
+  --blueColor: blue;
   /* --imageColor: brightness(0) saturate(100%) invert(16%) sepia(88%)
     saturate(1642%) hue-rotate(343deg) brightness(90%) contrast(90%); */
 }
@@ -21,6 +22,7 @@
   --enquireNowButtonColor: #000000;
   --redWhiteColor: #ffffff;
   --imageColor: brightness(0) invert(1);
+  --blueColor: rgb(235, 235, 235);
 }
 
 @font-face {
@@ -782,4 +784,123 @@ h1 {
   .professionals-heading-internals {
     font-size: 1.8rem;
   }
+}
+
+.service-box-home {
+  height: 250px !important;
+}
+
+.service-box-home h2 {
+  padding-bottom: 15px;
+}
+
+.why-work {
+  padding: 80px 5%;
+  background: var(--backgroundColor);
+  font-family: "Geist", sans-serif;
+  margin-top: 5%;
+}
+
+.content-two {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.text {
+  flex: 1 1 400px;
+}
+
+.text h2 {
+  font-size: 2rem;
+  color: var(--foreground);
+  margin-bottom: 30px;
+}
+
+.feature {
+  display: flex;
+  /* align-items: flex-start; */
+  gap: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f0d8d2;
+}
+
+.icon {
+  /* font-size: 24px;
+  color: #d2a191;
+  background-color: #f5e2db;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center; */
+  margin-top: 8px;
+}
+
+.info h3 {
+  font-size: 20px;
+  color: var(--foreground);
+  margin-bottom: 10px;
+}
+
+.info p {
+  font-size: 14px;
+  color: var(--foreground);
+  line-height: 1.5;
+}
+
+.image-wrapper {
+  position: relative;
+  flex: 1 1 200px;
+  margin-left: 10%;
+  margin-top: 5%;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  margin-top: -32%;
+}
+
+.person-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* important! */
+  border-radius: 20px;
+  position: relative;
+  z-index: 2;
+  display: block;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.key-card {
+  height: 240px !important;
+}
+
+.key-asterisk {
+  margin-bottom: 0 !important;
+}
+
+.internal-section-one-btn button {
+  color: var(--blueColor) !important;
+}
+
+#internal-line {
+  border-color: var(--foreGround) !important;
+}
+
+#project-caraousel {
+  height: auto !important;
+}
+
+.carousel-slides-internals {
+  gap: 1%;
 }
