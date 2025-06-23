@@ -20,52 +20,20 @@ const ServiceTwo = () => {
   const carouselRef = useRef(null);
   const [showForm, setShowForm] = useState(false);
 
-  // const servicesData = [
-  //   {
-  //     title: "Remote Executive Assistant",
-  //     category: "Services",
-  //     image: "/cad-1.webp",
-  //   },
-  //   {
-  //     title: "MEP Engineer",
-  //     category: "Services",
-  //     image: "/cad-2.webp",
-  //   },
-  //   {
-  //     title: "Construction Documentation",
-  //     category: "Services",
-  //     image: "/cad-4.webp",
-  //   },
-  //   {
-  //     title: "CAD Outsourcing",
-  //     category: "Services",
-  //     image: "/cad-3.webp",
-  //   },
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
-  //   {
-  //     title: "Bim Services",
-  //     category: "Services",
-  //     image: "/cad-2.webp",
-  //   },
-
-  //   {
-  //     title: "MEP Engineer",
-  //     category: "Services",
-  //     image: "/cad-3.webp",
-  //   },
-
-  //   {
-  //     title: "Presenting Drawing",
-  //     category: "Services",
-  //     image: "/cad-4.webp",
-  //   },
-
-  //   {
-  //     title: "3D Visualization",
-  //     category: "Services",
-  //     image: "/cad-5.webp",
-  //   },
-  // ];
+  useEffect(() => {
+    const updateMode = () => {
+      setIsDarkMode(document.body.classList.contains("dark-mode"));
+    };
+    updateMode();
+    const observer = new MutationObserver(updateMode);
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -184,7 +152,12 @@ const ServiceTwo = () => {
         <section
           className="schematic-section"
           style={{
-            backgroundImage: `url(${urlFor(data.serviceBannerImage).url()})`,
+            // backgroundImage: `url(${urlFor(data.serviceBannerImage).url()})`,
+            backgroundImage: `url(${
+              isDarkMode
+                ? urlFor(data?.serviceBannerImageDarkMode).url()
+                : urlFor(data?.serviceBannerImage).url()
+            })`,
           }}
         ></section>
       )}
@@ -219,32 +192,28 @@ const ServiceTwo = () => {
       <div className="home_services">
         <h1>{homepageData.serviceHeading}</h1>
         <div className="home_services_box">
-          {homepageData?.serviceBox?.map((service, i) => (
-            <Link key={i} href={service.boxUrl}>
-              <div className="service-box-home">
-                <div className="service-image">
-                  {service?.serviceBoxImg?.asset ? (
-                    <Image
-                      src={urlFor(service.serviceBoxImg).url()}
-                      alt={service.serviceBoxTitle || "Service"}
-                      width={400}
-                      height={200}
-                      unoptimized
-                    />
-                  ) : (
-                    <div
-                      style={{ width: 400, height: 200, background: "#eee" }}
-                    >
-                      <p style={{ textAlign: "center", paddingTop: "80px" }}>
-                        No Image
-                      </p>
+          {(isDarkMode
+            ? homepageData.serviceBoxDarkMode
+            : homepageData.serviceBox
+          )?.map(
+            (service, index) =>
+              service?.serviceBoxImg?.asset && (
+                <Link href={service.boxUrl} key={index}>
+                  <div className="service-box-home">
+                    <div className="service-image">
+                      <Image
+                        src={urlFor(service.serviceBoxImg).url()}
+                        alt={service.serviceBoxTitle}
+                        width={400}
+                        height={200}
+                        unoptimized
+                      />
                     </div>
-                  )}
-                </div>
-                <h2>{service.serviceBoxTitle}</h2>
-              </div>
-            </Link>
-          ))}
+                    <h2>{service.serviceBoxTitle}</h2>
+                  </div>
+                </Link>
+              )
+          )}
         </div>
       </div>
 
@@ -276,14 +245,23 @@ const ServiceTwo = () => {
           </div>
 
           <div className="image-wrapper-main-service-page">
-            {data?.whyWorkWithUs?.image?.asset && (
-              <Image
-                src={urlFor(data.whyWorkWithUs.image).url()}
-                alt="Why Work Image"
-                width={500}
-                height={400}
-              />
-            )}
+            {isDarkMode
+              ? data?.whyWorkWithUs?.imageDarkMode?.asset && (
+                  <Image
+                    src={urlFor(data.whyWorkWithUs.imageDarkMode).url()}
+                    alt="Why Work Image"
+                    width={500}
+                    height={400}
+                  />
+                )
+              : data?.whyWorkWithUs?.image?.asset && (
+                  <Image
+                    src={urlFor(data.whyWorkWithUs.image).url()}
+                    alt="Why Work Image"
+                    width={500}
+                    height={400}
+                  />
+                )}
           </div>
         </div>
       </section>

@@ -82,6 +82,12 @@ export const aboutPage = defineType({
               type: "image",
               options: { hotspot: true },
             },
+            {
+              name: "imageDarkMode",
+              title: "Section Image for Dark Mode",
+              type: "image",
+              options: { hotspot: true },
+            },
           ],
         },
       ],

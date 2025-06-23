@@ -13,6 +13,20 @@ export default function FAQ() {
   const [faqData, setFaqData] = useState(null);
   const [openFaqs, setOpenFaqs] = useState({});
   const [showForm, setShowForm] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const updateMode = () => {
+      setIsDarkMode(document.body.classList.contains("dark-mode"));
+    };
+    updateMode();
+    const observer = new MutationObserver(updateMode);
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
 
   const upwardHandler = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -87,32 +101,6 @@ export default function FAQ() {
             <div
               className={`faq-content ${categoryIndex % 2 === 1 ? "reverse" : ""}`}
             >
-              {/* FAQ Text */}
-              {/* <div className="faq-text-content">
-                {category.faqs?.map((faq, faqIndex) => {
-                  const isOpen = openFaqs[`${categoryIndex}-${faqIndex}`];
-                  return (
-                    <div key={faqIndex} className="faq-item">
-                      <div
-                        className="faq-question-container"
-                        onClick={() => toggleFaq(categoryIndex, faqIndex)}
-                      >
-                        <div className="faq-content-text">
-                          <h3 className="faq-question-two">{faq.question}</h3>
-                        </div>
-                      </div>
-
-                      {isOpen && (
-                        <div
-                          className={`faq-answer-container ${isOpen ? "open" : ""}`}
-                        >
-                          <p className="faq-answer-two">{faq.answer}</p>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div> */}
               <div className="faq-text-content">
                 {category.faqs?.map((faq, faqIndex) => {
                   const isOpen = openFaqs[`${categoryIndex}-${faqIndex}`];
@@ -162,15 +150,25 @@ export default function FAQ() {
               {/* FAQ Image */}
               <div className="faq-image-container">
                 <div className="image-wrapper-two">
-                  {category?.image?.asset && (
-                    <Image
-                      src={urlFor(category.image).url()}
-                      alt={category.title || "FAQ image"}
-                      width={500}
-                      height={400}
-                      className="faq-image"
-                    />
-                  )}
+                  {isDarkMode
+                    ? category?.imageDarkMode?.asset && (
+                        <Image
+                          src={urlFor(category.imageDarkMode).url()}
+                          alt={category.title || "FAQ image"}
+                          width={500}
+                          height={400}
+                          className="faq-image"
+                        />
+                      )
+                    : category?.image?.asset && (
+                        <Image
+                          src={urlFor(category.image).url()}
+                          alt={category.title || "FAQ image"}
+                          width={500}
+                          height={400}
+                          className="faq-image"
+                        />
+                      )}
                 </div>
               </div>
             </div>

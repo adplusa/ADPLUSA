@@ -26,6 +26,20 @@ const ServicesPageThree = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [filteredServices, setFilteredServices] = useState([]);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const updateMode = () => {
+      setIsDarkMode(document.body.classList.contains("dark-mode"));
+    };
+    updateMode();
+    const observer = new MutationObserver(updateMode);
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
 
   const upwardHandler = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -282,35 +296,20 @@ const ServicesPageThree = () => {
         <section
           className="service-container"
           style={{
-            backgroundImage: `url(${urlFor(data.serviceBannerImage).url()})`,
+            backgroundImage: `${
+              isDarkMode
+                ? data?.serviceBannerImageDarkMode?.asset
+                  ? `url(${urlFor(data.serviceBannerImageDarkMode).url()})`
+                  : ""
+                : data?.serviceBannerImage?.asset
+                  ? `url(${urlFor(data.serviceBannerImage).url()})`
+                  : ""
+            }`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
         />
       )}
-      {/* <section className="service-info">
-        <div className="services-into-df">
-          {data.servicesList?.map((service, i) => (
-            <div key={i} className="service-info-df">
-              <div className="service-left">
-                <h1>{service.title}</h1>
-                <p>{service.description}</p>
-              </div>
-              {service.image?.asset && (
-                <div className="service-right">
-                  <Image
-                    src={urlFor(service.image).url()}
-                    width={0}
-                    height={0}
-                    unoptimized
-                    alt={service.title}
-                  />
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </section> */}
 
       <section className="separate-div">
         <h1>{data.sectionTitle}</h1>
@@ -319,15 +318,25 @@ const ServicesPageThree = () => {
             <div className="service-three-separated-div" key={idx}>
               <div className="service-content">
                 <div className="image-container">
-                  {service.image && (
-                    <Image
-                      src={urlFor(service.image).url()}
-                      alt={service.title}
-                      width={500}
-                      height={400}
-                      unoptimized
-                    />
-                  )}
+                  {isDarkMode
+                    ? service.imageDarkMode && (
+                        <Image
+                          src={urlFor(service.imageDarkMode).url()}
+                          alt={service.title}
+                          width={500}
+                          height={400}
+                          unoptimized
+                        />
+                      )
+                    : service.image && (
+                        <Image
+                          src={urlFor(service.image).url()}
+                          alt={service.title}
+                          width={500}
+                          height={400}
+                          unoptimized
+                        />
+                      )}
                 </div>
                 <div className="text-content">
                   <h3>{service.title}</h3>
@@ -377,14 +386,25 @@ const ServicesPageThree = () => {
             ))}
           </div>
           <div className="image-wrapper-main-service-page">
-            {mainServiceData?.whyWorkWithUs?.image?.asset && (
-              <Image
-                src={urlFor(mainServiceData.whyWorkWithUs.image).url()}
-                alt="Why Work Image"
-                width={500}
-                height={400}
-              />
-            )}
+            {isDarkMode
+              ? mainServiceData?.whyWorkWithUs?.imageDarkMode?.asset && (
+                  <Image
+                    src={urlFor(
+                      mainServiceData.whyWorkWithUs.imageDarkMode
+                    ).url()}
+                    alt="Why Work Image"
+                    width={500}
+                    height={400}
+                  />
+                )
+              : mainServiceData?.whyWorkWithUs?.image?.asset && (
+                  <Image
+                    src={urlFor(mainServiceData.whyWorkWithUs.image).url()}
+                    alt="Why Work Image"
+                    width={500}
+                    height={400}
+                  />
+                )}
           </div>
         </div>
       </section>

@@ -14,6 +14,21 @@ const ContactPage = () => {
   const [data, setData] = useState(null);
   const [formData, setFormData] = useState({});
   const [showForm, setShowForm] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [mainServiceData, setMainServiceData] = useState(null);
+
+  useEffect(() => {
+    const updateMode = () => {
+      setIsDarkMode(document.body.classList.contains("dark-mode"));
+    };
+    updateMode();
+    const observer = new MutationObserver(updateMode);
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
 
   const upwardHandler = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -22,6 +37,10 @@ const ContactPage = () => {
       try {
         const result = await client.fetch(`*[_type == "contactPage"][0]`);
         setData(result);
+        const mainServiceData = await client.fetch(
+          `*[_type == "serviceTwoPage"][0]`
+        );
+        setMainServiceData(mainServiceData);
       } catch (error) {
         console.error("Failed to fetch contact page data:", error);
       }
@@ -83,32 +102,6 @@ const ContactPage = () => {
           </h1>
           <div className="title-underline"></div>
 
-          {/* <form onSubmit={handleSubmit}>
-            {data.formFields?.map((field, idx) => (
-              <div className="form-field" key={idx}>
-                {field.type === "textarea" ? (
-                  <textarea
-                    name={field.name}
-                    placeholder={field.label}
-                    required={field.required}
-                    onChange={handleChange}
-                  />
-                ) : (
-                  <input
-                    type={field.type}
-                    name={field.name}
-                    placeholder={field.label}
-                    required={field.required}
-                    onChange={handleChange}
-                  />
-                )}
-              </div>
-            ))}
-
-            <button type="submit" className="submit-button">
-              Submit
-            </button>
-          </form> */}
           <form onSubmit={handleSubmit}>
             {data.formFields?.map((field, idx) => (
               <div className="form-field" key={idx}>
@@ -144,8 +137,11 @@ const ContactPage = () => {
         <div className="contact-info-section">
           <div className="map-container">
             <Image
-              // src="/banner-3.jpg"
-              src={urlFor(data.contactImage).url()}
+              src={
+                isDarkMode
+                  ? urlFor(data.contactImageDarkMode).url()
+                  : urlFor(data.contactImage).url()
+              }
               width={0}
               height={0}
               alt="Map"
@@ -225,14 +221,25 @@ const ContactPage = () => {
 
           <div className="image-wrapper-contact">
             <div className="background-contact">
-              {data?.rightImage?.asset && (
-                <Image
-                  src={urlFor(data.rightImage).url()}
-                  alt="Right Section Image"
-                  width={500}
-                  height={400}
-                />
-              )}
+              {isDarkMode
+                ? mainServiceData?.whyWorkWithUs?.imageDarkMode?.asset && (
+                    <Image
+                      src={urlFor(
+                        mainServiceData.whyWorkWithUs.imageDarkMode
+                      ).url()}
+                      alt="Why Work Image"
+                      width={500}
+                      height={400}
+                    />
+                  )
+                : mainServiceData?.whyWorkWithUs?.image?.asset && (
+                    <Image
+                      src={urlFor(mainServiceData.whyWorkWithUs.image).url()}
+                      alt="Why Work Image"
+                      width={500}
+                      height={400}
+                    />
+                  )}
             </div>
           </div>
         </div>

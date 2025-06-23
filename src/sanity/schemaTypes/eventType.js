@@ -385,14 +385,6 @@ export const eventType = defineType({
         hotspot: true,
       },
     }),
-    defineField({
-      name: "peopleVideo",
-      title: "People Video",
-      type: "file",
-      options: {
-        accept: "video/*",
-      },
-    }),
 
     // About us Image Dark Mode
     defineField({
@@ -411,6 +403,15 @@ export const eventType = defineType({
         hotspot: true,
       },
     }),
+    defineField({
+      name: "peopleVideo",
+      title: "People Video",
+      type: "file",
+      options: {
+        accept: "video/*",
+      },
+    }),
+
     defineField({
       name: "peopleVideoDarkMode",
       title: "People Video Dark Mode",
@@ -479,24 +480,28 @@ export const eventType = defineType({
                 hotspot: true,
               },
             },
+            {
+              name: "imageDarkMode", // ✅ Add this field
+              title: "Founder Image for Dark Mode",
+              type: "image",
+              options: {
+                hotspot: true,
+              },
+            },
           ],
         },
       ],
     }),
 
-    // defineField({
-    //   name: "slideImage",
-    //   title: "Slide Image",
-    //   type: "image",
-    //   options: {
-    //     hotspot: true,
-    //   },
-    // }),
-
     // Contact us
     defineField({
       name: "contactUsSectionImg",
       title: "Contact Us Section Image",
+      type: "image",
+    }),
+    defineField({
+      name: "contactUsSectionImgDarkMode",
+      title: "Contact Us Section Image for Dark Mode",
       type: "image",
     }),
     //

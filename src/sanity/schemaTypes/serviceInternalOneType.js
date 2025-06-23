@@ -31,6 +31,12 @@ export const servicesInternalOnePage = defineType({
       type: "image",
       options: { hotspot: true },
     }),
+    defineField({
+      name: "serviceBannerImageDarkMode",
+      title: "Banner Image",
+      type: "image",
+      options: { hotspot: true },
+    }),
 
     // ✅ Services List
     defineField({
@@ -47,6 +53,13 @@ export const servicesInternalOnePage = defineType({
               name: "image",
               type: "image",
               title: "Service Image",
+              options: { hotspot: true },
+              fields: [{ name: "alt", type: "string", title: "Alt Text" }],
+            },
+            {
+              name: "imageDarkMode",
+              type: "image",
+              title: "Service Image for Dark Mode",
               options: { hotspot: true },
               fields: [{ name: "alt", type: "string", title: "Alt Text" }],
             },

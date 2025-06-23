@@ -24,6 +24,20 @@ const ServicesPageSix = () => {
   const [startX, setStartX] = useState(0);
   const [filteredServices, setFilteredServices] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const updateMode = () => {
+      setIsDarkMode(document.body.classList.contains("dark-mode"));
+    };
+    updateMode();
+    const observer = new MutationObserver(updateMode);
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
 
   // ✅ Resize
   useEffect(() => {
@@ -234,7 +248,15 @@ const ServicesPageSix = () => {
         <section
           className="service-container"
           style={{
-            backgroundImage: `url(${urlFor(data.serviceBannerImage).url()})`,
+            backgroundImage: `${
+              isDarkMode
+                ? data?.serviceBannerImageDarkMode?.asset
+                  ? `url(${urlFor(data.serviceBannerImageDarkMode).url()})`
+                  : ""
+                : data?.serviceBannerImage?.asset
+                  ? `url(${urlFor(data.serviceBannerImage).url()})`
+                  : ""
+            }`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -251,13 +273,23 @@ const ServicesPageSix = () => {
               </div>
               {service.image?.asset && (
                 <div className="service-right">
-                  <Image
-                    src={urlFor(service.image).url()}
-                    width={0}
-                    height={0}
-                    unoptimized
-                    alt={service.title}
-                  />
+                  {isDarkMode ? (
+                    <Image
+                      src={urlFor(service.imageDarkMode).url()}
+                      width={0}
+                      height={0}
+                      unoptimized
+                      alt={service.title || "Service Image"}
+                    />
+                  ) : (
+                    <Image
+                      src={urlFor(service.image).url()}
+                      width={0}
+                      height={0}
+                      unoptimized
+                      alt={service.title || "Service Image"}
+                    />
+                  )}
                 </div>
               )}
             </div>
@@ -303,14 +335,25 @@ const ServicesPageSix = () => {
             ))}
           </div>
           <div className="image-wrapper-main-service-page">
-            {mainServiceData?.whyWorkWithUs?.image?.asset && (
-              <Image
-                src={urlFor(mainServiceData.whyWorkWithUs.image).url()}
-                alt="Why Work Image"
-                width={500}
-                height={400}
-              />
-            )}
+            {isDarkMode
+              ? mainServiceData?.whyWorkWithUs?.imageDarkMode?.asset && (
+                  <Image
+                    src={urlFor(
+                      mainServiceData.whyWorkWithUs.imageDarkMode
+                    ).url()}
+                    alt="Why Work Image"
+                    width={500}
+                    height={400}
+                  />
+                )
+              : mainServiceData?.whyWorkWithUs?.image?.asset && (
+                  <Image
+                    src={urlFor(mainServiceData.whyWorkWithUs.image).url()}
+                    alt="Why Work Image"
+                    width={500}
+                    height={400}
+                  />
+                )}
           </div>
         </div>
       </section>

@@ -57,6 +57,12 @@ export const faqSection = defineType({
               options: { hotspot: true },
             }),
             defineField({
+              name: "imageDarkMode",
+              title: "Category Image for Dark Mode",
+              type: "image",
+              options: { hotspot: true },
+            }),
+            defineField({
               name: "faqs",
               title: "FAQs",
               type: "array",

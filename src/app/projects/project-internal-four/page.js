@@ -22,6 +22,20 @@ const InternalFour = () => {
   const [isMobile, setIsMobile] = useState(false);
   const slideRef = useRef(null);
   const intervalRef = useRef(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const updateMode = () => {
+      setIsDarkMode(document.body.classList.contains("dark-mode"));
+    };
+    updateMode();
+    const observer = new MutationObserver(updateMode);
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -238,14 +252,18 @@ const InternalFour = () => {
   return (
     <div className="internal-container">
       <Header />
-
       <div className="internal-section-one">
         <div className="internal-section-one-top">
           <h1>{data?.[0]?.title}</h1>
+
           {data?.[0]?.mainImage?.asset && (
             <Image
-              src={urlFor(data[0].mainImage).url()}
-              alt="Main image"
+              src={
+                isDarkMode
+                  ? urlFor(data[0].mainImageDarkMode).url()
+                  : urlFor(data[0].mainImage).url()
+              }
+              alt="Internal-img"
               width={1200}
               height={600}
               unoptimized
@@ -257,6 +275,7 @@ const InternalFour = () => {
         <div className="internal-section-one-bottom">
           <div className="internal-section-one-bottom-left">
             <p>{data?.[0]?.introText}</p>
+
             {data?.[0]?.moreContent?.map((paragraph, idx) => (
               <p
                 key={idx}
@@ -302,35 +321,55 @@ const InternalFour = () => {
         >
           <button>
             {isExpanded ? "Less Information" : "More Information"}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className={`bi ${isExpanded ? "bi-x-lg" : "bi-plus"}`}
+              viewBox="0 0 16 16"
+            >
+              {isExpanded ? (
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+              ) : (
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+              )}
+            </svg>
           </button>
         </div>
-
         <hr id="internal-line" />
       </div>
 
-      {/* Project Images */}
+      {/* Section Two */}
       <div className="internal-section-two">
-        <div className="internal-section-two-top">
-          <div className="internal-section-two-top-imgs">
-            {data?.[0]?.projectImages?.topImages?.map((img, idx) =>
-              img?.asset ? (
-                <Image
-                  key={idx}
-                  src={urlFor(img).url()}
-                  alt={`Top image ${idx + 1}`}
-                  width={600}
-                  height={400}
-                  unoptimized
-                />
-              ) : null
-            )}
-          </div>
+        <div className="internal-section-two-top-imgs">
+          {data?.[0]?.projectImages?.topImages?.map((img, idx) =>
+            img?.asset ? (
+              <Image
+                key={idx}
+                src={
+                  isDarkMode
+                    ? urlFor(data[0].projectImages.topImagesDarkMode[idx]).url()
+                    : urlFor(img).url()
+                }
+                alt={`Top image ${idx + 1}`}
+                width={600}
+                height={400}
+                unoptimized
+              />
+            ) : null
+          )}
         </div>
+
         <div className="internal-section-two-bottom">
           {data?.[0]?.projectImages?.bottomImage?.asset && (
             <Image
-              src={urlFor(data[0].projectImages.bottomImage).url()}
-              alt="Bottom image"
+              src={
+                isDarkMode
+                  ? urlFor(data[0].projectImages.bottomImageDarkMode).url()
+                  : urlFor(data[0].projectImages.bottomImage).url()
+              }
+              alt="Bottom Image"
               width={1200}
               height={600}
               unoptimized
@@ -339,29 +378,42 @@ const InternalFour = () => {
         </div>
       </div>
 
-      {/* Project Images Two */}
+      {/* Section Three */}
       <div className="internal-section-two">
-        <div className="internal-section-two-top">
-          <div className="internal-section-two-top-imgs">
-            {data?.[0]?.projectImagesTwo?.topImagesTwo?.map((img, idx) =>
-              img?.asset ? (
-                <Image
-                  key={idx}
-                  src={urlFor(img).url()}
-                  alt={`Top image ${idx + 1}`}
-                  width={600}
-                  height={400}
-                  unoptimized
-                />
-              ) : null
-            )}
-          </div>
+        <div className="internal-section-two-top-imgs">
+          {/* Top images with dark mode toggle */}
+          {data?.[0]?.projectImagesTwo?.topImagesTwo?.map((img, idx) =>
+            img?.asset ? (
+              <Image
+                key={idx}
+                src={
+                  isDarkMode
+                    ? urlFor(
+                        data[0].projectImagesTwo.topImagesTwoDarkMode[idx]
+                      ).url()
+                    : urlFor(img).url()
+                }
+                alt={`Top image ${idx + 1}`}
+                width={600}
+                height={400}
+                unoptimized
+              />
+            ) : null
+          )}
         </div>
+
         <div className="internal-section-two-bottom">
+          {/* Bottom image with dark mode toggle */}
           {data?.[0]?.projectImagesTwo?.bottomImageTwo?.asset && (
             <Image
-              src={urlFor(data[0].projectImagesTwo.bottomImageTwo).url()}
-              alt="Bottom image"
+              src={
+                isDarkMode
+                  ? urlFor(
+                      data[0].projectImagesTwo.bottomImageTwoDarkMode
+                    ).url()
+                  : urlFor(data[0].projectImagesTwo.bottomImageTwo).url()
+              }
+              alt="Bottom Image"
               width={1200}
               height={600}
               unoptimized
@@ -370,7 +422,6 @@ const InternalFour = () => {
         </div>
       </div>
 
-      {/* ✅ Carousel */}
       <div className="professionals-section-internals">
         <h1 className="professionals-heading-internals">
           Explore More Projects
@@ -394,7 +445,7 @@ const InternalFour = () => {
           >
             {slidesToShow.map((service, i) =>
               service?.link ? (
-                <Link key={i} href={service.link}>
+                <Link key={i} href={service.link} id="redirection-service">
                   <div className="carousel-slide-internals">
                     <div
                       className="professional-card-internals"
@@ -454,7 +505,7 @@ const InternalFour = () => {
             height={40}
             alt="Whatsapp-img"
             unoptimized
-          />
+          ></Image>
         </a>
       </div>
 
@@ -465,7 +516,7 @@ const InternalFour = () => {
         <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
           <div
             className="enquiry-container"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()} // Prevent close on form click
           >
             <div className="enquiry-box">
               <div className="close-icon" onClick={() => setShowForm(false)}>
@@ -493,6 +544,7 @@ const InternalFour = () => {
                   className="form-input"
                   rows="3"
                 ></textarea>
+
                 <button type="submit" className="submit-button">
                   Submit
                 </button>

@@ -16,6 +16,20 @@ const About = () => {
   const textRef = useRef(null);
   const [data, setData] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const updateMode = () => {
+      setIsDarkMode(document.body.classList.contains("dark-mode"));
+    };
+    updateMode();
+    const observer = new MutationObserver(updateMode);
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (!data) return; // Prevent null error
@@ -141,18 +155,31 @@ const About = () => {
                 <h1>{section.title}</h1>
                 <p>{section.body}</p>
               </div>
-              {section?.image?.asset && (
-                <div className="people-img">
-                  <Image
-                    src={urlFor(section.image).url()}
-                    alt={`${section.title} image`}
-                    width={600}
-                    height={400}
-                    unoptimized
-                    priority
-                  />
-                </div>
-              )}
+              {isDarkMode
+                ? section?.imageDarkMode?.asset && (
+                    <div className="people-img">
+                      <Image
+                        src={urlFor(section.imageDarkMode).url()}
+                        alt={`${section.title} image`}
+                        width={600}
+                        height={400}
+                        unoptimized
+                        priority
+                      />
+                    </div>
+                  )
+                : section?.image?.asset && (
+                    <div className="people-img">
+                      <Image
+                        src={urlFor(section.image).url()}
+                        alt={`${section.title} image`}
+                        width={600}
+                        height={400}
+                        unoptimized
+                        priority
+                      />
+                    </div>
+                  )}
             </div>
           ))}
         </div>

@@ -33,6 +33,12 @@ const serviceInternalSevenPage = defineType({
       type: "image",
       options: { hotspot: true },
     }),
+    defineField({
+      name: "serviceBannerImageDarkMode",
+      title: "Banner Image for Dark Mode",
+      type: "image",
+      options: { hotspot: true },
+    }),
 
     // ✅ Services List (with link)
     defineField({
@@ -49,6 +55,13 @@ const serviceInternalSevenPage = defineType({
               name: "image",
               type: "image",
               title: "Service Image",
+              options: { hotspot: true },
+              fields: [{ name: "alt", type: "string", title: "Alt Text" }],
+            },
+            {
+              name: "imageDarkMode",
+              type: "image",
+              title: "Service Image for Dark Mode",
               options: { hotspot: true },
               fields: [{ name: "alt", type: "string", title: "Alt Text" }],
             },

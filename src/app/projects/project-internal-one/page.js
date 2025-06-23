@@ -20,6 +20,20 @@ const InternalOne = () => {
   const [isMobile, setIsMobile] = useState(false);
   const slideRef = useRef(null);
   const intervalRef = useRef(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const updateMode = () => {
+      setIsDarkMode(document.body.classList.contains("dark-mode"));
+    };
+    updateMode();
+    const observer = new MutationObserver(updateMode);
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -250,7 +264,11 @@ const InternalOne = () => {
 
           {data?.[0]?.mainImage?.asset && (
             <Image
-              src={urlFor(data[0].mainImage).url()}
+              src={
+                isDarkMode
+                  ? urlFor(data[0].mainImageDarkMode).url()
+                  : urlFor(data[0].mainImage).url()
+              }
               alt="Internal-img"
               width={1200}
               height={600}
@@ -330,28 +348,34 @@ const InternalOne = () => {
 
       {/* Section Two */}
       <div className="internal-section-two">
-        <div className="internal-section-two-top">
-          <div className="internal-section-two-top-imgs">
-            {data?.[0]?.projectImages?.topImages?.map((img, idx) =>
-              img?.asset ? (
-                <Image
-                  key={idx}
-                  src={urlFor(img).url()}
-                  alt={`Top image ${idx + 1}`}
-                  width={600}
-                  height={400}
-                  unoptimized
-                />
-              ) : null
-            )}
-          </div>
+        <div className="internal-section-two-top-imgs">
+          {data?.[0]?.projectImages?.topImages?.map((img, idx) =>
+            img?.asset ? (
+              <Image
+                key={idx}
+                src={
+                  isDarkMode
+                    ? urlFor(data[0].projectImages.topImagesDarkMode[idx]).url()
+                    : urlFor(img).url()
+                }
+                alt={`Top image ${idx + 1}`}
+                width={600}
+                height={400}
+                unoptimized
+              />
+            ) : null
+          )}
         </div>
 
         <div className="internal-section-two-bottom">
           {data?.[0]?.projectImages?.bottomImage?.asset && (
             <Image
-              src={urlFor(data[0].projectImages.bottomImage).url()}
-              alt="Bottom image"
+              src={
+                isDarkMode
+                  ? urlFor(data[0].projectImages.bottomImageDarkMode).url()
+                  : urlFor(data[0].projectImages.bottomImage).url()
+              }
+              alt="Bottom Image"
               width={1200}
               height={600}
               unoptimized
@@ -362,28 +386,40 @@ const InternalOne = () => {
 
       {/* Section Three */}
       <div className="internal-section-two">
-        <div className="internal-section-two-top">
-          <div className="internal-section-two-top-imgs">
-            {data?.[0]?.projectImagesTwo?.topImagesTwo?.map((img, idx) =>
-              img?.asset ? (
-                <Image
-                  key={idx}
-                  src={urlFor(img).url()}
-                  alt={`Top image ${idx + 1}`}
-                  width={600}
-                  height={400}
-                  unoptimized
-                />
-              ) : null
-            )}
-          </div>
+        <div className="internal-section-two-top-imgs">
+          {/* Top images with dark mode toggle */}
+          {data?.[0]?.projectImagesTwo?.topImagesTwo?.map((img, idx) =>
+            img?.asset ? (
+              <Image
+                key={idx}
+                src={
+                  isDarkMode
+                    ? urlFor(
+                        data[0].projectImagesTwo.topImagesTwoDarkMode[idx]
+                      ).url()
+                    : urlFor(img).url()
+                }
+                alt={`Top image ${idx + 1}`}
+                width={600}
+                height={400}
+                unoptimized
+              />
+            ) : null
+          )}
         </div>
 
         <div className="internal-section-two-bottom">
+          {/* Bottom image with dark mode toggle */}
           {data?.[0]?.projectImagesTwo?.bottomImageTwo?.asset && (
             <Image
-              src={urlFor(data[0].projectImagesTwo.bottomImageTwo).url()}
-              alt="Bottom image"
+              src={
+                isDarkMode
+                  ? urlFor(
+                      data[0].projectImagesTwo.bottomImageTwoDarkMode
+                    ).url()
+                  : urlFor(data[0].projectImagesTwo.bottomImageTwo).url()
+              }
+              alt="Bottom Image"
               width={1200}
               height={600}
               unoptimized

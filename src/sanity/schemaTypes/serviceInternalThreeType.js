@@ -32,6 +32,12 @@ export const servicesInternalThreePage = defineType({
       type: "image",
       options: { hotspot: true },
     }),
+    defineField({
+      name: "serviceBannerImageDarkMode",
+      title: "Banner Image for Dark Mode",
+      type: "image",
+      options: { hotspot: true },
+    }),
 
     // ✅ Section title (used in your `<h1>{data.sectionTitle}</h1>`)
     defineField({
@@ -56,6 +62,13 @@ export const servicesInternalThreePage = defineType({
               name: "image",
               type: "image",
               title: "Service Image",
+              options: { hotspot: true },
+              fields: [{ name: "alt", type: "string", title: "Alt Text" }],
+            },
+            {
+              name: "imageDarkMode",
+              type: "image",
+              title: "Service Image for Dark Mode",
               options: { hotspot: true },
               fields: [{ name: "alt", type: "string", title: "Alt Text" }],
             },

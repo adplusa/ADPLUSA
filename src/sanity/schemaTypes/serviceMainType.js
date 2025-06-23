@@ -31,89 +31,12 @@ export const mainServiceType = defineType({
       type: "image",
       options: { hotspot: true },
     }),
-
-    // ✅ Trust Section
-    // defineField({
-    //   name: "trustSection",
-    //   title: "Trust Section",
-    //   type: "object",
-    //   fields: [
-    //     defineField({ name: "title", title: "Title", type: "string" }),
-    //     defineField({ name: "subtitle", title: "Subtitle", type: "string" }),
-    //   ],
-    // }),
-
-    // ✅ Trust Icons Grid
-    // defineField({
-    //   name: "trustIconsHeading",
-    //   title: "Trust Icons Heading",
-    //   type: "string",
-    // }),
-    // defineField({
-    //   name: "serviceRelatedIcon",
-    //   title: "Service Related Icons",
-    //   type: "array",
-    //   of: [
-    //     {
-    //       type: "object",
-    //       fields: [
-    //         defineField({
-    //           name: "serviceRelatedImg",
-    //           title: "Icon Image",
-    //           type: "image",
-    //         }),
-    //         defineField({
-    //           name: "serviceRelatedNumber",
-    //           title: "Number",
-    //           type: "string",
-    //         }),
-    //         defineField({
-    //           name: "serviceRelatedName",
-    //           title: "Name",
-    //           type: "string",
-    //         }),
-    //       ],
-    //     },
-    //   ],
-    // }),
-
-    // ✅ Services Boxes
-    // defineField({
-    //   name: "serviceHeading",
-    //   title: "Service Heading",
-    //   type: "string",
-    // }),
-    // defineField({
-    //   name: "serviceBox",
-    //   title: "Service Boxes",
-    //   type: "array",
-    //   of: [
-    //     {
-    //       type: "object",
-    //       fields: [
-    //         {
-    //           name: "boxUrl",
-    //           title: "Service Box URL",
-    //           type: "string",
-    //           validation: (Rule) =>
-    //             Rule.required().custom((url) =>
-    //               url.startsWith("/") ? true : "Must start with /"
-    //             ),
-    //         },
-    //         {
-    //           name: "serviceBoxImg",
-    //           title: "Service Box Image",
-    //           type: "image",
-    //         },
-    //         {
-    //           name: "serviceBoxTitle",
-    //           title: "Service Box Title",
-    //           type: "string",
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // }),
+    defineField({
+      name: "serviceBannerImageDarkMode",
+      title: "Banner Image for Dark Mode",
+      type: "image",
+      options: { hotspot: true },
+    }),
 
     // ✅ Why Work With Us
     defineField({
@@ -147,6 +70,11 @@ export const mainServiceType = defineType({
         defineField({
           name: "image",
           title: "Image",
+          type: "image",
+        }),
+        defineField({
+          name: "imageDarkMode",
+          title: "Image for Dark Mode",
           type: "image",
         }),
       ],

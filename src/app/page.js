@@ -46,6 +46,7 @@ export default function Home() {
   const [testSliderContent, setTextSliderContent] = useState(false);
   const [videos, setVideos] = useState({
     peopleVideo: null,
+    peopleVideoDarkMode: null,
     serviceVideo: null,
   });
   const [bgImage, setBgImage] = useState("");
@@ -121,6 +122,9 @@ export default function Home() {
 
         setVideos({
           peopleVideo: resolveVideo(
+            homepageData?.[0]?.peopleVideo?.asset?._ref
+          ),
+          peopleVideoDarkMode: resolveVideo(
             homepageData?.[0]?.peopleVideo?.asset?._ref
           ),
           serviceVideo: resolveVideo(
@@ -697,37 +701,6 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* <div className="home_services">
-                  <h1>{homepageData[0].serviceHeading}</h1>
-                  <div className="home_services_box">
-                    {homepageData[0].serviceBox?.map(
-                      (service, index) =>
-                        service?.serviceBoxImg?.asset && (
-                          <Link href={service.boxUrl} key={index}>
-                            <div className="service-box-home">
-                              <div className="service-image">
-                                <Image
-                                  src={urlFor(service.serviceBoxImg).url()}
-                                  alt={service.serviceBoxTitle}
-                                  width={400}
-                                  height={200}
-                                  unoptimized
-                                />
-                              </div>
-                              <h2>{service.serviceBoxTitle}</h2>
-                            </div>
-                          </Link>
-                        )
-                    )}
-                  </div>
-
-                  <Link className="service-cta-wrap" href={"/mainservice"}>
-                    <button className="service-cta">
-                      {homepageData[0].home_services_cta}
-                    </button>
-                  </Link>
-                </div> */}
-
                 <div className="home_services">
                   <h1>{homepageData[0].serviceHeading}</h1>
                   <div className="home_services_box">
@@ -980,6 +953,7 @@ export default function Home() {
                           unoptimized
                         />
                       )}
+
                       {(isDarkMode
                         ? videos.peopleVideoDarkMode
                         : videos.peopleVideo) && (
@@ -997,6 +971,7 @@ export default function Home() {
                           style={{ width: "100%", height: "auto" }}
                         />
                       )}
+
                       {(isDarkMode
                         ? homepageData[0]?.peoplImageTwoDarkMode?.asset
                         : homepageData[0]?.peoplImageTwo?.asset) && (
@@ -1085,15 +1060,31 @@ export default function Home() {
 
                               <div className="image-wrapper-home">
                                 <div className="background">
-                                  {slide?.image?.asset && (
-                                    <Image
-                                      src={urlFor(slide.image).url()}
-                                      alt={slide.founderTitle || "Slide Image"}
-                                      width={400}
-                                      height={300}
-                                      priority={idx === 0}
-                                    />
-                                  )}
+                                  {isDarkMode
+                                    ? slide?.imageDarkMode?.asset && (
+                                        <Image
+                                          src={urlFor(
+                                            slide.imageDarkMode
+                                          ).url()}
+                                          alt={
+                                            slide.founderTitle || "Slide Image"
+                                          }
+                                          width={400}
+                                          height={300}
+                                          priority={idx === 0}
+                                        />
+                                      )
+                                    : slide?.image?.asset && (
+                                        <Image
+                                          src={urlFor(slide.image).url()}
+                                          alt={
+                                            slide.founderTitle || "Slide Image"
+                                          }
+                                          width={400}
+                                          height={300}
+                                          priority={idx === 0}
+                                        />
+                                      )}
                                 </div>
                               </div>
                             </div>
@@ -1127,17 +1118,30 @@ export default function Home() {
                   <div className="contact-container-two">
                     <div className="contact-us-df">
                       <div className="contact-left">
-                        {homepageData[0]?.contactUsSectionImg?.asset && (
-                          <Image
-                            src={urlFor(
-                              homepageData[0].contactUsSectionImg
-                            ).url()}
-                            width={500}
-                            height={500}
-                            alt="footer-img"
-                            unoptimized
-                          />
-                        )}
+                        {isDarkMode
+                          ? homepageData[0]?.contactUsSectionImgDarkMode
+                              ?.asset && (
+                              <Image
+                                src={urlFor(
+                                  homepageData[0].contactUsSectionImgDarkMode
+                                ).url()}
+                                width={500}
+                                height={500}
+                                alt="footer-img"
+                                unoptimized
+                              />
+                            )
+                          : homepageData[0]?.contactUsSectionImg?.asset && (
+                              <Image
+                                src={urlFor(
+                                  homepageData[0].contactUsSectionImg
+                                ).url()}
+                                width={500}
+                                height={500}
+                                alt="footer-img"
+                                unoptimized
+                              />
+                            )}
                       </div>
                       <div className="contact-right">
                         <h1>{homepageData[0]?.contactUsTitle}</h1>

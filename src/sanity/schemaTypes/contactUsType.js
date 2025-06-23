@@ -64,6 +64,12 @@ export const contactPage = defineType({
       options: { hotspot: true },
     }),
     defineField({
+      name: "contactImageDarkMode",
+      title: "Contact Image for Dark Mode",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
       name: "introText",
       title: "Introductory Text",
       type: "array",

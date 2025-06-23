@@ -14,6 +14,20 @@ const Project = () => {
   const textRef = useRef(null);
   const [data, setData] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const updateMode = () => {
+      setIsDarkMode(document.body.classList.contains("dark-mode"));
+    };
+    updateMode();
+    const observer = new MutationObserver(updateMode);
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
 
   // 🧠 Fetch Sanity CMS data
   useEffect(() => {
@@ -45,19 +59,6 @@ const Project = () => {
       document.head.appendChild(meta);
     }
   }, [data]);
-
-  // 🎞️ GSAP rotation
-  // useEffect(() => {
-  //   if (textRef.current) {
-  //     gsap.to(textRef.current, {
-  //       rotation: 360,
-  //       transformOrigin: "center",
-  //       repeat: -1,
-  //       duration: 8,
-  //       ease: "linear",
-  //     });
-  //   }
-  // }, []);
 
   const upwardHandler = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
