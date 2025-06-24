@@ -503,7 +503,7 @@ const ServicesPage = () => {
               </div>
               <h2 className="title">Quick Query</h2>
               <p className="subtitle">
-                If you have any queries, we will be pleased to assist you.
+                If you have any querie, we will be pleased to assist you.
               </p>
               <form>
                 <input type="text" placeholder="Name" className="form-input" />
