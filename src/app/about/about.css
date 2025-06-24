@@ -231,7 +231,7 @@ div#practice-box {
   position: absolute;
   bottom: -10px;
   left: 0;
-  background-color: #902b2c;
+  background-color: var(--redWhiteColor);
   width: 150px;
   height: 2px;
 }

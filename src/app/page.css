@@ -2075,6 +2075,12 @@ select#service {
     margin-top: 55%;
   }
 
+  .home_services_box {
+    display: grid;
+    grid-template-columns: auto auto;
+    padding: 2% 0;
+  }
+
   .image-wrapper-home img {
     width: 250px;
     height: auto;
@@ -2085,6 +2091,7 @@ select#service {
   .service-box-home h2 {
     height: 60px;
     padding-bottom: 30px;
+    font-size: 13px !important;
   }
 
   .animation-slider {
@@ -2147,19 +2154,16 @@ select#service {
   }
 
   .service-box-home {
-    width: 250px;
+    width: 160px;
+    height: auto !important;
   }
 
-  .home_services_box {
+  /* .home_services_box {
     display: flex;
     overflow-x: auto;
     gap: 30px;
     margin-top: 15px;
-  }
-
-  .home_services_box:first-of-type {
-    margin-left: 5%;
-  }
+  } */
 
   .service-cta {
     margin-top: 2%;
@@ -2251,7 +2255,7 @@ select#service {
   }
 
   .number {
-    background: var(--foreground);
+    background: var(--redWhiteColor);
     height: 30px;
     width: 30px;
   }

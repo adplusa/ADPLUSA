@@ -870,6 +870,14 @@ button.next-button:active {
     padding: 60px 15px;
   }
 
+  .service-three-separated-div {
+    width: 330px;
+  }
+
+  .separate-div {
+    padding: 10px 0;
+  }
+
   .separate-div h1 {
     font-size: 2.2rem;
     margin-bottom: 40px;
@@ -878,10 +886,6 @@ button.next-button:active {
   .separate-div-df {
     grid-template-columns: 1fr;
     gap: 30px;
-  }
-
-  .service-three-separated-div {
-    margin: 0 10px;
   }
 
   .text-content {

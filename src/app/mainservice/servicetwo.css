@@ -206,6 +206,63 @@
     margin-top: 13%;
   }
 
+  .features-name {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: unset;
+    margin-top: 0;
+    padding: 15px;
+  }
+
+  .feature-box {
+    width: 90%;
+  }
+
+  .features-name img {
+    width: 45px;
+    height: auto;
+    margin-top: 4%;
+  }
+
+  .features-name h3 {
+    margin-top: 1%;
+    font-size: 14px !important;
+  }
+
+  .features-name p {
+    font-size: 16px;
+    margin-top: 1%;
+  }
+
+  .feature-section-df {
+    margin-top: 10%;
+  }
+
+  .feature-section {
+    padding: 0 !important;
+  }
+
+  .home_services_box {
+    display: grid !important;
+    grid-template-columns: auto auto !important;
+    padding: 2% 0 !important;
+  }
+
+  .service-box-home h2 {
+    height: 60px;
+    padding-bottom: 30px;
+    font-size: 13px !important;
+  }
+
+  .home_services {
+    margin-top: 18% !important;
+  }
+
+  .service-box-home {
+    width: 160px !important;
+    height: auto !important;
+  }
+
   .schematic-content,
   .schematic-image {
     width: 100%;

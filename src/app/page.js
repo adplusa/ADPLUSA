@@ -340,25 +340,23 @@ export default function Home() {
     }
   }, []);
 
-  // upward handler
+  // // upward handler
   useEffect(() => {
     const handleScroll = () => {
-      const hero = document.querySelector(".hero-banner");
-      if (!hero) return;
+      const scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0;
 
-      const rect = hero.getBoundingClientRect();
-      if (rect.bottom <= 0) {
-        setShowScrollUp(true);
-      } else {
-        setShowScrollUp(false);
-      }
+      setShowScrollUp(scrollTop > 200);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // ✅ your existing upwardHandler stays same
+  // // ✅ your existing upwardHandler stays same
   const upwardHandler = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
