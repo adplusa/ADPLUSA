@@ -857,7 +857,6 @@ h1 {
 
 .feature {
   display: flex;
-  /* align-items: flex-start; */
   gap: 20px;
   padding-bottom: 20px;
   margin-bottom: 20px;
@@ -951,6 +950,19 @@ h1 {
 
     h1 {
       letter-spacing: normal;
+    }
+
+    .copy-designed {
+      align-items: baseline;
+      justify-content: unset;
+    }
+
+    .technology-we-use {
+      margin-top: 22%;
+    }
+
+    .technology-grid {
+      margin-top: 3%;
     }
   }
 }
