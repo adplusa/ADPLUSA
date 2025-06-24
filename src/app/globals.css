@@ -946,7 +946,11 @@ h1 {
 @media screen and (max-width: 768px) {
   @supports (-webkit-touch-callout: none) {
     .home_services h1 {
-      padding: 5%;
+      padding: 0 3%;
+    }
+
+    h1 {
+      letter-spacing: normal;
     }
   }
 }
