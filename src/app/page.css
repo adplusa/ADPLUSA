@@ -2189,11 +2189,16 @@ select#service {
     position: relative;
     flex-wrap: unset;
     gap: 25px 34px;
+    margin-top: 3%;
   }
 
   .technology-grid img {
     width: 130px;
     height: auto;
+  }
+
+  .rto-section {
+    padding: 20px 9%;
   }
 
   .technology-grid > * {
@@ -2222,7 +2227,7 @@ select#service {
   }
 
   .technology-we-use {
-    margin-top: 15%;
+    margin-top: 22%;
   }
 
   .technology-we-use h1 {

@@ -147,7 +147,7 @@
   }
 
   .footer {
-    padding-bottom: 14%;
+    padding-bottom: 3%;
   }
 
   .copy-designed p {
@@ -157,5 +157,6 @@
 
   .copy-designed {
     align-items: baseline;
+    justify-content: unset;
   }
 }
