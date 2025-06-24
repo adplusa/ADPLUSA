@@ -695,8 +695,7 @@ h1 {
 
   .why-work {
     margin-top: 0 !important;
-    padding: 40px 5% !important;
-    padding-top: 10px !important;
+    padding: 10px !important;
   }
 }
 
@@ -942,4 +941,12 @@ h1 {
 
 .carousel-slides-internals {
   gap: 1%;
+}
+
+@media screen and (max-width: 768px) {
+  @supports (-webkit-touch-callout: none) {
+    .home_services h1 {
+      padding: 5%;
+    }
+  }
 }

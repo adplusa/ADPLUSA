@@ -158,6 +158,17 @@ const InternalOne = () => {
     }
   };
 
+  const getVisibleSlides = () => {
+    if (typeof window !== "undefined") {
+      const width = window.innerWidth;
+      if (width <= 480) return 1;
+      if (width <= 768) return 2;
+      if (width <= 1024) return 3;
+      return 4;
+    }
+    return 4;
+  };
+
   const handleDragMove = useCallback(
     (e) => {
       if (!isDragging || !slideRef.current) return;
@@ -441,7 +452,8 @@ const InternalOne = () => {
             className="carousel-slides-internals"
             ref={slideRef}
             style={{
-              transform: `translateX(-${currentIndex * (isMobile ? 100 : 25)}%)`,
+              // transform: `translateX(-${currentIndex * (isMobile ? 100 : 25)}%)`,
+              transform: `translateX(-${currentIndex * (100 / getVisibleSlides())}%)`,
               transition: isDragging ? "none" : "transform 0.5s ease-in-out",
               cursor: isDragging ? "grabbing" : "grab",
               userSelect: "none",
