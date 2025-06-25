@@ -1,5 +1,3 @@
-// ./schemas/projectInternalPageThree.js
-
 import { defineField, defineType } from "sanity";
 
 export const projectInternalPageThree = defineType({

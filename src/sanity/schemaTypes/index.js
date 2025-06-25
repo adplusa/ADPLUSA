@@ -21,6 +21,17 @@ import { projectInternalPageSix } from "./projectInternalSix";
 import { projectInternalPageSeven } from "./projectInternalSeven";
 import { projectInternalPageEight } from "./projectInternalEight";
 import { projectInternalPageNine } from "./projectInternalNine";
+import { projectInternalPageTen } from "./projectInternalTen";
+import { projectInternalPageEleven } from "./projectInternalEleven";
+import { projectInternalPageTwelve } from "./projectInternalTwelve";
+import { projectInternalPageThirteen } from "./projectInternalThirteen";
+import { projectInternalPageFourteen } from "./projectInternalFourteen";
+import { projectInternalPageFifteen } from "./projectInternalFifteen";
+import { projectInternalPageSixteen } from "./projectInternalSixteen";
+import { projectInternalPageSeventeen } from "./projectInternalSeventeen";
+import { projectInternalPageEighteen } from "./projectInternalEighteen";
+import { projectInternalPageNinteen } from "./projectInternalNinteen";
+import { projectInternalPageTwenty } from "./projectInternalTwenty";
 
 export const schema = {
   types: [
@@ -47,5 +58,16 @@ export const schema = {
     projectInternalPageSeven,
     projectInternalPageEight,
     projectInternalPageNine,
+    projectInternalPageTen,
+    projectInternalPageEleven,
+    projectInternalPageTwelve,
+    projectInternalPageThirteen,
+    projectInternalPageFourteen,
+    projectInternalPageFifteen,
+    projectInternalPageSixteen,
+    projectInternalPageSeventeen,
+    projectInternalPageEighteen,
+    projectInternalPageNinteen,
+    projectInternalPageTwenty,
   ],
 };
