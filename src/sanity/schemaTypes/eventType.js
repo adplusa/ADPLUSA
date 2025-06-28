@@ -280,7 +280,7 @@ export const eventType = defineType({
     // Process Image for Dark Mode
     defineField({
       name: "processStepsDarkMode",
-      title: "Process Steps",
+      title: "Process Steps for Dark Mode",
       type: "array",
       of: [
         {

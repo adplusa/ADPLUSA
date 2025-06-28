@@ -189,7 +189,7 @@ const ServiceTwo = () => {
         </div>
       </div>
 
-      <div className="home_services">
+      {/* <div className="home_services">
         <h1>{homepageData.serviceHeading}</h1>
         <div className="home_services_box">
           {(isDarkMode
@@ -200,7 +200,34 @@ const ServiceTwo = () => {
               service?.serviceBoxImg?.asset && (
                 <Link href={service.boxUrl} key={index}>
                   <div className="service-box-home">
-                    <div className="service-image">
+                    <div className="service-image-main">
+                      <Image
+                        src={urlFor(service.serviceBoxImg).url()}
+                        alt={service.serviceBoxTitle}
+                        width={400}
+                        height={200}
+                        unoptimized
+                      />
+                    </div>
+                    <h2>{service.serviceBoxTitle}</h2>
+                  </div>
+                </Link>
+              )
+          )}
+        </div>
+      </div> */}
+      <div className="home_services_unique">
+        <h1>{homepageData.serviceHeading}</h1>
+        <div className="home_services_box_unique">
+          {(isDarkMode
+            ? homepageData.serviceBoxDarkMode
+            : homepageData.serviceBox
+          )?.map(
+            (service, index) =>
+              service?.serviceBoxImg?.asset && (
+                <Link href={service.boxUrl} key={index}>
+                  <div className="service-box-home-unique">
+                    <div className="service-image-main-unique">
                       <Image
                         src={urlFor(service.serviceBoxImg).url()}
                         alt={service.serviceBoxTitle}

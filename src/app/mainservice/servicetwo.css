@@ -642,7 +642,7 @@
     font-size: 16px;
   }
 }
-
+/* 
 .service-box-home {
   width: 100%;
   border-radius: 12px;
@@ -657,7 +657,7 @@
   transform: translateY(-5px);
 }
 
-.service-image {
+.service-image-main {
   width: 100%;
   height: auto;
   position: relative;
@@ -688,7 +688,7 @@
   margin-top: 5%;
 }
 
-.service-image img {
+.service-image-main img {
   object-fit: cover;
   width: 100%;
 }
@@ -714,6 +714,106 @@
 @media (min-width: 1200px) {
   .home_services_box {
     grid-template-columns: repeat(4, 1fr);
+  }
+} */
+
+.home_services_unique {
+  margin-top: 5%;
+}
+
+.home_services_unique h1 {
+  text-align: center;
+}
+
+.home_services_box_unique {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-content: space-evenly;
+  margin-top: 2%;
+  gap: 3%;
+  padding: 2% 5%;
+}
+
+.service-box-home-unique {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: white;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.service-box-home-unique:hover {
+  transform: translateY(-5px);
+}
+
+.service-image-main-unique {
+  width: 100%;
+  height: auto;
+  position: relative;
+}
+
+.service-image-main-unique img {
+  object-fit: contain;
+  width: 100%;
+  height: auto;
+}
+
+.service-box-home-unique h2 {
+  font-size: 17px;
+  margin: 10px 0 5px;
+  padding: 10px;
+  padding-bottom: 20px;
+  color: #000;
+}
+
+/* Responsive Grid Columns */
+@media (min-width: 576px) {
+  .home_services_box_unique {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .home_services_box_unique {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+  .home_services_box_unique {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .home_services_box_unique {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Mobile Styles */
+@media screen and (max-width: 768px) {
+  .home_services_box_unique {
+    display: grid !important;
+    grid-template-columns: auto auto !important;
+    padding: 2% 0 !important;
+  }
+
+  .service-box-home-unique h2 {
+    height: 60px;
+    padding-bottom: 30px;
+    font-size: 13px !important;
+  }
+
+  .home_services_unique {
+    margin-top: 18% !important;
+  }
+
+  .service-box-home-unique {
+    width: 160px !important;
+    height: auto !important;
   }
 }
 

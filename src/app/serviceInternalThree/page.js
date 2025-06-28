@@ -311,6 +311,40 @@ const ServicesPageThree = () => {
         />
       )}
 
+      <section className="service-info">
+        <div className="services-into-df">
+          {data.servicesListOne?.map((service, i) => (
+            <div key={i} className="service-info-df">
+              <div className="service-left">
+                <h1>{service.title}</h1>
+                <p>{service.description}</p>
+              </div>
+              {service.image?.asset && (
+                <div className="service-right">
+                  {isDarkMode ? (
+                    <Image
+                      src={urlFor(service.imageDarkMode).url()}
+                      width={0}
+                      height={0}
+                      unoptimized
+                      alt={service.title || "Service Image"}
+                    />
+                  ) : (
+                    <Image
+                      src={urlFor(service.image).url()}
+                      width={0}
+                      height={0}
+                      unoptimized
+                      alt={service.title || "Service Image"}
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="separate-div">
         <h1>{data.sectionTitle}</h1>
         <div className="separate-div-df">

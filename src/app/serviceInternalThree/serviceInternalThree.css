@@ -751,7 +751,7 @@ button.next-button:active {
 
 .separate-div {
   padding: 80px 20px;
-
+  padding-top: 0px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

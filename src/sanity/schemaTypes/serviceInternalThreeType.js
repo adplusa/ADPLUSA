@@ -39,18 +39,53 @@ export const servicesInternalThreePage = defineType({
       options: { hotspot: true },
     }),
 
-    // ✅ Section title (used in your `<h1>{data.sectionTitle}</h1>`)
     defineField({
-      name: "sectionTitle",
-      title: "Section Title",
-      type: "string",
-      description: "Title for the main separated services block",
+      name: "servicesListOne",
+      title: "Services Offered One",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            { name: "title", type: "string", title: "Service Title" },
+            { name: "description", type: "text", title: "Service Description" },
+            {
+              name: "image",
+              type: "image",
+              title: "Service Image",
+              options: { hotspot: true },
+              fields: [{ name: "alt", type: "string", title: "Alt Text" }],
+            },
+            {
+              name: "imageDarkMode",
+              type: "image",
+              title: "Service Image for Dark Mode",
+              options: { hotspot: true },
+              fields: [{ name: "alt", type: "string", title: "Alt Text" }],
+            },
+            {
+              name: "link",
+              type: "string",
+              title: "Link URL",
+              description:
+                "Optional: Internal (/page) or external (https://...)",
+            },
+            {
+              name: "isExternal",
+              type: "boolean",
+              title: "Is External Link?",
+              description: "Open in new tab if external",
+              initialValue: false,
+            },
+          ],
+        },
+      ],
     }),
 
     // ✅ Services list
     defineField({
       name: "servicesList",
-      title: "Services Offered",
+      title: "Services Offered Two",
       type: "array",
       of: [
         {
