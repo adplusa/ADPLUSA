@@ -357,8 +357,18 @@ export default function Home() {
   }, []);
 
   // // ✅ your existing upwardHandler stays same
+  // const upwardHandler = () => {
+  //   window.scrollTo({ top: 0, behavior: "smooth" });
+  // };
   const upwardHandler = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    (
+      window.scrollTo ||
+      document.documentElement.scrollTo ||
+      document.body.scrollTo
+    )?.({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   // prev

@@ -2390,7 +2390,7 @@ select#service {
   }
 
   .about-us-video-text h1 {
-    font-size: 4rem;
+    font-size: 4rem !important;
   }
 
   .about-us-video-image {

@@ -43,13 +43,21 @@ export const faqSection = defineType({
               title: "Category Description",
               type: "text",
             }),
+            // defineField({
+            //   name: "chatLink",
+            //   title: "Chat Link URL",
+            //   type: "url",
+            //   description: "Link to chat or contact page",
+            //   initialValue: "/contact",
+            // }),
             defineField({
               name: "chatLink",
               title: "Chat Link URL",
-              type: "url",
+              type: "string",
               description: "Link to chat or contact page",
               initialValue: "/contact",
             }),
+
             defineField({
               name: "image",
               title: "Category Image",
