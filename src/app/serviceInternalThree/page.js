@@ -292,19 +292,17 @@ const ServicesPageThree = () => {
   return (
     <>
       <Header />
-      {data.serviceBannerImage?.asset && (
+      {(isDarkMode
+        ? data?.serviceBannerImageDarkMode?.asset
+        : data?.serviceBannerImage?.asset) && (
         <section
           className="service-container"
           style={{
-            backgroundImage: `${
+            backgroundImage: `url(${
               isDarkMode
-                ? data?.serviceBannerImageDarkMode?.asset
-                  ? `url(${urlFor(data.serviceBannerImageDarkMode).url()})`
-                  : ""
-                : data?.serviceBannerImage?.asset
-                  ? `url(${urlFor(data.serviceBannerImage).url()})`
-                  : ""
-            }`,
+                ? urlFor(data.serviceBannerImageDarkMode).url()
+                : urlFor(data.serviceBannerImage).url()
+            })`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -319,27 +317,26 @@ const ServicesPageThree = () => {
                 <h1>{service.title}</h1>
                 <p>{service.description}</p>
               </div>
-              {service.image?.asset && (
-                <div className="service-right">
-                  {isDarkMode ? (
-                    <Image
-                      src={urlFor(service.imageDarkMode).url()}
-                      width={0}
-                      height={0}
-                      unoptimized
-                      alt={service.title || "Service Image"}
-                    />
-                  ) : (
-                    <Image
-                      src={urlFor(service.image).url()}
-                      width={0}
-                      height={0}
-                      unoptimized
-                      alt={service.title || "Service Image"}
-                    />
-                  )}
-                </div>
-              )}
+
+              <div className="service-right">
+                {isDarkMode && service.imageDarkMode?.asset ? (
+                  <Image
+                    src={urlFor(service.imageDarkMode).url()}
+                    width={0}
+                    height={0}
+                    unoptimized
+                    alt={service.title || "Service Image"}
+                  />
+                ) : !isDarkMode && service.image?.asset ? (
+                  <Image
+                    src={urlFor(service.image).url()}
+                    width={0}
+                    height={0}
+                    unoptimized
+                    alt={service.title || "Service Image"}
+                  />
+                ) : null}
+              </div>
             </div>
           ))}
         </div>
