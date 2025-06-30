@@ -11,6 +11,14 @@ p {
   padding: 0 2%;
 }
 
+.internal-section-two-bottom img,
+.internal-section-two img {
+  width: 95%;
+  height: auto;
+  object-fit: contain;
+  margin-top: 8%;
+}
+
 .internal-section-one img {
   width: 100%;
   height: auto;

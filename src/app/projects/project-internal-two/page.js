@@ -257,10 +257,11 @@ const InternalTwo = () => {
         <div className="internal-section-one-top">
           <h1>{data?.[0]?.title}</h1>
 
-          {data?.[0]?.mainImage?.asset && (
+          {(data?.[0]?.mainImage?.asset ||
+            data?.[0]?.mainImageDarkMode?.asset) && (
             <Image
               src={
-                isDarkMode
+                isDarkMode && data[0]?.mainImageDarkMode?.asset
                   ? urlFor(data[0].mainImageDarkMode).url()
                   : urlFor(data[0].mainImage).url()
               }
@@ -344,13 +345,16 @@ const InternalTwo = () => {
       {/* Section Two */}
       <div className="internal-section-two">
         <div className="internal-section-two-top-imgs">
-          {data?.[0]?.projectImages?.topImages?.map((img, idx) =>
-            img?.asset ? (
+          {data?.[0]?.projectImages?.topImages?.map((img, idx) => {
+            const darkImg = data?.[0]?.projectImages?.topImagesDarkMode?.[idx];
+            if (!img?.asset) return null;
+
+            return (
               <Image
                 key={idx}
                 src={
-                  isDarkMode
-                    ? urlFor(data[0].projectImages.topImagesDarkMode[idx]).url()
+                  isDarkMode && darkImg?.asset
+                    ? urlFor(darkImg).url()
                     : urlFor(img).url()
                 }
                 alt={`Top image ${idx + 1}`}
@@ -358,15 +362,17 @@ const InternalTwo = () => {
                 height={400}
                 unoptimized
               />
-            ) : null
-          )}
+            );
+          })}
         </div>
 
         <div className="internal-section-two-bottom">
-          {data?.[0]?.projectImages?.bottomImage?.asset && (
+          {(isDarkMode
+            ? data?.[0]?.projectImages?.bottomImageDarkMode?.asset
+            : data?.[0]?.projectImages?.bottomImage?.asset) && (
             <Image
               src={
-                isDarkMode
+                isDarkMode && data[0]?.projectImages?.bottomImageDarkMode?.asset
                   ? urlFor(data[0].projectImages.bottomImageDarkMode).url()
                   : urlFor(data[0].projectImages.bottomImage).url()
               }
@@ -383,15 +389,17 @@ const InternalTwo = () => {
       <div className="internal-section-two">
         <div className="internal-section-two-top-imgs">
           {/* Top images with dark mode toggle */}
-          {data?.[0]?.projectImagesTwo?.topImagesTwo?.map((img, idx) =>
-            img?.asset ? (
+          {data?.[0]?.projectImagesTwo?.topImagesTwo?.map((img, idx) => {
+            const darkImg =
+              data?.[0]?.projectImagesTwo?.topImagesTwoDarkMode?.[idx];
+            if (!img?.asset) return null;
+
+            return (
               <Image
                 key={idx}
                 src={
-                  isDarkMode
-                    ? urlFor(
-                        data[0].projectImagesTwo.topImagesTwoDarkMode[idx]
-                      ).url()
+                  isDarkMode && darkImg?.asset
+                    ? urlFor(darkImg).url()
                     : urlFor(img).url()
                 }
                 alt={`Top image ${idx + 1}`}
@@ -399,16 +407,19 @@ const InternalTwo = () => {
                 height={400}
                 unoptimized
               />
-            ) : null
-          )}
+            );
+          })}
         </div>
 
         <div className="internal-section-two-bottom">
           {/* Bottom image with dark mode toggle */}
-          {data?.[0]?.projectImagesTwo?.bottomImageTwo?.asset && (
+          {(isDarkMode
+            ? data?.[0]?.projectImagesTwo?.bottomImageTwoDarkMode?.asset
+            : data?.[0]?.projectImagesTwo?.bottomImageTwo?.asset) && (
             <Image
               src={
-                isDarkMode
+                isDarkMode &&
+                data[0]?.projectImagesTwo?.bottomImageTwoDarkMode?.asset
                   ? urlFor(
                       data[0].projectImagesTwo.bottomImageTwoDarkMode
                     ).url()
