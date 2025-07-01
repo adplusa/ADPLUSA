@@ -1756,6 +1756,7 @@ select#service {
   background: white;
   text-align: center;
   transition: transform 0.3s ease;
+  height: unset !important;
 }
 
 .service-box-home:hover {

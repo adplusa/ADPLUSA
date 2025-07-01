@@ -347,8 +347,8 @@ const ServicesPageThree = () => {
         <div className="separate-div-df">
           {data?.servicesList?.map((service, idx) => (
             <div className="service-three-separated-div" key={idx}>
-              <div className="service-content">
-                <div className="image-container">
+              <div className="service-content-service-three">
+                <div className="image-container-service-three">
                   {isDarkMode
                     ? service.imageDarkMode && (
                         <Image
@@ -369,7 +369,7 @@ const ServicesPageThree = () => {
                         />
                       )}
                 </div>
-                <div className="text-content">
+                <div className="text-content-three">
                   <h3>{service.title}</h3>
                   <p>{service.description}</p>
                 </div>
