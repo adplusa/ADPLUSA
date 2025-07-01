@@ -243,24 +243,7 @@ const ServicesPageFive = () => {
   return (
     <>
       <Header />
-      {data.serviceBannerImage?.asset && (
-        <section
-          className="service-container"
-          style={{
-            backgroundImage: `${
-              isDarkMode
-                ? data?.serviceBannerImageDarkMode?.asset
-                  ? `url(${urlFor(data.serviceBannerImageDarkMode).url()})`
-                  : ""
-                : data?.serviceBannerImage?.asset
-                  ? `url(${urlFor(data.serviceBannerImage).url()})`
-                  : ""
-            }`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
-      )}{" "}
+
       {data.serviceBannerImage?.asset && (
         <section
           className="service-container"

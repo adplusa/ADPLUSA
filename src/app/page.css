@@ -1756,7 +1756,7 @@ select#service {
   background: white;
   text-align: center;
   transition: transform 0.3s ease;
-  height: unset !important;
+  height: 250px !important;
 }
 
 .service-box-home:hover {
@@ -1766,7 +1766,7 @@ select#service {
 .service-image {
   width: 100%;
   /* max-width: 200px; */
-  height: auto;
+  height: auto !important;
   /* margin: 0 auto; */
   position: relative;
 }
