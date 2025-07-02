@@ -2021,9 +2021,9 @@ select#service {
 }
 
 .text h3 {
-  font-size: 2rem;
+  /* font-size: 2rem; */
   color: var(--foreground);
-  margin-bottom: 40px;
+  /* margin-bottom: 40px; */
 }
 
 .text h5 {
