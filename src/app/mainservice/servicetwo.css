@@ -642,80 +642,6 @@
     font-size: 16px;
   }
 }
-/* 
-.service-box-home {
-  width: 100%;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  background: white;
-  text-align: center;
-  transition: transform 0.3s ease;
-}
-
-.service-box-home:hover {
-  transform: translateY(-5px);
-}
-
-.service-image-main {
-  width: 100%;
-  height: auto;
-  position: relative;
-}
-
-.service-box-home h2 {
-  font-size: 17px;
-  margin: 10px 0 5px;
-  padding: 10px;
-  padding-bottom: 20px;
-  color: #000;
-}
-
-.home_services_box {
-  display: grid;
-  grid-template-columns: 1fr;
-  justify-content: space-evenly;
-  margin-top: 2%;
-  gap: 3%;
-  padding: 2% 5%;
-}
-
-.home_services h1 {
-  text-align: center;
-}
-
-.home_services {
-  margin-top: 5%;
-}
-
-.service-image-main img {
-  object-fit: cover;
-  width: 100%;
-}
-
-@media (min-width: 576px) {
-  .home_services_box {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 768px) {
-  .home_services_box {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 992px) {
-  .home_services_box {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1200px) {
-  .home_services_box {
-    grid-template-columns: repeat(4, 1fr);
-  }
-} */
 
 .home_services_unique {
   margin-top: 5%;
@@ -914,5 +840,72 @@
   .image-wrapper-main-service-page img {
     width: 250px;
     height: 300px;
+  }
+}
+
+@media (min-width: 650px) and (max-width: 768px) {
+  .home_services_box_unique {
+    display: grid;
+    padding: 2% 0;
+    grid-template-columns: auto auto auto !important;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+  .service-box-home-unique {
+    width: 210px !important;
+  }
+
+  .content-two-main-service-page {
+    margin-top: -9% !important;
+  }
+
+  .schematic-section {
+    margin-top: 8% !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1100px) {
+  .service-related-item img {
+    width: 50px !important;
+    height: auto;
+  }
+
+  .features-name p {
+    font-size: 20px;
+  }
+
+  .features-name h3 {
+    font-size: 14px;
+  }
+
+  .feature-box h1 {
+    font-size: 1.5rem !important;
+    padding: 0 15px;
+  }
+
+  .content-two-main-service-page {
+    margin-top: 15%;
+  }
+
+  .home_services_box_unique {
+    place-items: center !important;
+  }
+
+  .home_services_box_unique a {
+    width: 300px !important;
+  }
+
+  .text-main-service-page h2,
+  .home_services_unique h1 {
+    font-size: 1.7rem !important;
+  }
+
+  .home_services_unique h1 {
+    margin-top: 8% !important;
+  }
+
+  .info-main-service-page h3 {
+    font-size: 18px;
   }
 }

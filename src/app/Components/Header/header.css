@@ -282,3 +282,73 @@
     display: none;
   }
 }
+
+@media (min-width: 768px) and (max-width: 1200px) {
+  .header-df {
+    height: auto;
+  }
+
+  .second-navbar ul li a {
+    font-size: 12px !important;
+  }
+
+  .second-navbar ul {
+    margin-top: -7px;
+  }
+
+  .flip-logo img {
+    width: 80px;
+  }
+
+  .day-night svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .rounder-div-changer {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+  }
+
+  .day-night {
+    border: 1px solid #000;
+    height: 22px;
+    width: 55px;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+  .header-df {
+    height: auto;
+  }
+
+  .second-navbar ul li a {
+    font-size: 16px !important;
+  }
+
+  .second-navbar ul {
+    margin-top: -7px;
+  }
+
+  .flip-logo img {
+    width: 80px;
+  }
+
+  .day-night svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .rounder-div-changer {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+  }
+
+  .day-night {
+    border: 1px solid #000;
+    height: 22px;
+    width: 55px;
+  }
+}

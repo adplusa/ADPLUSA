@@ -973,3 +973,55 @@ h1 {
     }
   }
 }
+
+@media (min-width: 769px) and (max-width: 1100px) {
+  .key-heading,
+  .professionals-heading-internals {
+    font-size: 2rem !important;
+  }
+
+  .text h2,
+  .service-left h1 {
+    font-size: 1.7rem !important;
+  }
+
+  .key-card h3 {
+    font-size: 1.2rem !important;
+  }
+
+  .image-wrapper-main-service-page img {
+    width: 300px !important;
+  }
+
+  .content-two {
+    align-items: center;
+  }
+
+  .professional-card-internals h3 {
+    font-size: 1rem !important;
+  }
+
+  .professional-card-internals {
+    height: 220px !important;
+  }
+
+  .key-card {
+    height: auto !important;
+  }
+
+  .why-work {
+    margin-top: 0 !important;
+  }
+
+  .service-right img {
+    width: 450px !important;
+  }
+
+  .service-left p {
+    font-size: 15px;
+  }
+
+  .service-info-df {
+    padding: 3% 4% !important;
+  }
+}
