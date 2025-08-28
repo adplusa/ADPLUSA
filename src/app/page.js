@@ -775,6 +775,8 @@ export default function Home() {
                   </p>
 
                   {/* conten */}
+
+                  {/* content */}
                   <div className="content">
                     <div className="left">
                       {homepageData[0]?.processSteps
