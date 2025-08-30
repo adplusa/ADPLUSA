@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@gsap/react": "^2.1.2",
     "@portabletext/react": "^3.2.1",
     "@progress/kendo-react-buttons": "^9.4.0",

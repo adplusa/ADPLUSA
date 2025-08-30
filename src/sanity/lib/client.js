@@ -8,5 +8,5 @@ export const client = createClient({
   // useCdn: true,
   // token: process.env.SANITY_API_READ_TOKEN,
   useCdn: false, // set false if you need fresh data with token
-  token,
+  // token,
 });

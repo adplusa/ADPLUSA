@@ -16,6 +16,7 @@ import { client } from "@/sanity/lib/client";
 import { PortableText } from "@portabletext/react";
 import urlFor from "./helpers/sanity";
 import { getFileAsset } from "@sanity/asset-utils";
+import emailjs from "@emailjs/browser";
 
 gsap.registerPlugin(CSSPlugin, ScrollTrigger);
 
@@ -55,9 +56,91 @@ export default function Home() {
   const [showForm, setShowForm] = useState(false);
   const [showScrollUp, setShowScrollUp] = useState(false);
 
+  const formRef = useRef(null);
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState(null);
+
+  const validate = (form) => {
+    const newErrors = {};
+    const firstName = form.firstName?.value?.trim();
+    const email = form.email?.value?.trim();
+    const phone = form.phone?.value?.trim();
+    const service = form.service?.value?.trim();
+
+    if (!firstName) newErrors.firstName = "Please enter your name.";
+    if (!email) newErrors.email = "Please enter your email.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      newErrors.email = "Enter a valid email.";
+    if (!phone) newErrors.phone = "Please enter your phone number.";
+    if (!service) newErrors.service = "Please select a service.";
+
+    return newErrors;
+  };
+
+  const handleSubmitContact = async (e) => {
+    e.preventDefault();
+    setStatus(null);
+    setIsSubmitting(true);
+
+    const formEl = e.currentTarget;
+    const v = validate(formEl);
+    setErrors(v);
+    if (Object.keys(v).length) {
+      setIsSubmitting(false);
+      return;
+    }
+
+    // simple honeypot (optional)
+    const honeypot = formEl.querySelector('[name="website"]')?.value;
+    if (honeypot) {
+      setIsSubmitting(false);
+      setStatus({ type: "ok", msg: "Thanks!" });
+      return;
+    }
+    try {
+      // compute IST timestamp & year
+      const submittedAtIST = new Date().toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        hour12: true,
+      });
+      const currentYear = new Date().getFullYear().toString();
+
+      // write into the hidden fields
+      if (formRef.current) {
+        const submittedAtEl = formRef.current.querySelector(
+          '[name="submitted_at"]'
+        );
+        const yearEl = formRef.current.querySelector('[name="year"]');
+        if (submittedAtEl) submittedAtEl.value = submittedAtIST;
+        if (yearEl) yearEl.value = currentYear;
+      }
+
+      await emailjs.sendForm(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID",
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID",
+        formRef.current,
+        {
+          publicKey:
+            process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY",
+        }
+      );
+
+      formEl.reset();
+      setStatus({
+        type: "ok",
+        msg: "Message sent! We’ll get back to you shortly.",
+      });
+    } catch (err) {
+      console.error(err);
+      setStatus({ type: "err", msg: "Could not send. Please try again." });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   // Add this state to track if we should show animation
   const [shouldAnimate, setShouldAnimate] = useState(false);
-  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const updateMode = () => {
@@ -1157,7 +1240,7 @@ export default function Home() {
                       <div className="contact-right">
                         <h1>{homepageData[0]?.contactUsTitle}</h1>
 
-                        <form
+                        {/* <form
                           id="contactform"
                           className="contact-form"
                           onSubmit={handleSubmit}
@@ -1225,7 +1308,122 @@ export default function Home() {
                               placeholder="Send Your Message"
                             ></textarea>
                           </div>
-                        </form>
+                        </form> */}
+                        <div>
+                          <form
+                            ref={formRef}
+                            id="contactform"
+                            className="contact-form"
+                            onSubmit={handleSubmitContact}
+                          >
+                            <div className="form-fields">
+                              <label htmlFor="fname">Name</label>
+                              <input
+                                type="text"
+                                name="firstName"
+                                id="fname"
+                                placeholder="Your name"
+                              />
+                              {errors.firstName && (
+                                <span className="error">
+                                  {errors.firstName}
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="form-fields">
+                              <label htmlFor="email">Email</label>
+                              <input
+                                type="email"
+                                name="email"
+                                id="email"
+                                placeholder="Your Email"
+                              />
+                              {errors.email && (
+                                <span className="error">{errors.email}</span>
+                              )}
+                            </div>
+
+                            <div className="form-fields">
+                              <label htmlFor="phone">Phone no</label>
+                              <input
+                                type="text"
+                                name="phone"
+                                id="phone"
+                                placeholder="Your Phone Number"
+                              />
+                              {errors.phone && (
+                                <span className="error">{errors.phone}</span>
+                              )}
+                            </div>
+
+                            <div className="form-fields">
+                              <label htmlFor="service">Services</label>
+                              <select
+                                name="service"
+                                id="service"
+                                defaultValue=""
+                              >
+                                <option value="" disabled>
+                                  Select Service
+                                </option>
+                                <option>Drafting to CAD (PDF to CAD)</option>
+                                <option>
+                                  Permit Drawing and Documentation
+                                </option>
+                                <option>Working Drawing and Detailing</option>
+                                <option>
+                                  3D Modelling, Rendering and Walkthrough
+                                </option>
+                                <option>360 Degree Views</option>
+                                <option>BIM Services</option>
+                                <option>Bill of Quantities (BOQ)</option>
+                                <option>MEP Drafting</option>
+                              </select>
+                              {errors.service && (
+                                <span className="error">{errors.service}</span>
+                              )}
+                            </div>
+
+                            <div className="form-fields message">
+                              <label htmlFor="message">Message</label>
+                              <textarea
+                                name="message"
+                                id="message"
+                                placeholder="Send Your Message"
+                              ></textarea>
+                            </div>
+
+                            {/* Honeypot (hidden) */}
+                            {/* Honeypot (hidden) */}
+                            <input
+                              type="text"
+                              name="website"
+                              style={{ display: "none" }}
+                              tabIndex={-1}
+                              autoComplete="off"
+                            />
+
+                            {/* System fields (hidden) */}
+                            <input type="hidden" name="submitted_at" />
+                            <input type="hidden" name="year" />
+
+                            <button type="submit" disabled={isSubmitting}>
+                              {isSubmitting ? "Sending…" : "Send Message"}
+                            </button>
+                          </form>
+
+                          {status && (
+                            <p
+                              className={
+                                status.type === "ok" ? "success" : "error"
+                              }
+                              style={{ marginTop: 12 }}
+                            >
+                              {status.msg}
+                            </p>
+                          )}
+                        </div>
                         <div className="contact-btn">
                           <span>
                             <button type="submit" form="contactform">
