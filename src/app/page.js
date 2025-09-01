@@ -1454,7 +1454,7 @@ export default function Home() {
                 </a>
               </div>
 
-              <div className="enquire">
+              {/* <div className="enquire">
                 <button onClick={() => setShowForm(true)}>Enquire Now</button>
               </div>
               {showForm && (
@@ -1508,7 +1508,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-              )}
+              )} */}
 
               {showScrollUp && (
                 <div className="upward" onClick={upwardHandler}>

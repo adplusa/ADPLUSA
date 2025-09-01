@@ -278,7 +278,31 @@ textarea.form-input {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  backdrop-filter: blur(2px);
+  /* backdrop-filter: blur(1px); */
+}
+
+button.enquiry-tab {
+  position: fixed;
+  top: 85%;
+  right: 0;
+  /* width: 100%; */
+  height: auto;
+  z-index: 1100000;
+  padding: 5px 5px;
+  background-color: var(--enquireNowBackgroundColor);
+  color: var(--enquireNowButtonColor);
+  border: none;
+  outline: none;
+  font-size: 16px;
+  padding: 7px 15px;
+  transform: rotate(-90deg);
+  transform-origin: right center;
+  right: 16.5px;
+  top: 30%;
+  transform: translateY(-50%) rotate(-90deg);
+  font-weight: 700;
+  letter-spacing: 1px;
+  border-radius: 5px 5px 0 0;
 }
 
 .enquiry-container {
@@ -1024,4 +1048,8 @@ h1 {
   .service-info-df {
     padding: 3% 4% !important;
   }
+}
+
+.enquire button {
+  display: none !important;
 }
