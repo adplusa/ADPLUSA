@@ -378,6 +378,10 @@ button.next-button:active {
   font-size: 12px;
 }
 
+.contact-form button {
+  display: none;
+}
+
 .partner-content {
   margin-top: 5px !important;
 }
