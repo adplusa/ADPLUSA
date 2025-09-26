@@ -1394,8 +1394,6 @@ export default function Home() {
                               ></textarea>
                             </div>
 
-                            {/* Honeypot (hidden) */}
-                            {/* Honeypot (hidden) */}
                             <input
                               type="text"
                               name="website"
