@@ -584,4 +584,3 @@ const InternalFive = () => {
 };
 
 export default InternalFive;
-export const dynamic = "force-dynamic";

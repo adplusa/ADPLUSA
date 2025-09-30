@@ -548,4 +548,3 @@ const InternalEighteen = () => {
 };
 
 export default InternalEighteen;
-export const dynamic = "force-dynamic";

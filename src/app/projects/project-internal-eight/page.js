@@ -559,4 +559,3 @@ const InternalEight = () => {
 };
 
 export default InternalEight;
-export const dynamic = "force-dynamic";

@@ -559,4 +559,3 @@ const InternalSeven = () => {
 };
 
 export default InternalSeven;
-export const dynamic = "force-dynamic";

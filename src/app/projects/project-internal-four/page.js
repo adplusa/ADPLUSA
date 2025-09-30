@@ -585,4 +585,3 @@ const InternalFour = () => {
 };
 
 export default InternalFour;
-export const dynamic = "force-dynamic";

@@ -575,4 +575,3 @@ const InternalTwelve = () => {
 };
 
 export default InternalTwelve;
-export const dynamic = "force-dynamic";

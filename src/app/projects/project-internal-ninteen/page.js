@@ -548,4 +548,3 @@ const InternalNinteen = () => {
 };
 
 export default InternalNinteen;
-export const dynamic = "force-dynamic";

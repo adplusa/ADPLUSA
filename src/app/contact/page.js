@@ -494,4 +494,3 @@ const ContactPage = () => {
 };
 
 export default ContactPage;
-export const dynamic = "force-dynamic";

@@ -575,4 +575,3 @@ const InternalTwenty = () => {
 };
 
 export default InternalTwenty;
-export const dynamic = "force-dynamic";

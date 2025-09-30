@@ -575,4 +575,3 @@ const InternalSixteen = () => {
 };
 
 export default InternalSixteen;
-export const dynamic = "force-dynamic";

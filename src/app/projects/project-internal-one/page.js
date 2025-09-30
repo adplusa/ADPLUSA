@@ -610,4 +610,3 @@ const InternalOne = () => {
 };
 
 export default InternalOne;
-export const dynamic = "force-dynamic";
