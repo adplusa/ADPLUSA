@@ -1,7 +1,7 @@
 import { createClient } from "next-sanity";
+import { apiVersion, dataset, projectId } from "../env.js";
 
-import { apiVersion, dataset, projectId } from "../env";
-console.log(projectId, "Naveen ProjectId");
+console.log("Sanity projectId:", projectId, "dataset:", dataset);
 
 export const client = createClient({
   projectId,
