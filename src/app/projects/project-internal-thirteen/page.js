@@ -575,3 +575,4 @@ const InternalThirteen = () => {
 };
 
 export default InternalThirteen;
+export const dynamic = "force-dynamic";

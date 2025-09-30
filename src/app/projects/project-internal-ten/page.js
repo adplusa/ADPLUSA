@@ -575,3 +575,4 @@ const InternalTen = () => {
 };
 
 export default InternalTen;
+export const dynamic = "force-dynamic";

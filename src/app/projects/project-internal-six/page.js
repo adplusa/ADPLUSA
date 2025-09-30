@@ -559,3 +559,4 @@ const InternalSix = () => {
 };
 
 export default InternalSix;
+export const dynamic = "force-dynamic";

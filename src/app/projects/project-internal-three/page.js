@@ -597,3 +597,4 @@ const InternalThree = () => {
 };
 
 export default InternalThree;
+export const dynamic = "force-dynamic";

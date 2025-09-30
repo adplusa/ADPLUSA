@@ -548,3 +548,4 @@ const InternalFifteen = () => {
 };
 
 export default InternalFifteen;
+export const dynamic = "force-dynamic";
