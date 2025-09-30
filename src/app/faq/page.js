@@ -257,3 +257,4 @@ export default function FAQ() {
     </>
   );
 }
+export const dynamic = "force-dynamic";

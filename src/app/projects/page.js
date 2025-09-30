@@ -193,3 +193,4 @@ const Project = () => {
 };
 
 export default Project;
+export const dynamic = "force-dynamic";

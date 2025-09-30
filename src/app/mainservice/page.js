@@ -378,3 +378,4 @@ const ServiceTwo = () => {
 };
 
 export default ServiceTwo;
+export const dynamic = "force-dynamic";
