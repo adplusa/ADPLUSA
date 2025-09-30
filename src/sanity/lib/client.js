@@ -30,6 +30,6 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  token: process.env.SANITY_API_TOKEN, // only used on server if available
+  // token: process.env.SANITY_API_TOKEN, // only used on server if available
   useCdn: process.env.NODE_ENV === "production",
 });
