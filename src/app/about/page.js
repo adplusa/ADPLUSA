@@ -7,7 +7,7 @@ import "./about.css";
 import Image from "next/image";
 import gsap from "gsap";
 // import { client } from "../../sanity/lib/client";
-import { client } from "@/sanity/lib/client";
+// import { client } from "@/sanity/lib/client";
 // import { SanityClient } from "next-sanity";
 import urlFor from "../helpers/sanity";
 import { PortableText } from "@portabletext/react";
@@ -52,6 +52,7 @@ const About = () => {
   useEffect(() => {
     const fetchAboutData = async () => {
       try {
+        const { client } = await import("../../sanity/lib/client");
         const aboutPageData = await client.fetch('*[_type == "aboutPage"]');
 
         const resolveVideo = (ref) => {
