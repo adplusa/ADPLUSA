@@ -6,9 +6,7 @@ import Footer from "../Components/Footer/page";
 import "./about.css";
 import Image from "next/image";
 import gsap from "gsap";
-// import { client } from "../../sanity/lib/client";
-// import { client } from "@/sanity/lib/client";
-// import { SanityClient } from "next-sanity";
+
 import urlFor from "../helpers/sanity";
 import { PortableText } from "@portabletext/react";
 import Link from "next/link";
