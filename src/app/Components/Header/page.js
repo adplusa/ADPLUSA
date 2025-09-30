@@ -78,7 +78,7 @@ const Header = () => {
                 height={0}
                 unoptimized
               />
-              <Image
+              {/* <Image
                 id="flip-two"
                 className="flip-back"
                 src={"/red-logo-flip.png"}
@@ -86,7 +86,7 @@ const Header = () => {
                 width={100}
                 height={100}
                 unoptimized
-              />
+              /> */}
             </span>
           </div>
         </Link>
