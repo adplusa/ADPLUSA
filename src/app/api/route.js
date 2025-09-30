@@ -75,7 +75,8 @@ const writeClient = process.env.SANITY_API_TOKEN
 
 export async function POST(req) {
   try {
-    const data = await req.json(); // {name,email,phone,service,message,submitted_at,year}
+    const data = await req.json();
+    // {name,email,phone,service,message,submitted_at,year}
 
     // 1) Send email via EmailJS REST API
     const r = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
@@ -117,3 +118,5 @@ export async function POST(req) {
     );
   }
 }
+
+console.log("naveen");
