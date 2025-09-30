@@ -44,10 +44,28 @@ export const projectInternalPageOne = defineType({
     }),
 
     defineField({
+      // name: "moreContent",
+      // title: "Expandable Content",
+      // type: "array",
+      // of: [{ type: "text" }],
       name: "moreContent",
-      title: "Expandable Content",
+      title: "More Content",
       type: "array",
-      of: [{ type: "text" }],
+      of: [
+        {
+          type: "block",
+          styles: [
+            { title: "Normal", value: "normal" },
+            { title: "Heading", value: "h3" },
+          ],
+          marks: {
+            decorators: [
+              { title: "Strong", value: "strong" }, // Bold
+              { title: "Emphasis", value: "em" }, // Italic
+            ],
+          },
+        },
+      ],
     }),
 
     defineField({
