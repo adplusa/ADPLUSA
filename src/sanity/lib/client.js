@@ -27,9 +27,9 @@ if (!projectId || !dataset) {
 }
 
 export const client = createClient({
-  projectId,
-  dataset,
+  projectId: "5ippxm43",
+  dataset: "production",
   apiVersion,
-  // token: process.env.SANITY_API_TOKEN, // only used on server if available
+  token: process.env.SANITY_API_TOKEN,
   useCdn: process.env.NODE_ENV === "production",
 });
