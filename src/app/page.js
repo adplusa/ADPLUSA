@@ -502,24 +502,59 @@ export default function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const form = e.target;
+  //   const name = form.firstName.value.trim();
+  //   const phone = form.phone.value.trim();
+
+  //   let formErrors = {};
+
+  //   if (!name) formErrors.firstName = "Name is required.";
+  //   if (!phone) formErrors.phone = "Phone number is required.";
+
+  //   setErrors(formErrors);
+
+  //   if (Object.keys(formErrors).length === 0) {
+  //     // proceed with form submission
+  //     console.log("Form submitted");
+  //   }
+  // };
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    const form = e.target;
-    const name = form.firstName.value.trim();
-    const phone = form.phone.value.trim();
+    setSending(true);
 
-    let formErrors = {};
+    try {
+      const formData = {
+        name: v("name"),
+        email: v("email"),
+        phone: v("phone"),
+        message: v("message"),
+      };
 
-    if (!name) formErrors.firstName = "Name is required.";
-    if (!phone) formErrors.phone = "Phone number is required.";
+      const res = await fetch("/api/sendEmail", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-    setErrors(formErrors);
-
-    if (Object.keys(formErrors).length === 0) {
-      // proceed with form submission
-      console.log("Form submitted");
+      const data = await res.json();
+      if (data.success) {
+        setStatus({
+          type: "ok",
+          msg: "Message sent! We’ll get back to you shortly.",
+        });
+        formRef.current.reset();
+      } else {
+        throw new Error(data.error || "Something went wrong");
+      }
+    } catch (err) {
+      setStatus({ type: "err", msg: err.message });
+    } finally {
+      setSending(false);
     }
-  };
+  }
 
   return (
     <>
