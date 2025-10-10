@@ -16,7 +16,7 @@ import { client } from "@/sanity/lib/client";
 import { PortableText } from "@portabletext/react";
 import urlFor from "./helpers/sanity";
 import { getFileAsset } from "@sanity/asset-utils";
-import emailjs from "@emailjs/browser";
+// import emailjs from "@emailjs/browser";
 
 gsap.registerPlugin(CSSPlugin, ScrollTrigger);
 
@@ -78,6 +78,69 @@ export default function Home() {
     return newErrors;
   };
 
+  // const handleSubmitContact = async (e) => {
+  //   e.preventDefault();
+  //   setStatus(null);
+  //   setIsSubmitting(true);
+
+  //   const formEl = e.currentTarget;
+  //   const v = validate(formEl);
+  //   setErrors(v);
+  //   if (Object.keys(v).length) {
+  //     setIsSubmitting(false);
+  //     return;
+  //   }
+
+  //   // simple honeypot (optional)
+  //   const honeypot = formEl.querySelector('[name="website"]')?.value;
+  //   if (honeypot) {
+  //     setIsSubmitting(false);
+  //     setStatus({ type: "ok", msg: "Thanks!" });
+  //     return;
+  //   }
+  //   try {
+  //     // compute IST timestamp & year
+  //     const submittedAtIST = new Date().toLocaleString("en-IN", {
+  //       timeZone: "Asia/Kolkata",
+  //       hour12: true,
+  //     });
+  //     const currentYear = new Date().getFullYear().toString();
+
+  //     // write into the hidden fields
+  //     if (formRef.current) {
+  //       const submittedAtEl = formRef.current.querySelector(
+  //         '[name="submitted_at"]'
+  //       );
+  //       const yearEl = formRef.current.querySelector('[name="year"]');
+  //       if (submittedAtEl) submittedAtEl.value = submittedAtIST;
+  //       if (yearEl) yearEl.value = currentYear;
+  //     }
+
+  //     await emailjs.sendForm(
+  //       process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID",
+  //       process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID",
+  //       formRef.current,
+  //       {
+  //         publicKey:
+  //           process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY",
+  //       }
+  //     );
+
+  //     formEl.reset();
+  //     setStatus({
+  //       type: "ok",
+  //       msg: "Message sent! We’ll get back to you shortly.",
+  //     });
+  //   } catch (err) {
+  //     console.error(err);
+  //     setStatus({ type: "err", msg: "Could not send. Please try again." });
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+
+  // Add this state to track if we should show animation
+
   const handleSubmitContact = async (e) => {
     e.preventDefault();
     setStatus(null);
@@ -91,55 +154,60 @@ export default function Home() {
       return;
     }
 
-    // simple honeypot (optional)
     const honeypot = formEl.querySelector('[name="website"]')?.value;
     if (honeypot) {
       setIsSubmitting(false);
       setStatus({ type: "ok", msg: "Thanks!" });
       return;
     }
+
     try {
-      // compute IST timestamp & year
-      const submittedAtIST = new Date().toLocaleString("en-IN", {
+      // generate timestamp + year
+      const submitted_at = new Date().toLocaleString("en-IN", {
         timeZone: "Asia/Kolkata",
         hour12: true,
       });
-      const currentYear = new Date().getFullYear().toString();
+      const year = String(new Date().getFullYear());
 
-      // write into the hidden fields
-      if (formRef.current) {
-        const submittedAtEl = formRef.current.querySelector(
-          '[name="submitted_at"]'
-        );
-        const yearEl = formRef.current.querySelector('[name="year"]');
-        if (submittedAtEl) submittedAtEl.value = submittedAtIST;
-        if (yearEl) yearEl.value = currentYear;
-      }
+      const formData = {
+        name: formEl.firstName.value.trim(),
+        email: formEl.email.value.trim(),
+        phone: formEl.phone.value.trim(),
+        service: formEl.service.value.trim() || "General",
+        message: formEl.message.value.trim(),
+        submitted_at,
+        year,
+      };
 
-      await emailjs.sendForm(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID",
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID",
-        formRef.current,
-        {
-          publicKey:
-            process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY",
-        }
-      );
-
-      formEl.reset();
-      setStatus({
-        type: "ok",
-        msg: "Message sent! We’ll get back to you shortly.",
+      // 🚀 Call your backend API (server-side EmailJS)
+      const res = await fetch("/api/sendEmail", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
+
+      const data = await res.json();
+
+      if (data.success) {
+        formEl.reset();
+        setStatus({
+          type: "ok",
+          msg: "Message sent! We’ll get back to you shortly.",
+        });
+      } else {
+        throw new Error(data.error || "Failed to send email.");
+      }
     } catch (err) {
-      console.error(err);
-      setStatus({ type: "err", msg: "Could not send. Please try again." });
+      console.error("Form Submit Error:", err);
+      setStatus({
+        type: "err",
+        msg: err.message || "Something went wrong. Please try again.",
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Add this state to track if we should show animation
   const [shouldAnimate, setShouldAnimate] = useState(false);
 
   useEffect(() => {
@@ -523,16 +591,56 @@ export default function Home() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setStatus(null);
     setSending(true);
 
+    // --- Validate ---
+    if (!v("name"))
+      return (
+        setSending(false),
+        setStatus({ type: "err", msg: "Please enter your name." })
+      );
+    if (!v("email"))
+      return (
+        setSending(false),
+        setStatus({ type: "err", msg: "Please enter your email." })
+      );
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v("email")))
+      return (
+        setSending(false),
+        setStatus({ type: "err", msg: "Enter a valid email." })
+      );
+    if (!v("phone"))
+      return (
+        setSending(false),
+        setStatus({ type: "err", msg: "Please enter your phone number." })
+      );
+
+    // --- Honeypot ---
+    if (v("website")) {
+      setSending(false);
+      setStatus({ type: "ok", msg: "Thanks!" });
+      return;
+    }
+
     try {
+      const submitted_at = new Date().toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        hour12: true,
+      });
+      const year = String(new Date().getFullYear());
+
       const formData = {
         name: v("name"),
-        email: v("email"),
         phone: v("phone"),
+        email: v("email"),
+        service: v("service") || "General",
         message: v("message"),
+        submitted_at,
+        year,
       };
 
+      // 🚀 Send data to your secure backend API
       const res = await fetch("/api/sendEmail", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -540,17 +648,23 @@ export default function Home() {
       });
 
       const data = await res.json();
+
       if (data.success) {
+        formRef.current?.reset();
         setStatus({
           type: "ok",
           msg: "Message sent! We’ll get back to you shortly.",
         });
-        formRef.current.reset();
+        setOpen(false);
       } else {
-        throw new Error(data.error || "Something went wrong");
+        throw new Error(data.error || "Failed to send email.");
       }
     } catch (err) {
-      setStatus({ type: "err", msg: err.message });
+      console.error("Form Submit Error:", err);
+      setStatus({
+        type: "err",
+        msg: err.message || "Something went wrong. Please try again.",
+      });
     } finally {
       setSending(false);
     }
