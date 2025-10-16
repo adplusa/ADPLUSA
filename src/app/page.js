@@ -630,17 +630,32 @@ export default function Home() {
       });
       const year = String(new Date().getFullYear());
 
-      const formData = {
-        name: v("name"),
-        phone: v("phone"),
-        email: v("email"),
-        service: v("service") || "General",
-        message: v("message"),
-        submitted_at,
-        year,
-      };
+      // const formData = {
+      //   name: v("name"),
+      //   phone: v("phone"),
+      //   email: v("email"),
+      //   service: v("service") || "General",
+      //   message: v("message"),
+      //   submitted_at,
+      //   year,
+      // };
 
       // 🚀 Send data to your secure backend API
+
+      const formData = {
+        name: formEl.firstName.value.trim(),
+        email: formEl.email.value.trim(),
+        phone: formEl.phone.value.trim(),
+        service: formEl.service.value.trim() || "General",
+        message: formEl.message.value.trim(),
+        submitted_at: new Date().toLocaleString("en-IN", {
+          timeZone: "Asia/Kolkata",
+          hour12: true,
+        }),
+        year: String(new Date().getFullYear()),
+        type: "contact", // 👈 add this so backend knows it’s contact form
+      };
+
       const res = await fetch("/api/sendEmail", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

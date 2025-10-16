@@ -6,7 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 const Header = () => {
-  const [logo, setLogo] = useState("/red-log-width.png");
+  // const [logo, setLogo] = useState("/red-log-width.png");
+  const [logo, setLogo] = useState("/n.png");
   const [isFixed, setIsFixed] = useState(false);
   const [navbarTop, setNavbarTop] = useState(0);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -78,6 +79,7 @@ const Header = () => {
                 height={0}
                 unoptimized
               />
+
               {/* <Image
                 id="flip-two"
                 className="flip-back"
