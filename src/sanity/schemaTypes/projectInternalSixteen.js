@@ -23,6 +23,16 @@ export const projectInternalPageSixteen = defineType({
     }),
 
     defineField({
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: {
+        source: "title", // auto-generate from page title
+        maxLength: 96,
+      },
+    }),
+
+    defineField({
       name: "mainImage",
       title: "Top Image",
       type: "image",

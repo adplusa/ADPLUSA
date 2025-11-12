@@ -5,17 +5,18 @@ import Header from "../Components/Header/page";
 import Footer from "../Components/Footer/page";
 import Image from "next/image";
 import Link from "next/link";
-import { gsap } from "gsap";
 import { client } from "@/sanity/lib/client";
 import urlFor from "../helpers/sanity";
 import "./project.css";
 
 const Project = () => {
   const textRef = useRef(null);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(6);
 
+  // 🌙 Dark / Light mode listener
   useEffect(() => {
     const updateMode = () => {
       setIsDarkMode(document.body.classList.contains("dark-mode"));
@@ -29,12 +30,42 @@ const Project = () => {
     return () => observer.disconnect();
   }, []);
 
-  // 🧠 Fetch Sanity CMS data
+  // 🧠 Fetch and Filter Sanity Projects
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fetched = await client.fetch(`*[_type == "projectPage"]`);
-        setData(fetched);
+        // 1️⃣ Fetch all docs whose type starts with "projectInternalPage"
+        const fetched = await client.fetch(
+          `*[_type match "projectInternalPage*"]{
+            _id,
+            _type,
+            title,
+            slug,
+            introText,
+            mainImage,
+            mainImageDarkMode,
+            projectImages,
+            _createdAt
+          }`
+        );
+
+        // 2️⃣ Filter out docs that have no title or image or content
+        const filtered = fetched.filter(
+          (item) =>
+            (item.mainImage || item.mainImageDarkMode) &&
+            (item.introText || item.projectImages)
+        );
+
+        // 3️⃣ Sort by internal page number (projectInternalPageOne → Two → ...)
+        const sorted = filtered.sort((a, b) => {
+          const getNum = (typeName) => {
+            const match = typeName.match(/\d+/);
+            return match ? parseInt(match[0]) : 0;
+          };
+          return getNum(a._type) - getNum(b._type);
+        });
+
+        setData(sorted);
       } catch (error) {
         console.error("Error fetching project data:", error);
       }
@@ -43,28 +74,18 @@ const Project = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    if (!data) return;
-
-    const pageData = data[0];
-    document.title = pageData.seoTitle;
-
-    const metaDesc = document.querySelector("meta[name='description']");
-    if (metaDesc) {
-      metaDesc.setAttribute("content", pageData.seoDescription);
-    } else {
-      const meta = document.createElement("meta");
-      meta.name = "description";
-      meta.content = "Learn about our mission and team";
-      document.head.appendChild(meta);
-    }
-  }, [data]);
-
+  // 🆙 Scroll to Top
   const upwardHandler = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if (!data) return <div>Loading...</div>;
+  // ➕ Load More
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + 6);
+  };
+
+  if (!data || data.length === 0)
+    return <div className="loading">Loading projects...</div>;
 
   return (
     <>
@@ -73,38 +94,53 @@ const Project = () => {
       <div className="project-container">
         <div className="project-content">
           <div className="project-heading">
-            <h1 ref={textRef}>{data[0].heading}</h1>
+            <h1 ref={textRef}>Our Projects</h1>
             <hr id="project-hr" />
           </div>
 
+          {/* 🏗️ Project Grid */}
           <div className="project-grid">
-            {data[0]?.projects?.map(
-              (item, index) =>
-                item?.image?.asset && (
-                  <Link
-                    href={item.link || "#"}
-                    key={index}
-                    className="project-tile"
-                  >
-                    <div className="image-wrapper-pr">
-                      <Image
-                        src={urlFor(item.image).url()}
-                        alt={item.title || "Project Image"}
-                        fill
-                        unoptimized
-                        priority
-                      />
-                    </div>
-                    <p className="image-title">{item.title}</p>
-                  </Link>
-                )
-            )}
+            {data.slice(0, visibleCount).map((item, index) => (
+              <Link
+                href={
+                  item.slug?.current ? `/projects/${item.slug.current}` : "#"
+                }
+                key={index}
+                className="project-tile"
+              >
+                <div className="image-wrapper-pr">
+                  <Image
+                    src={
+                      isDarkMode && item.mainImageDarkMode
+                        ? urlFor(item.mainImageDarkMode).url()
+                        : item.mainImage
+                          ? urlFor(item.mainImage).url()
+                          : "/placeholder.jpg"
+                    }
+                    alt={item.title || "Project Image"}
+                    fill
+                    unoptimized
+                    priority
+                  />
+                </div>
+                <p className="image-title">{item.title}</p>
+              </Link>
+            ))}
           </div>
+
+          {/* 🔽 Load More Button */}
+          {visibleCount < data.length && (
+            <div className="load-more-container">
+              <button className="load-more-btn" onClick={handleLoadMore}>
+                Load More
+              </button>
+            </div>
+          )}
         </div>
 
         <Footer />
 
-        {/* WhatsApp Button */}
+        {/* 💬 WhatsApp Button */}
         <div className="whatsapp">
           <a
             className="btn-whatsapp-pulse"
@@ -121,15 +157,16 @@ const Project = () => {
           </a>
         </div>
 
-        {/* Enquire Button */}
+        {/* 📩 Enquiry Form */}
         <div className="enquire">
           <button onClick={() => setShowForm(true)}>Enquire Now</button>
         </div>
+
         {showForm && (
           <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
             <div
               className="enquiry-container"
-              onClick={(e) => e.stopPropagation()} // Prevent close on form click
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="enquiry-box">
                 <div className="close-icon" onClick={() => setShowForm(false)}>
@@ -171,7 +208,7 @@ const Project = () => {
           </div>
         )}
 
-        {/* Scroll Up Button */}
+        {/* ⬆ Scroll Up Button */}
         <div className="upward" onClick={upwardHandler}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
