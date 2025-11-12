@@ -283,6 +283,9 @@
   }
 }
 
+@media (min-width: 1000px) and (max-width: 1200px) {
+}
+
 @media (min-width: 768px) and (max-width: 1200px) {
   .header-df {
     height: auto;
@@ -350,5 +353,12 @@
     border: 1px solid #000;
     height: 22px;
     width: 55px;
+  }
+}
+
+@media (min-width: 1450px) and (max-width: 2150px) {
+  .flip-logo img {
+    margin-top: 20px;
+    width: 130px;
   }
 }
