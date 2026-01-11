@@ -121,8 +121,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Find user by username (include password field)
-    const user = await User.findOne({ username }).select('+password');
+    // Find user by username or email (include password field)
+    const user = await User.findOne({
+      $or: [
+        { username },
+        { email: username } // Allow login with email in the username field
+      ]
+    }).select('+password');
 
     if (!user) {
       res.status(401).json({

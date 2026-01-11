@@ -8,7 +8,10 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "jest",
-    "migrate": "ts-node src/scripts/migrate.ts"
+    "migrate": "ts-node src/scripts/migrate.ts",
+    "create-user": "ts-node src/scripts/create-user.ts",
+    "create-custom-user": "ts-node src/scripts/create-custom-user.ts",
+    "list-users": "ts-node src/scripts/list-users.ts"
   },
   "keywords": [
     "cms",
@@ -31,7 +34,7 @@
     "mongoose": "^8.0.3",
     "multer": "^1.4.5-lts.1",
     "sharp": "^0.34.5",
-    "uuid": "^13.0.0"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
