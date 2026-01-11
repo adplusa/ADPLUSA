@@ -1,4 +1,4 @@
-import api from './axios';
+import { axiosApi } from './axios';
 
 // FAQ Types
 export interface FAQItem {
@@ -84,7 +84,7 @@ export interface ContentResponse<T> {
  * Get FAQ data
  */
 export const getFAQ = async (): Promise<ContentResponse<FAQ>> => {
-  const response = await api.get<ContentResponse<FAQ>>('/faq');
+  const response = await axiosApi.get<ContentResponse<FAQ>>('/faq');
   return response.data;
 };
 
@@ -92,7 +92,7 @@ export const getFAQ = async (): Promise<ContentResponse<FAQ>> => {
  * Update FAQ data (admin only)
  */
 export const updateFAQ = async (faq: FAQ): Promise<ContentResponse<FAQ>> => {
-  const response = await api.put<ContentResponse<FAQ>>('/admin/faq', faq);
+  const response = await axiosApi.put<ContentResponse<FAQ>>('/admin/faq', faq);
   return response.data;
 };
 
@@ -100,7 +100,7 @@ export const updateFAQ = async (faq: FAQ): Promise<ContentResponse<FAQ>> => {
  * Get About page data
  */
 export const getAbout = async (): Promise<ContentResponse<About>> => {
-  const response = await api.get<ContentResponse<About>>('/about');
+  const response = await axiosApi.get<ContentResponse<About>>('/about');
   return response.data;
 };
 
@@ -108,7 +108,7 @@ export const getAbout = async (): Promise<ContentResponse<About>> => {
  * Update About page data (admin only)
  */
 export const updateAbout = async (about: About): Promise<ContentResponse<About>> => {
-  const response = await api.put<ContentResponse<About>>('/admin/about', about);
+  const response = await axiosApi.put<ContentResponse<About>>('/admin/about', about);
   return response.data;
 };
 
@@ -116,7 +116,7 @@ export const updateAbout = async (about: About): Promise<ContentResponse<About>>
  * Get Contact page data
  */
 export const getContact = async (): Promise<ContentResponse<Contact>> => {
-  const response = await api.get<ContentResponse<Contact>>('/contact');
+  const response = await axiosApi.get<ContentResponse<Contact>>('/contact');
   return response.data;
 };
 
@@ -124,6 +124,6 @@ export const getContact = async (): Promise<ContentResponse<Contact>> => {
  * Update Contact page data (admin only)
  */
 export const updateContact = async (contact: Contact): Promise<ContentResponse<Contact>> => {
-  const response = await api.put<ContentResponse<Contact>>('/admin/contact', contact);
+  const response = await axiosApi.put<ContentResponse<Contact>>('/admin/contact', contact);
   return response.data;
 };

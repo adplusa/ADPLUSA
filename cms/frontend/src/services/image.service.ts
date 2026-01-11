@@ -1,4 +1,4 @@
-import api from './axios';
+import { axiosApi } from './axios';
 
 export interface ImageMetadata {
   _id?: string;
@@ -61,7 +61,7 @@ export const uploadImage = async (file: File): Promise<ImageUploadResponse> => {
   const formData = new FormData();
   formData.append('image', file);
 
-  const response = await api.post<ImageUploadResponse>('/admin/upload', formData, {
+  const response = await axiosApi.post<ImageUploadResponse>('/admin/upload', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -78,7 +78,7 @@ export const uploadMultipleImages = async (files: File[]): Promise<MultipleImage
     formData.append('images', file);
   });
 
-  const response = await api.post<MultipleImageUploadResponse>('/admin/upload/multiple', formData, {
+  const response = await axiosApi.post<MultipleImageUploadResponse>('/admin/upload/multiple', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -90,7 +90,7 @@ export const uploadMultipleImages = async (files: File[]): Promise<MultipleImage
  * List images with pagination
  */
 export const listImages = async (params?: ImageQueryParams): Promise<ImagesListResponse> => {
-  const response = await api.get<ImagesListResponse>('/admin/images', { params });
+  const response = await axiosApi.get<ImagesListResponse>('/admin/images', { params });
   return response.data;
 };
 
@@ -98,7 +98,7 @@ export const listImages = async (params?: ImageQueryParams): Promise<ImagesListR
  * Get image by ID
  */
 export const getImageById = async (id: string): Promise<ImageResponse> => {
-  const response = await api.get<ImageResponse>(`/admin/images/${id}`);
+  const response = await axiosApi.get<ImageResponse>(`/admin/images/${id}`);
   return response.data;
 };
 
@@ -106,7 +106,7 @@ export const getImageById = async (id: string): Promise<ImageResponse> => {
  * Delete image by ID
  */
 export const deleteImage = async (id: string): Promise<DeleteResponse> => {
-  const response = await api.delete<DeleteResponse>(`/admin/images/${id}`);
+  const response = await axiosApi.delete<DeleteResponse>(`/admin/images/${id}`);
   return response.data;
 };
 
@@ -114,7 +114,7 @@ export const deleteImage = async (id: string): Promise<DeleteResponse> => {
  * Delete multiple images
  */
 export const deleteMultipleImages = async (ids: string[]): Promise<DeleteResponse> => {
-  const response = await api.delete<DeleteResponse>('/admin/images', {
+  const response = await axiosApi.delete<DeleteResponse>('/admin/images', {
     data: { ids },
   });
   return response.data;

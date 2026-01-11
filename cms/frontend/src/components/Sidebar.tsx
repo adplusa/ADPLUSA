@@ -9,6 +9,8 @@ import {
   HelpCircle,
   Info,
   Phone,
+  Tags,
+  Image,
   X
 } from 'lucide-react';
 
@@ -24,6 +26,8 @@ const navigation = [
   { name: 'FAQ', href: '/dashboard/faq', icon: HelpCircle },
   { name: 'About', href: '/dashboard/about', icon: Info },
   { name: 'Contact', href: '/dashboard/contact', icon: Phone },
+  { name: 'Tags', href: '/dashboard/tags', icon: Tags },
+  { name: 'Media Library', href: '/dashboard/media', icon: Image },
 ];
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {

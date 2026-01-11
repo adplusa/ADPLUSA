@@ -1,4 +1,4 @@
-import api from './axios';
+import { axiosApi } from './axios';
 
 export interface ProjectImage {
   url: string;
@@ -50,7 +50,7 @@ export interface ProjectQueryParams {
  * Get all projects with pagination and filtering
  */
 export const getProjects = async (params?: ProjectQueryParams): Promise<ProjectsResponse> => {
-  const response = await api.get<ProjectsResponse>('/projects', { params });
+  const response = await axiosApi.get<ProjectsResponse>('/projects', { params });
   return response.data;
 };
 
@@ -58,7 +58,7 @@ export const getProjects = async (params?: ProjectQueryParams): Promise<Projects
  * Get single project by slug
  */
 export const getProjectBySlug = async (slug: string): Promise<ProjectResponse> => {
-  const response = await api.get<ProjectResponse>(`/projects/${slug}`);
+  const response = await axiosApi.get<ProjectResponse>(`/projects/${slug}`);
   return response.data;
 };
 
@@ -66,7 +66,7 @@ export const getProjectBySlug = async (slug: string): Promise<ProjectResponse> =
  * Create new project (admin only)
  */
 export const createProject = async (project: Project): Promise<ProjectResponse> => {
-  const response = await api.post<ProjectResponse>('/admin/projects', project);
+  const response = await axiosApi.post<ProjectResponse>('/admin/projects', project);
   return response.data;
 };
 
@@ -74,7 +74,7 @@ export const createProject = async (project: Project): Promise<ProjectResponse> 
  * Update project (admin only)
  */
 export const updateProject = async (id: string, project: Partial<Project>): Promise<ProjectResponse> => {
-  const response = await api.put<ProjectResponse>(`/admin/projects/${id}`, project);
+  const response = await axiosApi.put<ProjectResponse>(`/admin/projects/${id}`, project);
   return response.data;
 };
 
@@ -82,6 +82,6 @@ export const updateProject = async (id: string, project: Partial<Project>): Prom
  * Delete project (admin only)
  */
 export const deleteProject = async (id: string): Promise<{ success: boolean; message: string }> => {
-  const response = await api.delete(`/admin/projects/${id}`);
+  const response = await axiosApi.delete(`/admin/projects/${id}`);
   return response.data;
 };

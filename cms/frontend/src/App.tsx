@@ -15,6 +15,11 @@ import About from './pages/About';
 import AboutForm from './pages/AboutForm';
 import Contact from './pages/Contact';
 import ContactForm from './pages/ContactForm';
+import Tags from './pages/Tags';
+import TagForm from './pages/TagForm';
+import MediaLibrary from './pages/MediaLibrary';
+import MediaUpload from './pages/MediaUpload';
+import MediaEdit from './pages/MediaEdit';
 import './App.css';
 
 function App() {
@@ -44,6 +49,12 @@ function App() {
             <Route path="about/edit" element={<AboutForm />} />
             <Route path="contact" element={<Contact />} />
             <Route path="contact/edit" element={<ContactForm />} />
+            <Route path="tags" element={<Tags />} />
+            <Route path="tags/new" element={<TagForm />} />
+            <Route path="tags/:id" element={<TagForm />} />
+            <Route path="media" element={<MediaLibrary />} />
+            <Route path="media/upload" element={<MediaUpload />} />
+            <Route path="media/:id" element={<MediaEdit />} />
           </Route>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>

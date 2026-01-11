@@ -50,8 +50,13 @@ app.use('/api/auth', authRoutes);
 // Admin routes (protected)
 import adminRoutes from './routes/admin.routes';
 import presignedRoutes from './routes/presigned.routes';
+import tagRoutes from './routes/tag.routes';
+import mediaRoutes from './routes/media.routes';
+
 app.use('/api/admin', adminRoutes);
 app.use('/api/admin', presignedRoutes);
+app.use('/api/admin/tags', tagRoutes);
+app.use('/api/admin/media', mediaRoutes);
 
 // Image upload routes (already under /api/admin)
 app.use('/api/admin', imageRoutes);

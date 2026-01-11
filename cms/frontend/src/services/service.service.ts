@@ -1,4 +1,4 @@
-import api from './axios';
+import { axiosApi } from './axios';
 
 export interface ServiceImage {
   url: string;
@@ -39,7 +39,7 @@ export interface ServiceResponse {
  * Get all services
  */
 export const getServices = async (): Promise<ServicesResponse> => {
-  const response = await api.get<ServicesResponse>('/services');
+  const response = await axiosApi.get<ServicesResponse>('/services');
   return response.data;
 };
 
@@ -47,7 +47,7 @@ export const getServices = async (): Promise<ServicesResponse> => {
  * Get single service by slug
  */
 export const getServiceBySlug = async (slug: string): Promise<ServiceResponse> => {
-  const response = await api.get<ServiceResponse>(`/services/${slug}`);
+  const response = await axiosApi.get<ServiceResponse>(`/services/${slug}`);
   return response.data;
 };
 
@@ -55,7 +55,7 @@ export const getServiceBySlug = async (slug: string): Promise<ServiceResponse> =
  * Create new service (admin only)
  */
 export const createService = async (service: Service): Promise<ServiceResponse> => {
-  const response = await api.post<ServiceResponse>('/admin/services', service);
+  const response = await axiosApi.post<ServiceResponse>('/admin/services', service);
   return response.data;
 };
 
@@ -63,7 +63,7 @@ export const createService = async (service: Service): Promise<ServiceResponse> 
  * Update service (admin only)
  */
 export const updateService = async (id: string, service: Partial<Service>): Promise<ServiceResponse> => {
-  const response = await api.put<ServiceResponse>(`/admin/services/${id}`, service);
+  const response = await axiosApi.put<ServiceResponse>(`/admin/services/${id}`, service);
   return response.data;
 };
 
@@ -71,6 +71,6 @@ export const updateService = async (id: string, service: Partial<Service>): Prom
  * Delete service (admin only)
  */
 export const deleteService = async (id: string): Promise<{ success: boolean; message: string }> => {
-  const response = await api.delete(`/admin/services/${id}`);
+  const response = await axiosApi.delete(`/admin/services/${id}`);
   return response.data;
 };

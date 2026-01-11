@@ -1,4 +1,4 @@
-import api from './axios';
+import { axiosApi } from './axios';
 
 export interface LoginCredentials {
   username: string;
@@ -20,8 +20,11 @@ export interface User {
 
 export interface AuthResponse {
   success: boolean;
-  token: string;
-  user: User;
+  message: string;
+  data: {
+    token: string;
+    user: User;
+  };
 }
 
 export interface UserResponse {
@@ -33,7 +36,7 @@ export interface UserResponse {
  * Login user and get JWT token
  */
 export const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
-  const response = await api.post<AuthResponse>('/auth/login', credentials);
+  const response = await axiosApi.post<AuthResponse>('/auth/login', credentials);
   return response.data;
 };
 
@@ -41,7 +44,7 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
  * Register new admin user (requires authentication)
  */
 export const register = async (data: RegisterData): Promise<AuthResponse> => {
-  const response = await api.post<AuthResponse>('/auth/register', data);
+  const response = await axiosApi.post<AuthResponse>('/auth/register', data);
   return response.data;
 };
 
@@ -49,13 +52,13 @@ export const register = async (data: RegisterData): Promise<AuthResponse> => {
  * Logout user
  */
 export const logout = async (): Promise<void> => {
-  await api.post('/auth/logout');
+  await axiosApi.post('/auth/logout');
 };
 
 /**
  * Get current user info
  */
 export const getCurrentUser = async (): Promise<UserResponse> => {
-  const response = await api.get<UserResponse>('/auth/me');
+  const response = await axiosApi.get<UserResponse>('/auth/me');
   return response.data;
 };

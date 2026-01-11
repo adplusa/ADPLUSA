@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useLoginMutation } from '../services/api';
+import { login } from '../services/auth.service';
 import { useAppDispatch } from '../store/hooks';
 import { setCredentials } from '../store/authSlice';
 import { Button } from '../components/ui/button';
@@ -13,29 +13,55 @@ import { Alert, AlertDescription } from '../components/ui/alert';
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [login, { isLoading, error }] = useLoginMutation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    console.log('🔐 Attempting login with:', { username, password: '***' });
 
     try {
-      const result = await login({ username, password }).unwrap();
-      dispatch(setCredentials(result));
+      console.log('📡 Making API call to login...');
+      const result = await login({ username, password });
+
+      console.log('✅ Login API response:', result);
+
+      // Extract token and user from the nested data structure
+      const { token, user } = result.data;
+
+      console.log('🎫 Extracted token:', token ? 'Present' : 'Missing');
+      console.log('👤 Extracted user:', user);
+
+      dispatch(setCredentials({ token, user }));
+
+      console.log('💾 Credentials dispatched to Redux store');
+      console.log('🗄️ localStorage token:', localStorage.getItem('token'));
+      console.log('🗄️ localStorage user:', localStorage.getItem('user'));
+
       // Redirect to dashboard on success
       navigate('/dashboard');
-    } catch (err) {
-      // Error is handled by RTK Query
-      console.error('Login failed:', err);
+    } catch (err: any) {
+      console.error('❌ Login failed:', err);
+      console.error('📄 Error response:', err.response?.data);
+
+      // Extract error message from response
+      const errorMessage = err.response?.data?.error?.message ||
+        err.response?.data?.message ||
+        err.message ||
+        'Login failed. Please try again.';
+
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const errorMessage = error && 'data' in error 
-    ? (error.data as any)?.error?.message || 'Login failed. Please try again.'
-    : error && 'message' in error
-    ? error.message
-    : 'Login failed. Please try again.';
+  const errorMessage = error;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background py-12 px-4 sm:px-6 lg:px-8">
