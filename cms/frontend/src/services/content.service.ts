@@ -18,112 +18,138 @@ export interface FAQCategory {
 }
 
 export interface FAQ {
-  _id?: string;
-  title?: string;
+  _id: string;
+  title: string;
   categories: FAQCategory[];
   seoTitle?: string;
   seoDescription?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface FAQResponse {
+  success: boolean;
+  data: FAQ;
+}
+
+export interface UpdateFAQData {
+  title: string;
+  categories: Array<{
+    title: string;
+    description?: string;
+    chatLink?: string;
+    image?: {
+      url: string;
+      darkModeUrl?: string;
+    };
+    faqs: Array<{
+      question: string;
+      answer: string;
+    }>;
+  }>;
+  seoTitle?: string;
+  seoDescription?: string;
 }
 
 // About Types
-export interface AnchorLink {
-  label: string;
-  targetId: string;
-}
-
-export interface AboutSection {
-  sectionId: string;
-  title: string;
-  body: string;
-  image?: {
-    url: string;
-    darkModeUrl?: string;
-  };
-}
-
 export interface About {
-  _id?: string;
-  allowLightHeading?: string;
-  allowUsHeading?: string;
-  allowRightHeading?: string;
-  paragraph?: string;
-  anchorLinks?: AnchorLink[];
-  sections?: AboutSection[];
+  _id: string;
+  title: string;
+  content: string;
   seoTitle?: string;
   seoDescription?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AboutResponse {
+  success: boolean;
+  data: About;
+}
+
+export interface UpdateAboutData {
+  title: string;
+  content: string;
+  seoTitle?: string;
+  seoDescription?: string;
 }
 
 // Contact Types
 export interface Contact {
-  _id?: string;
-  email?: string;
-  phone?: string;
-  address?: string;
-  socialLinks?: {
-    facebook?: string;
-    twitter?: string;
-    instagram?: string;
-    linkedin?: string;
+  _id: string;
+  title: string;
+  description?: string;
+  contactInfo: {
+    email?: string;
+    phone?: string;
+    address?: string;
+    socialMedia?: {
+      facebook?: string;
+      twitter?: string;
+      instagram?: string;
+      linkedin?: string;
+      youtube?: string;
+    };
   };
   seoTitle?: string;
   seoDescription?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface ContentResponse<T> {
+export interface ContactResponse {
   success: boolean;
-  data: T;
+  data: Contact;
 }
 
-/**
- * Get FAQ data
- */
-export const getFAQ = async (): Promise<ContentResponse<FAQ>> => {
-  const response = await axiosApi.get<ContentResponse<FAQ>>('/faq');
+export interface UpdateContactData {
+  title: string;
+  description?: string;
+  contactInfo: {
+    email?: string;
+    phone?: string;
+    address?: string;
+    socialMedia?: {
+      facebook?: string;
+      twitter?: string;
+      instagram?: string;
+      linkedin?: string;
+      youtube?: string;
+    };
+  };
+  seoTitle?: string;
+  seoDescription?: string;
+}
+
+// FAQ API Functions
+export const getFAQ = async (): Promise<FAQResponse> => {
+  const response = await axiosApi.get<FAQResponse>('/faq');
   return response.data;
 };
 
-/**
- * Update FAQ data (admin only)
- */
-export const updateFAQ = async (faq: FAQ): Promise<ContentResponse<FAQ>> => {
-  const response = await axiosApi.put<ContentResponse<FAQ>>('/admin/faq', faq);
+export const updateFAQ = async (data: UpdateFAQData): Promise<FAQResponse> => {
+  const response = await axiosApi.put<FAQResponse>('/admin/faq', data);
   return response.data;
 };
 
-/**
- * Get About page data
- */
-export const getAbout = async (): Promise<ContentResponse<About>> => {
-  const response = await axiosApi.get<ContentResponse<About>>('/about');
+// About API Functions
+export const getAbout = async (): Promise<AboutResponse> => {
+  const response = await axiosApi.get<AboutResponse>('/about');
   return response.data;
 };
 
-/**
- * Update About page data (admin only)
- */
-export const updateAbout = async (about: About): Promise<ContentResponse<About>> => {
-  const response = await axiosApi.put<ContentResponse<About>>('/admin/about', about);
+export const updateAbout = async (data: UpdateAboutData): Promise<AboutResponse> => {
+  const response = await axiosApi.put<AboutResponse>('/admin/about', data);
   return response.data;
 };
 
-/**
- * Get Contact page data
- */
-export const getContact = async (): Promise<ContentResponse<Contact>> => {
-  const response = await axiosApi.get<ContentResponse<Contact>>('/contact');
+// Contact API Functions
+export const getContact = async (): Promise<ContactResponse> => {
+  const response = await axiosApi.get<ContactResponse>('/contact');
   return response.data;
 };
 
-/**
- * Update Contact page data (admin only)
- */
-export const updateContact = async (contact: Contact): Promise<ContentResponse<Contact>> => {
-  const response = await axiosApi.put<ContentResponse<Contact>>('/admin/contact', contact);
+export const updateContact = async (data: UpdateContactData): Promise<ContactResponse> => {
+  const response = await axiosApi.put<ContactResponse>('/admin/contact', data);
   return response.data;
 };

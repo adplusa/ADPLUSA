@@ -1,4 +1,40 @@
+import { useState, useEffect } from 'react';
+import { getProjects } from '../services/project.service';
+import { getServices } from '../services/service.service';
+import { getTags } from '../services/tag.service';
+
 export default function Dashboard() {
+  const [stats, setStats] = useState({
+    projects: 0,
+    services: 0,
+    tags: 0,
+    loading: true,
+  });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const [projectsRes, servicesRes, tagsRes] = await Promise.all([
+          getProjects({ limit: 1 }),
+          getServices(),
+          getTags({ limit: 1 }),
+        ]);
+
+        setStats({
+          projects: projectsRes.pagination?.total || projectsRes.data.length,
+          services: servicesRes.data.length,
+          tags: tagsRes.pagination?.total || tagsRes.data.length,
+          loading: false,
+        });
+      } catch (error) {
+        console.error('Failed to fetch dashboard stats:', error);
+        setStats(prev => ({ ...prev, loading: false }));
+      }
+    };
+
+    fetchStats();
+  }, []);
+
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
@@ -26,7 +62,9 @@ export default function Dashboard() {
               <div className="ml-5 w-0 flex-1">
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">Total Projects</dt>
-                  <dd className="text-lg font-medium text-gray-900">-</dd>
+                  <dd className="text-lg font-medium text-gray-900">
+                    {stats.loading ? '...' : stats.projects}
+                  </dd>
                 </dl>
               </div>
             </div>
@@ -54,7 +92,9 @@ export default function Dashboard() {
               <div className="ml-5 w-0 flex-1">
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">Total Services</dt>
-                  <dd className="text-lg font-medium text-gray-900">-</dd>
+                  <dd className="text-lg font-medium text-gray-900">
+                    {stats.loading ? '...' : stats.services}
+                  </dd>
                 </dl>
               </div>
             </div>
@@ -82,7 +122,9 @@ export default function Dashboard() {
               <div className="ml-5 w-0 flex-1">
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">Total Images</dt>
-                  <dd className="text-lg font-medium text-gray-900">-</dd>
+                  <dd className="text-lg font-medium text-gray-900">
+                    {stats.loading ? '...' : stats.tags}
+                  </dd>
                 </dl>
               </div>
             </div>
