@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ContentList from '../components/ContentList';
-import type { Column } from '../components/ContentList';
+import type { ColumnDef } from '@tanstack/react-table';
+import { DataTable, createActionsColumn } from '../components/ui/data-table';
+import { Badge } from '../components/ui/badge';
 import { getProjects, deleteProject } from '../services/project.service';
 import type { Project } from '../services/project.service';
 
@@ -13,12 +14,6 @@ export default function Projects() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 10,
-    total: 0,
-    pages: 1,
-  });
 
   const fetchProjects = async (page: number = 1, search: string = '') => {
     try {
@@ -30,9 +25,6 @@ export default function Projects() {
         search: search || undefined,
       });
       setProjects(response.data);
-      if (response.pagination) {
-        setPagination(response.pagination);
-      }
     } catch (err: any) {
       setError(err.response?.data?.error?.message || 'Failed to load projects');
     } finally {
@@ -70,63 +62,72 @@ export default function Projects() {
     setCurrentPage(1); // Reset to first page on search
   };
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  const handleCreateNew = () => {
+    navigate('/dashboard/projects/new');
   };
 
-  const columns: Column<Project>[] = [
+  const columns: ColumnDef<Project>[] = [
     {
-      key: 'title',
-      label: 'Title',
+      accessorKey: 'title',
+      header: 'Title',
     },
     {
-      key: 'slug',
-      label: 'Slug',
-    },
-    {
-      key: 'category',
-      label: 'Category',
-      render: (project) => project.category || '-',
-    },
-    {
-      key: 'featured',
-      label: 'Featured',
-      render: (project) => (
-        <span
-          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-            project.featured
-              ? 'bg-green-100 text-green-800'
-              : 'bg-gray-100 text-gray-800'
-          }`}
-        >
-          {project.featured ? 'Yes' : 'No'}
-        </span>
+      accessorKey: 'slug',
+      header: 'Slug',
+      cell: ({ row }) => (
+        <code className="text-sm bg-muted px-2 py-1 rounded">
+          {row.getValue('slug')}
+        </code>
       ),
     },
     {
-      key: 'createdAt',
-      label: 'Created',
-      render: (project) =>
-        project.createdAt
-          ? new Date(project.createdAt).toLocaleDateString()
-          : '-',
+      accessorKey: 'category',
+      header: 'Category',
+      cell: ({ row }) => {
+        const category = row.getValue('category') as string;
+        return category ? (
+          <Badge variant="secondary">{category}</Badge>
+        ) : (
+          <span className="text-muted-foreground">-</span>
+        );
+      },
     },
+    {
+      accessorKey: 'featured',
+      header: 'Featured',
+      cell: ({ row }) => {
+        const featured = row.getValue('featured') as boolean;
+        return (
+          <Badge variant={featured ? 'default' : 'outline'}>
+            {featured ? 'Yes' : 'No'}
+          </Badge>
+        );
+      },
+    },
+    {
+      accessorKey: 'createdAt',
+      header: 'Created',
+      cell: ({ row }) => {
+        const date = row.getValue('createdAt') as string;
+        return date ? new Date(date).toLocaleDateString() : '-';
+      },
+    },
+    createActionsColumn<Project>(handleEdit, handleDelete),
   ];
 
   return (
-    <ContentList
-      title="Projects"
-      data={projects}
-      columns={columns}
-      loading={loading}
-      error={error}
-      successMessage={successMessage}
-      onEdit={handleEdit}
-      onDelete={handleDelete}
-      onSearch={handleSearch}
-      createLink="/dashboard/projects/new"
-      pagination={pagination}
-      onPageChange={handlePageChange}
-    />
+    <div className="container mx-auto py-6">
+      <DataTable
+        columns={columns}
+        data={projects}
+        title="Projects"
+        loading={loading}
+        error={error}
+        successMessage={successMessage}
+        onSearch={handleSearch}
+        onCreateClick={handleCreateNew}
+        searchPlaceholder="Search projects..."
+      />
+    </div>
   );
 }

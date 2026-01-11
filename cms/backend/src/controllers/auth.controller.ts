@@ -121,7 +121,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Find user by username or email (include password field)
     const user = await User.findOne({
       $or: [
         { username },
