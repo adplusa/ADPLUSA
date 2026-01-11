@@ -53,7 +53,8 @@ This design outlines the architecture for migrating from Sanity CMS to a MongoDB
 - Mongoose for ODM (Object Data Modeling)
 - JWT for authentication
 - Multer for file uploads
-- Cloudinary or AWS S3 for image storage (or local filesystem for development)
+- AWS S3 for image storage
+- AWS SDK for S3 operations
 
 **Admin Interface:**
 - React 18+ with functional components and hooks
@@ -350,19 +351,35 @@ export async function getStaticProps() {
 
 ### Image Storage Model
 
-Images will be stored in Cloudinary (or S3) with the following structure:
+Images will be stored in AWS S3 with the following structure:
 
 ```javascript
 {
-  publicId: "projects/project-1/hero-image",
-  url: "https://res.cloudinary.com/.../image.jpg",
-  secureUrl: "https://res.cloudinary.com/.../image.jpg",
-  format: "jpg",
-  width: 1920,
-  height: 1080,
-  bytes: 245678,
+  key: "projects/project-1/hero-image.jpg",
+  bucket: "architect-cms-images",
+  url: "https://architect-cms-images.s3.amazonaws.com/projects/project-1/hero-image.jpg",
+  cloudFrontUrl: "https://d1234567890.cloudfront.net/projects/project-1/hero-image.jpg", // Optional CDN
+  contentType: "image/jpeg",
+  size: 245678,
+  etag: "abc123def456",
   createdAt: Date
 }
+```
+
+**S3 Bucket Structure:**
+```
+architect-cms-images/
+├── projects/
+│   ├── project-1/
+│   │   ├── hero-image.jpg
+│   │   └── gallery-1.jpg
+│   └── project-2/
+├── services/
+│   ├── service-1/
+│   └── service-2/
+├── about/
+├── faq/
+└── temp/ (for uploads before content is saved)
 ```
 
 ### Migration Data Mapping
@@ -572,16 +589,12 @@ API_URL=http://localhost:5000
 JWT_SECRET=your-secret-key-here
 JWT_EXPIRES_IN=7d
 
-# Image Storage (Cloudinary)
-CLOUDINARY_CLOUD_NAME=your-cloud-name
-CLOUDINARY_API_KEY=your-api-key
-CLOUDINARY_API_SECRET=your-api-secret
-
-# Or AWS S3
+# AWS S3 Image Storage
 AWS_ACCESS_KEY_ID=your-access-key
 AWS_SECRET_ACCESS_KEY=your-secret-key
-AWS_BUCKET_NAME=your-bucket-name
+AWS_BUCKET_NAME=architect-cms-images
 AWS_REGION=us-east-1
+AWS_CLOUDFRONT_URL=https://d1234567890.cloudfront.net (optional)
 
 # Sanity (for migration only)
 SANITY_PROJECT_ID=5ippxm43
@@ -606,8 +619,10 @@ NEXT_PUBLIC_API_URL=http://localhost:5000
    - Test API endpoints
 
 3. **Image Storage Setup:**
-   - Create Cloudinary account or S3 bucket
-   - Configure upload presets and transformations
+   - Create AWS S3 bucket with appropriate permissions
+   - Configure bucket policy for public read access (or use CloudFront)
+   - Set up CORS configuration for admin uploads
+   - Optional: Set up CloudFront CDN for faster image delivery
    - Set environment variables
 
 4. **Admin Interface Deployment:**
