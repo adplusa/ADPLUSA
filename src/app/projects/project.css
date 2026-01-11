@@ -1,0 +1,138 @@
+/* .project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(350px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+  padding: 50px;
+} */
+
+.project-content {
+  margin-top: 10%;
+}
+
+.project-heading {
+  margin: 3%;
+}
+
+#project-hr {
+  margin-top: 3%;
+}
+
+.project-grid {
+  /* display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px; */
+  padding: 40px 30px;
+}
+
+@media (max-width: 1024px) {
+  .project-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-container {
+    margin-top: 27%;
+  }
+}
+
+.project-tile {
+  text-align: center;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.image-wrapper-pr {
+  width: 100%;
+  aspect-ratio: 4 / 3; /* Maintains same height across */
+  overflow: hidden;
+  border-radius: 8px;
+  position: relative;
+}
+
+.image-wrapper-pr img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.image-title {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--foreGround);
+  text-align: left;
+}
+
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.load-more-btn {
+  background-color: #800000;
+  color: white;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.load-more-btn:hover {
+  background-color: #a52a2a;
+  transform: translateY(-2px);
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+  margin-top: 2rem;
+}
+
+.image-wrapper-pr {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.image-title {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.load-more-btn {
+  background-color: #800000;
+  color: white;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.load-more-btn:hover {
+  background-color: #a52a2a;
+  transform: translateY(-2px);
+}

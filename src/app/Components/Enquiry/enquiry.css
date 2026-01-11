@@ -1,0 +1,152 @@
+Right-side vertical tab .enquiry-tab {
+  position: fixed;
+  top: 40%;
+  right: 0;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  background: #a32323;
+  color: #fff;
+  border: none;
+  padding: 12px 10px;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  cursor: pointer;
+  z-index: 1010; /* above page content, below panel */
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* Overlay (no blur; faint dim only when open) */
+.enquiry-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0); /* transparent when closed */
+  pointer-events: none;
+  transition: background 0.25s ease;
+  z-index: 1009;
+}
+.enquiry-overlay.open {
+  background: rgba(0, 0, 0, 0.15); /* light, not blurry */
+  pointer-events: auto;
+}
+
+/* Slide-in area that holds the card */
+.enquiry-panel {
+  position: absolute;
+  inset: 0 0 0 auto; /* stick to right */
+  width: 480px; /* area the card slides within */
+  max-width: min(90vw, 480px);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  display: flex;
+  justify-content: center; /* center the card horizontally inside panel */
+  align-items: center; /* center vertically */
+}
+.enquiry-panel.open {
+  transform: translateX(0);
+}
+
+/* The floating card (matches your 3rd screenshot) */
+.enquiry-card {
+  width: 440px;
+  max-width: 92vw;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  padding: 18px 18px 16px;
+  border: 1px solid #eee;
+}
+
+/* Card header */
+.enquiry-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.enquiry-card-head h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+.close-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  color: #333;
+}
+.close-btn:hover {
+  color: #000;
+}
+
+.enquiry-subtitle {
+  margin: 0 0 14px 0;
+  font-size: 13px;
+  color: #6b6b6b;
+}
+
+/* Form */
+.enquiry-form {
+  display: grid;
+  gap: 10px;
+}
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cfcfcf;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+}
+.form-input:focus {
+  border-color: #a32323;
+}
+
+/* Hidden honeypot */
+.hp {
+  display: none !important;
+}
+
+/* Submit button */
+.submit-button {
+  background: #111;
+  color: #fff;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* status messages */
+.msg {
+  margin: 6px 2px 0;
+  font-size: 13px;
+}
+.msg.ok {
+  color: #10733b;
+}
+.msg.err {
+  color: #b42318;
+}
+
+/* Small screens: keep the card nicely sized */
+@media (max-width: 420px) {
+  .enquiry-card {
+    padding: 16px;
+    border-radius: 8px;
+  }
+  .enquiry-card-head h3 {
+    font-size: 18px;
+  }
+}

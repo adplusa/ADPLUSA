@@ -1,0 +1,162 @@
+#footer-logo {
+  width: 150px;
+  height: auto;
+}
+
+.footer {
+  margin-top: 6%;
+  border-top: 1px solid var(--foreground);
+  padding-top: 5%;
+  /* background-color: #f9f9f9; */
+  background-color: var(--backgroundColor);
+  color: var(--foreground);
+}
+
+.footer-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.footer-logo p {
+  margin-top: 10px;
+}
+
+.footer-nav ul {
+  display: flex;
+  justify-content: center;
+  margin-top: 3%;
+}
+
+.footer-nav ul li {
+  list-style: none;
+}
+
+.footer-nav ul li a {
+  margin: 28px;
+  font-weight: bold;
+  font-size: 20px;
+  color: var(--foreground);
+}
+
+.social-media {
+  display: flex;
+  justify-content: center;
+  margin-top: 2%;
+}
+
+.social-media span {
+  /* background-color: #8b0d0e; */
+  background-color: var(--redWhiteColor);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  color: var(--background);
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.social-media span:hover {
+  transform: scale(1.1);
+}
+
+.social-media span a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.blue-border {
+  border: 0.5px solid;
+  border-color: var(--foreground);
+  margin-top: 3%;
+  width: 90%;
+}
+
+#blue-border-div {
+  display: flex;
+  justify-content: center;
+}
+
+#copyright {
+  margin-top: 25px;
+  padding-bottom: 2%;
+}
+
+.copy-designed {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 36%;
+}
+
+.second-navbar {
+  margin-top: 4%;
+  padding: 15px 0;
+}
+
+.second-navbar ul {
+  display: flex;
+  justify-content: center;
+}
+
+.second-navbar ul li {
+  list-style: none;
+}
+
+.second-navbar ul li a {
+  text-decoration: none;
+  margin: 23px;
+  font-size: 17px;
+  font-weight: bold;
+  position: relative;
+}
+
+.header-right {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+}
+
+#quitegood {
+  font-weight: bold;
+}
+
+#footer-right {
+  justify-content: center;
+}
+
+#footer-right .second-navbar {
+  margin-top: 2% !important;
+}
+
+.footer-logo img {
+  filter: var(--imageColor);
+}
+
+@media screen and (max-width: 768px) {
+  .footer-logo p {
+    font-size: 14px;
+    max-width: 80%;
+  }
+
+  .footer {
+    padding-bottom: 3%;
+  }
+
+  .copy-designed p {
+    font-size: 11px;
+    margin-left: 10px;
+  }
+
+  .copy-designed {
+    align-items: baseline;
+    justify-content: unset;
+  }
+}

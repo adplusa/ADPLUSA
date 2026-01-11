@@ -1,0 +1,17 @@
+{
+  "name": "sanity-studio",
+  "private": true,
+  "scripts": {
+    "dev": "sanity dev",
+    "build": "sanity build",
+    "start": "sanity start"
+  },
+  "dependencies": {
+    "@sanity/asset-utils": "^2.0.0",
+    "@sanity/client": "^6.0.0",
+    "@sanity/image-url": "^1.0.0",
+    "@sanity/vision": "^3.0.0",
+    "sanity": "^3.0.0",
+    "styled-components": "^6.1.18"
+  }
+}
