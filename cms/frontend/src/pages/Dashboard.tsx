@@ -1,29 +1,99 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getProjects } from '../services/project.service';
 import { getServices } from '../services/service.service';
 import { getTags } from '../services/tag.service';
+import { getMedia } from '../services/media.service';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
+import { Button } from '../components/ui/button';
+import {
+  FolderOpen,
+  Briefcase,
+  Tags,
+  Image,
+  Activity,
+  Plus,
+  ArrowUpRight,
+  Clock
+} from 'lucide-react';
+
+interface DashboardStats {
+  projects: number;
+  services: number;
+  tags: number;
+  media: number;
+  loading: boolean;
+}
+
+interface RecentActivity {
+  id: string;
+  type: 'project' | 'service' | 'media' | 'tag';
+  title: string;
+  action: string;
+  timestamp: string;
+}
 
 export default function Dashboard() {
-  const [stats, setStats] = useState({
+  const [stats, setStats] = useState<DashboardStats>({
     projects: 0,
     services: 0,
     tags: 0,
+    media: 0,
     loading: true,
   });
+
+  const [recentProjects, setRecentProjects] = useState<any[]>([]);
+  const [recentActivity] = useState<RecentActivity[]>([
+    {
+      id: '1',
+      type: 'project',
+      title: 'Modern Office Building',
+      action: 'created',
+      timestamp: '2 hours ago'
+    },
+    {
+      id: '2',
+      type: 'media',
+      title: 'office-render-01.jpg',
+      action: 'uploaded',
+      timestamp: '4 hours ago'
+    },
+    {
+      id: '3',
+      type: 'service',
+      title: '3D Visualization',
+      action: 'updated',
+      timestamp: '1 day ago'
+    },
+    {
+      id: '4',
+      type: 'tag',
+      title: 'Architecture',
+      action: 'created',
+      timestamp: '2 days ago'
+    }
+  ]);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [projectsRes, servicesRes, tagsRes] = await Promise.all([
+        const [projectsRes, servicesRes, tagsRes, mediaRes] = await Promise.all([
           getProjects({ limit: 1 }),
           getServices(),
           getTags({ limit: 1 }),
+          getMedia({ limit: 1 }),
         ]);
+
+        // Get recent projects for the recent items section
+        const recentProjectsRes = await getProjects({ limit: 5 });
+        setRecentProjects(recentProjectsRes.data);
 
         setStats({
           projects: projectsRes.pagination?.total || projectsRes.data.length,
           services: servicesRes.data.length,
           tags: tagsRes.pagination?.total || tagsRes.data.length,
+          media: mediaRes.pagination?.total || mediaRes.data.length,
           loading: false,
         });
       } catch (error) {
@@ -35,102 +105,236 @@ export default function Dashboard() {
     fetchStats();
   }, []);
 
+  const getActivityIcon = (type: string) => {
+    switch (type) {
+      case 'project': return <FolderOpen className="h-4 w-4" />;
+      case 'service': return <Briefcase className="h-4 w-4" />;
+      case 'media': return <Image className="h-4 w-4" />;
+      case 'tag': return <Tags className="h-4 w-4" />;
+      default: return <Activity className="h-4 w-4" />;
+    }
+  };
+
+  const getActivityColor = (type: string) => {
+    switch (type) {
+      case 'project': return 'bg-blue-100 text-blue-600';
+      case 'service': return 'bg-green-100 text-green-600';
+      case 'media': return 'bg-purple-100 text-purple-600';
+      case 'tag': return 'bg-orange-100 text-orange-600';
+      default: return 'bg-gray-100 text-gray-600';
+    }
+  };
+
   return (
-    <div>
-      <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-      <p className="mt-4 text-gray-600">Welcome to the admin dashboard!</p>
-      <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <svg
-                  className="h-6 w-6 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
-                  />
-                </svg>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">Total Projects</dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {stats.loading ? '...' : stats.projects}
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <svg
-                  className="h-6 w-6 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  />
-                </svg>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">Total Services</dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {stats.loading ? '...' : stats.services}
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <svg
-                  className="h-6 w-6 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">Total Images</dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {stats.loading ? '...' : stats.tags}
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="space-y-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+        <p className="text-muted-foreground">
+          Welcome back! Here's what's happening with your content.
+        </p>
       </div>
+
+      {/* Stats Cards */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Projects</CardTitle>
+            <FolderOpen className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {stats.loading ? '...' : stats.projects}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              <span className="text-green-600">+12%</span> from last month
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Services</CardTitle>
+            <Briefcase className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {stats.loading ? '...' : stats.services}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              <span className="text-green-600">+5%</span> from last month
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Media Files</CardTitle>
+            <Image className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {stats.loading ? '...' : stats.media}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              <span className="text-green-600">+23%</span> from last month
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Tags</CardTitle>
+            <Tags className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {stats.loading ? '...' : stats.tags}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              <span className="text-green-600">+8%</span> from last month
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        {/* Recent Projects */}
+        <Card className="col-span-4">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Recent Projects</CardTitle>
+                <CardDescription>
+                  Your latest project updates
+                </CardDescription>
+              </div>
+              <Button asChild size="sm">
+                <Link to="/dashboard/projects">
+                  View All
+                  <ArrowUpRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentProjects.length > 0 ? (
+                recentProjects.map((project) => (
+                  <div key={project._id} className="flex items-center space-x-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
+                      <FolderOpen className="h-5 w-5" />
+                    </div>
+                    <div className="flex-1 space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {project.title}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {project.description?.substring(0, 60)}...
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="secondary">
+                        {project.status || 'Active'}
+                      </Badge>
+                      <Button variant="ghost" size="sm" asChild>
+                        <Link to={`/dashboard/projects/${project._id}/edit`}>
+                          Edit
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="flex flex-col items-center justify-center py-8 text-center">
+                  <FolderOpen className="h-12 w-12 text-muted-foreground mb-4" />
+                  <h3 className="text-lg font-medium">No projects yet</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Get started by creating your first project
+                  </p>
+                  <Button asChild>
+                    <Link to="/dashboard/projects/new">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Create Project
+                    </Link>
+                  </Button>
+                  </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Recent Activity */}
+        <Card className="col-span-3">
+          <CardHeader>
+            <CardTitle>Recent Activity</CardTitle>
+            <CardDescription>
+              Latest changes across your content
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentActivity.map((activity) => (
+                <div key={activity.id} className="flex items-center space-x-4">
+                  <div className={`flex h-8 w-8 items-center justify-center rounded-full ${getActivityColor(activity.type)}`}>
+                    {getActivityIcon(activity.type)}
+                  </div>
+                  <div className="flex-1 space-y-1">
+                    <p className="text-sm font-medium leading-none">
+                      {activity.title}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {activity.action}
+                    </p>
+                  </div>
+                  <div className="flex items-center text-xs text-muted-foreground">
+                    <Clock className="mr-1 h-3 w-3" />
+                    {activity.timestamp}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Quick Actions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Quick Actions</CardTitle>
+          <CardDescription>
+            Common tasks to manage your content
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <Button asChild variant="outline" className="h-20 flex-col">
+              <Link to="/dashboard/projects/new">
+                <Plus className="h-6 w-6 mb-2" />
+                New Project
+              </Link>
+            </Button>
+            <Button asChild variant="outline" className="h-20 flex-col">
+              <Link to="/dashboard/services/new">
+                <Plus className="h-6 w-6 mb-2" />
+                New Service
+              </Link>
+            </Button>
+            <Button asChild variant="outline" className="h-20 flex-col">
+              <Link to="/dashboard/media">
+                <Image className="h-6 w-6 mb-2" />
+                Upload Media
+              </Link>
+            </Button>
+            <Button asChild variant="outline" className="h-20 flex-col">
+              <Link to="/dashboard/tags/new">
+                <Tags className="h-6 w-6 mb-2" />
+                Create Tag
+              </Link>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

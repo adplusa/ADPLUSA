@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import DashboardLayout from './components/DashboardLayout';
 import Dashboard from './pages/Dashboard';
+import Analytics from './pages/Analytics';
 import Projects from './pages/Projects';
 import ProjectForm from './pages/ProjectForm';
 import Services from './pages/Services';
@@ -20,6 +21,7 @@ import TagForm from './pages/TagForm';
 import MediaLibrary from './pages/MediaLibrary';
 import MediaUpload from './pages/MediaUpload';
 import MediaEdit from './pages/MediaEdit';
+import Settings from './pages/Settings';
 import './App.css';
 
 function App() {
@@ -37,6 +39,7 @@ function App() {
             }
           >
             <Route index element={<Dashboard />} />
+            <Route path="analytics" element={<Analytics />} />
             <Route path="projects" element={<Projects />} />
             <Route path="projects/new" element={<ProjectForm />} />
             <Route path="projects/:id" element={<ProjectForm />} />
@@ -55,6 +58,7 @@ function App() {
             <Route path="media" element={<MediaLibrary />} />
             <Route path="media/upload" element={<MediaUpload />} />
             <Route path="media/:id" element={<MediaEdit />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>
