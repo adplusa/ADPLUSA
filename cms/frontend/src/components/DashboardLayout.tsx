@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { logout } from '../store/authSlice';
 import { Button } from './ui/button';
@@ -33,9 +33,13 @@ function Breadcrumb() {
       {breadcrumbItems.map((item, index) => (
         <div key={item.path} className="flex items-center">
           {index > 0 && <ChevronRight className="h-4 w-4 mx-1" />}
-          <span className={item.isLast ? "text-foreground font-medium" : "hover:text-foreground"}>
-            {item.label}
-          </span>
+          {item.isLast ? (
+            <span className="text-foreground font-medium">{item.label}</span>
+          ) : (
+            <Link to={item.path} className="hover:text-foreground transition-colors">
+              {item.label}
+            </Link>
+          )}
         </div>
       ))}
     </nav>
@@ -112,13 +116,17 @@ export default function DashboardLayout() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
+                  <DropdownMenuItem asChild>
+                    <Link to="/dashboard/profile">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Profile</span>
+                    </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
+                  <DropdownMenuItem asChild>
+                    <Link to="/dashboard/settings">
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Settings</span>
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout}>
