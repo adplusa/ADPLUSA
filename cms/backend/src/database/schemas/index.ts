@@ -3,7 +3,7 @@
  */
 
 // Export models
-export { Project, IProject, IProjectImage, IProjectDetail, IProjectImageGroup } from './project.schema';
+export { Project, IProject, IProjectImage, IProjectDetail, IProjectImageGallery } from './project.schema';
 export { Service, IService, IServiceImage, IServiceFeature, IServiceItem, IKeyActivity } from './service.schema';
 export { FAQ, IFAQ, IFAQCategory, IFAQItem, IFAQImage } from './faq.schema';
 export { About, IAbout, IAboutSection, IAnchorLink, IAboutImage } from './about.schema';

@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { FormWrapper, FormField } from '../components/FormWrapper';
 import type { FormTab } from '../components/FormWrapper';
-import { seoSchema, urlSchema } from '../utils/validation';
+import { seoSchema } from '../utils/validation';
 import type { FAQ } from '../services/content.service';
 import { getFAQ, updateFAQ } from '../services/content.service';
 import PreviewModal from '../components/PreviewModal';

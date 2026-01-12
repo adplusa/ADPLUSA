@@ -7,21 +7,21 @@ import { getContact, updateContact } from '../services/content.service';
 
 const contactFields: FormField<Contact>[] = [
   {
-    name: 'email',
+    name: 'contactInfo.email',
     label: 'Email Address',
     type: 'text',
     placeholder: 'contact@example.com',
     helpText: 'Primary contact email address',
   },
   {
-    name: 'phone',
+    name: 'contactInfo.phone',
     label: 'Phone Number',
     type: 'text',
     placeholder: '+1 (555) 123-4567',
     helpText: 'Primary contact phone number',
   },
   {
-    name: 'address',
+    name: 'contactInfo.address',
     label: 'Address',
     type: 'textarea',
     placeholder: 'Enter full address',

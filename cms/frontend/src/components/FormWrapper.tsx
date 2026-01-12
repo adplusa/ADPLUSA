@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
-import type { FieldValues, UseFormReturn, FieldErrors, Path } from 'react-hook-form';
+import type { FieldValues, UseFormReturn, FieldErrors } from 'react-hook-form';
 import { Button } from './ui/button';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { saveDraft, loadDraft, clearDraft, getDraftSavedAt } from '../utils/draft-storage';
@@ -33,7 +33,6 @@ export interface FormWrapperProps<T extends FieldValues> {
   
   // Features
   enableDraftSave?: boolean;
-  draftKey?: string;
   contentType?: string;
   contentId?: string;
   tabs?: FormTab[];
@@ -435,7 +434,6 @@ export function FormWrapper<T extends FieldValues>({
   onSubmit,
   onCancel,
   enableDraftSave = false,
-  draftKey,
   contentType,
   contentId,
   tabs,

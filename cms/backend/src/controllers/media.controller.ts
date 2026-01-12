@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Media } from '../database/schemas/media.schema';
-import { uploadToS3, deleteFromS3 } from '../utils/s3';
+import { uploadImageToS3, deleteImageFromS3 } from '../utils/s3';
 import { ApiResponse } from '../types/api.types';
 import sharp from 'sharp';
 
@@ -139,12 +139,16 @@ export const uploadMedia = async (req: Request, res: Response) => {
     }
 
     // Upload to S3
-    const s3Result = await uploadToS3(processedBuffer, file.originalname, file.mimetype);
+    const s3Result = await uploadImageToS3({
+      buffer: processedBuffer,
+      originalName: file.originalname,
+      folder: 'media'
+    });
 
     // Create media record
     const media = new Media({
       title,
-      filename: s3Result.filename,
+      filename: s3Result.key.split('/').pop(),
       originalName: file.originalname,
       s3Path: s3Result.key,
       s3Url: s3Result.url,
@@ -155,7 +159,7 @@ export const uploadMedia = async (req: Request, res: Response) => {
       alt,
       description,
       tags: tags ? (Array.isArray(tags) ? tags : [tags]) : [],
-      uploadedBy: req.user.id
+      uploadedBy: (req as any).user?.id
     });
 
     await media.save();
@@ -227,7 +231,7 @@ export const deleteMedia = async (req: Request, res: Response) => {
 
     // Delete from S3
     try {
-      await deleteFromS3(media.s3Path);
+      await deleteImageFromS3(media.s3Path);
     } catch (error) {
       console.error('Error deleting from S3:', error);
       // Continue with database deletion even if S3 deletion fails
