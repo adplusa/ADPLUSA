@@ -67,7 +67,6 @@ services:
   - type: web
     name: architect-cms-admin
     runtime: static
-    plan: free
     buildCommand: npm ci && npm run build
     staticPublishPath: dist
     rootDir: cms/frontend
