@@ -843,7 +843,7 @@ span.service-two-bottom-box-logo {
 .features-name {
   display: flex;
   justify-content: center;
-  align-items: end;
+  align-items: flex-end;
   text-align: center;
   margin-top: 5%;
   gap: 6%;

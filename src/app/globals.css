@@ -612,7 +612,8 @@ h1 {
 
 .feature-main-service-page {
   display: flex;
-  align-items: start; /* or center, depending on design */
+  align-items: flex-start;
+    /* or center, depending on design */
   gap: 12px; /* or whatever spacing you prefer */
 }
 
@@ -626,7 +627,8 @@ h1 {
 
 .feature {
   display: flex;
-  align-items: start; /* or center, depending on design */
+  align-items: flex-start;
+    /* or center, depending on design */
   gap: 12px; /* or whatever spacing you prefer */
 }
 
