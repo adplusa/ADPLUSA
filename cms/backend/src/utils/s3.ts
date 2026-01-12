@@ -117,22 +117,26 @@ export async function uploadImageToS3(
   };
   const contentType = contentTypeMap[fileExtension] || 'image/jpeg';
 
-  // Upload to S3
   const uploadParams: AWS.S3.PutObjectRequest = {
     Bucket: config.aws.bucketName,
     Key: key,
     Body: optimizedBuffer,
     ContentType: contentType,
-    ACL: 'public-read',
   };
 
   await s3.upload(uploadParams).promise();
 
   // Generate URLs
   const url = `https://${config.aws.bucketName}.s3.${config.aws.region}.amazonaws.com/${key}`;
-  const cloudFrontUrl = config.aws.cloudFrontUrl
-    ? `${config.aws.cloudFrontUrl}/${key}`
-    : undefined;
+
+  // Ensure CloudFront URL has https:// prefix
+  let cloudFrontUrl: string | undefined;
+  if (config.aws.cloudFrontUrl) {
+    const cfUrl = config.aws.cloudFrontUrl.startsWith('http')
+      ? config.aws.cloudFrontUrl
+      : `https://${config.aws.cloudFrontUrl}`;
+    cloudFrontUrl = `${cfUrl}/${key}`;
+  }
   
   // Use CloudFront URL if available, otherwise S3 URL
   const cdnUrl = cloudFrontUrl || url;
@@ -235,19 +239,23 @@ export async function generatePresignedUploadUrl(
   const uniqueFileName = `${uuidv4()}.${fileExtension}`;
   const key = `${folder}/${uniqueFileName}`;
 
-  // Generate presigned URL for PUT operation
   const uploadUrl = await s3.getSignedUrlPromise('putObject', {
     Bucket: config.aws.bucketName,
     Key: key,
     ContentType: contentType,
     Expires: expiresIn,
-    ACL: 'public-read',
   });
 
   // Generate CDN URL for accessing the uploaded file
-  const cdnUrl = config.aws.cloudFrontUrl
-    ? `${config.aws.cloudFrontUrl}/${key}`
-    : `https://${config.aws.bucketName}.s3.${config.aws.region}.amazonaws.com/${key}`;
+  let cdnUrl: string;
+  if (config.aws.cloudFrontUrl) {
+    const cfUrl = config.aws.cloudFrontUrl.startsWith('http')
+      ? config.aws.cloudFrontUrl
+      : `https://${config.aws.cloudFrontUrl}`;
+    cdnUrl = `${cfUrl}/${key}`;
+  } else {
+    cdnUrl = `https://${config.aws.bucketName}.s3.${config.aws.region}.amazonaws.com/${key}`;
+  }
 
   return {
     uploadUrl,
@@ -287,7 +295,10 @@ export async function generatePresignedDownloadUrl(
 
   // If CloudFront is configured, return CloudFront URL (no presigning needed for public content)
   if (config.aws.cloudFrontUrl) {
-    return `${config.aws.cloudFrontUrl}/${key}`;
+    const cfUrl = config.aws.cloudFrontUrl.startsWith('http')
+      ? config.aws.cloudFrontUrl
+      : `https://${config.aws.cloudFrontUrl}`;
+    return `${cfUrl}/${key}`;
   }
 
   // Otherwise, generate presigned S3 URL
@@ -305,7 +316,10 @@ export async function generatePresignedDownloadUrl(
  */
 export function getCdnUrl(key: string): string {
   if (config.aws.cloudFrontUrl) {
-    return `${config.aws.cloudFrontUrl}/${key}`;
+    const cfUrl = config.aws.cloudFrontUrl.startsWith('http')
+      ? config.aws.cloudFrontUrl
+      : `https://${config.aws.cloudFrontUrl}`;
+    return `${cfUrl}/${key}`;
   }
   return `https://${config.aws.bucketName}.s3.${config.aws.region}.amazonaws.com/${key}`;
 }

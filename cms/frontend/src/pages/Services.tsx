@@ -1,51 +1,97 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { ColumnDef } from '@tanstack/react-table';
-import { DataTable, createActionsColumn } from '../components/ui/data-table';
+import { createActionsColumn } from '../components/ui/data-table';
 import { Badge } from '../components/ui/badge';
+import { ServerPaginatedTable, type FetchParams, type PaginatedResponse } from '../components/ui/ServerPaginatedTable';
 import { getServices, deleteService } from '../services/service.service';
 import type { Service } from '../services/service.service';
 
 export default function Services() {
   const navigate = useNavigate();
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  const fetchServices = async (search: string = '') => {
+  /**
+   * Fetch services from the server with pagination and search
+   * Requirements: 5.1, 6.2
+   * 
+   * Note: If the backend doesn't support server-side pagination/search yet,
+   * this will fall back to client-side filtering of all results.
+   */
+  const fetchServices = useCallback(async (params: FetchParams): Promise<PaginatedResponse<Service>> => {
     try {
-      setLoading(true);
       setError(null);
-      const response = await getServices();
+      const response = await getServices({
+        page: params.page,
+        limit: params.pageSize,
+        search: params.search || undefined,
+      });
 
-      // Filter services based on search query
-      let filteredServices = response.data;
-      if (search) {
-        filteredServices = response.data.filter(service =>
-          service.title.toLowerCase().includes(search.toLowerCase()) ||
-          service.description?.toLowerCase().includes(search.toLowerCase()) ||
-          service.slug.toLowerCase().includes(search.toLowerCase())
+      // If backend returns pagination info, use it
+      if (response.pagination) {
+        return {
+          data: response.data,
+          pagination: {
+            page: response.pagination.page,
+            pageSize: response.pagination.limit,
+            total: response.pagination.total,
+            totalPages: response.pagination.pages,
+          },
+        };
+      }
+
+      // Fallback: client-side pagination if backend doesn't support it
+      let filteredData = response.data;
+      if (params.search) {
+        const searchLower = params.search.toLowerCase();
+        filteredData = response.data.filter(service =>
+          service.title.toLowerCase().includes(searchLower) ||
+          service.description?.toLowerCase().includes(searchLower) ||
+          service.slug.toLowerCase().includes(searchLower)
         );
       }
 
-      setServices(filteredServices);
-    } catch (err: any) {
-      setError(err.response?.data?.error?.message || 'Failed to load services');
-    } finally {
-      setLoading(false);
-    }
-  };
+      const total = filteredData.length;
+      const totalPages = Math.ceil(total / params.pageSize);
+      const startIndex = (params.page - 1) * params.pageSize;
+      const paginatedData = filteredData.slice(startIndex, startIndex + params.pageSize);
 
-  useEffect(() => {
-    fetchServices(searchQuery);
-  }, [searchQuery]);
+      return {
+        data: paginatedData,
+        pagination: {
+          page: params.page,
+          pageSize: params.pageSize,
+          total,
+          totalPages,
+        },
+      };
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error
+        ? err.message
+        : (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message || 'Failed to load services';
+      setError(errorMessage);
+      return {
+        data: [],
+        pagination: {
+          page: params.page,
+          pageSize: params.pageSize,
+          total: 0,
+          totalPages: 0,
+        },
+      };
+    }
+  }, []);
 
   const handleEdit = (service: Service) => {
     navigate(`/dashboard/services/${service.slug}`);
   };
 
+  /**
+   * Handle service deletion with proper page management
+   * Requirements: 5.6, 5.7
+   */
   const handleDelete = async (service: Service) => {
     if (!service._id) return;
 
@@ -54,17 +100,16 @@ export default function Services() {
       setSuccessMessage(null);
       await deleteService(service._id);
       setSuccessMessage('Service deleted successfully');
-      // Refresh the list after deletion
-      fetchServices(searchQuery);
+      // Trigger refresh of the table data
+      setRefreshKey(prev => prev + 1);
       // Clear success message after 3 seconds
       setTimeout(() => setSuccessMessage(null), 3000);
-    } catch (err: any) {
-      setError(err.response?.data?.error?.message || 'Failed to delete service');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error
+        ? err.message
+        : (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message || 'Failed to delete service';
+      setError(errorMessage);
     }
-  };
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
   };
 
   const handleCreateNew = () => {
@@ -121,16 +166,18 @@ export default function Services() {
 
   return (
     <div className="container mx-auto py-6">
-      <DataTable
+      <ServerPaginatedTable
         columns={columns}
-        data={services}
+        fetchData={fetchServices}
         title="Services"
-        loading={loading}
+        searchPlaceholder="Search services..."
+        onCreateClick={handleCreateNew}
+        createButtonLabel="Create New"
         error={error}
         successMessage={successMessage}
-        onSearch={handleSearch}
-        onCreateClick={handleCreateNew}
-        searchPlaceholder="Search services..."
+        refreshKey={refreshKey}
+        emptyStateMessage="No services found. Create your first service!"
+        noResultsMessage="No services match your search criteria."
       />
     </div>
   );

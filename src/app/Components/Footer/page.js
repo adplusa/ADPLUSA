@@ -1,40 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./footer.css";
-// import Header from "../Header/page";
 import Link from "next/link";
 
 const Footer = () => {
-  const [whiteLogo, setWhiteLogo] = useState(false);
-
-  useEffect(() => {
-    const checkDarkMode = () => {
-      setWhiteLogo(document.body.classList.contains("dark-mode"));
-    };
-
-    checkDarkMode();
-
-    const observer = new MutationObserver(checkDarkMode);
-    observer.observe(
-      document.body,
-      {
-        attributes: true,
-        attributeFilter: ["class"],
-      },
-      []
-    );
-
-    return () => observer.disconnect();
-  });
-
   return (
     <div>
       <div className="footer">
         <div className="footer-logo">
           <Image
-            // src={whiteLogo ? "/white-logo.png" : "/red-logo.png"}
             src="/footer-logo.png"
             alt="Footer-logo"
             id="footer-logo"

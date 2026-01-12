@@ -2,12 +2,27 @@ import { axiosApi } from './axios';
 
 export interface ServiceImage {
   url: string;
-  darkModeUrl?: string;
+  alt?: string;
 }
 
 export interface ServiceFeature {
   title: string;
   description: string;
+}
+
+export interface ServiceItem {
+  title: string;
+  description: string;
+  image?: ServiceImage;
+  link?: string;
+  isExternal?: boolean;
+  order?: number;
+}
+
+export interface KeyActivity {
+  title: string;
+  description: string;
+  order?: number;
 }
 
 export interface Service {
@@ -17,8 +32,11 @@ export interface Service {
   description?: string;
   content?: string;
   bannerImage?: ServiceImage;
+  servicesList?: ServiceItem[];
+  keyActivities?: KeyActivity[];
   features?: ServiceFeature[];
   image?: ServiceImage;
+  order?: number;
   seoTitle?: string;
   seoDescription?: string;
   createdAt?: string;
@@ -28,6 +46,12 @@ export interface Service {
 export interface ServicesResponse {
   success: boolean;
   data: Service[];
+  pagination?: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
 }
 
 export interface ServiceResponse {
@@ -35,11 +59,17 @@ export interface ServiceResponse {
   data: Service;
 }
 
+export interface ServiceQueryParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+}
+
 /**
- * Get all services
+ * Get all services with optional pagination and search
  */
-export const getServices = async (): Promise<ServicesResponse> => {
-  const response = await axiosApi.get<ServicesResponse>('/services');
+export const getServices = async (params?: ServiceQueryParams): Promise<ServicesResponse> => {
+  const response = await axiosApi.get<ServicesResponse>('/services', { params });
   return response.data;
 };
 

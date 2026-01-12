@@ -1,91 +1,126 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import Header from "../Components/Header/page";
 import Footer from "../Components/Footer/page";
+import Loading from "../Components/Loading/page";
 import Image from "next/image";
 import Link from "next/link";
-import { client } from "@/sanity/lib/client";
-import urlFor from "../helpers/sanity";
+import { getProjects } from "@/lib/cms-client";
 import "./project.css";
 
+/**
+ * Projects Listing Page
+ * Fetches all projects from the custom CMS
+ * Uses infinite scroll for loading more projects
+ * Requirements: 2.1
+ */
 const Project = () => {
   const textRef = useRef(null);
   const [data, setData] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+
   const [visibleCount, setVisibleCount] = useState(6);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const loaderRef = useRef(null);
 
-  // 🌙 Dark / Light mode listener
-  useEffect(() => {
-    const updateMode = () => {
-      setIsDarkMode(document.body.classList.contains("dark-mode"));
-    };
-    updateMode();
-    const observer = new MutationObserver(updateMode);
-    observer.observe(document.body, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-    return () => observer.disconnect();
-  }, []);
 
-  // 🧠 Fetch and Filter Sanity Projects
+
+  // Fetch projects from CMS
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
-        // 1️⃣ Fetch all docs whose type starts with "projectInternalPage"
-        const fetched = await client.fetch(
-          `*[_type match "projectInternalPage*"]{
-            _id,
-            _type,
-            title,
-            slug,
-            introText,
-            mainImage,
-            mainImageDarkMode,
-            projectImages,
-            _createdAt
-          }`
-        );
+        const projects = await getProjects();
 
-        // 2️⃣ Filter out docs that have no title or image or content
-        const filtered = fetched.filter(
-          (item) =>
-            (item.mainImage || item.mainImageDarkMode) &&
-            (item.introText || item.projectImages)
-        );
+        if (projects) {
+          // Map images array to mainImage for compatibility
+          const mappedProjects = projects.map(item => ({
+            ...item,
+            mainImage: item.images?.[0] || null,
+          }));
 
-        // 3️⃣ Sort by internal page number (projectInternalPageOne → Two → ...)
-        const sorted = filtered.sort((a, b) => {
-          const getNum = (typeName) => {
-            const match = typeName.match(/\d+/);
-            return match ? parseInt(match[0]) : 0;
-          };
-          return getNum(a._type) - getNum(b._type);
-        });
+          // Filter out projects without images
+          const filtered = mappedProjects.filter(
+            (item) => item.mainImage?.url
+          );
 
-        setData(sorted);
+          setData(filtered);
+        }
       } catch (error) {
         console.error("Error fetching project data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, []);
 
-  // 🆙 Scroll to Top
+  // Infinite scroll - load more when loader element is visible
+  const loadMore = useCallback(() => {
+    if (isLoadingMore || visibleCount >= data.length) return;
+
+    setIsLoadingMore(true);
+    // Simulate a small delay for smooth UX
+    setTimeout(() => {
+      setVisibleCount((prev) => Math.min(prev + 6, data.length));
+      setIsLoadingMore(false);
+    }, 300);
+  }, [isLoadingMore, visibleCount, data.length]);
+
+  // Intersection Observer for infinite scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLoadingMore && visibleCount < data.length) {
+          loadMore();
+        }
+      },
+      { threshold: 0.1, rootMargin: '100px' }
+    );
+
+    const currentLoader = loaderRef.current;
+    if (currentLoader) {
+      observer.observe(currentLoader);
+    }
+
+    return () => {
+      if (currentLoader) {
+        observer.unobserve(currentLoader);
+      }
+    };
+  }, [loadMore, isLoadingMore, visibleCount, data.length]);
+
+  // Scroll to Top
   const upwardHandler = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // ➕ Load More
-  const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 6);
-  };
+  if (isLoading) {
+    return <Loading text="Loading Projects" fullScreen={true} />;
+  }
 
-  if (!data || data.length === 0)
-    return <div className="loading">Loading projects...</div>;
+  if (!data || data.length === 0) {
+    return (
+      <>
+        <Header />
+        <div className="project-container">
+          <div className="project-content">
+            <div className="project-heading">
+              <h1>Our Projects</h1>
+              <hr id="project-hr" />
+            </div>
+            <div style={{ padding: "50px", textAlign: "center" }}>
+              <p>No projects available at the moment.</p>
+            </div>
+          </div>
+          <Footer />
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -98,29 +133,21 @@ const Project = () => {
             <hr id="project-hr" />
           </div>
 
-          {/* 🏗️ Project Grid */}
+          {/* Project Grid */}
           <div className="project-grid">
             {data.slice(0, visibleCount).map((item, index) => (
               <Link
-                href={
-                  item.slug?.current ? `/projects/${item.slug.current}` : "#"
-                }
-                key={index}
+                href={item.slug ? `/projects/${item.slug}` : "#"}
+                key={item._id || index}
                 className="project-tile"
               >
                 <div className="image-wrapper-pr">
                   <Image
-                    src={
-                      isDarkMode && item.mainImageDarkMode
-                        ? urlFor(item.mainImageDarkMode).url()
-                        : item.mainImage
-                          ? urlFor(item.mainImage).url()
-                          : "/placeholder.jpg"
-                    }
-                    alt={item.title || "Project Image"}
+                    src={item.mainImage?.url || "/placeholder.jpg"}
+                    alt={item.mainImage?.alt || item.title || "Project Image"}
                     fill
                     unoptimized
-                    priority
+                    priority={index < 6}
                   />
                 </div>
                 <p className="image-title">{item.title}</p>
@@ -128,19 +155,35 @@ const Project = () => {
             ))}
           </div>
 
-          {/* 🔽 Load More Button */}
+          {/* Infinite Scroll Loader */}
           {visibleCount < data.length && (
-            <div className="load-more-container">
-              <button className="load-more-btn" onClick={handleLoadMore}>
-                Load More
-              </button>
+            <div
+              ref={loaderRef}
+              className="infinite-scroll-loader"
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                padding: '30px 0',
+                width: '100%'
+              }}
+            >
+              {isLoadingMore && (
+                <div className="loading-spinner" style={{
+                  width: '40px',
+                  height: '40px',
+                  border: '3px solid #f3f3f3',
+                  borderTop: '3px solid #333',
+                  borderRadius: '50%',
+                  animation: 'spin 1s linear infinite'
+                }} />
+              )}
             </div>
           )}
         </div>
 
         <Footer />
 
-        {/* 💬 WhatsApp Button */}
+        {/* WhatsApp Button */}
         <div className="whatsapp">
           <a
             className="btn-whatsapp-pulse"
@@ -148,7 +191,7 @@ const Project = () => {
             href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
           >
             <Image
-              src={"/whatsapp.png"}
+              src="/whatsapp.png"
               width={40}
               height={40}
               alt="Whatsapp-img"
@@ -157,7 +200,7 @@ const Project = () => {
           </a>
         </div>
 
-        {/* 📩 Enquiry Form */}
+        {/* Enquiry Form */}
         <div className="enquire">
           <button onClick={() => setShowForm(true)}>Enquire Now</button>
         </div>
@@ -208,7 +251,7 @@ const Project = () => {
           </div>
         )}
 
-        {/* ⬆ Scroll Up Button */}
+        {/* Scroll Up Button */}
         <div className="upward" onClick={upwardHandler}>
           <svg
             xmlns="http://www.w3.org/2000/svg"

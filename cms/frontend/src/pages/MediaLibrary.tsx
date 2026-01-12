@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -9,7 +9,25 @@ import { getMedia, deleteMedia, formatFileSize, isImage, getFileTypeIcon } from 
 import { getTags } from '../services/tag.service';
 import type { MediaFile } from '../services/media.service';
 import type { Tag } from '../services/tag.service';
-import { Search, Upload, Grid, List, Edit, Trash2 } from 'lucide-react';
+import {
+  Search,
+  Upload,
+  Grid,
+  List,
+  Edit,
+  Trash2,
+  ChevronsLeft,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsRight,
+  X,
+  Loader2
+} from 'lucide-react';
+import { useDebounce } from '../hooks/useDebounce';
+import { usePagination } from '../hooks/usePagination';
+
+const PAGE_SIZE_OPTIONS = [12, 24, 48, 96];
+const DEFAULT_PAGE_SIZE = 24;
 
 export default function MediaLibrary() {
   const navigate = useNavigate();
@@ -22,30 +40,46 @@ export default function MediaLibrary() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [mimeTypeFilter, setMimeTypeFilter] = useState<string>('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
 
-  const fetchMedia = async (page: number = 1) => {
+  // Debounced search value (300ms delay per Requirement 6.1)
+  const debouncedSearch = useDebounce(searchQuery, 300);
+
+  // Use the usePagination hook for consistent pagination behavior
+  // Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7
+  const pagination = usePagination({
+    initialPage: 1,
+    initialPageSize: DEFAULT_PAGE_SIZE,
+    pageSizeOptions: PAGE_SIZE_OPTIONS,
+  });
+
+  /**
+   * Fetch media from the server
+   * Requirements: 5.1, 5.5, 6.2
+   */
+  const fetchMedia = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
       const response = await getMedia({
-        page,
-        limit: 20,
-        search: searchQuery || undefined,
+        page: pagination.state.page,
+        limit: pagination.state.pageSize,
+        search: debouncedSearch || undefined,
         mimeType: mimeTypeFilter || undefined,
         tags: selectedTags.length > 0 ? selectedTags : undefined,
       });
       setMedia(response.data);
       if (response.pagination) {
-        setTotalPages(response.pagination.pages);
+        pagination.setTotal(response.pagination.total);
       }
-    } catch (err: any) {
-      setError(err.response?.data?.error?.message || 'Failed to load media');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error
+        ? err.message
+        : (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message || 'Failed to load media';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
-  };
+  }, [pagination.state.page, pagination.state.pageSize, debouncedSearch, mimeTypeFilter, selectedTags, pagination.setTotal]);
 
   const fetchTags = async () => {
     try {
@@ -61,12 +95,20 @@ export default function MediaLibrary() {
   }, []);
 
   useEffect(() => {
-    fetchMedia(currentPage);
-  }, [currentPage, searchQuery, selectedTags, mimeTypeFilter]);
+    fetchMedia();
+  }, [fetchMedia]);
+
+  // Reset to page 1 when search or filters change (Requirement 6.3)
+  useEffect(() => {
+    pagination.goToFirst();
+  }, [debouncedSearch, selectedTags, mimeTypeFilter]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-    setCurrentPage(1);
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery('');
   };
 
   const handleTagFilter = (tagId: string) => {
@@ -75,18 +117,20 @@ export default function MediaLibrary() {
         ? prev.filter(id => id !== tagId)
         : [...prev, tagId]
     );
-    setCurrentPage(1);
   };
 
   const handleMimeTypeFilter = (mimeType: string) => {
     setMimeTypeFilter(prev => prev === mimeType ? '' : mimeType);
-    setCurrentPage(1);
   };
 
   const handleEdit = (mediaFile: MediaFile) => {
     navigate(`/dashboard/media/${mediaFile._id}`);
   };
 
+  /**
+   * Handle media deletion with proper page management
+   * Requirements: 5.6, 5.7
+   */
   const handleDelete = async (mediaFile: MediaFile) => {
     if (!confirm('Are you sure you want to delete this media file?')) return;
 
@@ -95,10 +139,16 @@ export default function MediaLibrary() {
       setSuccessMessage(null);
       await deleteMedia(mediaFile._id);
       setSuccessMessage('Media deleted successfully');
-      fetchMedia(currentPage);
+      // Use handleDeletion to properly manage page after deletion
+      pagination.handleDeletion(1);
+      // Refetch data
+      fetchMedia();
       setTimeout(() => setSuccessMessage(null), 3000);
-    } catch (err: any) {
-      setError(err.response?.data?.error?.message || 'Failed to delete media');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error
+        ? err.message
+        : (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message || 'Failed to delete media';
+      setError(errorMessage);
     }
   };
 
@@ -106,27 +156,26 @@ export default function MediaLibrary() {
     navigate('/dashboard/media/upload');
   };
 
+  /**
+   * Clear all filters (Requirement 6.5)
+   */
   const clearFilters = () => {
     setSearchQuery('');
     setSelectedTags([]);
     setMimeTypeFilter('');
-    setCurrentPage(1);
+    pagination.goToFirst();
   };
 
-  if (loading && media.length === 0) {
-    return (
-      <div className="container mx-auto py-6">
-        <Card>
-          <CardContent className="flex items-center justify-center py-12">
-            <div className="flex items-center gap-2">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-              <span>Loading media library...</span>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    pagination.setPageSize(Number(e.target.value));
+  };
+
+  // Check if any filters are active
+  const hasActiveFilters = searchQuery || selectedTags.length > 0 || mimeTypeFilter;
+
+  // Calculate display range
+  const startItem = media.length > 0 ? (pagination.state.page - 1) * pagination.state.pageSize + 1 : 0;
+  const endItem = Math.min(pagination.state.page * pagination.state.pageSize, pagination.state.total);
 
   return (
     <div className="container mx-auto py-6">
@@ -153,14 +202,25 @@ export default function MediaLibrary() {
                   placeholder="Search media..."
                   value={searchQuery}
                   onChange={handleSearch}
-                  className="pl-9"
+                  className="pl-9 pr-9"
+                  aria-label="Search media"
                 />
+                {searchQuery && (
+                  <button
+                    onClick={handleClearSearch}
+                    className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground"
+                    aria-label="Clear search"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
               </div>
               <div className="flex items-center gap-2">
                 <Button
                   variant={viewMode === 'grid' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setViewMode('grid')}
+                  aria-label="Grid view"
                 >
                   <Grid className="h-4 w-4" />
                 </Button>
@@ -168,6 +228,7 @@ export default function MediaLibrary() {
                   variant={viewMode === 'list' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setViewMode('list')}
+                  aria-label="List view"
                 >
                   <List className="h-4 w-4" />
                 </Button>
@@ -221,8 +282,8 @@ export default function MediaLibrary() {
               </div>
             )}
 
-            {/* Clear Filters */}
-            {(searchQuery || selectedTags.length > 0 || mimeTypeFilter) && (
+            {/* Clear Filters (Requirement 6.5) */}
+            {hasActiveFilters && (
               <div className="flex items-center gap-2">
                 <Button variant="ghost" size="sm" onClick={clearFilters}>
                   Clear all filters
@@ -246,22 +307,38 @@ export default function MediaLibrary() {
         </Alert>
       )}
 
-      {/* Media Grid/List */}
-      {media.length === 0 ? (
+      {/* Loading State (Requirement 5.5) */}
+      {loading ? (
+        <Card>
+          <CardContent className="flex items-center justify-center py-12">
+            <div className="flex items-center gap-2" role="status" aria-label="Loading media">
+              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              <span>Loading media library...</span>
+            </div>
+          </CardContent>
+        </Card>
+      ) : media.length === 0 ? (
+      /* Empty State / No Results (Requirement 6.4) */
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Upload className="h-12 w-12 text-muted-foreground mb-4" />
             <h3 className="text-lg font-medium mb-2">No media found</h3>
             <p className="text-muted-foreground text-center mb-4">
-              {searchQuery || selectedTags.length > 0 || mimeTypeFilter
-                ? 'Try adjusting your filters or search terms.'
+                {hasActiveFilters
+                  ? 'No results match your search criteria. Try adjusting your filters.'
                 : 'Upload your first media file to get started.'
               }
             </p>
-            <Button onClick={handleUpload}>
-              <Upload className="h-4 w-4 mr-2" />
-              Upload Media
-            </Button>
+              {hasActiveFilters ? (
+                <Button variant="outline" onClick={clearFilters}>
+                  Clear filters
+                </Button>
+              ) : (
+                  <Button onClick={handleUpload}>
+                    <Upload className="h-4 w-4 mr-2" />
+                    Upload Media
+                  </Button>
+              )}
           </CardContent>
         </Card>
       ) : viewMode === 'grid' ? (
@@ -306,6 +383,7 @@ export default function MediaLibrary() {
                     size="sm"
                     onClick={() => handleEdit(mediaFile)}
                     className="flex-1"
+                    aria-label={`Edit ${mediaFile.title}`}
                   >
                     <Edit className="h-3 w-3" />
                   </Button>
@@ -314,6 +392,7 @@ export default function MediaLibrary() {
                     size="sm"
                     onClick={() => handleDelete(mediaFile)}
                     className="flex-1 text-destructive hover:text-destructive"
+                    aria-label={`Delete ${mediaFile.title}`}
                   >
                     <Trash2 className="h-3 w-3" />
                   </Button>
@@ -361,6 +440,7 @@ export default function MediaLibrary() {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleEdit(mediaFile)}
+                      aria-label={`Edit ${mediaFile.title}`}
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
@@ -369,6 +449,7 @@ export default function MediaLibrary() {
                       size="sm"
                       onClick={() => handleDelete(mediaFile)}
                       className="text-destructive hover:text-destructive"
+                      aria-label={`Delete ${mediaFile.title}`}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -380,28 +461,79 @@ export default function MediaLibrary() {
         </Card>
       )}
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 mt-6">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-            disabled={currentPage === 1 || loading}
-          >
-            Previous
-          </Button>
-          <span className="text-sm text-muted-foreground">
-            Page {currentPage} of {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-            disabled={currentPage === totalPages || loading}
-          >
-            Next
-          </Button>
+      {/* Pagination Controls (Requirements: 5.2, 5.3, 5.4) */}
+      {!loading && media.length > 0 && (
+        <div className="flex items-center justify-between space-x-2 py-4 mt-4">
+          <div className="flex items-center gap-4">
+            <div className="text-sm text-muted-foreground">
+              {pagination.state.total > 0 ? (
+                <>
+                  Showing {startItem} to {endItem} of {pagination.state.total} entries
+                </>
+              ) : (
+                'No entries'
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              <label htmlFor="media-page-size" className="text-sm text-muted-foreground">
+                Items per page:
+              </label>
+              <select
+                id="media-page-size"
+                value={pagination.state.pageSize}
+                onChange={handlePageSizeChange}
+                className="h-8 rounded-md border border-input bg-background px-2 text-sm"
+                aria-label="Select number of items per page"
+              >
+                {PAGE_SIZE_OPTIONS.map((size) => (
+                  <option key={size} value={size}>
+                    {size}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className="text-sm text-muted-foreground">
+              Page {pagination.state.page} of {pagination.state.totalPages || 1}
+            </span>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={pagination.goToFirst}
+              disabled={!pagination.canGoPrevious || loading}
+              aria-label="Go to first page"
+            >
+              <ChevronsLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={pagination.goToPrevious}
+              disabled={!pagination.canGoPrevious || loading}
+              aria-label="Go to previous page"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={pagination.goToNext}
+              disabled={!pagination.canGoNext || loading}
+              aria-label="Go to next page"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={pagination.goToLast}
+              disabled={!pagination.canGoNext || loading}
+              aria-label="Go to last page"
+            >
+              <ChevronsRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       )}
     </div>

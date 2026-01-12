@@ -65,7 +65,7 @@ const faqSchema = new Schema<IFAQ>(
         chatLink: {
           type: String,
           trim: true,
-          match: [/^https?:\/\/.+/, 'Chat link must be a valid URL'],
+          // Allow both full URLs and relative paths
         },
         image: {
           url: {

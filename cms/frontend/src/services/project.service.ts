@@ -7,12 +7,27 @@ export interface ProjectImage {
   height?: number;
 }
 
+export interface ProjectDetail {
+  label: string;
+  value: string;
+  items?: string[];
+}
+
+export interface ImageGallery {
+  title: string;
+  images: ProjectImage[];
+}
+
 export interface Project {
   _id?: string;
   title: string;
   slug: string;
   description?: string;
+  introText?: string;
+  moreContent?: string;
   images?: ProjectImage[];
+  imageGalleries?: ImageGallery[];
+  projectDetails?: ProjectDetail[];
   category?: string;
   featured?: boolean;
   link?: string;

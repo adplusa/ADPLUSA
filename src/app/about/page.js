@@ -3,72 +3,45 @@
 import React, { useEffect, useRef, useState } from "react";
 import Header from "../Components/Header/page";
 import Footer from "../Components/Footer/page";
+import Loading from "../Components/Loading/page";
 import "./about.css";
 import Image from "next/image";
 import gsap from "gsap";
-
-import urlFor from "../helpers/sanity";
-import { PortableText } from "@portabletext/react";
-import Link from "next/link";
 import Head from "next/head";
+import { getAbout } from "../../lib/cms-client";
 
 const About = () => {
   const textRef = useRef(null);
   const [data, setData] = useState(null);
   const [showForm, setShowForm] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+
+
+
 
   useEffect(() => {
-    const updateMode = () => {
-      setIsDarkMode(document.body.classList.contains("dark-mode"));
-    };
-    updateMode();
-    const observer = new MutationObserver(updateMode);
-    observer.observe(document.body, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-    return () => observer.disconnect();
-  }, []);
+    if (!data) return;
 
-  useEffect(() => {
-    if (!data) return; // Prevent null error
-
-    document.title = data.seoTitle;
+    document.title = data.seoTitle || "About Us";
 
     const metaDesc = document.querySelector("meta[name='description']");
     if (metaDesc) {
-      metaDesc.setAttribute("content", data.seoDescription);
+      metaDesc.setAttribute("content", data.seoDescription || "Learn about our mission and team");
     } else {
       const meta = document.createElement("meta");
       meta.name = "description";
-      meta.content = "Learn about our mission and team";
+      meta.content = data.seoDescription || "Learn about our mission and team";
       document.head.appendChild(meta);
     }
-  }, [data]); // Re-run when `data` becomes available
+  }, [data]);
 
   useEffect(() => {
     const fetchAboutData = async () => {
       try {
-        const { client } = await import("../../sanity/lib/client");
-        const aboutPageData = await client.fetch('*[_type == "aboutPage"]');
-
-        const resolveVideo = (ref) => {
-          if (!ref) return null;
-          return getFileAsset(
-            { _ref: ref },
-            {
-              projectId: "5ippxm43",
-              dataset: "production",
-            }
-          ).url;
-        };
-
+        const aboutPageData = await getAbout();
         console.log("Fetched About Page Data:", aboutPageData);
-
-        setData(aboutPageData[0]);
+        setData(aboutPageData);
       } catch (error) {
-        console.error("Error fetching aboutPage data from Sanity:", error);
+        console.error("Error fetching aboutPage data from CMS:", error);
       }
     };
 
@@ -91,28 +64,24 @@ const About = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if (!data) return <div className="loading">Loading...</div>;
+  if (!data) return <Loading text="Loading" fullScreen={true} />;
 
   return (
     <div>
       <Head>
-        <title>{data.pageTitle || "About Us - My Website"}</title>
+        <title>{data.seoTitle || "About Us - My Website"}</title>
         <meta
           name="description"
-          content={
-            data.pageDescription || "Learn more about our company and mission."
-          }
+          content={data.seoDescription || "Learn more about our company and mission."}
         />
         <meta name="robots" content="index, follow" />
         <meta
           property="og:title"
-          content={data.pageTitle || "About Us - My Website"}
+          content={data.seoTitle || "About Us - My Website"}
         />
         <meta
           property="og:description"
-          content={
-            data.pageDescription || "Learn more about our company and mission."
-          }
+          content={data.seoDescription || "Learn more about our company and mission."}
         />
       </Head>
       <Header />
@@ -129,7 +98,10 @@ const About = () => {
                 <div className="about-us-top-right">
                   <h1>{data.allowRightHeading}</h1>
 
-                  <PortableText value={data.paragraph} />
+                  {/* Paragraph is now plain HTML string from CMS */}
+                  {data.paragraph && (
+                    <div dangerouslySetInnerHTML={{ __html: data.paragraph }} />
+                  )}
                   <span className="four-p">
                     {data.anchorLinks?.map((link, idx) => (
                       <a href={`#${link.targetId}`} key={idx}>
@@ -148,7 +120,6 @@ const About = () => {
               className={`about-content-${idx + 2}-row`}
               key={section.sectionId || idx}
             >
-              {/* <div className="people-content" id={section.sectionId}> */}
               <div
                 className="people-content"
                 id={section.sectionId?.replace(/^#/, "")}
@@ -156,31 +127,18 @@ const About = () => {
                 <h1>{section.title}</h1>
                 <p>{section.body}</p>
               </div>
-              {isDarkMode
-                ? section?.imageDarkMode?.asset && (
-                    <div className="people-img">
-                      <Image
-                        src={urlFor(section.imageDarkMode).url()}
-                        alt={`${section.title} image`}
-                        width={600}
-                        height={400}
-                        unoptimized
-                        priority
-                      />
-                    </div>
-                  )
-                : section?.image?.asset && (
-                    <div className="people-img">
-                      <Image
-                        src={urlFor(section.image).url()}
-                        alt={`${section.title} image`}
-                        width={600}
-                        height={400}
-                        unoptimized
-                        priority
-                      />
-                    </div>
-                  )}
+              {section?.image?.url && (
+                <div className="people-img">
+                  <Image
+                    src={section.image.url}
+                    alt={`${section.title} image`}
+                    width={600}
+                    height={400}
+                    unoptimized
+                    priority
+                  />
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -211,7 +169,7 @@ const About = () => {
         <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
           <div
             className="enquiry-container"
-            onClick={(e) => e.stopPropagation()} // Prevent close on form click
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="enquiry-box">
               <div className="close-icon" onClick={() => setShowForm(false)}>

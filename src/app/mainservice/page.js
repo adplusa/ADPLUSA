@@ -2,62 +2,53 @@
 
 import Header from "../Components/Header/page";
 import Footer from "../Components/Footer/page";
+import Loading from "../Components/Loading/page";
 import "./servicetwo.css";
 import { useEffect, useState, useRef } from "react";
-import { client } from "@/sanity/lib/client"; // Correct Sanity client import
 import Image from "next/image";
 import Link from "next/link";
-import urlFor from "../helpers/sanity";
+import { getServices, getHomepage } from "@/lib/cms-client";
 import gsap from "gsap";
 
+/**
+ * Main Services Page
+ * Fetches all services from the custom CMS
+ * Requirements: 3.1
+ */
 const ServiceTwo = () => {
   const textRef = useRef(null);
 
   const [homepageData, setHomepageData] = useState(null);
-  const [data, setData] = useState(null);
+  const [services, setServices] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const carouselRef = useRef(null);
   const [showForm, setShowForm] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
-  useEffect(() => {
-    const updateMode = () => {
-      setIsDarkMode(document.body.classList.contains("dark-mode"));
-    };
-    updateMode();
-    const observer = new MutationObserver(updateMode);
-    observer.observe(document.body, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-    return () => observer.disconnect();
-  }, []);
+
+
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const fetchedData = await client.fetch('*[_type == "serviceTwoPage"]');
-        console.log("Fetched Service Two Data:", fetchedData);
+        // Fetch services from CMS
+        const servicesData = await getServices();
+        if (servicesData) {
+          setServices(servicesData);
+        }
 
-        const homepageData = await client.fetch(`*[_type == "homepage"][0]`);
-        setHomepageData(homepageData);
-
-        const resolveVideo = (ref) => {
-          if (!ref) return null;
-          return getFileAsset(
-            { _ref: ref },
-            {
-              projectId: "5ippxm43",
-              dataset: "production",
-            }
-          ).url;
-        };
-
-        setData(fetchedData[0]);
+        // Fetch homepage data for trust icons and service boxes
+        const homepage = await getHomepage();
+        if (homepage) {
+          setHomepageData(homepage);
+        }
       } catch (error) {
-        console.error("Error fetching Service Two data:", error);
+        console.error("Error fetching services data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -65,20 +56,21 @@ const ServiceTwo = () => {
   }, []);
 
   useEffect(() => {
-    if (!data) return; // Prevent null error
+    if (!homepageData) return;
 
-    document.title = data.seoTitle;
+    // Set SEO meta tags
+    document.title = "Services | ADPL Consulting";
 
     const metaDesc = document.querySelector("meta[name='description']");
     if (metaDesc) {
-      metaDesc.setAttribute("content", data.seoDescription);
+      metaDesc.setAttribute("content", "Explore our comprehensive range of services at ADPL Consulting");
     } else {
       const meta = document.createElement("meta");
       meta.name = "description";
-      meta.content = "Learn about our mission and team";
+      meta.content = "Explore our comprehensive range of services at ADPL Consulting";
       document.head.appendChild(meta);
     }
-  }, [data]); // Re-run when `data` becomes available
+  }, [homepageData]);
 
   useEffect(() => {
     if (textRef.current) {
@@ -97,7 +89,7 @@ const ServiceTwo = () => {
   };
 
   // Infinite Carousel Logic
-  const professionals = data?.professionals || [];
+  const professionals = services || [];
   const allCards = [...professionals, ...professionals, ...professionals];
   const startIndex = professionals.length;
 
@@ -142,156 +134,140 @@ const ServiceTwo = () => {
     setActiveIndex(index + startIndex);
   };
 
-  if (!data) return <div>Loading...</div>; // Show loading while data is fetched
+  if (isLoading) {
+    return <Loading text="Loading Services" fullScreen={true} />;
+  }
 
   return (
     <>
       <Header />
 
-      {data.serviceBannerImage?.asset && (
-        <section
-          className="schematic-section"
-          style={{
-            // backgroundImage: `url(${urlFor(data.serviceBannerImage).url()})`,
-            backgroundImage: `url(${
-              isDarkMode
-                ? urlFor(data?.serviceBannerImageDarkMode).url()
-                : urlFor(data?.serviceBannerImage).url()
-            })`,
-          }}
-        ></section>
-      )}
+      {/* Banner Section - Use main-services banner */}
+      {(() => {
+        const mainService = services.find(s => s.slug === 'main-services');
+        const bannerUrl = mainService?.bannerImage?.url || services[0]?.bannerImage?.url;
+        return bannerUrl ? (
+          <section
+            className="schematic-section"
+            style={{
+              backgroundImage: `url(${bannerUrl})`,
+            }}
+          ></section>
+        ) : null;
+      })()}
 
-      <div className="feature-section">
-        <div className="feature-section-df">
-          <div className="feature-box">
-            <h1>{homepageData.trustIconsHeading}</h1>
-            <div className="features-name">
-              {homepageData?.serviceRelatedIcon?.map(
-                (related, index) =>
-                  related?.serviceRelatedImg?.asset && (
+      {/* Trust Icons Section */}
+      {homepageData?.trustIcons?.length > 0 && (
+        <div className="feature-section">
+          <div className="feature-section-df">
+            <div className="feature-box">
+              <h1>{homepageData.trustIconsHeading || "Why Choose Us"}</h1>
+              <div className="features-name">
+                {homepageData.trustIcons.map((icon, index) => (
+                  icon?.image?.url && (
                     <div key={index} className="service-related-item">
                       <Image
-                        src={urlFor(related.serviceRelatedImg).url()}
-                        alt={related.serviceRelatedName || "Service Icon"}
+                        src={icon.image.url}
+                        alt={icon.name || "Trust Icon"}
                         width={70}
                         height={70}
                         unoptimized
                         priority
                       />
-                      <p>{related.serviceRelatedNumber}</p>
-                      <h3>{related.serviceRelatedName}</h3>
+                      <p>{icon.number}</p>
+                      <h3>{icon.name}</h3>
                     </div>
                   )
-              )}
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
-      {/* <div className="home_services">
-        <h1>{homepageData.serviceHeading}</h1>
-        <div className="home_services_box">
-          {(isDarkMode
-            ? homepageData.serviceBoxDarkMode
-            : homepageData.serviceBox
-          )?.map(
-            (service, index) =>
-              service?.serviceBoxImg?.asset && (
-                <Link href={service.boxUrl} key={index}>
-                  <div className="service-box-home">
-                    <div className="service-image-main">
-                      <Image
-                        src={urlFor(service.serviceBoxImg).url()}
-                        alt={service.serviceBoxTitle}
-                        width={400}
-                        height={200}
-                        unoptimized
-                      />
-                    </div>
-                    <h2>{service.serviceBoxTitle}</h2>
-                  </div>
-                </Link>
-              )
-          )}
-        </div>
-      </div> */}
+      {/* Services Grid - Display all services dynamically */}
       <div className="home_services_unique">
-        <h1>{homepageData.serviceHeading}</h1>
+        <h1>{homepageData?.serviceHeading || "Our Services"}</h1>
         <div className="home_services_box_unique">
-          {(isDarkMode
-            ? homepageData.serviceBoxDarkMode
-            : homepageData.serviceBox
-          )?.map(
-            (service, index) =>
-              service?.serviceBoxImg?.asset && (
-                <Link href={service.boxUrl} key={index}>
-                  <div className="service-box-home-unique">
-                    <div className="service-image-main-unique">
-                      <Image
-                        src={urlFor(service.serviceBoxImg).url()}
-                        alt={service.serviceBoxTitle}
-                        width={400}
-                        height={200}
-                        unoptimized
-                      />
+          {services.filter(s => s.slug !== 'main-services').map((service, index) => (
+            <Link href={`/services/${service.slug}`} key={service._id || index}>
+              <div className="service-box-home-unique">
+                <div className="service-image-main-unique">
+                  {service.bannerImage?.url || service.image?.url ? (
+                    <Image
+                      src={service.bannerImage?.url || service.image?.url}
+                      alt={service.title || 'Service'}
+                      width={400}
+                      height={200}
+                      unoptimized
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        width: "100%",
+                        height: 200,
+                        background: "#eee",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <p>No Image</p>
                     </div>
-                    <h2>{service.serviceBoxTitle}</h2>
-                  </div>
-                </Link>
-              )
-          )}
+                  )}
+                </div>
+                <h2>{service.title}</h2>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
 
-      {/* Why Work With Us */}
-      <section className="why-work-main-service-page">
-        <div className="content-two-main-service-page">
-          <div className="text-main-service-page">
-            <h2>{data?.whyWorkWithUs?.title}</h2>
-
-            {data?.whyWorkWithUs?.features?.map((feature, idx) => (
-              <div key={idx} className="feature-main-service-page">
-                <svg
-                  id="tick"
-                  xmlns="http://www.w3.org/2000/svg"
-                  // width="16"
-                  // height="16"
-                  fill="currentColor"
-                  className="bi bi-check2"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"></path>
-                </svg>
-                <div className="info-main-service-page">
-                  <h3>{feature.title}</h3>
-                  <p>{feature.description}</p>
-                </div>
+      {/* Why Work With Us Section - Using main-services features */}
+      {(() => {
+        const mainService = services.find(s => s.slug === 'main-services');
+        if (!mainService?.features?.length) return null;
+        return (
+          <section className="why-work-main-service-page">
+            <div className="content-two-main-service-page">
+              <div className="text-main-service-page">
+                <h2>Why Work With Us?</h2>
+                {mainService.features.map((feature, idx) => (
+                  <div key={idx} className="feature-main-service-page">
+                    <svg
+                      id="tick"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      className="bi bi-check2"
+                      viewBox="0 0 16 16"
+                      width="24"
+                      height="24"
+                    >
+                      <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"></path>
+                    </svg>
+                    <div className="info-main-service-page">
+                      <h3>{feature.title}</h3>
+                      <p>{feature.description}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          <div className="image-wrapper-main-service-page">
-            {isDarkMode
-              ? data?.whyWorkWithUs?.imageDarkMode?.asset && (
+              <div className="image-wrapper-main-service-page">
+                {mainService?.image?.url && (
                   <Image
-                    src={urlFor(data.whyWorkWithUs.imageDarkMode).url()}
-                    alt="Why Work Image"
+                    src={mainService.image.url}
+                    alt="Why Work With Us"
                     width={500}
                     height={400}
-                  />
-                )
-              : data?.whyWorkWithUs?.image?.asset && (
-                  <Image
-                    src={urlFor(data.whyWorkWithUs.image).url()}
-                    alt="Why Work Image"
-                    width={500}
-                    height={400}
+                    unoptimized
                   />
                 )}
-          </div>
-        </div>
-      </section>
+              </div>
+            </div>
+          </section>
+        );
+      })()}
 
       <Footer />
 
@@ -319,7 +295,7 @@ const ServiceTwo = () => {
         <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
           <div
             className="enquiry-container"
-            onClick={(e) => e.stopPropagation()} // Prevent close on form click
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="enquiry-box">
               <div className="close-icon" onClick={() => setShowForm(false)}>

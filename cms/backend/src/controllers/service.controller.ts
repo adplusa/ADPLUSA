@@ -314,13 +314,11 @@ export const deleteService = async (req: Request, res: Response): Promise<void> 
     // Extract keys from banner image
     if (service.bannerImage) {
       extractKeyFromUrl(service.bannerImage.url);
-      extractKeyFromUrl(service.bannerImage.darkModeUrl);
     }
 
     // Extract keys from main image
     if (service.image) {
       extractKeyFromUrl(service.image.url);
-      extractKeyFromUrl(service.image.darkModeUrl);
     }
 
     // Delete service from database

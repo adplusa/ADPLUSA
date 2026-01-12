@@ -5,7 +5,7 @@
  * in different scenarios.
  */
 
-import ImageUploader, { type UploadedImage } from './ImageUploader';
+import ImageUploader, { type UploadedImage, type UploadError } from './ImageUploader';
 
 // Example 1: Single Image Upload
 export function SingleImageUploadExample() {
@@ -14,8 +14,8 @@ export function SingleImageUploadExample() {
     // Use the image URL: images[0].url or images[0].cdnUrl
   };
 
-  const handleUploadError = (error: string) => {
-    console.error('Upload error:', error);
+  const handleUploadError = (error: UploadError) => {
+    console.error('Upload error:', error.message);
   };
 
   return (

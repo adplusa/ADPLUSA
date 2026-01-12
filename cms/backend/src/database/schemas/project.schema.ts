@@ -12,17 +12,74 @@ export interface IProjectImage {
 }
 
 /**
+ * Project detail (label-value pairs for specs)
+ */
+export interface IProjectDetail {
+  label: string;
+  value: string;
+  items?: string[]; // Original items array for frontend compatibility
+}
+
+/**
+ * Project image gallery
+ */
+export interface IProjectImageGallery {
+  title?: string;
+  images: IProjectImage[];
+}
+
+/**
  * Project document interface
  */
 export interface IProject extends Document, BaseSchemaFields {
   title: string;
   slug: string;
   description?: string;
+
+  // Main/Hero image
+  mainImage?: IProjectImage;
+
+  // Content
+  introText?: string;
+  moreContent?: string; // Rich text HTML
+
+  // Project details (label-value pairs)
+  projectDetails: IProjectDetail[];
+
+  // Image galleries
+  imageGalleries: IProjectImageGallery[];
+
+  // Legacy images array (for backward compatibility)
   images: IProjectImage[];
+
+  // Metadata
   category?: string;
   featured: boolean;
+  order: number;
   link?: string;
 }
+
+/**
+ * Image sub-schema (reusable)
+ */
+const imageSubSchema = {
+  url: {
+    type: String,
+    trim: true,
+  },
+  alt: {
+    type: String,
+    trim: true,
+  },
+  width: {
+    type: Number,
+    min: 0,
+  },
+  height: {
+    type: Number,
+    min: 0,
+  },
+};
 
 /**
  * Project schema definition
@@ -41,48 +98,81 @@ const projectSchema = new Schema<IProject>(
       unique: true,
       trim: true,
       lowercase: true,
-      index: true, // Index for faster queries
+      index: true,
       match: [/^[a-z0-9-]+$/, 'Slug can only contain lowercase letters, numbers, and hyphens'],
     },
     description: {
       type: String,
       trim: true,
-      maxlength: [2000, 'Description cannot exceed 2000 characters'],
+      // No maxlength - stores full introText for backward compatibility
     },
-    images: [
+
+    // Main/Hero image
+    mainImage: imageSubSchema,
+
+    // Content
+    introText: {
+      type: String,
+      trim: true,
+      // No maxlength - stores full intro text from Sanity
+    },
+    moreContent: {
+      type: String, // Rich text HTML
+      trim: true,
+    },
+
+    // Project details (label-value pairs)
+    projectDetails: [
       {
-        url: {
+        label: {
           type: String,
-          required: true,
+          trim: true,
+          maxlength: [100, 'Label cannot exceed 100 characters'],
         },
-        alt: {
+        value: {
           type: String,
           trim: true,
         },
-        width: {
-          type: Number,
-          min: 0,
-        },
-        height: {
-          type: Number,
-          min: 0,
-        },
+        items: [{
+          type: String,
+          trim: true,
+        }],
       },
     ],
+
+    // Image galleries
+    imageGalleries: [
+      {
+        title: {
+          type: String,
+          trim: true,
+        },
+        images: [imageSubSchema],
+      },
+    ],
+
+    // Legacy images array (for backward compatibility)
+    images: [imageSubSchema],
+
+    // Metadata
     category: {
       type: String,
       trim: true,
-      index: true, // Index for filtering by category
+      index: true,
     },
     featured: {
       type: Boolean,
       default: false,
-      index: true, // Index for filtering featured projects
+      index: true,
+    },
+    order: {
+      type: Number,
+      default: 0,
+      index: true,
     },
     link: {
       type: String,
       trim: true,
-      match: [/^https?:\/\/.+/, 'Link must be a valid URL'],
     },
   },
   baseSchemaOptions
@@ -92,8 +182,9 @@ const projectSchema = new Schema<IProject>(
 addSEOFields(projectSchema);
 
 // Add indexes for common queries
-projectSchema.index({ createdAt: -1 }); // For sorting by date
-projectSchema.index({ featured: 1, createdAt: -1 }); // For featured projects sorted by date
+projectSchema.index({ createdAt: -1 });
+projectSchema.index({ featured: 1, createdAt: -1 });
+projectSchema.index({ order: 1, createdAt: -1 });
 
 // Pre-save middleware to ensure slug uniqueness
 projectSchema.pre('save', async function (next) {

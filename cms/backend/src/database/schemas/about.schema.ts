@@ -76,7 +76,7 @@ const aboutSchema = new Schema<IAbout>(
           type: String,
           required: true,
           trim: true,
-          match: [/^[a-z0-9-_]+$/, 'Target ID can only contain lowercase letters, numbers, hyphens, and underscores'],
+          // Allow any string for flexibility with Sanity data
         },
       },
     ],
@@ -86,7 +86,7 @@ const aboutSchema = new Schema<IAbout>(
           type: String,
           required: true,
           trim: true,
-          match: [/^[a-z0-9-_]+$/, 'Section ID can only contain lowercase letters, numbers, hyphens, and underscores'],
+          // Allow any string for flexibility with Sanity data
         },
         title: {
           type: String,

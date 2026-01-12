@@ -2,6 +2,7 @@
 import Image from "next/image";
 import styles from "./page.css";
 import Header from "./Components/Header/page";
+import Loading from "./Components/Loading/page";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useKeenSlider } from "keen-slider/react";
@@ -12,11 +13,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "swiper/css";
 import "swiper/css/pagination";
 import Footer from "./Components/Footer/page";
-import { client } from "@/sanity/lib/client";
-import { PortableText } from "@portabletext/react";
-import urlFor from "./helpers/sanity";
-import { getFileAsset } from "@sanity/asset-utils";
-// import emailjs from "@emailjs/browser";
+import { getHomepage } from "@/lib/cms-client";
 
 gsap.registerPlugin(CSSPlugin, ScrollTrigger);
 
@@ -29,7 +26,7 @@ export default function Home() {
   const [cursorPosSecond, setCursorPosSecond] = useState({ x: 0, y: 0 });
   const [renderCursorPos, setRenderCursorPos] = useState({ x: 0, y: 0 });
   const [slides, setSlides] = useState([]);
-  const [slidesDarkMode, setSlidesDarkMode] = useState([]);
+
   const [currentSlideHeroBanner, setCurrentSlideHeroBanner] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -47,11 +44,10 @@ export default function Home() {
   const [testSliderContent, setTextSliderContent] = useState(false);
   const [videos, setVideos] = useState({
     peopleVideo: null,
-    peopleVideoDarkMode: null,
     serviceVideo: null,
   });
   const [bgImage, setBgImage] = useState("");
-  const [isDarkMode, setIsDarkMode] = useState(false);
+
   const [showIntro, setShowIntro] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [showScrollUp, setShowScrollUp] = useState(false);
@@ -78,69 +74,6 @@ export default function Home() {
     return newErrors;
   };
 
-  // const handleSubmitContact = async (e) => {
-  //   e.preventDefault();
-  //   setStatus(null);
-  //   setIsSubmitting(true);
-
-  //   const formEl = e.currentTarget;
-  //   const v = validate(formEl);
-  //   setErrors(v);
-  //   if (Object.keys(v).length) {
-  //     setIsSubmitting(false);
-  //     return;
-  //   }
-
-  //   // simple honeypot (optional)
-  //   const honeypot = formEl.querySelector('[name="website"]')?.value;
-  //   if (honeypot) {
-  //     setIsSubmitting(false);
-  //     setStatus({ type: "ok", msg: "Thanks!" });
-  //     return;
-  //   }
-  //   try {
-  //     // compute IST timestamp & year
-  //     const submittedAtIST = new Date().toLocaleString("en-IN", {
-  //       timeZone: "Asia/Kolkata",
-  //       hour12: true,
-  //     });
-  //     const currentYear = new Date().getFullYear().toString();
-
-  //     // write into the hidden fields
-  //     if (formRef.current) {
-  //       const submittedAtEl = formRef.current.querySelector(
-  //         '[name="submitted_at"]'
-  //       );
-  //       const yearEl = formRef.current.querySelector('[name="year"]');
-  //       if (submittedAtEl) submittedAtEl.value = submittedAtIST;
-  //       if (yearEl) yearEl.value = currentYear;
-  //     }
-
-  //     await emailjs.sendForm(
-  //       process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID",
-  //       process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID",
-  //       formRef.current,
-  //       {
-  //         publicKey:
-  //           process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY",
-  //       }
-  //     );
-
-  //     formEl.reset();
-  //     setStatus({
-  //       type: "ok",
-  //       msg: "Message sent! We’ll get back to you shortly.",
-  //     });
-  //   } catch (err) {
-  //     console.error(err);
-  //     setStatus({ type: "err", msg: "Could not send. Please try again." });
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // };
-
-  // Add this state to track if we should show animation
-
   const handleSubmitContact = async (e) => {
     e.preventDefault();
     setStatus(null);
@@ -162,7 +95,6 @@ export default function Home() {
     }
 
     try {
-      // generate timestamp + year
       const submitted_at = new Date().toLocaleString("en-IN", {
         timeZone: "Asia/Kolkata",
         hour12: true,
@@ -179,7 +111,6 @@ export default function Home() {
         year,
       };
 
-      // 🚀 Call your backend API (server-side EmailJS)
       const res = await fetch("/api/sendEmail", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -192,7 +123,7 @@ export default function Home() {
         formEl.reset();
         setStatus({
           type: "ok",
-          msg: "Message sent! We’ll get back to you shortly.",
+          msg: "Message sent! We'll get back to you shortly.",
         });
       } else {
         throw new Error(data.error || "Failed to send email.");
@@ -210,18 +141,7 @@ export default function Home() {
 
   const [shouldAnimate, setShouldAnimate] = useState(false);
 
-  useEffect(() => {
-    const updateMode = () => {
-      setIsDarkMode(document.body.classList.contains("dark-mode"));
-    };
-    updateMode();
-    const observer = new MutationObserver(updateMode);
-    observer.observe(document.body, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-    return () => observer.disconnect();
-  }, []);
+
 
   const [sliderRef, instanceRef] = useKeenSlider(
     {
@@ -258,38 +178,30 @@ export default function Home() {
     ]
   );
 
-  // Fetching CMS
+  // Fetching CMS data from custom CMS API
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const homepageData = await client.fetch('*[_type == "homepage"]');
-        const resolveVideo = (ref) =>
-          ref
-            ? getFileAsset(
-                { _ref: ref },
-                { projectId: "5ippxm43", dataset: "production" }
-              ).url
-            : null;
+        const data = await getHomepage();
 
-        setVideos({
-          peopleVideo: resolveVideo(
-            homepageData?.[0]?.peopleVideo?.asset?._ref
-          ),
-          peopleVideoDarkMode: resolveVideo(
-            homepageData?.[0]?.peopleVideo?.asset?._ref
-          ),
-          serviceVideo: resolveVideo(
-            homepageData?.[0]?.serviceCirclVideo?.asset?._ref
-          ),
-        });
+        if (data) {
+          // Set homepage data - CMS returns a single object, not an array
+          setHomepageData(data);
 
-        console.log(homepageData);
+          // Set slides from CMS data
+          setSlides(data.slides || []);
 
-        setHomepageData(homepageData);
-        setSlides(homepageData?.[0]?.slides || []);
-        setSlidesDarkMode(homepageData?.[0]?.slidesDarkMode || []);
+
+        // Set videos if available
+          setVideos({
+            peopleVideo: data.aboutVideo?.url || null,
+            serviceVideo: null,
+          });
+        }
+
+        console.log("Homepage data from CMS:", data);
       } catch (error) {
-        console.error("Error fetching data from Sanity:", error);
+        console.error("Error fetching data from CMS:", error);
       }
     };
 
@@ -298,7 +210,6 @@ export default function Home() {
 
   // Fixed localStorage check and intro logic
   useEffect(() => {
-    // Check if we're on the client side
     if (typeof window === "undefined") return;
 
     const hasVisited = localStorage.getItem("hasVisited");
@@ -317,22 +228,19 @@ export default function Home() {
 
   // Fixed animation logic
   useEffect(() => {
-    if (!homepageData || !homepageData[0]) return;
+    if (!homepageData) return;
 
-    // If we shouldn't animate, just set loading to false
     if (!shouldAnimate) {
       setLoading(false);
       return;
     }
 
-    // Start the counter animation
     const interval = setInterval(() => {
       setCounter((prev) => {
         if (prev < 100) {
           return prev + 1;
         } else {
           clearInterval(interval);
-          // Start GSAP animation when counter reaches 100
           setTimeout(() => {
             startGSAPAnimation();
           }, 100);
@@ -346,27 +254,23 @@ export default function Home() {
 
   // Separate GSAP animation function
   const startGSAPAnimation = () => {
-    // Wait for DOM elements to be ready
     const checkAndAnimate = () => {
       const logo = document.querySelector(".logo");
       const followTop = document.querySelector(".follow-top");
       const followBottom = document.querySelector(".follow-bottom");
 
       if (!logo || !followTop || !followBottom) {
-        // If elements aren't ready, try again in next frame
         requestAnimationFrame(checkAndAnimate);
         return;
       }
 
-      // Create GSAP timeline
       const tl = gsap.timeline({
         onComplete: () => {
           setLoading(false);
-          console.log("Animation completed"); // Debug log
+          console.log("Animation completed");
         },
       });
 
-      // Animation sequence
       tl.to(".count", {
         opacity: 0,
         duration: 0.1,
@@ -404,16 +308,15 @@ export default function Home() {
 
   // Meta Description
   useEffect(() => {
-    if (!homepageData || homepageData.length === 0) return;
+    if (!homepageData) return;
 
-    const pageData = homepageData?.[0];
-    document.title = pageData?.seoTitle || "ADPL Consulting";
+    document.title = homepageData.seoTitle || "ADPL Consulting";
 
     const metaDesc = document.querySelector("meta[name='description']");
     if (metaDesc) {
       metaDesc.setAttribute(
         "content",
-        pageData?.seoDescription || "Learn about our mission and team"
+        homepageData.seoDescription || "Learn about our mission and team"
       );
     } else {
       const meta = document.createElement("meta");
@@ -491,7 +394,6 @@ export default function Home() {
     }
   }, []);
 
-  // // upward handler
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop =
@@ -507,10 +409,6 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // // ✅ your existing upwardHandler stays same
-  // const upwardHandler = () => {
-  //   window.scrollTo({ top: 0, behavior: "smooth" });
-  // };
   const upwardHandler = () => {
     (
       window.scrollTo ||
@@ -522,7 +420,6 @@ export default function Home() {
     });
   };
 
-  // prev
   const prevSlide = () => {
     setCurrentSlideHeroBanner(
       (prev) => (prev - 1 + slides.length) % slides.length
@@ -570,55 +467,37 @@ export default function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   const form = e.target;
-  //   const name = form.firstName.value.trim();
-  //   const phone = form.phone.value.trim();
-
-  //   let formErrors = {};
-
-  //   if (!name) formErrors.firstName = "Name is required.";
-  //   if (!phone) formErrors.phone = "Phone number is required.";
-
-  //   setErrors(formErrors);
-
-  //   if (Object.keys(formErrors).length === 0) {
-  //     // proceed with form submission
-  //     console.log("Form submitted");
-  //   }
-  // };
-
   async function handleSubmit(e) {
     e.preventDefault();
     setStatus(null);
-    setSending(true);
+    setIsSubmitting(true);
 
-    // --- Validate ---
-    if (!v("name"))
+    const formEl = e.currentTarget;
+    const v = (name) => formEl[name]?.value?.trim();
+
+    if (!v("firstName"))
       return (
-        setSending(false),
+        setIsSubmitting(false),
         setStatus({ type: "err", msg: "Please enter your name." })
       );
     if (!v("email"))
       return (
-        setSending(false),
+        setIsSubmitting(false),
         setStatus({ type: "err", msg: "Please enter your email." })
       );
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v("email")))
       return (
-        setSending(false),
+        setIsSubmitting(false),
         setStatus({ type: "err", msg: "Enter a valid email." })
       );
     if (!v("phone"))
       return (
-        setSending(false),
+        setIsSubmitting(false),
         setStatus({ type: "err", msg: "Please enter your phone number." })
       );
 
-    // --- Honeypot ---
     if (v("website")) {
-      setSending(false);
+      setIsSubmitting(false);
       setStatus({ type: "ok", msg: "Thanks!" });
       return;
     }
@@ -630,30 +509,15 @@ export default function Home() {
       });
       const year = String(new Date().getFullYear());
 
-      // const formData = {
-      //   name: v("name"),
-      //   phone: v("phone"),
-      //   email: v("email"),
-      //   service: v("service") || "General",
-      //   message: v("message"),
-      //   submitted_at,
-      //   year,
-      // };
-
-      // 🚀 Send data to your secure backend API
-
       const formData = {
-        name: formEl.firstName.value.trim(),
-        email: formEl.email.value.trim(),
-        phone: formEl.phone.value.trim(),
-        service: formEl.service.value.trim() || "General",
-        message: formEl.message.value.trim(),
-        submitted_at: new Date().toLocaleString("en-IN", {
-          timeZone: "Asia/Kolkata",
-          hour12: true,
-        }),
-        year: String(new Date().getFullYear()),
-        type: "contact", // 👈 add this so backend knows it’s contact form
+        name: v("firstName"),
+        email: v("email"),
+        phone: v("phone"),
+        service: v("service") || "General",
+        message: v("message"),
+        submitted_at,
+        year,
+        type: "contact",
       };
 
       const res = await fetch("/api/sendEmail", {
@@ -668,7 +532,7 @@ export default function Home() {
         formRef.current?.reset();
         setStatus({
           type: "ok",
-          msg: "Message sent! We’ll get back to you shortly.",
+          msg: "Message sent! We'll get back to you shortly.",
         });
         setOpen(false);
       } else {
@@ -681,14 +545,14 @@ export default function Home() {
         msg: err.message || "Something went wrong. Please try again.",
       });
     } finally {
-      setSending(false);
+      setIsSubmitting(false);
     }
   }
 
   return (
     <>
-      {!homepageData || !homepageData[0] ? (
-        <div>Loading homepage content.....</div>
+      {!homepageData ? (
+        <Loading text="Loading" fullScreen={true} />
       ) : (
         <div className="main-content">
           {loading && shouldAnimate ? (
@@ -706,7 +570,7 @@ export default function Home() {
               </div>
               <div className="logo-container">
                 <Image
-                  className="logo" // ✅ required for animation target
+                    className="logo"
                   src="/white-logo.png"
                   alt="logo"
                   width={200}
@@ -726,257 +590,143 @@ export default function Home() {
                   }}
                 >
                   <div className="overlay"></div>
-                </div>
-                {!isDarkMode && (
-                  <div
-                    className={"animation-slider light-banner"}
-                    {...(isDesktop && {
-                      onMouseMove: handleMouseMove,
-                      onMouseEnter: handleMouseEnter,
-                      onMouseLeave: handleMouseLeave,
-                      onClick: () => {
-                        isLeftHalf ? prevSlide() : nextSlide();
-                      },
-                    })}
-                  >
-                    <div
-                      className="animation-slider-df"
-                      style={{
-                        transform: `translateX(-${currentSlideHeroBanner * 100}%)`,
-                      }}
-                    >
-                      {slides.map(
-                        (slide, index) =>
-                          slide?.image?.asset && (
-                            <div
-                              key={index}
-                              className="animate-back-img"
-                              style={{
-                                backgroundImage: `url(${urlFor(slide.image.asset).url()})`,
-                                backgroundSize: "contain",
-                              }}
-                              aria-label={slide.image?.alt || "Slide Image"}
-                            ></div>
-                          )
-                      )}
                     </div>
-
-                    {/* Custom Cursor Only on Desktop */}
-                    {isDesktop && showCustomCursor && (
+                    <div
+                      className={"animation-slider light-banner"}
+                      {...(isDesktop && {
+                        onMouseMove: handleMouseMove,
+                        onMouseEnter: handleMouseEnter,
+                        onMouseLeave: handleMouseLeave,
+                        onClick: () => {
+                          isLeftHalf ? prevSlide() : nextSlide();
+                        },
+                      })}
+                    >
                       <div
-                        className={`custom-cursor ${isLeftHalf ? "left-btn" : "right-btn"}`}
+                        className="animation-slider-df"
                         style={{
-                          left: `${renderCursorPos.x}px`,
-                          top: `${renderCursorPos.y}px`,
-                          transform: "translate(-50%, -50%)",
+                          transform: `translateX(-${currentSlideHeroBanner * 100}%)`,
                         }}
                       >
-                        <span>
-                          {isLeftHalf ? (
-                            <svg
-                              id="left-btn-hero"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              fill="currentColor"
-                              className="bi bi-chevron-left"
-                              viewBox="0 0 16 16"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
-                              />
-                            </svg>
-                          ) : (
-                            <svg
-                              id="right-btn-hero"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              fill="currentColor"
-                              className="bi bi-chevron-right"
-                              viewBox="0 0 16 16"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
-                              />
-                            </svg>
-                          )}
-                        </span>
+                        {slides.map(
+                          (slide, index) =>
+                            slide?.image?.url && (
+                              <div
+                                key={index}
+                                className="animate-back-img"
+                                style={{
+                                  backgroundImage: `url(${slide.image.url})`,
+                                  backgroundSize: "contain",
+                                }}
+                                aria-label={slide.image?.alt || "Slide Image"}
+                              ></div>
+                            )
+                        )}
                       </div>
-                    )}
 
-                    {/* Slider Dots Work on All Devices */}
-                    <div className="slider-dots">
-                      {slides.map((_, index) => (
-                        <button
-                          key={index}
-                          className={`dot ${index === currentSlideHeroBanner ? "active" : ""}`}
-                          onClick={() => setCurrentSlideHeroBanner(index)}
-                        ></button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {isDarkMode && (
-                  <div
-                    className={"animation-slider dark-banner"}
-                    {...(isDesktop && {
-                      onMouseMove: handleMouseMove,
-                      onMouseEnter: handleMouseEnter,
-                      onMouseLeave: handleMouseLeave,
-                      onClick: () => {
-                        isLeftHalf ? prevSlide() : nextSlide();
-                      },
-                    })}
-                  >
-                    <div
-                      className="animation-slider-df"
-                      style={{
-                        transform: `translateX(-${currentSlideHeroBanner * 100}%)`,
-                      }}
-                    >
-                      {slidesDarkMode.map(
-                        (slide, index) =>
-                          slide?.image?.asset && (
-                            <div
-                              key={index}
-                              className="animate-back-img"
-                              style={{
-                                backgroundImage: `url(${urlFor(slide.image.asset).url()})`,
-                                backgroundSize: "contain",
-                              }}
-                              aria-label={slide.image?.alt || "Slide Image"}
-                            ></div>
-                          )
+                      {/* Custom Cursor Only on Desktop */}
+                      {isDesktop && showCustomCursor && (
+                        <div
+                          className={`custom-cursor ${isLeftHalf ? "left-btn" : "right-btn"}`}
+                          style={{
+                            left: `${renderCursorPos.x}px`,
+                            top: `${renderCursorPos.y}px`,
+                            transform: "translate(-50%, -50%)",
+                          }}
+                        >
+                          <span>
+                            {isLeftHalf ? (
+                              <svg
+                                id="left-btn-hero"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                className="bi bi-chevron-left"
+                                viewBox="0 0 16 16"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
+                                />
+                              </svg>
+                            ) : (
+                              <svg
+                                id="right-btn-hero"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                className="bi bi-chevron-right"
+                                viewBox="0 0 16 16"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+                                />
+                              </svg>
+                            )}
+                          </span>
+                        </div>
                       )}
-                    </div>
 
-                    {isDesktop && showCustomCursor && (
-                      <div
-                        className={`custom-cursor ${isLeftHalf ? "left-btn" : "right-btn"}`}
-                        style={{
-                          left: `${renderCursorPos.x}px`,
-                          top: `${renderCursorPos.y}px`,
-                          transform: "translate(-50%, -50%)",
-                        }}
-                      >
-                        <span>
-                          {isLeftHalf ? (
-                            <svg
-                              id="left-btn-hero"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              fill="currentColor"
-                              className="bi bi-chevron-left"
-                              viewBox="0 0 16 16"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
-                              />
-                            </svg>
-                          ) : (
-                            <svg
-                              id="right-btn-hero"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              fill="currentColor"
-                              className="bi bi-chevron-right"
-                              viewBox="0 0 16 16"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
-                              />
-                            </svg>
-                          )}
-                        </span>
+                      {/* Slider Dots Work on All Devices */}
+                      <div className="slider-dots">
+                        {slides.map((_, index) => (
+                          <button
+                            key={index}
+                            className={`dot ${index === currentSlideHeroBanner ? "active" : ""}`}
+                            onClick={() => setCurrentSlideHeroBanner(index)}
+                          ></button>
+                        ))}
                       </div>
-                    )}
-
-                    <div className="slider-dots">
-                      {slides.map((_, index) => (
-                        <button
-                          key={index}
-                          className={`dot ${index === currentSlideHeroBanner ? "active" : ""}`}
-                          onClick={() => setCurrentSlideHeroBanner(index)}
-                        ></button>
-                      ))}
                     </div>
-                  </div>
-                )}
+
                 <div className="feature-section">
                   <div className="feature-section-df">
                     <div className="feature-box">
-                      <h1>{homepageData[0].trustIconsHeading}</h1>
+                          <h1>{homepageData.trustIconsHeading}</h1>
                       <div className="features-name">
-                        {homepageData[0]?.serviceRelatedIcon?.map(
-                          (related, index) =>
-                            related?.serviceRelatedImg?.asset && (
+                            {homepageData.trustIcons?.map(
+                              (icon, index) =>
+                                icon?.image?.url && (
                               <div key={index} className="service-related-item">
                                 <Image
-                                  src={urlFor(related.serviceRelatedImg).url()}
-                                  alt={
-                                    related.serviceRelatedName || "Service Icon"
-                                  }
+                                      src={icon.image.url}
+                                      alt={icon.image.alt || icon.name || "Trust icon"}
                                   width={70}
                                   height={70}
                                   unoptimized
                                   priority
                                 />
-                                <p>{related.serviceRelatedNumber}</p>
-                                <h3>{related.serviceRelatedName}</h3>
+                                    <p>{icon.number}</p>
+                                    <h3>{icon.name}</h3>
                               </div>
                             )
                         )}
                       </div>
                     </div>
-                  </div>
-                  <div className="achievements-container">
-                    <div className="achievements-grid">
-                      {homepageData[0]?.achievements?.map((item, index) => (
-                        <div className="achievement-card" key={index}>
-                          <div className="achievement-content">
-                            <div className="achievement-text-home">
-                              <span>
-                                <h3>{item.title}</h3>
-                              </span>
-                              <span className="achievement-numbers">
-                                <p>{item.number}</p>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                      </div>
                 </div>
 
                 <div className="home_services">
-                  <h1>{homepageData[0].serviceHeading}</h1>
+                      <h1>{homepageData.serviceHeading}</h1>
                   <div className="home_services_box">
-                    {(isDarkMode
-                      ? homepageData[0].serviceBoxDarkMode
-                      : homepageData[0].serviceBox
-                    )?.map(
+                        {homepageData.serviceBoxes?.map(
                       (service, index) =>
-                        service?.serviceBoxImg?.asset && (
-                          <Link href={service.boxUrl} key={index}>
+                            service?.image?.url && (
+                              <Link href={service.url || '/mainservice'} key={index}>
                             <div className="service-box-home">
                               <div className="service-image">
                                 <Image
-                                  src={urlFor(service.serviceBoxImg).url()}
-                                  alt={service.serviceBoxTitle}
+                                      src={service.image.url}
+                                      alt={service.title || "Service"}
                                   width={400}
                                   height={200}
                                   unoptimized
                                 />
                               </div>
-                              <h2>{service.serviceBoxTitle}</h2>
+                                  <h2>{service.title}</h2>
                             </div>
                           </Link>
                         )
@@ -985,23 +735,17 @@ export default function Home() {
                 </div>
 
                 <div className="technology-we-use">
-                  <h1>Technologies We Use</h1>
+                      <h1>{homepageData.technologyHeading || "Technologies We Use"}</h1>
                   <div className="technology-grid">
-                    {(isDarkMode
-                      ? homepageData[0]?.technologyImgsDarkMode
-                      : homepageData[0]?.technologyImgs
-                    )?.length > 0 ? (
-                      (isDarkMode
-                        ? homepageData[0].technologyImgsDarkMode
-                        : homepageData[0].technologyImgs
-                      ).map((img, index) =>
-                        img?.technologyImage?.asset ? (
+                        {homepageData.technologyImages?.length > 0 ? (
+                          homepageData.technologyImages.map((tech, index) =>
+                            tech?.image?.url ? (
                           <span key={index}>
                             <Image
-                              src={urlFor(img.technologyImage).url()}
+                                  src={tech.image.url}
                               width={500}
                               height={500}
-                              alt="Technology image"
+                                  alt={tech.image.alt || "Technology image"}
                               unoptimized
                             />
                           </span>
@@ -1011,23 +755,21 @@ export default function Home() {
                       <p>No image available</p>
                     )}
                   </div>
-                </div>
+                    </div>
+
                 <section className="rto-section">
                   <div className="background-process-img"></div>
                   <h2 className="heading">
-                    {homepageData[0].workingProcessHeading}
+                        {homepageData.workingProcessHeading}
                   </h2>
                   <p className="subheading">
-                    {homepageData[0].workingProcessSubHeading}
+                        {homepageData.workingProcessSubHeading}
                   </p>
 
-                  {/* conten */}
-
-                  {/* content */}
                   <div className="content">
                     <div className="left">
-                      {homepageData[0]?.processSteps
-                        ?.filter((step) => step.stepTitle && step.stepText)
+                          {homepageData.processSteps
+                            ?.filter((step) => step.title && step.description)
                         .map((step, idx) => (
                           <div
                             key={idx}
@@ -1036,36 +778,18 @@ export default function Home() {
                           >
                             <div className="number">{idx + 1}</div>
                             <div>
-                              <h3 className="card-title">{step.stepTitle}</h3>
-                              <p className="card-text-home">{step.stepText}</p>
+                              <h3 className="card-title">{step.title}</h3>
+                              <p className="card-text-home">{step.description}</p>
                             </div>
                           </div>
                         ))}
                     </div>
 
                     <div className="right">
-                      {(isDarkMode
-                        ? homepageData[0]?.processStepsDarkMode?.[activeIndex]
-                            ?.stepImage?.asset
-                        : homepageData[0]?.processSteps?.[activeIndex]
-                            ?.stepImage?.asset) && (
+                          {homepageData.processSteps?.[activeIndex]?.image?.url && (
                         <Image
-                          src={urlFor(
-                            isDarkMode
-                              ? homepageData[0].processStepsDarkMode[
-                                  activeIndex
-                                ].stepImage
-                              : homepageData[0].processSteps[activeIndex]
-                                  .stepImage
-                          ).url()}
-                          alt={
-                            isDarkMode
-                              ? homepageData[0].processStepsDarkMode[
-                                  activeIndex
-                                ]?.stepTitle || "Step Image"
-                              : homepageData[0].processSteps[activeIndex]
-                                  ?.stepTitle || "Step Image"
-                          }
+                              src={homepageData.processSteps[activeIndex].image.url}
+                              alt={homepageData.processSteps[activeIndex]?.title || "Step Image"}
                           width={500}
                           height={500}
                           unoptimized
@@ -1079,120 +803,59 @@ export default function Home() {
                   <div className="marquee">
                     {/* First set of items */}
                     <div className="marquee-item">
-                      <h1>{homepageData[0]?.sliderTextOne}</h1>
-                      {homepageData[0]?.sliderImage && (
-                        <Image
-                          src={urlFor(homepageData[0].sliderImage).url()}
-                          alt="Slider Icon"
-                          width="30"
-                          height="30"
-                        />
-                      )}
-                      <h1>{homepageData[0]?.sliderTextTwo}</h1>
-                      {homepageData[0]?.sliderImage && (
-                        <Image
-                          src={urlFor(homepageData[0].sliderImage).url()}
-                          alt="Slider Icon"
-                          width="30"
-                          height="30"
-                        />
-                      )}
-                      <h1>{homepageData[0]?.sliderTextThree}</h1>
-                      {homepageData[0]?.sliderImage && (
-                        <Image
-                          src={urlFor(homepageData[0].sliderImage).url()}
-                          alt="Slider Icon"
-                          width="30"
-                          height="30"
-                        />
-                      )}
-                      <h1>{homepageData[0]?.sliderTextFour}</h1>
-                      {homepageData[0]?.sliderImage && (
-                        <Image
-                          src={urlFor(homepageData[0].sliderImage).url()}
-                          alt="Slider Icon"
-                          width="30"
-                          height="30"
-                        />
-                      )}
-                      <h1>{homepageData[0]?.sliderTextFive}</h1>
-                      {homepageData[0]?.sliderImage && (
-                        <Image
-                          src={urlFor(homepageData[0].sliderImage).url()}
-                          alt="Slider Icon"
-                          width="30"
-                          height="30"
-                        />
-                      )}
+                          {homepageData.sliderTexts?.map((text, idx) => (
+                            <span key={idx}>
+                              <h1>{text}</h1>
+                              {homepageData.sliderImage?.url && (
+                                <Image
+                                  src={homepageData.sliderImage.url}
+                                  alt="Slider Icon"
+                                  width="30"
+                                  height="30"
+                                />
+                              )}
+                            </span>
+                          ))}
                     </div>
 
                     {/* Duplicate set for seamless loop */}
                     <div className="marquee-item">
-                      <h1>{homepageData[0]?.sliderTextOne}</h1>
-                      {homepageData[0]?.sliderImage?.asset && (
-                        <Image
-                          src={urlFor(homepageData[0].sliderImage).url()}
-                          alt="Slider Icon"
-                          width="30"
-                          height="30"
-                        />
-                      )}
-                      <h1>{homepageData[0]?.sliderTextTwo}</h1>
-                      {homepageData[0]?.sliderImage?.asset && (
-                        <Image
-                          src={urlFor(homepageData[0].sliderImage).url()}
-                          alt="Slider Icon"
-                          width="30"
-                          height="30"
-                        />
-                      )}
-                      <h1>{homepageData[0]?.sliderTextThree}</h1>
-                      {homepageData[0]?.sliderImage?.asset && (
-                        <Image
-                          src={urlFor(homepageData[0].sliderImage).url()}
-                          alt="Slider Icon"
-                          width="30"
-                          height="30"
-                        />
-                      )}
-                      <h1>{homepageData[0]?.sliderTextFour}</h1>
-                      {homepageData[0]?.sliderImage?.asset && (
-                        <Image
-                          src={urlFor(homepageData[0].sliderImage).url()}
-                          alt="Slider Icon"
-                          width="30"
-                          height="30"
-                        />
-                      )}
-                      <h1>{homepageData[0]?.sliderTextFive}</h1>
-                      {homepageData[0]?.sliderImage?.asset && (
-                        <Image
-                          src={urlFor(homepageData[0].sliderImage).url()}
-                          alt="Slider Icon"
-                          width="30"
-                          height="30"
-                        />
-                      )}
+                          {homepageData.sliderTexts?.map((text, idx) => (
+                            <span key={`dup-${idx}`}>
+                              <h1>{text}</h1>
+                              {homepageData.sliderImage?.url && (
+                                <Image
+                                  src={homepageData.sliderImage.url}
+                                  alt="Slider Icon"
+                                  width="30"
+                                  height="30"
+                                />
+                              )}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+
                 <div className="home-about">
                   <div className="about-us">
-                    <h2>{homepageData[0].allowLightHeading}</h2>
+                        <h2>{homepageData.aboutLightHeading}</h2>
                     <div className="about-us-top">
                       <div className="about-us-top-left">
-                        <h1>{homepageData[0].allowUsHeading}</h1>
+                            <h1>{homepageData.aboutUsHeading}</h1>
                       </div>
                       <div className="about-us-top-right">
-                        <h1>{homepageData[0].allowRightHeading}</h1>
-
-                        <PortableText value={homepageData[0].paragraph} />
+                            <h1>{homepageData.aboutRightHeading}</h1>
+                            {/* aboutParagraph is now HTML string from CMS */}
+                            {homepageData.aboutParagraph && (
+                              <div dangerouslySetInnerHTML={{ __html: homepageData.aboutParagraph }} />
+                            )}
                       </div>
                     </div>
                     <div className="who-we-are-btn">
                       <Link href="/about">
                         <button>
-                          <span>{homepageData[0].ctaButton}</span>
+                              <span>{homepageData.aboutCtaButton}</span>
                         </button>
                       </Link>
                     </div>
@@ -1200,27 +863,19 @@ export default function Home() {
 
                   <div className="about-us-video-image">
                     <div className="about-us-img">
-                      {(isDarkMode
-                        ? homepageData[0]?.peoplImageOneDarkMode?.asset
-                        : homepageData[0]?.peoplImageOne?.asset) && (
+                          {homepageData.aboutImages?.[0]?.url && (
                         <Image
-                          src={urlFor(homepageData[0].peoplImageOne).url()}
+                              src={homepageData.aboutImages[0].url}
                           width={500}
                           height={500}
-                          alt="People image one"
+                              alt={homepageData.aboutImages[0].alt || "People image one"}
                           unoptimized
                         />
                       )}
 
-                      {(isDarkMode
-                        ? videos.peopleVideoDarkMode
-                        : videos.peopleVideo) && (
+                          {videos.peopleVideo && (
                         <video
-                          src={
-                            isDarkMode
-                              ? videos.peopleVideoDarkMode
-                              : videos.peopleVideo
-                          }
+                              src={videos.peopleVideo}
                           autoPlay
                           muted
                           loop
@@ -1230,27 +885,21 @@ export default function Home() {
                         />
                       )}
 
-                      {(isDarkMode
-                        ? homepageData[0]?.peoplImageTwoDarkMode?.asset
-                        : homepageData[0]?.peoplImageTwo?.asset) && (
+                          {homepageData.aboutImages?.[1]?.url && (
                         <Image
-                          src={urlFor(
-                            isDarkMode
-                              ? homepageData[0].peoplImageTwoDarkMode
-                              : homepageData[0].peoplImageTwo
-                          ).url()}
+                              src={homepageData.aboutImages[1].url}
                           width={500}
                           height={500}
-                          alt="People image two"
+                              alt={homepageData.aboutImages[1].alt || "People image two"}
                           unoptimized
                         />
                       )}
                     </div>
                     <div className="about-us-video-text">
-                      <h1>{homepageData[0].peopleText}</h1>
+                          <h1>{homepageData.peopleText}</h1>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
 
                 <div className="reviews-section">
                   <div className="navigation-wrapper">
@@ -1274,40 +923,38 @@ export default function Home() {
                     </button>
 
                     <div ref={sliderRef} className="keen-slider">
-                      {homepageData?.[0]?.founderSlider?.map((slide, idx) => (
+                          {homepageData.founderSlides?.map((slide, idx) => (
                         <div
-                          key={slide._key || idx}
+                              key={idx}
                           className={`keen-slider__slide number-slide${idx + 1}`}
                         >
                           <section className="why-work-home">
                             <div className="content-two">
                               <div className="text">
-                                <h3>{slide.founderTitle}</h3>
+                                    <h3>{slide.title}</h3>
 
-                                {/* Render rich text content properly */}
-                                {slide.founderDescription && (
-                                  <div className="founder-description">
-                                    <PortableText
-                                      value={slide.founderDescription}
-                                    />
-                                  </div>
+                                    {/* Render rich text content - now HTML string */}
+                                    {slide.description && (
+                                      <div
+                                        className="founder-description"
+                                        dangerouslySetInnerHTML={{ __html: slide.description }}
+                                      />
                                 )}
 
-                                {slide.founderDescriptionTwo && (
-                                  <div className="founder-description-two">
-                                    <PortableText
-                                      value={slide.founderDescriptionTwo}
-                                    />
-                                  </div>
+                                    {slide.descriptionTwo && (
+                                      <div
+                                        className="founder-description-two"
+                                        dangerouslySetInnerHTML={{ __html: slide.descriptionTwo }}
+                                      />
                                 )}
 
                                 <br />
 
                                 <h5>
-                                  <b>{slide.founderName}</b>
+                                      <b>{slide.name}</b>
                                 </h5>
                                 <p className="author-p">
-                                  {slide.founderAchievements}
+                                      {slide.achievements}
                                 </p>
                                 <br />
                                 <h5>
@@ -1318,26 +965,10 @@ export default function Home() {
 
                               <div className="image-wrapper-home">
                                 <div className="background">
-                                  {isDarkMode
-                                    ? slide?.imageDarkMode?.asset && (
+                                      {slide?.image?.url && (
                                         <Image
-                                          src={urlFor(
-                                            slide.imageDarkMode
-                                          ).url()}
-                                          alt={
-                                            slide.founderTitle || "Slide Image"
-                                          }
-                                          width={400}
-                                          height={300}
-                                          priority={idx === 0}
-                                        />
-                                      )
-                                    : slide?.image?.asset && (
-                                        <Image
-                                          src={urlFor(slide.image).url()}
-                                          alt={
-                                            slide.founderTitle || "Slide Image"
-                                          }
+                                          src={slide.image.url}
+                                          alt={slide.title || "Slide Image"}
                                           width={400}
                                           height={300}
                                           priority={idx === 0}
@@ -1376,103 +1007,19 @@ export default function Home() {
                   <div className="contact-container-two">
                     <div className="contact-us-df">
                       <div className="contact-left">
-                        {isDarkMode
-                          ? homepageData[0]?.contactUsSectionImgDarkMode
-                              ?.asset && (
+                            {homepageData.contactImage?.url && (
                               <Image
-                                src={urlFor(
-                                  homepageData[0].contactUsSectionImgDarkMode
-                                ).url()}
+                                src={homepageData.contactImage.url}
                                 width={500}
                                 height={500}
-                                alt="footer-img"
-                                unoptimized
-                              />
-                            )
-                          : homepageData[0]?.contactUsSectionImg?.asset && (
-                              <Image
-                                src={urlFor(
-                                  homepageData[0].contactUsSectionImg
-                                ).url()}
-                                width={500}
-                                height={500}
-                                alt="footer-img"
+                                alt={homepageData.contactImage.alt || "footer-img"}
                                 unoptimized
                               />
                             )}
                       </div>
                       <div className="contact-right">
-                        <h1>{homepageData[0]?.contactUsTitle}</h1>
+                            <h1>{homepageData.contactTitle}</h1>
 
-                        {/* <form
-                          id="contactform"
-                          className="contact-form"
-                          onSubmit={handleSubmit}
-                        >
-                          <div className="form-fields">
-                            <label htmlFor="fname">Name</label>
-                            <input
-                              type="text"
-                              name="firstName"
-                              id="fname"
-                              placeholder="Your name"
-                            />
-                            {errors.firstName && (
-                              <span className="error">{errors.firstName}</span>
-                            )}
-                          </div>
-
-                          <div className="form-fields">
-                            <label htmlFor="email">Email</label>
-                            <input
-                              type="email"
-                              name="email"
-                              id="email"
-                              placeholder="Your Email"
-                            />
-                          </div>
-
-                          <div className="form-fields">
-                            <label htmlFor="phone">Phone no</label>
-                            <input
-                              type="text"
-                              name="phone"
-                              id="phone"
-                              placeholder="Your Phone Number"
-                            />
-                            {errors.phone && (
-                              <span className="error">{errors.phone}</span>
-                            )}
-                          </div>
-
-                          <div className="form-fields">
-                            <label htmlFor="service">Services</label>
-                            <select name="service" id="service" defaultValue="">
-                              <option value="" disabled>
-                                Select Service
-                              </option>
-                              <option>Drafting to CAD (PDF to CAD)</option>
-                              <option>Permit Drawing and Documentation</option>
-                              <option>Working Drawing and Detailing</option>
-                              <option>
-                                3D Modelling, Rendering and Walkthrough
-                              </option>
-                              <option>360 Degree Views</option>
-                              <option>BIM Services</option>
-                              <option>Bill of Quantities (BOQ)</option>
-                              <option>MEP Drafting</option>
-                            </select>
-                          </div>
-
-                          <div className="form-fields message">
-                            <label htmlFor="message">Message</label>
-                            <textarea
-                              name="message"
-                              id="message"
-                              placeholder="Send Your Message"
-                            ></textarea>
-                          </div>
-                        </form> */}
                         <div>
                           <form
                             ref={formRef}
@@ -1589,7 +1136,7 @@ export default function Home() {
                         <div className="contact-btn">
                           <span>
                             <button type="submit" form="contactform">
-                              {homepageData[0]?.contactUsButton}
+                                  {homepageData.contactButton}
                             </button>
                           </span>
                         </div>

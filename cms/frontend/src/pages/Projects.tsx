@@ -1,45 +1,65 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { ColumnDef } from '@tanstack/react-table';
-import { DataTable, createActionsColumn } from '../components/ui/data-table';
+import { createActionsColumn } from '../components/ui/data-table';
 import { Badge } from '../components/ui/badge';
+import { ServerPaginatedTable, type FetchParams, type PaginatedResponse } from '../components/ui/ServerPaginatedTable';
 import { getProjects, deleteProject } from '../services/project.service';
 import type { Project } from '../services/project.service';
 
 export default function Projects() {
   const navigate = useNavigate();
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  const fetchProjects = async (page: number = 1, search: string = '') => {
+  /**
+   * Fetch projects from the server with pagination and search
+   * Requirements: 5.1, 6.2
+   */
+  const fetchProjects = useCallback(async (params: FetchParams): Promise<PaginatedResponse<Project>> => {
     try {
-      setLoading(true);
       setError(null);
       const response = await getProjects({
-        page,
-        limit: 10,
-        search: search || undefined,
+        page: params.page,
+        limit: params.pageSize,
+        search: params.search || undefined,
       });
-      setProjects(response.data);
-    } catch (err: any) {
-      setError(err.response?.data?.error?.message || 'Failed to load projects');
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    fetchProjects(currentPage, searchQuery);
-  }, [currentPage, searchQuery]);
+      return {
+        data: response.data,
+        pagination: {
+          page: response.pagination?.page || params.page,
+          pageSize: response.pagination?.limit || params.pageSize,
+          total: response.pagination?.total || response.data.length,
+          totalPages: response.pagination?.pages || 1,
+        },
+      };
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error
+        ? err.message
+        : (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message || 'Failed to load projects';
+      setError(errorMessage);
+      return {
+        data: [],
+        pagination: {
+          page: params.page,
+          pageSize: params.pageSize,
+          total: 0,
+          totalPages: 0,
+        },
+      };
+    }
+  }, []);
 
   const handleEdit = (project: Project) => {
     navigate(`/dashboard/projects/${project.slug}`);
   };
 
+  /**
+   * Handle project deletion with proper page management
+   * Requirements: 5.6, 5.7
+   */
   const handleDelete = async (project: Project) => {
     if (!project._id) return;
 
@@ -48,18 +68,16 @@ export default function Projects() {
       setSuccessMessage(null);
       await deleteProject(project._id);
       setSuccessMessage('Project deleted successfully');
-      // Refresh the list after deletion
-      fetchProjects(currentPage, searchQuery);
+      // Trigger refresh of the table data
+      setRefreshKey(prev => prev + 1);
       // Clear success message after 3 seconds
       setTimeout(() => setSuccessMessage(null), 3000);
-    } catch (err: any) {
-      setError(err.response?.data?.error?.message || 'Failed to delete project');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error
+        ? err.message
+        : (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message || 'Failed to delete project';
+      setError(errorMessage);
     }
-  };
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    setCurrentPage(1); // Reset to first page on search
   };
 
   const handleCreateNew = () => {
@@ -117,16 +135,18 @@ export default function Projects() {
 
   return (
     <div className="container mx-auto py-6">
-      <DataTable
+      <ServerPaginatedTable
         columns={columns}
-        data={projects}
+        fetchData={fetchProjects}
         title="Projects"
-        loading={loading}
+        searchPlaceholder="Search projects..."
+        onCreateClick={handleCreateNew}
+        createButtonLabel="Create New"
         error={error}
         successMessage={successMessage}
-        onSearch={handleSearch}
-        onCreateClick={handleCreateNew}
-        searchPlaceholder="Search projects..."
+        refreshKey={refreshKey}
+        emptyStateMessage="No projects found. Create your first project!"
+        noResultsMessage="No projects match your search criteria."
       />
     </div>
   );

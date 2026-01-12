@@ -1,0 +1,240 @@
+/**
+ * CMS Client Module
+ * Provides typed functions for fetching content from the custom CMS API
+ * Supports SSR, SSG, and ISR with proper error handling
+ */
+
+import type {
+  Homepage,
+  Project,
+  Service,
+  About,
+  Contact,
+  FAQ,
+  CMSResponse,
+} from './cms-types';
+
+/**
+ * CMS API base URL from environment variable
+ * Falls back to localhost for development
+ */
+const CMS_API_URL = process.env.NEXT_PUBLIC_CMS_API_URL || 'http://localhost:8000';
+
+/**
+ * Default revalidation time in seconds for ISR
+ */
+const DEFAULT_REVALIDATE = 60;
+
+/**
+ * Fetch options for Next.js data fetching
+ */
+interface FetchOptions {
+  revalidate?: number | false;
+  tags?: string[];
+}
+
+/**
+ * Generic fetch function for CMS API endpoints
+ * Handles errors gracefully by returning null instead of throwing
+ * 
+ * @param endpoint - API endpoint path (without /api/public prefix)
+ * @param options - Next.js fetch options for caching/revalidation
+ * @returns The data or null if an error occurred
+ */
+async function fetchCMS<T>(
+  endpoint: string,
+  options: FetchOptions = {}
+): Promise<T | null> {
+  const { revalidate = DEFAULT_REVALIDATE, tags } = options;
+
+  try {
+    const url = `${CMS_API_URL}/api/public${endpoint}`;
+    
+    const fetchOptions: RequestInit & { next?: { revalidate?: number | false; tags?: string[] } } = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    // Add Next.js specific options for caching
+    if (typeof revalidate === 'number' || revalidate === false) {
+      fetchOptions.next = { revalidate };
+    }
+    if (tags && tags.length > 0) {
+      fetchOptions.next = { ...fetchOptions.next, tags };
+    }
+
+    const response = await fetch(url, fetchOptions);
+
+    if (!response.ok) {
+      console.error(`CMS fetch failed: ${endpoint} - Status: ${response.status}`);
+      return null;
+    }
+
+    const result: CMSResponse<T> = await response.json();
+    
+    if (!result.success) {
+      console.error(`CMS API error: ${endpoint} - ${result.error}`);
+      return null;
+    }
+
+    return result.data;
+  } catch (error) {
+    console.error(`CMS fetch error: ${endpoint}`, error);
+    return null;
+  }
+}
+
+// ============================================================================
+// Homepage
+// ============================================================================
+
+/**
+ * Fetch homepage content (singleton document)
+ */
+export async function getHomepage(options?: FetchOptions): Promise<Homepage | null> {
+  return fetchCMS<Homepage>('/homepage', {
+    ...options,
+    tags: ['homepage', ...(options?.tags || [])],
+  });
+}
+
+// ============================================================================
+// Projects
+// ============================================================================
+
+/**
+ * Fetch all projects sorted by order
+ */
+export async function getProjects(options?: FetchOptions): Promise<Project[] | null> {
+  return fetchCMS<Project[]>('/projects', {
+    ...options,
+    tags: ['projects', ...(options?.tags || [])],
+  });
+}
+
+/**
+ * Fetch a single project by slug
+ */
+export async function getProject(
+  slug: string,
+  options?: FetchOptions
+): Promise<Project | null> {
+  if (!slug) {
+    console.error('getProject: slug is required');
+    return null;
+  }
+  return fetchCMS<Project>(`/projects/${encodeURIComponent(slug)}`, {
+    ...options,
+    tags: ['projects', `project-${slug}`, ...(options?.tags || [])],
+  });
+}
+
+/**
+ * Get all project slugs for static generation
+ */
+export async function getProjectSlugs(): Promise<string[]> {
+  const projects = await getProjects({ revalidate: false });
+  if (!projects) return [];
+  return projects.map((project) => project.slug);
+}
+
+// ============================================================================
+// Services
+// ============================================================================
+
+/**
+ * Fetch all services sorted by order
+ */
+export async function getServices(options?: FetchOptions): Promise<Service[] | null> {
+  return fetchCMS<Service[]>('/services', {
+    ...options,
+    tags: ['services', ...(options?.tags || [])],
+  });
+}
+
+/**
+ * Fetch a single service by slug
+ */
+export async function getService(
+  slug: string,
+  options?: FetchOptions
+): Promise<Service | null> {
+  if (!slug) {
+    console.error('getService: slug is required');
+    return null;
+  }
+  return fetchCMS<Service>(`/services/${encodeURIComponent(slug)}`, {
+    ...options,
+    tags: ['services', `service-${slug}`, ...(options?.tags || [])],
+  });
+}
+
+/**
+ * Get all service slugs for static generation
+ */
+export async function getServiceSlugs(): Promise<string[]> {
+  const services = await getServices({ revalidate: false });
+  if (!services) return [];
+  return services.map((service) => service.slug);
+}
+
+// ============================================================================
+// Static Pages
+// ============================================================================
+
+/**
+ * Fetch about page content (singleton document)
+ */
+export async function getAbout(options?: FetchOptions): Promise<About | null> {
+  return fetchCMS<About>('/about', {
+    ...options,
+    tags: ['about', ...(options?.tags || [])],
+  });
+}
+
+/**
+ * Fetch contact page content (singleton document)
+ */
+export async function getContact(options?: FetchOptions): Promise<Contact | null> {
+  return fetchCMS<Contact>('/contact', {
+    ...options,
+    tags: ['contact', ...(options?.tags || [])],
+  });
+}
+
+/**
+ * Fetch FAQ content (singleton document)
+ */
+export async function getFAQ(options?: FetchOptions): Promise<FAQ | null> {
+  return fetchCMS<FAQ>('/faq', {
+    ...options,
+    tags: ['faq', ...(options?.tags || [])],
+  });
+}
+
+// ============================================================================
+// Utility Functions
+// ============================================================================
+
+/**
+ * Check if the CMS API is available
+ */
+export async function checkCMSHealth(): Promise<boolean> {
+  try {
+    const response = await fetch(`${CMS_API_URL}/api/health`, {
+      method: 'GET',
+      cache: 'no-store',
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Get the CMS API URL (useful for debugging)
+ */
+export function getCMSApiUrl(): string {
+  return CMS_API_URL;
+}

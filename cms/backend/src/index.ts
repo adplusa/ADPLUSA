@@ -65,10 +65,13 @@ app.use('/api/admin', imageRoutes);
 import projectRoutes from './routes/project.routes';
 import serviceRoutes from './routes/service.routes';
 import contentRoutes from './routes/content.routes';
+import publicRoutes from './routes/public.routes';
 
 app.use('/api/projects', projectRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api', contentRoutes);
+
+app.use('/api/public', publicRoutes);
 
 // Error handling middleware (must be last)
 import { errorHandler, notFoundHandler } from './middleware/error.middleware';

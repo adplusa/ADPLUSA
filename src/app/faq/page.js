@@ -5,28 +5,17 @@ import { useState, useEffect } from "react";
 import "./faq.css";
 import Header from "../Components/Header/page";
 import Footer from "../Components/Footer/page";
-import { client } from "../../sanity/lib/client";
-import urlFor from "../helpers/sanity";
+import Loading from "../Components/Loading/page";
+import { getFAQ } from "../../lib/cms-client";
 import { Plus, Minus } from "lucide-react";
 
 export default function FAQ() {
   const [faqData, setFaqData] = useState(null);
   const [openFaqs, setOpenFaqs] = useState({});
   const [showForm, setShowForm] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
-  useEffect(() => {
-    const updateMode = () => {
-      setIsDarkMode(document.body.classList.contains("dark-mode"));
-    };
-    updateMode();
-    const observer = new MutationObserver(updateMode);
-    observer.observe(document.body, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-    return () => observer.disconnect();
-  }, []);
+
+
 
   const upwardHandler = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -35,9 +24,9 @@ export default function FAQ() {
   useEffect(() => {
     const fetchFaq = async () => {
       try {
-        const faqSection = await client.fetch('*[_type == "faqSection"]');
+        const faqSection = await getFAQ();
+        console.log("Fetched FAQ Data:", faqSection);
         setFaqData(faqSection);
-        console.log(faqSection);
       } catch (err) {
         console.error("Failed to fetch FAQ data:", err);
       }
@@ -47,19 +36,17 @@ export default function FAQ() {
   }, []);
 
   useEffect(() => {
-    if (!faqData || faqData.length === 0) return;
+    if (!faqData) return;
 
-    const pageData = faqData[0]; // Get the first item in the array
-
-    document.title = pageData.seoTitle;
+    document.title = faqData.seoTitle || "FAQ | ADPL Consulting";
 
     const metaDesc = document.querySelector("meta[name='description']");
     if (metaDesc) {
-      metaDesc.setAttribute("content", pageData.seoDescription);
+      metaDesc.setAttribute("content", faqData.seoDescription || "Frequently Asked Questions");
     } else {
       const meta = document.createElement("meta");
       meta.name = "description";
-      meta.content = "Learn about our mission and team";
+      meta.content = faqData.seoDescription || "Frequently Asked Questions";
       document.head.appendChild(meta);
     }
   }, [faqData]);
@@ -72,7 +59,7 @@ export default function FAQ() {
     }));
   };
 
-  if (!faqData) return <div>Loading FAQs...</div>;
+  if (!faqData) return <Loading text="Loading FAQs" fullScreen={true} />;
 
   return (
     <>
@@ -84,7 +71,7 @@ export default function FAQ() {
       </div>
 
       <div className="faq-container">
-        {faqData[0].categories?.map((category, categoryIndex) => (
+        {faqData.categories?.map((category, categoryIndex) => (
           <section key={categoryIndex} className="faq-section">
             <h2 className="faq-title">{category.title}</h2>
 
@@ -147,28 +134,18 @@ export default function FAQ() {
                 })}
               </div>
 
-              {/* FAQ Image */}
+              {/* FAQ Image - using direct URL from CMS */}
               <div className="faq-image-container">
                 <div className="image-wrapper-two">
-                  {isDarkMode
-                    ? category?.imageDarkMode?.asset && (
-                        <Image
-                          src={urlFor(category.imageDarkMode).url()}
-                          alt={category.title || "FAQ image"}
-                          width={500}
-                          height={400}
-                          className="faq-image"
-                        />
-                      )
-                    : category?.image?.asset && (
-                        <Image
-                          src={urlFor(category.image).url()}
-                          alt={category.title || "FAQ image"}
-                          width={500}
-                          height={400}
-                          className="faq-image"
-                        />
-                      )}
+                  {category?.image?.url && (
+                    <Image
+                      src={category.image.url}
+                      alt={category.title || "FAQ image"}
+                      width={500}
+                      height={400}
+                      className="faq-image"
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -199,7 +176,7 @@ export default function FAQ() {
         <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
           <div
             className="enquiry-container"
-            onClick={(e) => e.stopPropagation()} // Prevent close on form click
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="enquiry-box">
               <div className="close-icon" onClick={() => setShowForm(false)}>
