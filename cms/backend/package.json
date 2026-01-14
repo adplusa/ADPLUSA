@@ -12,7 +12,8 @@
         "migrate:sanity": "ts-node src/scripts/migrate-sanity.ts",
         "create-user": "ts-node src/scripts/create-user.ts",
         "create-custom-user": "ts-node src/scripts/create-custom-user.ts",
-        "list-users": "ts-node src/scripts/list-users.ts"
+        "list-users": "ts-node src/scripts/list-users.ts",
+        "seed:general-settings": "ts-node src/scripts/seed-general-settings.ts"
     },
     "keywords": [
         "cms",

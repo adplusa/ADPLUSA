@@ -3,13 +3,39 @@
  */
 
 // Export models
-export { Project, IProject, IProjectImage, IProjectDetail, IProjectImageGallery } from './project.schema';
-export { Service, IService, IServiceImage, IServiceFeature, IServiceItem, IKeyActivity } from './service.schema';
-export { FAQ, IFAQ, IFAQCategory, IFAQItem, IFAQImage } from './faq.schema';
-export { About, IAbout, IAboutSection, IAnchorLink, IAboutImage } from './about.schema';
-export { Contact, IContact, IContactInfo, IFormField, IWhyWorkWithUsItem, IContactImage } from './contact.schema';
-export { User, IUser, UserRole } from './user.schema';
-export { Image, IImage } from './image.schema';
+export {
+    Project,
+    IProject,
+    IProjectImage,
+    IProjectDetail,
+    IProjectImageGallery,
+} from "./project.schema";
+export {
+    Service,
+    IService,
+    IServiceImage,
+    IServiceFeature,
+    IServiceItem,
+    IKeyActivity,
+} from "./service.schema";
+export { FAQ, IFAQ, IFAQCategory, IFAQItem, IFAQImage } from "./faq.schema";
+export {
+    About,
+    IAbout,
+    IAboutSection,
+    IAnchorLink,
+    IAboutImage,
+} from "./about.schema";
+export {
+    Contact,
+    IContact,
+    IContactInfo,
+    IFormField,
+    IWhyWorkWithUsItem,
+    IContactImage,
+} from "./contact.schema";
+export { User, IUser, UserRole } from "./user.schema";
+export { Image, IImage } from "./image.schema";
 export {
     Homepage,
     IHomepage,
@@ -19,8 +45,19 @@ export {
     IServiceBox,
     ITechnologyImage,
     IProcessStep,
-    IFounderSlide
-} from './homepage.schema';
+    IFounderSlide,
+} from "./homepage.schema";
 
 // Export base schema utilities
-export { BaseSchemaFields, baseSchemaOptions, addSEOFields } from './base.schema';
+export {
+    GeneralSettings,
+    IGeneralSettings,
+    ISettingsImage,
+} from "./generalSettings.schema";
+
+// Export base schema utilities
+export {
+    BaseSchemaFields,
+    baseSchemaOptions,
+    addSEOFields,
+} from "./base.schema";
