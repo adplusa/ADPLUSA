@@ -69,28 +69,6 @@ const About = () => {
 
     return (
         <div>
-            <Head>
-                <title>{data.seoTitle || "About Us - My Website"}</title>
-                <meta
-                    name="description"
-                    content={
-                        data.seoDescription ||
-                        "Learn more about our company and mission."
-                    }
-                />
-                <meta name="robots" content="index, follow" />
-                <meta
-                    property="og:title"
-                    content={data.seoTitle || "About Us - My Website"}
-                />
-                <meta
-                    property="og:description"
-                    content={
-                        data.seoDescription ||
-                        "Learn more about our company and mission."
-                    }
-                />
-            </Head>
             <Header />
 
             <div className="about-container">
