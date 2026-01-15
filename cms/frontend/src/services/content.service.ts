@@ -23,6 +23,7 @@ export interface FAQ {
     categories: FAQCategory[];
     seoTitle?: string;
     seoDescription?: string;
+    customHeadTags?: string;
     createdAt: string;
     updatedAt: string;
 }
@@ -49,6 +50,7 @@ export interface UpdateFAQData {
     }>;
     seoTitle?: string;
     seoDescription?: string;
+    customHeadTags?: string;
 }
 
 // About Types
@@ -79,6 +81,7 @@ export interface About {
     sections: AboutSection[];
     seoTitle?: string;
     seoDescription?: string;
+    customHeadTags?: string;
     createdAt: string;
     updatedAt: string;
 }
@@ -97,6 +100,7 @@ export interface UpdateAboutData {
     sections?: AboutSection[];
     seoTitle?: string;
     seoDescription?: string;
+    customHeadTags?: string;
 }
 
 // Contact Types
@@ -118,6 +122,7 @@ export interface Contact {
     };
     seoTitle?: string;
     seoDescription?: string;
+    customHeadTags?: string;
     createdAt: string;
     updatedAt: string;
 }
@@ -144,6 +149,7 @@ export interface UpdateContactData {
     };
     seoTitle?: string;
     seoDescription?: string;
+    customHeadTags?: string;
 }
 
 // FAQ API Functions

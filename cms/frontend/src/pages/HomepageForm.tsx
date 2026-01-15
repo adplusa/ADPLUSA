@@ -224,6 +224,7 @@ export default function HomepageForm() {
             founderSlides: [],
             seoTitle: "",
             seoDescription: "",
+            customHeadTags: "",
         },
     });
 
@@ -1465,21 +1466,28 @@ export default function HomepageForm() {
                                         {watchSeoDescription ||
                                             "All the details about our business..."}
                                     </p>
+                                    {form.watch("customHeadTags") && (
+                                        <div className="mt-2 pt-2 border-t border-gray-100">
+                                            <p className="text-xs font-semibold text-gray-500 mb-1">
+                                                Custom Head Tags:
+                                            </p>
+                                            <code className="block text-xs text-gray-600 bg-gray-50 p-2 rounded truncate font-mono">
+                                                {form.watch("customHeadTags")}
+                                            </code>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             <div className="space-y-4">
                                 <FormField
                                     id="seoTitle"
                                     label="SEO Title"
-                                    maxLength={60}
-                                    currentLength={watchSeoTitle?.length || 0}
                                     error={errors.seoTitle?.message}
                                 >
                                     <input
                                         id="seoTitle"
                                         type="text"
                                         {...register("seoTitle")}
-                                        maxLength={60}
                                         className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
                                             errors.seoTitle
                                                 ? "border-red-300 bg-red-50"
@@ -1490,22 +1498,32 @@ export default function HomepageForm() {
                                 <FormField
                                     id="seoDescription"
                                     label="SEO Description"
-                                    maxLength={160}
-                                    currentLength={
-                                        watchSeoDescription?.length || 0
-                                    }
                                     error={errors.seoDescription?.message}
                                 >
                                     <textarea
                                         id="seoDescription"
                                         {...register("seoDescription")}
-                                        maxLength={160}
                                         rows={3}
                                         className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
                                             errors.seoDescription
                                                 ? "border-red-300 bg-red-50"
                                                 : "border-gray-300"
                                         }`}
+                                        placeholder="SEO optimized description"
+                                    />
+                                </FormField>
+                                <FormField
+                                    id="customHeadTags"
+                                    label="Custom Head Tags"
+                                    helpText="Add custom meta tags, scripts, or link tags here (e.g., <meta name='robots' content='noindex' />). These will be injected into the <head> of the page."
+                                    error={errors.customHeadTags?.message}
+                                >
+                                    <textarea
+                                        id="customHeadTags"
+                                        {...register("customHeadTags")}
+                                        rows={5}
+                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono text-sm"
+                                        placeholder="<meta name='keywords' content='...' />"
                                     />
                                 </FormField>
                             </div>

@@ -9,6 +9,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import Head from "next/head";
 import { getAbout } from "../../lib/cms-client";
+import { injectHeadTags, removeHeadTags } from "../utils/headInjector";
 
 const About = () => {
     const textRef = useRef(null);
@@ -33,6 +34,16 @@ const About = () => {
                 data.seoDescription || "Learn about our mission and team";
             document.head.appendChild(meta);
         }
+
+        // Inject Custom Head Tags
+        if (data.customHeadTags) {
+            injectHeadTags(data.customHeadTags, "about-custom-head");
+        }
+
+        // Cleanup: Remove about-specific custom head tags on unmount
+        return () => {
+            removeHeadTags("about-custom-head");
+        };
     }, [data]);
 
     useEffect(() => {

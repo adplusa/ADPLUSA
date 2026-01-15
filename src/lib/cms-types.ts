@@ -16,6 +16,7 @@ export interface BaseFields {
     updatedAt: string;
     seoTitle?: string;
     seoDescription?: string;
+    customHeadTags?: string;
 }
 
 /**
@@ -352,6 +353,7 @@ export interface GeneralSettings {
     favicon?: CMSImage;
     siteName?: string;
     siteDescription?: string;
+    customHeadTags?: string;
     createdAt: string;
     updatedAt: string;
 }

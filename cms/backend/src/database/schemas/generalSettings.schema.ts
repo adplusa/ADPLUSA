@@ -22,6 +22,7 @@ export interface IGeneralSettings extends Document, BaseSchemaFields {
     // Site metadata (optional, for future extensibility)
     siteName?: string;
     siteDescription?: string;
+    customHeadTags?: string;
 }
 
 /**
@@ -61,6 +62,11 @@ const generalSettingsSchema = new Schema<IGeneralSettings>(
             type: String,
             trim: true,
             maxlength: [500, "Site description cannot exceed 500 characters"],
+        },
+        customHeadTags: {
+            type: String,
+            trim: true,
+            default: "",
         },
     },
     baseSchemaOptions

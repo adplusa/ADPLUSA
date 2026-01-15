@@ -2,6 +2,7 @@ import { Router } from "express";
 import { authenticateToken } from "../middleware/auth.middleware";
 import {
     validateProject,
+    validateProjectUpdate,
     validateService,
     validateFAQ,
     validateAbout,
@@ -46,7 +47,7 @@ router.post("/projects", validateProject, createProject);
  * @desc    Update project
  * @access  Protected (Admin)
  */
-router.put("/projects/:id", validateProject, updateProject);
+router.put("/projects/:id", validateProjectUpdate, updateProject);
 
 /**
  * @route   DELETE /api/admin/projects/:id

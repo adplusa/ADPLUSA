@@ -79,6 +79,7 @@ export default function AboutForm() {
             sections: [],
             seoTitle: "",
             seoDescription: "",
+            customHeadTags: "",
         },
     });
 
@@ -503,45 +504,6 @@ export default function AboutForm() {
                                                     className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                                                 />
                                             </FormField>
-
-                                            {/* Section Image */}
-                                            {/* <div className="pt-4 border-t border-gray-200">
-                                                <h5 className="text-sm font-medium text-gray-700 mb-3">
-                                                    Section Image (Optional)
-                                                </h5>
-                                                <div className="grid gap-4 sm:grid-cols-2">
-                                                    <FormField
-                                                        id={`sections.${index}.image.url`}
-                                                        label="Light Mode Image URL"
-                                                        helpText="Image shown in light mode"
-                                                    >
-                                                        <input
-                                                            id={`sections.${index}.image.url`}
-                                                            type="text"
-                                                            {...register(
-                                                                `sections.${index}.image.url` as const
-                                                            )}
-                                                            placeholder="https://..."
-                                                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors text-sm"
-                                                        />
-                                                    </FormField>
-                                                    <FormField
-                                                        id={`sections.${index}.image.darkModeUrl`}
-                                                        label="Dark Mode Image URL"
-                                                        helpText="Image shown in dark mode"
-                                                    >
-                                                        <input
-                                                            id={`sections.${index}.image.darkModeUrl`}
-                                                            type="text"
-                                                            {...register(
-                                                                `sections.${index}.image.darkModeUrl` as const
-                                                            )}
-                                                            placeholder="https://..."
-                                                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors text-sm"
-                                                        />
-                                                    </FormField>
-                                                </div>
-                                            </div> */}
                                         </div>
                                     </div>
                                 ))}
@@ -574,6 +536,16 @@ export default function AboutForm() {
                                         {watchSeoDescription ||
                                             "Page description will appear here..."}
                                     </p>
+                                    {watch("customHeadTags") && (
+                                        <div className="mt-2 pt-2 border-t border-gray-100">
+                                            <p className="text-xs font-semibold text-gray-500 mb-1">
+                                                Custom Head Tags:
+                                            </p>
+                                            <code className="block text-xs text-gray-600 bg-gray-50 p-2 rounded truncate font-mono">
+                                                {watch("customHeadTags")}
+                                            </code>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
@@ -664,6 +636,21 @@ export default function AboutForm() {
                                             }}
                                         />
                                     </div>
+                                </FormField>
+
+                                <FormField
+                                    id="customHeadTags"
+                                    label="Custom Head Tags"
+                                    helpText="Add custom meta tags, scripts, or link tags here. These will be injected into the <head> of the page."
+                                    error={errors.customHeadTags?.message}
+                                >
+                                    <textarea
+                                        id="customHeadTags"
+                                        {...register("customHeadTags")}
+                                        rows={5}
+                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono text-sm"
+                                        placeholder="<meta name='keywords' content='...' />"
+                                    />
                                 </FormField>
                             </div>
                         </div>

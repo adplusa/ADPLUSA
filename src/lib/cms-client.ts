@@ -28,7 +28,7 @@ const CMS_API_URL = (
 /**
  * Default revalidation time in seconds for ISR
  */
-const DEFAULT_REVALIDATE = 60;
+const DEFAULT_REVALIDATE = 0;
 
 /**
  * Fetch options for Next.js data fetching
@@ -69,6 +69,11 @@ async function fetchCMS<T>(
         }
         if (tags && tags.length > 0) {
             fetchOptions.next = { ...fetchOptions.next, tags };
+        }
+
+        // Explicitly prevent caching if revalidate is 0
+        if (revalidate === 0) {
+            fetchOptions.cache = "no-store";
         }
 
         const response = await fetch(url, fetchOptions);

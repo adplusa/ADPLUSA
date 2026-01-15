@@ -48,6 +48,7 @@ export default function GeneralSettingsForm() {
     const [favicon, setFavicon] = useState<SettingsImage | null>(null);
     const [siteName, setSiteName] = useState("");
     const [siteDescription, setSiteDescription] = useState("");
+    const [customHeadTags, setCustomHeadTags] = useState("");
 
     // Image uploader visibility states
     const [showHeaderUploader, setShowHeaderUploader] = useState(false);
@@ -69,6 +70,7 @@ export default function GeneralSettingsForm() {
                 setFavicon(response.data.favicon || null);
                 setSiteName(response.data.siteName || "");
                 setSiteDescription(response.data.siteDescription || "");
+                setCustomHeadTags(response.data.customHeadTags || "");
             }
         } catch (err: unknown) {
             const apiError = err as ApiError;
@@ -101,6 +103,7 @@ export default function GeneralSettingsForm() {
                 favicon: favicon,
                 siteName,
                 siteDescription,
+                customHeadTags,
             });
             setSuccess(true);
             setTimeout(() => setSuccess(false), 3000);
@@ -543,6 +546,43 @@ export default function GeneralSettingsForm() {
                                     placeholder="Brief description of your site"
                                     maxLength={500}
                                 />
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Global SEO / Head Tags */}
+                    <Card>
+                        <CardHeader>
+                            <div className="flex items-center space-x-2">
+                                <SettingsIcon className="h-5 w-5" />
+                                <CardTitle>
+                                    Global SEO / Custom Head Tags
+                                </CardTitle>
+                            </div>
+                            <CardDescription>
+                                Add custom scripts, styles, or meta tags to be
+                                injected into the &lt;head&gt; of EVERY page.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="customHeadTags">
+                                    Custom Head Tags
+                                </Label>
+                                <textarea
+                                    id="customHeadTags"
+                                    value={customHeadTags}
+                                    onChange={(e) =>
+                                        setCustomHeadTags(e.target.value)
+                                    }
+                                    placeholder="<meta ... /> or <script>...</script>"
+                                    className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    rows={5}
+                                />
+                                <p className="text-sm text-muted-foreground">
+                                    Warning: Scripts added here will run on
+                                    every page. Ensure valid HTML.
+                                </p>
                             </div>
                         </CardContent>
                     </Card>

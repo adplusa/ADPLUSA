@@ -13,6 +13,7 @@ export interface GeneralSettings {
     favicon?: SettingsImage;
     siteName?: string;
     siteDescription?: string;
+    customHeadTags?: string;
     createdAt: string;
     updatedAt: string;
 }
@@ -28,6 +29,7 @@ export interface UpdateGeneralSettingsData {
     favicon?: SettingsImage | null;
     siteName?: string;
     siteDescription?: string;
+    customHeadTags?: string;
 }
 
 // General Settings API Functions
