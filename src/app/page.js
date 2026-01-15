@@ -14,7 +14,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import Footer from "./Components/Footer/page";
 import { getHomepage } from "@/lib/cms-client";
-import { injectHeadTags, removeHeadTags } from "./utils/headInjector";
+import PageScripts from "./Components/PageScripts";
 
 gsap.registerPlugin(CSSPlugin, ScrollTrigger);
 
@@ -304,7 +304,7 @@ export default function Home() {
         checkAndAnimate();
     };
 
-    // Meta Description and Custom Head Tags
+    // Meta Description - update document title and meta tags
     useEffect(() => {
         if (!homepageData) return;
 
@@ -323,16 +323,6 @@ export default function Home() {
             meta.content = "Learn about our mission and team";
             document.head.appendChild(meta);
         }
-
-        // Inject Custom Head Tags
-        if (homepageData.customHeadTags) {
-            injectHeadTags(homepageData.customHeadTags, "homepage-custom-head");
-        }
-
-        // Cleanup: Remove homepage-specific custom head tags on unmount
-        return () => {
-            removeHeadTags("homepage-custom-head");
-        };
     }, [homepageData]);
 
     useEffect(() => {
@@ -1496,6 +1486,12 @@ export default function Home() {
                     )}
                 </div>
             )}
+
+            {/* Page-specific scripts from CMS - rendered safely via Next.js Script */}
+            <PageScripts
+                customHeadTags={homepageData?.customHeadTags}
+                pageId="homepage"
+            />
         </>
     );
 }

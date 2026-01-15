@@ -9,7 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getService, getServices } from "@/lib/cms-client";
 import "./service-detail.css";
-import { injectHeadTags, removeHeadTags } from "../../utils/headInjector";
+import PageScripts from "../../Components/PageScripts";
 
 /**
  * Dynamic Service Detail Page
@@ -79,7 +79,7 @@ export default function ServiceDetail() {
         fetchData();
     }, [slug]);
 
-    // Handle SEO meta tags with proper cleanup
+    // Handle SEO meta tags
     useEffect(() => {
         if (!service || !slug) return;
 
@@ -101,17 +101,6 @@ export default function ServiceDetail() {
                 document.head.appendChild(metaDesc);
             }
         }
-
-        // Inject Custom Head Tags
-        const headTagId = `service-custom-head-${slug}`;
-        if (service.customHeadTags) {
-            injectHeadTags(service.customHeadTags, headTagId);
-        }
-
-        // Cleanup: Remove service-specific custom head tags on unmount
-        return () => {
-            removeHeadTags(headTagId);
-        };
     }, [service, slug]);
 
     // Scroll to top handler
@@ -591,6 +580,9 @@ export default function ServiceDetail() {
                     />
                 </svg>
             </div>
+
+            {/* Page-specific scripts from CMS */}
+            <PageScripts customHeadTags={service?.customHeadTags} pageId={`service-${slug}`} />
         </div>
     );
 }

@@ -6,7 +6,7 @@ import Footer from "../Components/Footer/page";
 import Loading from "../Components/Loading/page";
 import Image from "next/image";
 import { getContact } from "../../lib/cms-client";
-import { injectHeadTags, removeHeadTags } from "../utils/headInjector";
+import PageScripts from "../Components/PageScripts";
 import gsap from "gsap";
 import "./contact.css";
 
@@ -53,16 +53,6 @@ const ContactPage = () => {
             "content",
             data.seoDescription || "Contact ADPL Consulting"
         );
-
-        // Inject Custom Head Tags
-        if (data.customHeadTags) {
-            injectHeadTags(data.customHeadTags, "contact-custom-head");
-        }
-
-        // Cleanup: Remove contact-specific custom head tags on unmount
-        return () => {
-            removeHeadTags("contact-custom-head");
-        };
     }, [data]);
 
     // --- small anim
@@ -507,6 +497,9 @@ const ContactPage = () => {
                     />
                 </svg>
             </div>
+
+            {/* Page-specific scripts from CMS */}
+            <PageScripts customHeadTags={data?.customHeadTags} pageId="contact" />
         </>
     );
 };

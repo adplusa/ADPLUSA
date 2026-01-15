@@ -8,7 +8,7 @@ import Footer from "../Components/Footer/page";
 import Loading from "../Components/Loading/page";
 import { getFAQ } from "../../lib/cms-client";
 import { Plus, Minus } from "lucide-react";
-import { injectHeadTags, removeHeadTags } from "../utils/headInjector";
+import PageScripts from "../Components/PageScripts";
 
 export default function FAQ() {
     const [faqData, setFaqData] = useState(null);
@@ -51,16 +51,6 @@ export default function FAQ() {
                 faqData.seoDescription || "Frequently Asked Questions";
             document.head.appendChild(meta);
         }
-
-        // Inject Custom Head Tags
-        if (faqData.customHeadTags) {
-            injectHeadTags(faqData.customHeadTags, "faq-custom-head");
-        }
-
-        // Cleanup: Remove faq-specific custom head tags on unmount
-        return () => {
-            removeHeadTags("faq-custom-head");
-        };
     }, [faqData]);
 
     const toggleFaq = (categoryIndex, faqIndex) => {
@@ -283,6 +273,9 @@ export default function FAQ() {
             </div>
 
             <Footer />
+
+            {/* Page-specific scripts from CMS */}
+            <PageScripts customHeadTags={faqData?.customHeadTags} pageId="faq" />
         </>
     );
 }

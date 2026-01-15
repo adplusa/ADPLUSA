@@ -9,7 +9,7 @@ import Link from "next/link";
 import { getProject, getProjects } from "@/lib/cms-client";
 import Loading from "@/app/Components/Loading/page";
 import "./project-detail.css";
-import { injectHeadTags, removeHeadTags } from "../../utils/headInjector";
+import PageScripts from "../../Components/PageScripts";
 
 /**
  * Dynamic Project Detail Page
@@ -80,7 +80,7 @@ export default function ProjectDetail() {
         fetchData();
     }, [slug]);
 
-    // Handle SEO meta tags with proper cleanup
+    // Handle SEO meta tags
     useEffect(() => {
         if (!project || !slug) return;
 
@@ -102,17 +102,6 @@ export default function ProjectDetail() {
                 document.head.appendChild(metaDesc);
             }
         }
-
-        // Inject Custom Head Tags
-        const headTagId = `project-custom-head-${slug}`;
-        if (project.customHeadTags) {
-            injectHeadTags(project.customHeadTags, headTagId);
-        }
-
-        // Cleanup: Remove project-specific custom head tags on unmount
-        return () => {
-            removeHeadTags(headTagId);
-        };
     }, [project, slug]);
 
     // Scroll to top handler
@@ -698,6 +687,9 @@ export default function ProjectDetail() {
                     />
                 </svg>
             </div>
+
+            {/* Page-specific scripts from CMS */}
+            <PageScripts customHeadTags={project?.customHeadTags} pageId={`project-${slug}`} />
         </div>
     );
 }
