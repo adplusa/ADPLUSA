@@ -12,11 +12,11 @@
  *   npx ts-node src/scripts/full-migration.ts
  */
 
-import { createClient } from '@sanity/client';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import path from 'path';
 import axios from 'axios';
+import { createClient } from '@sanity/client';
 import { config as envConfig } from '../config/env';
 import { uploadImageToS3 } from '../utils/s3';
 
@@ -1002,15 +1002,34 @@ async function migrateAbout() {
     for (let i = 0; i < data.sections.length; i++) {
       const sec = data.sections[i];
       let imageUrl = '';
-      if (sec.image?.asset?._ref) {
+
+      // Handle both dereferenced asset (asset->{_id, url}) and reference (asset._ref)
+      if (sec.image?.asset?.url) {
+        // Asset was dereferenced, use URL directly or migrate from Sanity CDN
+        imageUrl = sec.image.asset.url;
+      } else if (sec.image?.asset?._id) {
+        // Asset was dereferenced but only has _id
+        imageUrl = await migrateImage(sec.image.asset._id, 'about', `section-${i + 1}.jpg`);
+      } else if (sec.image?.asset?._ref) {
+      // Asset is a reference
         imageUrl = await migrateImage(sec.image.asset._ref, 'about', `section-${i + 1}.jpg`);
+      }
+
+      // Handle dark mode image
+      let darkModeUrl = '';
+      if (sec.imageDarkMode?.asset?.url) {
+        darkModeUrl = sec.imageDarkMode.asset.url;
+      } else if (sec.imageDarkMode?.asset?._id) {
+        darkModeUrl = await migrateImage(sec.imageDarkMode.asset._id, 'about', `section-${i + 1}-dark.jpg`);
+      } else if (sec.imageDarkMode?.asset?._ref) {
+        darkModeUrl = await migrateImage(sec.imageDarkMode.asset._ref, 'about', `section-${i + 1}-dark.jpg`);
       }
 
       sections.push({
         sectionId: sec.sectionId || '',
         title: sec.title || '',
-        body: sec.body || '',
-        image: { url: imageUrl, darkModeUrl: '' },
+        body: portableTextToHTML(sec.body) || sec.body || 'Content coming soon',
+        image: { url: imageUrl, darkModeUrl },
       });
     }
   }
