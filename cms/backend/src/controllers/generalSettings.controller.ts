@@ -55,10 +55,7 @@ export const updateGeneralSettings = async (
     res: Response
 ): Promise<void> => {
     try {
-        console.log(
-            "Updating general settings with body:",
-            JSON.stringify(req.body, null, 2)
-        );
+
         const { headerLogo, footerLogo, favicon, siteName, siteDescription } =
             req.body;
 
@@ -122,7 +119,7 @@ export const updateGeneralSettings = async (
         if (siteDescription !== undefined)
             updateData.siteDescription = siteDescription;
 
-        console.log("Final update data:", JSON.stringify(updateData, null, 2));
+
 
         // Use findOneAndUpdate with upsert to ensure we always have one document
         // and it gets updated correctly.
@@ -137,7 +134,7 @@ export const updateGeneralSettings = async (
             }
         ).lean();
 
-        console.log("Settings updated successfully in DB");
+
 
         res.status(200).json({
             success: true,

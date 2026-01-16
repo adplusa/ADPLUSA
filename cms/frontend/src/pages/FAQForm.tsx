@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { FormWrapper, FormField } from "../components/FormWrapper";
@@ -9,24 +9,19 @@ import { seoSchema } from "../utils/validation";
 import type { FAQ } from "../services/content.service";
 import { getFAQ, updateFAQ } from "../services/content.service";
 import PreviewModal from "../components/PreviewModal";
+import { FAQEditor } from "../components/FAQEditor";
 
 // Validation schemas
 const faqItemSchema = z.object({
-    question: z.string().optional(),
-    answer: z.string().optional(),
+    question: z.string(),
+    answer: z.string(),
 });
 
 const faqCategorySchema = z.object({
-    title: z.string().optional(),
+    title: z.string(),
     description: z.string().optional(),
     chatLink: z.string().optional(),
-    image: z
-        .object({
-            url: z.string(),
-            darkModeUrl: z.string().optional(),
-        })
-        .optional(),
-    faqs: z.array(faqItemSchema).optional(),
+    faqs: z.array(faqItemSchema),
 });
 
 const faqSchema = z
@@ -69,15 +64,6 @@ export default function FAQForm() {
         getValues,
         formState: { errors },
     } = form;
-
-    const {
-        fields: categoryFields,
-        append: appendCategory,
-        remove: removeCategory,
-    } = useFieldArray({
-        control,
-        name: "categories",
-    });
 
     const watchSeoTitle = watch("seoTitle");
     const watchSeoDescription = watch("seoDescription");
@@ -145,8 +131,8 @@ export default function FAQForm() {
         {
             id: "categories",
             label: "Categories",
-            icon: "📋",
-            count: categoryFields.length,
+            icon: "❓",
+            count: watch("categories")?.length || 0,
         },
         { id: "seo", label: "SEO", icon: "🔍" },
     ];
@@ -223,117 +209,23 @@ export default function FAQForm() {
                 {/* Categories Tab */}
                 {activeTab === "categories" && (
                     <div className="space-y-6">
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <h3 className="text-lg font-medium text-gray-900">
-                                    FAQ Categories
-                                </h3>
-                                <p className="text-sm text-gray-500">
-                                    Organize your FAQs into categories
-                                </p>
-                            </div>
-                            <button
-                                type="button"
-                                onClick={() =>
-                                    appendCategory({
-                                        title: "",
-                                        description: "",
-                                        chatLink: "",
-                                        faqs: [],
-                                    })
-                                }
-                                className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
-                            >
-                                <span className="mr-2">+</span> Add Category
-                            </button>
-                        </div>
-
-                        {categoryFields.length === 0 ? (
-                            <div className="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-                                <p className="text-gray-500">
-                                    No categories yet. Click "Add Category" to
-                                    get started.
-                                </p>
-                            </div>
-                        ) : (
-                            <div className="space-y-6">
-                                {categoryFields.map(
-                                    (category, categoryIndex) => (
-                                        <div
-                                            key={category.id}
-                                            className="border border-gray-200 rounded-lg p-5 bg-gray-50"
-                                        >
-                                            <div className="flex justify-between items-start mb-4">
-                                                <h4 className="text-md font-medium text-gray-900">
-                                                    Category {categoryIndex + 1}
-                                                </h4>
-                                                <button
-                                                    type="button"
-                                                    onClick={() =>
-                                                        removeCategory(
-                                                            categoryIndex
-                                                        )
-                                                    }
-                                                    className="text-red-600 hover:text-red-800 text-sm font-medium"
-                                                    aria-label={`Remove category ${
-                                                        categoryIndex + 1
-                                                    }`}
-                                                >
-                                                    Remove
-                                                </button>
-                                            </div>
-
-                                            <div className="space-y-4">
-                                                <FormField
-                                                    id={`categories.${categoryIndex}.title`}
-                                                    label="Category Title"
-                                                >
-                                                    <input
-                                                        id={`categories.${categoryIndex}.title`}
-                                                        type="text"
-                                                        {...register(
-                                                            `categories.${categoryIndex}.title` as const
-                                                        )}
-                                                        placeholder="Category title"
-                                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
-                                                    />
-                                                </FormField>
-
-                                                <FormField
-                                                    id={`categories.${categoryIndex}.description`}
-                                                    label="Description"
-                                                >
-                                                    <textarea
-                                                        id={`categories.${categoryIndex}.description`}
-                                                        rows={2}
-                                                        {...register(
-                                                            `categories.${categoryIndex}.description` as const
-                                                        )}
-                                                        placeholder="Category description"
-                                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
-                                                    />
-                                                </FormField>
-
-                                                <FormField
-                                                    id={`categories.${categoryIndex}.chatLink`}
-                                                    label="Chat Link"
-                                                >
-                                                    <input
-                                                        id={`categories.${categoryIndex}.chatLink`}
-                                                        type="text"
-                                                        {...register(
-                                                            `categories.${categoryIndex}.chatLink` as const
-                                                        )}
-                                                        placeholder="https://chat.example.com"
-                                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
-                                                    />
-                                                </FormField>
-                                            </div>
-                                        </div>
-                                    )
+                        <div>
+                            <h3 className="text-lg font-medium text-gray-900 mb-4">FAQ Categories</h3>
+                            <p className="text-sm text-gray-500 mb-6">
+                                Organize your questions into categories. Each category can have multiple questions and answers.
+                            </p>
+                            
+                            <Controller
+                                name="categories"
+                                control={control}
+                                render={({ field: { onChange, value } }) => (
+                                    <FAQEditor
+                                        value={value || []}
+                                        onChange={onChange}
+                                    />
                                 )}
-                            </div>
-                        )}
+                            />
+                        </div>
                     </div>
                 )}
 

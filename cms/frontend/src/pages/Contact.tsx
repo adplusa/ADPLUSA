@@ -5,7 +5,22 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Alert, AlertDescription } from '../components/ui/alert';
 import { getContact } from '../services/content.service';
 import type { Contact as ContactType } from '../services/content.service';
-import { Edit, Phone, Mail, MapPin, ExternalLink } from 'lucide-react';
+import { Edit, Phone, Mail, MapPin, ExternalLink, Facebook, Twitter, Instagram, Linkedin, Youtube, Github, Globe, MessageCircle, Send } from 'lucide-react';
+
+const getPlatformConfig = (platform: string) => {
+  switch (platform.toLowerCase()) {
+    case 'facebook': return { icon: Facebook, color: 'bg-[#1877F2] hover:bg-[#1877F2]/90 text-white border-transparent' };
+    case 'twitter': return { icon: Twitter, color: 'bg-[#1DA1F2] hover:bg-[#1DA1F2]/90 text-white border-transparent' };
+    case 'instagram': return { icon: Instagram, color: 'bg-[#E4405F] hover:bg-[#E4405F]/90 text-white border-transparent' };
+    case 'linkedin': return { icon: Linkedin, color: 'bg-[#0A66C2] hover:bg-[#0A66C2]/90 text-white border-transparent' };
+    case 'youtube': return { icon: Youtube, color: 'bg-[#FF0000] hover:bg-[#FF0000]/90 text-white border-transparent' };
+    case 'github': return { icon: Github, color: 'bg-[#181717] hover:bg-[#181717]/90 text-white border-transparent' };
+    case 'whatsapp': return { icon: MessageCircle, color: 'bg-[#25D366] hover:bg-[#25D366]/90 text-white border-transparent' };
+    case 'telegram': return { icon: Send, color: 'bg-[#0088cc] hover:bg-[#0088cc]/90 text-white border-transparent' };
+    case 'website': return { icon: Globe, color: 'bg-slate-800 hover:bg-slate-900 text-white border-transparent' };
+    default: return { icon: ExternalLink, color: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 border-border' };
+  }
+};
 
 export default function Contact() {
   const navigate = useNavigate();
@@ -172,6 +187,36 @@ export default function Contact() {
               )}
             </CardContent>
           </Card>
+
+          {/* New Social Links */}
+          {/* @ts-ignore - socialLinks might not be in the type definition yet */}
+          {contact.socialLinks && contact.socialLinks.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Follow Us</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-3">
+                  {/* @ts-ignore */}
+                  {contact.socialLinks.map((link: any, index: number) => {
+                    const { icon: Icon, color } = getPlatformConfig(link.platform);
+                    return link.isActive && (
+                      <a
+                        key={index}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors text-sm border ${color}`}
+                      >
+                        <Icon className="h-4 w-4" />
+                        <span className="capitalize font-medium">{link.platform}</span>
+                      </a>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {contact.contactInfo.socialMedia && Object.values(contact.contactInfo.socialMedia).some(url => url) && (
             <Card>

@@ -12,6 +12,7 @@ export interface Tag {
 
 export interface CreateTagData {
   name: string;
+  slug?: string;
   description?: string;
   color?: string;
 }

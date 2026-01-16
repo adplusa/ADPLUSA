@@ -1,66 +1,74 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import ContentForm from "../components/ContentForm";
-import type { FormField } from "../components/ContentForm";
-import type { Contact } from "../services/content.service";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { FormWrapper, FormField } from "../components/FormWrapper";
+import type { FormTab } from "../components/FormWrapper";
+import { seoSchema } from "../utils/validation";
 import { getContact, updateContact } from "../services/content.service";
+import SocialLinksEditor from "../components/SocialLinksEditor";
+import PreviewModal from "../components/PreviewModal";
 
-const contactFields: FormField<Contact>[] = [
-    {
-        name: "contactInfo.email",
-        label: "Email Address",
-        type: "text",
-        placeholder: "contact@example.com",
-        helpText: "Primary contact email address",
-    },
-    {
-        name: "contactInfo.phone",
-        label: "Phone Number",
-        type: "text",
-        placeholder: "+1 (555) 123-4567",
-        helpText: "Primary contact phone number",
-    },
-    {
-        name: "contactInfo.address",
-        label: "Address",
-        type: "textarea",
-        placeholder: "Enter full address",
-        helpText: "Physical address or office location",
-    },
-    {
-        name: "seoTitle",
-        label: "SEO Title",
-        type: "text",
-        maxLength: 60,
-        placeholder: "SEO optimized title",
-        helpText: "Title for search engines (recommended: 50-60 characters)",
-    },
-    {
-        name: "seoDescription",
-        label: "SEO Description",
-        type: "textarea",
-        maxLength: 160,
-        placeholder: "SEO optimized description",
-        helpText:
-            "Description for search engines (recommended: 150-160 characters)",
-    },
-    {
-        name: "customHeadTags",
-        label: "Custom Head Tags",
-        type: "textarea",
-        placeholder: "<meta name='keywords' content='...' />",
-        helpText:
-            "Add custom meta tags, scripts, or link tags here. These will be injected into the <head> of the page.",
-    },
-];
+// Validation schema
+const contactSchema = z
+    .object({
+        _id: z.string().optional(),
+        title: z.string().min(1, "Title is required"),
+        description: z.string().optional(),
+        contactInfo: z.object({
+            email: z.string().optional(),
+            phone: z.string().optional(),
+            address: z.string().optional(),
+        }).optional(),
+        socialLinks: z.array(z.object({
+            platform: z.string(),
+            url: z.string(),
+            isActive: z.boolean()
+        })).optional(),
+        customHeadTags: z.string().optional(),
+    })
+    .merge(seoSchema);
+
+type ContactFormData = z.infer<typeof contactSchema>;
 
 export default function ContactForm() {
     const navigate = useNavigate();
-    const [initialData, setInitialData] = useState<
-        Partial<Contact> | undefined
-    >(undefined);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitSuccess, setSubmitSuccess] = useState(false);
+    const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState<string>("general");
+
+    const form = useForm<ContactFormData>({
+        resolver: zodResolver(contactSchema),
+        defaultValues: {
+            title: "",
+            description: "",
+            contactInfo: {
+                email: "",
+                phone: "",
+                address: "",
+            },
+            socialLinks: [],
+            seoTitle: "",
+            seoDescription: "",
+            customHeadTags: "",
+        },
+    });
+
+    const {
+        register,
+        control,
+        reset,
+        watch,
+        getValues,
+        formState: { errors },
+    } = form;
+
+    const watchSeoTitle = watch("seoTitle");
+    const watchSeoDescription = watch("seoDescription");
 
     useEffect(() => {
         loadContact();
@@ -71,80 +79,295 @@ export default function ContactForm() {
             setLoading(true);
             setError(null);
             const response = await getContact();
-            setInitialData(response.data);
+            if (response.data) {
+                reset(response.data as ContactFormData);
+            }
         } catch (err: any) {
             const errorMessage =
-                err.response?.data?.error?.message ||
-                "Failed to load contact page";
+                err.response?.data?.error?.message || "Failed to load Contact page";
             setError(errorMessage);
         } finally {
             setLoading(false);
         }
     };
 
-    const handleSubmit = async (data: Contact) => {
-        await updateContact(data);
-    };
+    const onSubmit = useCallback(
+        async (data: ContactFormData) => {
+            setIsSubmitting(true);
+            setError(null);
+            setSubmitSuccess(false);
 
-    const handleCancel = () => {
+            try {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                await updateContact(data as any);
+                setSubmitSuccess(true);
+
+                setTimeout(() => {
+                    navigate("/dashboard/contact");
+                }, 1500);
+            } catch (err: any) {
+                const errorMessage =
+                    err.response?.data?.error?.message || "Failed to save Contact page";
+                setError(errorMessage);
+                throw err;
+            } finally {
+                setIsSubmitting(false);
+            }
+        },
+        [navigate]
+    );
+
+    const handleCancel = useCallback(() => {
         navigate("/dashboard/contact");
-    };
+    }, [navigate]);
 
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center h-64">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-            </div>
-        );
-    }
+    const handleTabChange = useCallback((tabId: string) => {
+        setActiveTab(tabId);
+    }, []);
 
-    if (error) {
-        return (
-            <div className="max-w-4xl mx-auto">
-                <div className="rounded-md bg-red-50 p-4">
-                    <div className="flex">
-                        <div className="flex-shrink-0">
-                            <svg
-                                className="h-5 w-5 text-red-400"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                            >
-                                <path
-                                    fillRule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                                    clipRule="evenodd"
+    const handlePreview = useCallback(() => {
+        setIsPreviewOpen(true);
+    }, []);
+
+    const tabs: FormTab[] = [
+        { id: "general", label: "General Info", icon: "📝" },
+        { id: "social", label: "Social Media", icon: "🌐" },
+        { id: "seo", label: "SEO", icon: "🔍" },
+    ];
+
+    return (
+        <>
+            {/* Success Message */}
+            {submitSuccess && (
+                <div className="max-w-6xl mx-auto mb-6 rounded-lg bg-green-50 border border-green-200 p-4">
+                    <div className="flex items-center">
+                        <span className="text-green-500 mr-2">✓</span>
+                        <p className="text-sm font-medium text-green-800">
+                            Contact page updated successfully!
+                        </p>
+                    </div>
+                </div>
+            )}
+
+            {/* Error Message */}
+            {error && (
+                <div className="max-w-6xl mx-auto mb-6 rounded-lg bg-red-50 border border-red-200 p-4">
+                    <div className="flex items-center">
+                        <span className="text-red-500 mr-2">✕</span>
+                        <p className="text-sm font-medium text-red-800">
+                            {error}
+                        </p>
+                    </div>
+                </div>
+            )}
+
+            <FormWrapper
+                title="Edit Contact Page"
+                subtitle="Manage contact information and social links"
+                isEditMode={true}
+                form={form}
+                isSubmitting={isSubmitting}
+                isLoading={loading}
+                onSubmit={onSubmit}
+                onCancel={handleCancel}
+                enableDraftSave={true}
+                contentType="contact"
+                tabs={tabs}
+                activeTab={activeTab}
+                onTabChange={handleTabChange}
+                enableKeyboardShortcuts={true}
+            >
+                {/* General Tab */}
+                {activeTab === "general" && (
+                    <div className="space-y-6">
+                        <FormField id="title" label="Page Title" required error={errors.title?.message}>
+                            <input
+                                id="title"
+                                type="text"
+                                {...register("title")}
+                                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                placeholder="Contact Us"
+                            />
+                        </FormField>
+
+                        <FormField id="description" label="Description">
+                            <textarea
+                                id="description"
+                                {...register("description")}
+                                rows={3}
+                                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                placeholder="Get in touch with us..."
+                            />
+                        </FormField>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <FormField id="contactInfo.email" label="Email Address">
+                                <input
+                                    id="contactInfo.email"
+                                    type="email"
+                                    {...register("contactInfo.email")}
+                                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                    placeholder="contact@example.com"
                                 />
-                            </svg>
+                            </FormField>
+
+                            <FormField id="contactInfo.phone" label="Phone Number">
+                                <input
+                                    id="contactInfo.phone"
+                                    type="text"
+                                    {...register("contactInfo.phone")}
+                                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                    placeholder="+1 (555) 123-4567"
+                                />
+                            </FormField>
                         </div>
-                        <div className="ml-3">
-                            <p className="text-sm font-medium text-red-800">
-                                {error}
-                            </p>
-                        </div>
-                        <div className="ml-auto pl-3">
+
+                        <FormField id="contactInfo.address" label="Address">
+                            <textarea
+                                id="contactInfo.address"
+                                {...register("contactInfo.address")}
+                                rows={3}
+                                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                placeholder="123 Main St, City, Country"
+                            />
+                        </FormField>
+
+                        {/* Preview Button */}
+                        <div className="pt-4">
                             <button
-                                onClick={handleCancel}
-                                className="inline-flex text-sm font-medium text-red-600 hover:text-red-500"
+                                type="button"
+                                onClick={handlePreview}
+                                disabled={isSubmitting}
+                                className="px-4 py-2 border border-indigo-600 rounded-md shadow-sm text-sm font-medium text-indigo-600 bg-white hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
                             >
-                                Go Back
+                                Preview Contact Page
                             </button>
                         </div>
                     </div>
-                </div>
-            </div>
-        );
-    }
+                )}
 
-    return (
-        <ContentForm<Contact>
-            fields={contactFields}
-            initialData={initialData}
-            onSubmit={handleSubmit}
-            onCancel={handleCancel}
-            isEditMode={true}
-            title="Contact Page"
-            contentType="contact"
-        />
+                {/* Social Media Tab */}
+                {activeTab === "social" && (
+                    <div className="space-y-6">
+                        <div>
+                            <h3 className="text-lg font-medium text-gray-900 mb-4">Social Media Links</h3>
+                            <p className="text-sm text-gray-500 mb-6">
+                                Add links to your social media profiles. These will be displayed in the "Follow Us" section.
+                            </p>
+                            
+                            <Controller
+                                name="socialLinks"
+                                control={control}
+                                render={({ field: { onChange, value } }) => (
+                                    <SocialLinksEditor
+                                        value={value || []}
+                                        onChange={onChange}
+                                    />
+                                )}
+                            />
+                        </div>
+                    </div>
+                )}
+
+                {/* SEO Tab */}
+                {activeTab === "seo" && (
+                    <div className="space-y-6">
+                        <div>
+                            <h3 className="text-lg font-medium text-gray-900 mb-4">
+                                Search Engine Optimization
+                            </h3>
+
+                            {/* SEO Preview */}
+                            <div className="bg-white border border-gray-200 rounded-lg p-4 mb-6">
+                                <p className="text-xs text-gray-500 mb-2">
+                                    Search Result Preview
+                                </p>
+                                <div className="space-y-1">
+                                    <p className="text-blue-600 text-lg hover:underline cursor-pointer truncate">
+                                        {watchSeoTitle || watch("title") || "Contact Us"}
+                                    </p>
+                                    <p className="text-green-700 text-sm">
+                                        https://yoursite.com/contact
+                                    </p>
+                                    <p className="text-gray-600 text-sm line-clamp-2">
+                                        {watchSeoDescription ||
+                                            watch("description") ||
+                                            "Page description will appear here..."}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="space-y-4">
+                                <FormField
+                                    id="seoTitle"
+                                    label="SEO Title"
+                                    maxLength={60}
+                                    currentLength={watchSeoTitle?.length || 0}
+                                    error={errors.seoTitle?.message}
+                                >
+                                    <input
+                                        id="seoTitle"
+                                        type="text"
+                                        {...register("seoTitle")}
+                                        maxLength={60}
+                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
+                                            errors.seoTitle
+                                                ? "border-red-300 bg-red-50"
+                                                : "border-gray-300"
+                                        }`}
+                                        placeholder="SEO optimized title (50-60 characters)"
+                                    />
+                                </FormField>
+
+                                <FormField
+                                    id="seoDescription"
+                                    label="SEO Description"
+                                    maxLength={160}
+                                    currentLength={watchSeoDescription?.length || 0}
+                                    error={errors.seoDescription?.message}
+                                >
+                                    <textarea
+                                        id="seoDescription"
+                                        {...register("seoDescription")}
+                                        maxLength={160}
+                                        rows={3}
+                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
+                                            errors.seoDescription
+                                                ? "border-red-300 bg-red-50"
+                                                : "border-gray-300"
+                                        }`}
+                                        placeholder="SEO optimized description (150-160 characters)"
+                                    />
+                                </FormField>
+
+                                <FormField
+                                    id="customHeadTags"
+                                    label="Custom Head Tags"
+                                    helpText="Add custom meta tags, scripts, or link tags here. These will be injected into the <head> of the page."
+                                    error={errors.customHeadTags?.message}
+                                >
+                                    <textarea
+                                        id="customHeadTags"
+                                        {...register("customHeadTags")}
+                                        rows={5}
+                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono text-sm"
+                                        placeholder="<meta name='keywords' content='...' />"
+                                    />
+                                </FormField>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </FormWrapper>
+
+            {/* Preview Modal */}
+            <PreviewModal
+                isOpen={isPreviewOpen}
+                onClose={() => setIsPreviewOpen(false)}
+                title="Contact Page"
+                contentType="contact"
+                data={getValues()}
+            />
+        </>
     );
 }

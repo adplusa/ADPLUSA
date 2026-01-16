@@ -104,7 +104,7 @@ router.put("/about", validateAbout, updateAbout);
  * @desc    Update Contact page data
  * @access  Protected (Admin)
  */
-router.put("/contact", validateContact, updateContact);
+router.put("/contact", updateContact);
 
 /**
  * @route   PUT /api/admin/homepage

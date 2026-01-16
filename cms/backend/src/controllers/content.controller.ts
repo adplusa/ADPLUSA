@@ -291,6 +291,7 @@ export const updateContact = async (
             title,
             description,
             contactInfo,
+            socialLinks,
             seoTitle,
             seoDescription,
             customHeadTags,
@@ -305,6 +306,7 @@ export const updateContact = async (
                 title: title || "Contact Us",
                 description,
                 contactInfo: contactInfo || {},
+                socialLinks: socialLinks || [],
                 seoTitle,
                 seoDescription,
             });
@@ -313,6 +315,7 @@ export const updateContact = async (
             if (title !== undefined) contact.title = title;
             if (description !== undefined) contact.description = description;
             if (contactInfo !== undefined) contact.contactInfo = contactInfo;
+            if (socialLinks !== undefined) contact.socialLinks = socialLinks;
             if (seoDescription !== undefined)
                 contact.seoDescription = seoDescription;
             if (customHeadTags !== undefined)

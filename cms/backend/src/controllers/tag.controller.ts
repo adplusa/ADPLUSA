@@ -79,15 +79,6 @@ export const createTag = async (req: Request, res: Response) => {
   try {
     const { name, description, color } = req.body;
 
-    // Check if tag with same name exists
-    const existingTag = await Tag.findOne({ name: { $regex: new RegExp(`^${name}$`, 'i') } });
-    if (existingTag) {
-      return res.status(400).json({
-        success: false,
-        error: { message: 'Tag with this name already exists' }
-      });
-    }
-
     const tag = new Tag({
       name,
       description,
@@ -113,26 +104,17 @@ export const createTag = async (req: Request, res: Response) => {
 export const updateTag = async (req: Request, res: Response) => {
   try {
     const { name, description, color } = req.body;
+    
+    const updateData: {
+      name?: string;
+      description?: string;
+      color?: string;
+    } = { name, description, color };
 
-    // Check if another tag with same name exists
-    if (name) {
-      const existingTag = await Tag.findOne({ 
-        name: { $regex: new RegExp(`^${name}$`, 'i') },
-        _id: { $ne: req.params.id }
-      });
-      if (existingTag) {
-        return res.status(400).json({
-          success: false,
-          error: { message: 'Tag with this name already exists' }
-        });
-      }
-    }
-
-    const tag = await Tag.findByIdAndUpdate(
-      req.params.id,
-      { name, description, color },
-      { new: true, runValidators: true }
-    );
+    const tag = await Tag.findByIdAndUpdate(req.params.id, updateData, {
+      new: true,
+      runValidators: true
+    });
 
     if (!tag) {
       return res.status(404).json({

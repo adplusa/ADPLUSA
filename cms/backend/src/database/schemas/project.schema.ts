@@ -173,6 +173,7 @@ const projectSchema = new Schema<IProject>(
     link: {
       type: String,
       trim: true,
+      match: [/(^$|^https?:\/\/.+)/, 'Link must be a valid URL'],
     },
   },
   baseSchemaOptions

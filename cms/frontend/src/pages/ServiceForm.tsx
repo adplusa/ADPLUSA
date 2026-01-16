@@ -63,7 +63,7 @@ const serviceSchema = z
         keyActivities: z.array(keyActivitySchema).optional(),
         features: z.array(serviceFeatureSchema).optional(),
         image: serviceImageSchema.optional(),
-        order: z.number().optional(),
+        order: z.number().min(0, "Order must be a positive number").optional(),
         createdAt: z.string().optional(),
         updatedAt: z.string().optional(),
     })
@@ -387,7 +387,14 @@ export default function ServiceForm() {
                             <input
                                 id="order"
                                 type="number"
+                                min="0"
                                 {...register("order", { valueAsNumber: true })}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    const filteredValue = value.replace(/[^0-9]/g, ''); // Keep only digits
+                                    const numericValue = Math.max(0, parseInt(filteredValue, 10) || 0);
+                                    setValue("order", numericValue);
+                                }}
                                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                                 placeholder="0"
                             />
