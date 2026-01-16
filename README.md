@@ -8,7 +8,7 @@ This project consists of three main components:
 
 - **Main Frontend** (`src/app/`) - Next.js public website
 - **CMS Backend** (`cms/backend/`) - Express.js API with MongoDB
-- **CMS Admin Panel** (`cms/frontend/`) - React admin dashboard
+- **CMS Admin Panel** (`cms/frontend/`) - React admin dashboards
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
