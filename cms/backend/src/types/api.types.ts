@@ -2,24 +2,26 @@
  * Standard API response types for the CMS backend
  */
 
-export interface PaginationInfo {
+export interface Pagination {
   page: number;
   limit: number;
   total: number;
   pages: number;
 }
 
+export type PaginationInfo = Pagination;
+
 export interface ApiError {
   code?: string;
   message: string;
-  details?: string;
+  details?: string | any;
 }
 
-export interface ApiResponse<T> {
+export interface ApiResponse<T = any> {
   success: boolean;
-  data: T;
+  data?: T;
   message?: string;
-  pagination?: PaginationInfo;
+  pagination?: Pagination;
   error?: ApiError;
 }
 

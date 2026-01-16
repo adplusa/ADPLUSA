@@ -3,7 +3,16 @@ import cors from 'cors';
 import { config } from './config/env';
 import { dbConnection } from './database/connection';
 import authRoutes from './routes/auth.routes';
+import adminRoutes from './routes/admin.routes';
 import imageRoutes from './routes/image.routes';
+import presignedRoutes from './routes/presigned.routes';
+import tagRoutes from './routes/tag.routes';
+import mediaRoutes from './routes/media.routes';
+import projectRoutes from './routes/project.routes';
+import serviceRoutes from './routes/service.routes';
+import contentRoutes from './routes/content.routes';
+import publicRoutes from './routes/public.routes';
+import { errorHandler, notFoundHandler } from './middleware/error.middleware';
 
 const app: Application = express();
 
@@ -11,7 +20,7 @@ const app: Application = express();
 // CORS configuration for frontend access
 const corsOptions = {
   origin: true,
-  credentials: true, // Allow credentials (cookies, authorization headers)
+  credentials: true, // Allow credentials (cookies, authorization headers),
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
@@ -48,11 +57,6 @@ app.get('/', (_req: Request, res: Response) => {
 app.use('/api/auth', authRoutes);
 
 // Admin routes (protected)
-import adminRoutes from './routes/admin.routes';
-import presignedRoutes from './routes/presigned.routes';
-import tagRoutes from './routes/tag.routes';
-import mediaRoutes from './routes/media.routes';
-
 app.use('/api/admin', adminRoutes);
 app.use('/api/admin', presignedRoutes);
 app.use('/api/admin/tags', tagRoutes);
@@ -62,19 +66,10 @@ app.use('/api/admin/media', mediaRoutes);
 app.use('/api/admin', imageRoutes);
 
 // Public content routes
-import projectRoutes from './routes/project.routes';
-import serviceRoutes from './routes/service.routes';
-import contentRoutes from './routes/content.routes';
-import publicRoutes from './routes/public.routes';
-
 app.use('/api/projects', projectRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api', contentRoutes);
-
 app.use('/api/public', publicRoutes);
-
-// Error handling middleware (must be last)
-import { errorHandler, notFoundHandler } from './middleware/error.middleware';
 
 // 404 handler for undefined routes
 app.use(notFoundHandler);
@@ -92,10 +87,7 @@ async function startServer() {
 
     // Start Express server
     app.listen(PORT, () => {
-      console.log(`🚀 Server is running on port ${PORT}`);
-      console.log(`📝 Environment: ${config.nodeEnv}`);
-      console.log(`🔗 Health check: http://localhost:${PORT}/health`);
-    });
+          });
   } catch (error) {
     console.error('❌ Failed to start server:', error);
     process.exit(1);

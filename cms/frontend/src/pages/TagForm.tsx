@@ -9,7 +9,9 @@ import { Alert, AlertDescription } from '../components/ui/alert';
 import { createTag, updateTag, getTagById } from '../services/tag.service';
 import type { CreateTagData } from '../services/tag.service';
 
-interface TagFormData extends CreateTagData {
+interface TagFormData {
+  name: string;
+  description?: string;
   color: string;
 }
 
@@ -17,7 +19,7 @@ export default function TagForm() {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditMode = Boolean(id);
-  
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [initialLoading, setInitialLoading] = useState(isEditMode);
@@ -67,15 +69,29 @@ export default function TagForm() {
       setLoading(true);
       setError(null);
 
+      const payload = {
+        name: data.name,
+        description: data.description,
+        color: data.color
+      };
+
       if (isEditMode && id) {
-        await updateTag(id, data);
+        await updateTag(id, payload);
       } else {
-        await createTag(data);
+        await createTag(payload);
       }
 
       navigate('/dashboard/tags');
     } catch (err: any) {
-      setError(err.response?.data?.error?.message || `Failed to ${isEditMode ? 'update' : 'create'} tag`);
+      console.error('Error saving tag:', err);
+
+      const errorMessage =
+        err.response?.data?.error?.message ||
+        err.response?.data?.message ||
+        err.message ||
+        `Failed to ${isEditMode ? 'update' : 'create'} tag`;
+
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -106,10 +122,9 @@ export default function TagForm() {
         <CardHeader>
           <CardTitle>{isEditMode ? 'Edit Tag' : 'Create New Tag'}</CardTitle>
           <CardDescription>
-            {isEditMode 
-              ? 'Update the tag information below.' 
-              : 'Create a new tag to organize your content.'
-            }
+            {isEditMode
+              ? 'Update the tag information below.'
+              : 'Create a new tag to organize your content.'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -124,7 +139,7 @@ export default function TagForm() {
               <Label htmlFor="name">Name *</Label>
               <Input
                 id="name"
-                {...register('name', { 
+                {...register('name', {
                   required: 'Name is required',
                   minLength: { value: 2, message: 'Name must be at least 2 characters' },
                   maxLength: { value: 50, message: 'Name must be less than 50 characters' }
@@ -175,23 +190,21 @@ export default function TagForm() {
             </div>
 
             <div className="flex items-center gap-3 pt-4">
-              <Button 
-                type="submit" 
-                disabled={loading}
-                className="flex-1"
-              >
+              <Button type="submit" disabled={loading} className="flex-1">
                 {loading ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                     {isEditMode ? 'Updating...' : 'Creating...'}
                   </>
+                ) : isEditMode ? (
+                  'Update Tag'
                 ) : (
-                  isEditMode ? 'Update Tag' : 'Create Tag'
+                  'Create Tag'
                 )}
               </Button>
-              <Button 
-                type="button" 
-                variant="outline" 
+              <Button
+                type="button"
+                variant="outline"
                 onClick={handleCancel}
                 disabled={loading}
                 className="flex-1"

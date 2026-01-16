@@ -11,7 +11,7 @@ export const updateHomepage = async (
     res: Response
 ): Promise<void> => {
     try {
-        console.log("Updating homepage...");
+
 
         // Use findOneAndUpdate with upsert to ensure we always have one document
         const homepage = await Homepage.findOneAndUpdate(
@@ -25,7 +25,7 @@ export const updateHomepage = async (
             }
         ).lean();
 
-        console.log("Homepage updated successfully");
+
 
         res.status(200).json({
             success: true,

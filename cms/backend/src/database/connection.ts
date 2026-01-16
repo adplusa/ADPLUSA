@@ -27,7 +27,7 @@ class DatabaseConnection {
 
   public async connect(): Promise<void> {
     if (this.isConnected) {
-      console.log('📦 MongoDB is already connected');
+      
       return;
     }
 
@@ -46,10 +46,7 @@ class DatabaseConnection {
       this.isConnected = true;
       this.retryCount = 0;
 
-      console.log('✅ MongoDB connected successfully');
-      console.log(`📍 Database: ${mongoose.connection.name}`);
-      console.log(`🔗 Host: ${mongoose.connection.host}`);
-
+      
       // Set up connection event listeners
       this.setupEventListeners();
 
@@ -62,7 +59,7 @@ class DatabaseConnection {
   private setupEventListeners(): void {
     // Connection events
     mongoose.connection.on('connected', () => {
-      console.log('🔗 Mongoose connected to MongoDB');
+      
     });
 
     mongoose.connection.on('error', (error) => {
@@ -71,7 +68,7 @@ class DatabaseConnection {
     });
 
     mongoose.connection.on('disconnected', () => {
-      console.log('⚠️  Mongoose disconnected from MongoDB');
+      
       this.isConnected = false;
     });
 
@@ -91,9 +88,7 @@ class DatabaseConnection {
     this.retryCount++;
 
     if (this.retryCount <= this.maxRetries) {
-      console.log(
-        `🔄 Retrying connection (${this.retryCount}/${this.maxRetries}) in ${this.retryDelay / 1000} seconds...`
-      );
+
 
       await new Promise(resolve => setTimeout(resolve, this.retryDelay));
       await this.connect();
@@ -115,7 +110,7 @@ class DatabaseConnection {
     try {
       await mongoose.connection.close();
       this.isConnected = false;
-      console.log('👋 MongoDB connection closed');
+      
     } catch (error) {
       console.error('❌ Error closing MongoDB connection:', error);
       throw error;

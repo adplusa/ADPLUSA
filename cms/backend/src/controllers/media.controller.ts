@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Media } from '../database/schemas/media.schema';
-import { uploadImageToS3, deleteImageFromS3 } from '../utils/s3';
+import { uploadImageToS3, deleteImageFromS3, getCdnUrl } from '../utils/s3';
 import { ApiResponse } from '../types/api.types';
 import sharp from 'sharp';
 
@@ -35,7 +35,7 @@ export const getMedia = async (req: Request, res: Response) => {
       query.tags = { $in: tagIds };
     }
 
-    const [media, total] = await Promise.all([
+    const [mediaDocs, total] = await Promise.all([
       Media.find(query)
         .populate('tags', 'name color')
         .populate('uploadedBy', 'username')
@@ -44,6 +44,18 @@ export const getMedia = async (req: Request, res: Response) => {
         .limit(limitNum),
       Media.countDocuments(query)
     ]);
+
+    // Convert to objects and generate signed URLs
+    const media = mediaDocs.map(doc => {
+      const docObj = doc.toObject();
+      if (docObj.s3Path) {
+        docObj.s3Url = getCdnUrl(docObj.s3Path);
+      } else if (docObj.filename) {
+        // Fallback for older records missing s3Path
+        docObj.s3Url = getCdnUrl(`uploads/${docObj.filename}`);
+      }
+      return docObj;
+    });
 
     const response: ApiResponse<typeof media> = {
       success: true,
@@ -69,15 +81,22 @@ export const getMedia = async (req: Request, res: Response) => {
 // Get media by ID
 export const getMediaById = async (req: Request, res: Response) => {
   try {
-    const media = await Media.findById(req.params.id)
+    const mediaDoc = await Media.findById(req.params.id)
       .populate('tags', 'name color')
       .populate('uploadedBy', 'username');
     
-    if (!media) {
+    if (!mediaDoc) {
       return res.status(404).json({
         success: false,
         error: { message: 'Media not found' }
       });
+    }
+
+    const media = mediaDoc.toObject();
+    if (media.s3Path) {
+      media.s3Url = getCdnUrl(media.s3Path);
+    } else if (media.filename) {
+      media.s3Url = getCdnUrl(`uploads/${media.filename}`);
     }
 
     res.json({
@@ -98,6 +117,24 @@ export const uploadMedia = async (req: Request, res: Response) => {
   try {
     const { title, alt, description, tags } = req.body;
     const file = req.file;
+
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        error: { message: 'User not authenticated' }
+      });
+    }
+
+    // Try to extract ID from common properties
+    const userId = (req.user as any)._id || (req.user as any).id || (req.user as any).userId || (req.user as any).sub;
+
+    if (!userId) {
+      console.error('❌ Error: User ID is missing in req.user');
+      return res.status(500).json({
+        success: false,
+        error: { message: 'User ID could not be determined. Check server logs.' }
+      });
+    }
 
     if (!file) {
       return res.status(400).json({
@@ -159,16 +196,21 @@ export const uploadMedia = async (req: Request, res: Response) => {
       alt,
       description,
       tags: tags ? (Array.isArray(tags) ? tags : [tags]) : [],
-      uploadedBy: (req as any).user?.id
+      uploadedBy: userId
     });
 
     await media.save();
     await media.populate('tags', 'name color');
     await media.populate('uploadedBy', 'username');
 
+    const mediaObj = media.toObject();
+    if (mediaObj.s3Path) {
+      mediaObj.s3Url = getCdnUrl(mediaObj.s3Path);
+    }
+
     res.status(201).json({
       success: true,
-      data: media
+      data: mediaObj
     });
   } catch (error) {
     console.error('Error uploading media:', error);
@@ -184,7 +226,7 @@ export const updateMedia = async (req: Request, res: Response) => {
   try {
     const { title, alt, description, tags } = req.body;
 
-    const media = await Media.findByIdAndUpdate(
+    const mediaDoc = await Media.findByIdAndUpdate(
       req.params.id,
       { 
         title, 
@@ -197,11 +239,18 @@ export const updateMedia = async (req: Request, res: Response) => {
     .populate('tags', 'name color')
     .populate('uploadedBy', 'username');
 
-    if (!media) {
+    if (!mediaDoc) {
       return res.status(404).json({
         success: false,
         error: { message: 'Media not found' }
       });
+    }
+
+    const media = mediaDoc.toObject();
+    if (media.s3Path) {
+      media.s3Url = getCdnUrl(media.s3Path);
+    } else if (media.filename) {
+      media.s3Url = getCdnUrl(`uploads/${media.filename}`);
     }
 
     res.json({
