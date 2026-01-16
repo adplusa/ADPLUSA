@@ -20,10 +20,12 @@ export default function ProjectsClient({ projects }) {
     const loaderRef = useRef(null);
 
     // Map images array to mainImage for compatibility
-    const data = (projects || []).map(item => ({
-        ...item,
-        mainImage: item.images?.[0] || null,
-    })).filter(item => item.mainImage?.url);
+    const data = (projects || [])
+        .map((item) => ({
+            ...item,
+            mainImage: item.images?.[0] || null,
+        }))
+        .filter((item) => item.mainImage?.url);
 
     // Infinite scroll - load more when loader element is visible
     const loadMore = useCallback(() => {
@@ -40,11 +42,15 @@ export default function ProjectsClient({ projects }) {
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
-                if (entries[0].isIntersecting && !isLoadingMore && visibleCount < data.length) {
+                if (
+                    entries[0].isIntersecting &&
+                    !isLoadingMore &&
+                    visibleCount < data.length
+                ) {
                     loadMore();
                 }
             },
-            { threshold: 0.1, rootMargin: '100px' }
+            { threshold: 0.1, rootMargin: "100px" }
         );
 
         const currentLoader = loaderRef.current;
@@ -98,20 +104,82 @@ export default function ProjectsClient({ projects }) {
                     <div className="project-grid">
                         {data.slice(0, visibleCount).map((item, index) => (
                             <Link
-                                href={item.slug ? `/projects/${item.slug}` : "#"}
+                                href={
+                                    item.slug ? `/projects/${item.slug}` : "#"
+                                }
                                 key={item._id || index}
                                 className="project-tile"
                             >
                                 <div className="image-wrapper-pr">
                                     <Image
-                                        src={item.mainImage?.url || "/placeholder.jpg"}
-                                        alt={item.mainImage?.alt || item.title || "Project Image"}
+                                        src={
+                                            item.mainImage?.url ||
+                                            "/placeholder.jpg"
+                                        }
+                                        alt={
+                                            item.mainImage?.alt ||
+                                            item.title ||
+                                            "Project Image"
+                                        }
                                         fill
+                                        className="object-cover transition-transform duration-500 hover:scale-105"
                                         unoptimized
                                         priority={index < 6}
                                     />
                                 </div>
-                                <p className="image-title">{item.title}</p>
+
+                                <div className="card-content">
+                                    {/* Tags from Category */}
+                                    {item.category && (
+                                        <div className="card-tags">
+                                            {item.category
+                                                .split(",")
+                                                .map((tag, i) => (
+                                                    <span
+                                                        key={i}
+                                                        className="card-tag"
+                                                    >
+                                                        {tag.trim()}
+                                                    </span>
+                                                ))}
+                                        </div>
+                                    )}
+
+                                    <h2 className="card-title">{item.title}</h2>
+
+                                    {/* Description */}
+                                    {item.description && (
+                                        <p className="card-description">
+                                            {item.description}
+                                        </p>
+                                    )}
+
+                                    {/* Project Details */}
+                                    {item.projectDetails &&
+                                        item.projectDetails.length > 0 && (
+                                            <div className="card-details">
+                                                {item.projectDetails
+                                                    .slice(0, 4)
+                                                    .map((detail, idx) => (
+                                                        <div
+                                                            key={idx}
+                                                            className="detail-item"
+                                                        >
+                                                            <span className="detail-label">
+                                                                {detail.label}
+                                                            </span>
+                                                            <span className="detail-value">
+                                                                {detail.value ||
+                                                                    (detail.items &&
+                                                                        detail.items.join(
+                                                                            ", "
+                                                                        ))}
+                                                            </span>
+                                                        </div>
+                                                    ))}
+                                            </div>
+                                        )}
+                                </div>
                             </Link>
                         ))}
                     </div>
@@ -122,21 +190,24 @@ export default function ProjectsClient({ projects }) {
                             ref={loaderRef}
                             className="infinite-scroll-loader"
                             style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                padding: '30px 0',
-                                width: '100%'
+                                display: "flex",
+                                justifyContent: "center",
+                                padding: "30px 0",
+                                width: "100%",
                             }}
                         >
                             {isLoadingMore && (
-                                <div className="loading-spinner" style={{
-                                    width: '40px',
-                                    height: '40px',
-                                    border: '3px solid #f3f3f3',
-                                    borderTop: '3px solid #333',
-                                    borderRadius: '50%',
-                                    animation: 'spin 1s linear infinite'
-                                }} />
+                                <div
+                                    className="loading-spinner"
+                                    style={{
+                                        width: "40px",
+                                        height: "40px",
+                                        border: "3px solid #f3f3f3",
+                                        borderTop: "3px solid #333",
+                                        borderRadius: "50%",
+                                        animation: "spin 1s linear infinite",
+                                    }}
+                                />
                             )}
                         </div>
                     )}
@@ -163,22 +234,31 @@ export default function ProjectsClient({ projects }) {
 
                 {/* Enquiry Form */}
                 <div className="enquire">
-                    <button onClick={() => setShowForm(true)}>Enquire Now</button>
+                    <button onClick={() => setShowForm(true)}>
+                        Enquire Now
+                    </button>
                 </div>
 
                 {showForm && (
-                    <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
+                    <div
+                        className="enquiry-overlay"
+                        onClick={() => setShowForm(false)}
+                    >
                         <div
                             className="enquiry-container"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div className="enquiry-box">
-                                <div className="close-icon" onClick={() => setShowForm(false)}>
+                                <div
+                                    className="close-icon"
+                                    onClick={() => setShowForm(false)}
+                                >
                                     ✕
                                 </div>
                                 <h2 className="title">Quick Query</h2>
                                 <p className="subtitle">
-                                    If you have any queries, we will be pleased to assist you.
+                                    If you have any queries, we will be pleased
+                                    to assist you.
                                 </p>
                                 <form>
                                     <input
@@ -203,7 +283,10 @@ export default function ProjectsClient({ projects }) {
                                         rows="3"
                                     ></textarea>
 
-                                    <button type="submit" className="submit-button">
+                                    <button
+                                        type="submit"
+                                        className="submit-button"
+                                    >
                                         Submit
                                     </button>
                                 </form>
