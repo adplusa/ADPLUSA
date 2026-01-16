@@ -184,7 +184,7 @@ export default function MediaLibrary() {
           <h1 className="text-2xl font-bold">Media Library</h1>
           <p className="text-muted-foreground">Manage your images, videos, and documents</p>
         </div>
-        <Button onClick={handleUpload} disabled={loading} className="flex items-center gap-2">
+        <Button onClick={handleUpload} className="flex items-center gap-2">
           <Upload className="h-4 w-4" />
           Upload Media
         </Button>

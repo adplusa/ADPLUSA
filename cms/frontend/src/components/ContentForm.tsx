@@ -9,7 +9,7 @@ import PreviewModal from './PreviewModal';
 export interface FormField<T extends FieldValues> {
   name: Path<T>;
   label: string;
-  type: 'text' | 'textarea' | 'richtext' | 'checkbox' | 'image' | 'images' | 'array' | 'object' | 'number';
+  type: 'text' | 'textarea' | 'richtext' | 'checkbox' | 'image' | 'images' | 'array' | 'object';
   required?: boolean;
   placeholder?: string;
   maxLength?: number;
@@ -26,7 +26,7 @@ export interface ContentFormProps<T extends FieldValues> {
   onCancel: () => void;
   isEditMode?: boolean;
   title: string;
-  contentType: 'project' | 'service' | 'faq' | 'about' | 'contact' | 'tag';
+  contentType: 'project' | 'service' | 'faq' | 'about' | 'contact';
 }
 
 export default function ContentForm<T extends FieldValues>({
@@ -93,7 +93,6 @@ export default function ContentForm<T extends FieldValues>({
         onCancel();
       }, 1500);
     } catch (error: any) {
-      console.error('Form submission error:', error);
       const errorMessage =
         error.response?.data?.error?.message || error.message || 'Failed to save content';
       setSubmitError(errorMessage);
@@ -195,12 +194,6 @@ export default function ContentForm<T extends FieldValues>({
               control={control}
               rules={{
                 required: field.required ? `${field.label} is required` : false,
-                validate: (value) => {
-                  if (field.required && (!value || value === '<p><br></p>')) {
-                    return `${field.label} is required`;
-                  }
-                  return true;
-                }
               }}
               render={({ field: { onChange, value } }) => (
                 <ReactQuill
@@ -247,24 +240,15 @@ export default function ContentForm<T extends FieldValues>({
               control={control}
               rules={{
                 required: field.required ? `${field.label} is required` : false,
-                validate: (value) => {
-                  if (field.required && !value) {
-                    return `${field.label} is required`;
-                  }
-                  return true;
-                }
               }}
               render={({ field: { onChange, value } }) => (
                 <ImageUploader
                   multiple={false}
                   initialImages={value ? [value] : []}
-                  onImagesChange={(images) => {
-                    if (images.length === 0) {
-                      onChange(null);
-                    } else {
+                  onUploadComplete={(images) => {
+                    if (images.length > 0) {
                       onChange({
-                        ...images[0],
-                        url: images[0].cdnUrl || images[0].url,
+                        url: images[0].url,
                         darkModeUrl: images[0].cdnUrl || images[0].cloudFrontUrl,
                       });
                     }
@@ -294,15 +278,12 @@ export default function ContentForm<T extends FieldValues>({
                 <ImageUploader
                   multiple={true}
                   initialImages={value || []}
-                  onImagesChange={(images) => {
+                  onUploadComplete={(images) => {
                     const imageData = images.map((img) => ({
-                      id: img.id,
-                      url: img.cdnUrl || img.url,
+                      url: img.url,
                       alt: '',
                       width: img.width,
                       height: img.height,
-                      cdnUrl: img.cdnUrl,
-                      cloudFrontUrl: img.cloudFrontUrl,
                     }));
                     onChange(imageData);
                   }}
@@ -310,67 +291,6 @@ export default function ContentForm<T extends FieldValues>({
               )}
             />
             {field.helpText && <p className="mt-2 text-xs text-gray-500">{field.helpText}</p>}
-            {errorMessage && <p className="mt-1 text-sm text-red-600">{errorMessage}</p>}
-          </div>
-        );
-
-      case 'array':
-        return (
-          <div key={field.name as string}>
-            <label htmlFor={field.name as string} className="block text-sm font-medium text-gray-700">
-              {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
-            </label>
-            <Controller
-              name={field.name}
-              control={control}
-              rules={{
-                required: field.required ? `${field.label} is required` : false,
-              }}
-              render={({ field: { onChange, value } }) => (
-                <input
-                  type="text"
-                  className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${
-                    error
-                      ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-                      : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
-                  }`}
-                  placeholder={field.placeholder || "Separate items with commas"}
-                  value={Array.isArray(value) ? value.join(', ') : value || ''}
-                  onChange={(e) => {
-                    const val = e.target.value ? e.target.value.split(',').map((s: string) => s.trim()) : [];
-                    onChange(val);
-                  }}
-                />
-              )}
-            />
-            {field.helpText && <p className="mt-1 text-xs text-gray-500">{field.helpText}</p>}
-            {errorMessage && <p className="mt-1 text-sm text-red-600">{errorMessage}</p>}
-          </div>
-        );
-
-      case 'number':
-        return (
-          <div key={field.name as string}>
-            <label htmlFor={field.name as string} className="block text-sm font-medium text-gray-700">
-              {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
-            </label>
-            <input
-              id={field.name as string}
-              type="number"
-              {...register(field.name, {
-                required: field.required ? `${field.label} is required` : false,
-                valueAsNumber: true,
-              })}
-              placeholder={field.placeholder}
-              className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${
-                error
-                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
-              }`}
-            />
-            {field.helpText && <p className="mt-1 text-xs text-gray-500">{field.helpText}</p>}
             {errorMessage && <p className="mt-1 text-sm text-red-600">{errorMessage}</p>}
           </div>
         );

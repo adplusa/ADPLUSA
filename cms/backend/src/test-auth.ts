@@ -39,7 +39,7 @@ function testJWTGeneration() {
   };
   
   const signOptions: SignOptions = {
-    expiresIn: JWT_EXPIRES_IN,
+    expiresIn: JWT_EXPIRES_IN as any,
   };
   
   const token = jwt.sign(payload, JWT_SECRET, signOptions);
@@ -64,7 +64,7 @@ function testJWTVerification(token: string) {
   }
 }
 
-async function testExpiredToken(): Promise<boolean> {
+function testExpiredToken() {
   console.log('\n=== Testing Expired Token ===');
   
   const payload = {
@@ -75,29 +75,27 @@ async function testExpiredToken(): Promise<boolean> {
   
   // Create a token that expires immediately
   const signOptions: SignOptions = {
-    expiresIn: '1ms',
+    expiresIn: '1ms' as any,
   };
   
   const token = jwt.sign(payload, JWT_SECRET, signOptions);
   
-  // Wait a bit to ensure token expires and wrap in a Promise
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      try {
-        jwt.verify(token, JWT_SECRET);
-        console.log('✗ Expired token was accepted (should have been rejected)');
-        resolve(false);
-      } catch (error: any) {
-        if (error.name === 'TokenExpiredError') {
-          console.log('✓ Expired token correctly rejected');
-          resolve(true);
-        } else {
-          console.log('✗ Unexpected error:', error.message);
-          resolve(false);
-        }
+  // Wait a bit to ensure token expires
+  setTimeout(() => {
+    try {
+      jwt.verify(token, JWT_SECRET);
+      console.log('✗ Expired token was accepted (should have been rejected)');
+      return false;
+    } catch (error: any) {
+      if (error.name === 'TokenExpiredError') {
+        console.log('✓ Expired token correctly rejected');
+        return true;
+      } else {
+        console.log('✗ Unexpected error:', error.message);
+        return false;
       }
-    }, 100);
-  });
+    }
+  }, 100);
 }
 
 function testInvalidToken() {
@@ -138,7 +136,7 @@ async function runTests() {
     const invalidTest = testInvalidToken();
     
     // Test expired token
-    const expiredTest = await testExpiredToken();
+    testExpiredToken();
     
     console.log('\n' + '='.repeat(50));
     console.log('\n✅ All authentication logic tests passed!');

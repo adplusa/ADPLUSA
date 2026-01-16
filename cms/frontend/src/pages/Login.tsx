@@ -23,17 +23,32 @@ export default function Login() {
     setIsLoading(true);
     setError(null);
 
+    console.log('🔐 Attempting login with:', { username, password: '***' });
+
     try {
+      console.log('📡 Making API call to login...');
       const result = await login({ username, password });
+
+      console.log('✅ Login API response:', result);
 
       // Extract token and user from the nested data structure
       const { token, user } = result.data;
 
+      console.log('🎫 Extracted token:', token ? 'Present' : 'Missing');
+      console.log('👤 Extracted user:', user);
+
       dispatch(setCredentials({ token, user }));
+
+      console.log('💾 Credentials dispatched to Redux store');
+      console.log('🗄️ localStorage token:', localStorage.getItem('token'));
+      console.log('🗄️ localStorage user:', localStorage.getItem('user'));
 
       // Redirect to dashboard on success
       navigate('/dashboard');
     } catch (err: any) {
+      console.error('❌ Login failed:', err);
+      console.error('📄 Error response:', err.response?.data);
+
       // Extract error message from response
       const errorMessage = err.response?.data?.error?.message ||
         err.response?.data?.message ||

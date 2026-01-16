@@ -117,8 +117,7 @@ export default function MediaUpload() {
       await uploadMedia(file, uploadData);
       navigate('/dashboard/media');
     } catch (err: any) {
-      const errorMessage = err.response?.data?.error?.message || 'Failed to upload media';
-      setError(errorMessage);
+      setError(err.response?.data?.error?.message || 'Failed to upload media');
     } finally {
       setLoading(false);
     }
@@ -222,13 +221,11 @@ export default function MediaUpload() {
                       id="file-upload"
                       accept="image/*,video/*,.pdf,.doc,.docx"
                     />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => document.getElementById('file-upload')?.click()}
-                    >
-                      Choose File
-                    </Button>
+                    <Label htmlFor="file-upload" className="cursor-pointer">
+                      <Button type="button" variant="outline">
+                        Choose File
+                      </Button>
+                    </Label>
                   </div>
                 )}
               </div>
