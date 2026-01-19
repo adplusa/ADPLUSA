@@ -55,6 +55,20 @@ export {
     ISettingsImage,
 } from "./generalSettings.schema";
 
+// Export Main Service Page schema
+export {
+    MainServicePage,
+    IMainServicePage,
+    IMainServicePageImage,
+    IWhyWorkWithUsItem as IMainServiceWhyWorkWithUsItem,
+} from "./mainServicePage.schema";
+
+// Export Projects Page schema
+export {
+    ProjectsPage,
+    IProjectsPage,
+} from "./projectsPage.schema";
+
 // Export base schema utilities
 export {
     BaseSchemaFields,

@@ -6,15 +6,17 @@ import { z } from "zod";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import ImageUploader from "../components/ImageUploader";
+import { MEDIA_ACCEPTED_TYPES } from "../components/ImageUploader";
 import { FormWrapper, FormField } from "../components/FormWrapper";
 import type { FormTab } from "../components/FormWrapper";
-import { slugSchema, urlSchema, seoSchema } from "../utils/validation";
+import { slugSchema, urlSchema } from "../utils/validation";
 import type { Project } from "../services/project.service";
 import {
     createProject,
     updateProject,
     getProjectBySlug,
 } from "../services/project.service";
+import MetaTagsInput from "../components/MetaTagsInput";
 
 // Quill configuration
 const quillModules = {
@@ -53,6 +55,8 @@ const projectImageSchema = z.object({
     alt: z.string().optional(),
     width: z.number().optional(),
     height: z.number().optional(),
+    type: z.enum(["image", "video"]).optional(),
+    thumbnailUrl: z.string().optional(),
 });
 
 const projectDetailSchema = z.object({
@@ -76,8 +80,14 @@ const projectSchema = z
         link: urlSchema,
         createdAt: z.string().optional(),
         updatedAt: z.string().optional(),
-    })
-    .merge(seoSchema);
+        seoTitle: z.string().optional().or(z.literal("")),
+        seoDescription: z.string().optional().or(z.literal("")),
+        customHeadTags: z.string().optional().or(z.literal("")),
+        metaTags: z.array(z.object({
+            name: z.string(),
+            content: z.string(),
+        })).optional(),
+    });
 
 type ProjectFormData = z.infer<typeof projectSchema>;
 
@@ -108,6 +118,7 @@ export default function ProjectForm() {
             seoTitle: "",
             seoDescription: "",
             customHeadTags: "",
+            metaTags: [],
         },
     });
 
@@ -517,49 +528,193 @@ export default function ProjectForm() {
                     <div className="space-y-6">
                         <div>
                             <h3 className="text-lg font-medium text-gray-900 mb-2">
-                                Project Images
+                                Project Media Gallery
                             </h3>
                             <p className="text-sm text-gray-500 mb-4">
-                                Upload images for the project gallery. The first
-                                image will be used as the main image.
+                                Upload images and videos for the project gallery. The first
+                                item will be used as the main media. Supported video formats: MP4, WebM.
                             </p>
                             <Controller
                                 name="images"
                                 control={control}
                                 render={({ field: { onChange, value } }) => (
-                                    <ImageUploader
-                                        multiple={true}
-                                        initialImages={
-                                            value?.map((img) => ({
-                                                url: img.url,
-                                                width: img.width,
-                                                height: img.height,
-                                                status: "success" as const,
-                                            })) || []
-                                        }
-                                        onUploadComplete={(images) => {
-                                            const imageData = images.map(
-                                                (img) => ({
+                                    <>
+                                        <ImageUploader
+                                            multiple={true}
+                                            acceptedTypes={MEDIA_ACCEPTED_TYPES}
+                                            maxSizeInMB={50}
+                                            initialImages={
+                                                value?.map((img) => ({
                                                     url: img.url,
-                                                    alt: "",
                                                     width: img.width,
                                                     height: img.height,
-                                                })
-                                            );
-                                            onChange(imageData);
-                                        }}
-                                        onImagesReorder={(images) => {
-                                            const imageData = images.map(
-                                                (img) => ({
-                                                    url: img.url,
-                                                    alt: "",
-                                                    width: img.width,
-                                                    height: img.height,
-                                                })
-                                            );
-                                            onChange(imageData);
-                                        }}
-                                    />
+                                                    type: img.type || "image",
+                                                    thumbnailUrl: img.thumbnailUrl,
+                                                    status: "success" as const,
+                                                })) || []
+                                            }
+                                            onUploadComplete={(images) => {
+                                                const currentValue = value || [];
+                                                const newMediaData = images.map(
+                                                    (img) => ({
+                                                        url: img.url,
+                                                        alt: "",
+                                                        width: img.width,
+                                                        height: img.height,
+                                                        type: img.type || "image" as const,
+                                                        thumbnailUrl: img.thumbnailUrl || "",
+                                                    })
+                                                );
+                                                onChange([...currentValue, ...newMediaData]);
+                                            }}
+                                            onImagesReorder={(images) => {
+                                                const mediaData = images.map(
+                                                    (img, idx) => {
+                                                        const existingItem = value?.[idx];
+                                                        return {
+                                                            url: img.url,
+                                                            alt: existingItem?.alt || "",
+                                                            width: img.width,
+                                                            height: img.height,
+                                                            type: img.type || existingItem?.type || "image" as const,
+                                                            thumbnailUrl: img.thumbnailUrl || existingItem?.thumbnailUrl || "",
+                                                        };
+                                                    }
+                                                );
+                                                onChange(mediaData);
+                                            }}
+                                            onImageRemove={(removedImage) => {
+                                                const newValue = value?.filter(
+                                                    (img) => img.url !== removedImage.url
+                                                ) || [];
+                                                onChange(newValue);
+                                            }}
+                                        />
+                                        
+                                        {/* Media Details Editor */}
+                                        {value && value.length > 0 && (
+                                            <div className="mt-6 space-y-4">
+                                                <h4 className="text-sm font-medium text-gray-700">
+                                                    Media Details
+                                                </h4>
+                                                <p className="text-xs text-gray-500">
+                                                    Configure media type and thumbnail for each gallery item.
+                                                </p>
+                                                <div className="space-y-3">
+                                                    {value.map((media, index) => (
+                                                        <div
+                                                            key={`media-${index}-${media.url}`}
+                                                            className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200"
+                                                        >
+                                                            {/* Thumbnail Preview */}
+                                                            <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-gray-200">
+                                                                {media.type === "video" ? (
+                                                                    media.thumbnailUrl ? (
+                                                                        <img
+                                                                            src={media.thumbnailUrl}
+                                                                            alt={`Thumbnail for video ${index + 1}`}
+                                                                            className="w-full h-full object-cover"
+                                                                        />
+                                                                    ) : (
+                                                                        <div className="w-full h-full flex items-center justify-center text-gray-400">
+                                                                            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                                                                                <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
+                                                                            </svg>
+                                                                        </div>
+                                                                    )
+                                                                ) : (
+                                                                    <img
+                                                                        src={media.url}
+                                                                        alt={`Preview ${index + 1}`}
+                                                                        className="w-full h-full object-cover"
+                                                                    />
+                                                                )}
+                                                            </div>
+                                                            
+                                                            {/* Media Details */}
+                                                            <div className="flex-1 space-y-3">
+                                                                <div className="flex items-center gap-4">
+                                                                    <span className="text-sm font-medium text-gray-700">
+                                                                        #{index + 1}
+                                                                    </span>
+                                                                    <div className="flex items-center gap-2">
+                                                                        <label className="text-xs text-gray-500">Type:</label>
+                                                                        <select
+                                                                            value={media.type || "image"}
+                                                                            onChange={(e) => {
+                                                                                const newValue = [...value];
+                                                                                newValue[index] = {
+                                                                                    ...newValue[index],
+                                                                                    type: e.target.value as "image" | "video",
+                                                                                };
+                                                                                onChange(newValue);
+                                                                            }}
+                                                                            className="text-sm px-2 py-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                                                        >
+                                                                            <option value="image">🖼️ Image</option>
+                                                                            <option value="video">🎬 Video</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                {/* Alt Text */}
+                                                                <div>
+                                                                    <label className="text-xs text-gray-500 block mb-1">
+                                                                        Alt Text
+                                                                    </label>
+                                                                    <input
+                                                                        type="text"
+                                                                        value={media.alt || ""}
+                                                                        onChange={(e) => {
+                                                                            const newValue = [...value];
+                                                                            newValue[index] = {
+                                                                                ...newValue[index],
+                                                                                alt: e.target.value,
+                                                                            };
+                                                                            onChange(newValue);
+                                                                        }}
+                                                                        placeholder="Describe this media..."
+                                                                        className="w-full text-sm px-3 py-1.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                                                    />
+                                                                </div>
+                                                                
+                                                                {/* Thumbnail URL (for videos) */}
+                                                                {media.type === "video" && (
+                                                                    <div>
+                                                                        <label className="text-xs text-gray-500 block mb-1">
+                                                                            Thumbnail URL (for video poster)
+                                                                        </label>
+                                                                        <input
+                                                                            type="text"
+                                                                            value={media.thumbnailUrl || ""}
+                                                                            onChange={(e) => {
+                                                                                const newValue = [...value];
+                                                                                newValue[index] = {
+                                                                                    ...newValue[index],
+                                                                                    thumbnailUrl: e.target.value,
+                                                                                };
+                                                                                onChange(newValue);
+                                                                            }}
+                                                                            placeholder="https://example.com/thumbnail.jpg"
+                                                                            className="w-full text-sm px-3 py-1.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                                                        />
+                                                                        <p className="text-xs text-gray-400 mt-1">
+                                                                            Optional: Image shown before video plays
+                                                                        </p>
+                                                                    </div>
+                                                                )}
+                                                                
+                                                                {/* URL Display */}
+                                                                <div className="text-xs text-gray-400 truncate">
+                                                                    {media.url}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
                                 )}
                             />
                         </div>
@@ -594,16 +749,6 @@ export default function ProjectForm() {
                                             watch("description") ||
                                             "Page description will appear here..."}
                                     </p>
-                                    {watch("customHeadTags") && (
-                                        <div className="mt-2 pt-2 border-t border-gray-100">
-                                            <p className="text-xs font-semibold text-gray-500 mb-1">
-                                                Custom Head Tags:
-                                            </p>
-                                            <code className="block text-xs text-gray-600 bg-gray-50 p-2 rounded truncate font-mono">
-                                                {watch("customHeadTags")}
-                                            </code>
-                                        </div>
-                                    )}
                                 </div>
                             </div>
 
@@ -704,20 +849,17 @@ export default function ProjectForm() {
                                     </div>
                                 </FormField>
 
-                                <FormField
-                                    id="customHeadTags"
-                                    label="Custom Head Tags"
-                                    helpText="Add custom meta tags, scripts, or link tags here. These will be injected into the <head> of the page."
-                                    error={errors.customHeadTags?.message}
-                                >
-                                    <textarea
-                                        id="customHeadTags"
-                                        {...register("customHeadTags")}
-                                        rows={5}
-                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono text-sm"
-                                        placeholder="<meta name='keywords' content='...' />"
-                                    />
-                                </FormField>
+                                <Controller
+                                    name="metaTags"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <MetaTagsInput
+                                            value={field.value || []}
+                                            onChange={field.onChange}
+                                            disabled={isSubmitting}
+                                        />
+                                    )}
+                                />
                             </div>
                         </div>
                     </div>

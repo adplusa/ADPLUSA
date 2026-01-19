@@ -32,6 +32,7 @@ export interface Service {
   description?: string;
   content?: string;
   bannerImage?: ServiceImage;
+  displayImage?: ServiceImage;
   servicesList?: ServiceItem[];
   keyActivities?: KeyActivity[];
   features?: ServiceFeature[];

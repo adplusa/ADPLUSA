@@ -187,7 +187,7 @@ export default function AboutClient({ data }) {
                 </svg>
             </div>
 
-            <PageScripts customHeadTags={data?.customHeadTags} pageId="about" />
+            <PageScripts customHeadTags={data?.customHeadTags} metaTags={data?.metaTags} pageId="about" />
         </div>
     );
 }

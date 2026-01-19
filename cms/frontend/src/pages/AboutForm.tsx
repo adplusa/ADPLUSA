@@ -10,6 +10,7 @@ import type { FormTab } from "../components/FormWrapper";
 import { seoSchema } from "../utils/validation";
 import { getAbout, updateAbout } from "../services/content.service";
 import PreviewModal from "../components/PreviewModal";
+import MetaTagsInput from "../components/MetaTagsInput";
 
 // Validation schemas
 const anchorLinkSchema = z.object({
@@ -80,6 +81,7 @@ export default function AboutForm() {
             seoTitle: "",
             seoDescription: "",
             customHeadTags: "",
+            metaTags: [],
         },
     });
 
@@ -536,16 +538,6 @@ export default function AboutForm() {
                                         {watchSeoDescription ||
                                             "Page description will appear here..."}
                                     </p>
-                                    {watch("customHeadTags") && (
-                                        <div className="mt-2 pt-2 border-t border-gray-100">
-                                            <p className="text-xs font-semibold text-gray-500 mb-1">
-                                                Custom Head Tags:
-                                            </p>
-                                            <code className="block text-xs text-gray-600 bg-gray-50 p-2 rounded truncate font-mono">
-                                                {watch("customHeadTags")}
-                                            </code>
-                                        </div>
-                                    )}
                                 </div>
                             </div>
 
@@ -638,20 +630,17 @@ export default function AboutForm() {
                                     </div>
                                 </FormField>
 
-                                <FormField
-                                    id="customHeadTags"
-                                    label="Custom Head Tags"
-                                    helpText="Add custom meta tags, scripts, or link tags here. These will be injected into the <head> of the page."
-                                    error={errors.customHeadTags?.message}
-                                >
-                                    <textarea
-                                        id="customHeadTags"
-                                        {...register("customHeadTags")}
-                                        rows={5}
-                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono text-sm"
-                                        placeholder="<meta name='keywords' content='...' />"
-                                    />
-                                </FormField>
+                                <Controller
+                                    name="metaTags"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <MetaTagsInput
+                                            value={field.value || []}
+                                            onChange={field.onChange}
+                                            disabled={isSubmitting}
+                                        />
+                                    )}
+                                />
                             </div>
                         </div>
                     </div>

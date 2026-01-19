@@ -50,6 +50,9 @@ export interface IService extends Document, BaseSchemaFields {
   // Banner image
   bannerImage?: IServiceImage;
 
+  // Display image - used consistently on homepage and main services page
+  displayImage?: IServiceImage;
+
   // Services list (sub-services)
   servicesList: IServiceItem[];
 
@@ -112,6 +115,9 @@ const serviceSchema = new Schema<IService>(
 
     // Banner image
     bannerImage: imageSubSchema,
+
+    // Display image - used consistently on homepage and main services page
+    displayImage: imageSubSchema,
 
     // Services list (sub-services)
     servicesList: [

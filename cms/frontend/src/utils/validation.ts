@@ -64,12 +64,26 @@ export const urlSchema = z
     .or(z.literal(""));
 
 /**
+ * Schema for a single meta tag
+ */
+export const metaTagSchema = z.object({
+    name: z.string().min(1, "Name is required").max(100, "Name must be 100 characters or less"),
+    content: z.string().min(1, "Content is required").max(500, "Content must be 500 characters or less"),
+});
+
+/**
+ * Type for a single meta tag
+ */
+export type MetaTag = z.infer<typeof metaTagSchema>;
+
+/**
  * Schema for SEO fields with character limits.
  */
 export const seoSchema = z.object({
     seoTitle: z.string().optional().or(z.literal("")),
     seoDescription: z.string().optional().or(z.literal("")),
-    customHeadTags: z.string().optional().or(z.literal("")),
+    customHeadTags: z.string().optional().or(z.literal("")), // Kept for backward compatibility
+    metaTags: z.array(metaTagSchema).optional().default([]),
 });
 
 /**

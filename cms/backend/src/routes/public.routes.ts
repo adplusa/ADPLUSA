@@ -6,6 +6,8 @@ import { About } from "../database/schemas/about.schema";
 import { Contact } from "../database/schemas/contact.schema";
 import { FAQ } from "../database/schemas/faq.schema";
 import { getGeneralSettings } from "../controllers/generalSettings.controller";
+import { getMainServicePage } from "../controllers/mainServicePage.controller";
+import { getProjectsPage } from "../controllers/projectsPage.controller";
 
 const router = Router();
 
@@ -257,5 +259,19 @@ router.get("/faq", async (_req: Request, res: Response): Promise<void> => {
  * @access  Public
  */
 router.get("/general-settings", getGeneralSettings);
+
+/**
+ * @route   GET /api/public/main-service-page
+ * @desc    Get main service page content (singleton document)
+ * @access  Public
+ */
+router.get("/main-service-page", getMainServicePage);
+
+/**
+ * @route   GET /api/public/projects-page
+ * @desc    Get projects page content (singleton document)
+ * @access  Public
+ */
+router.get("/projects-page", getProjectsPage);
 
 export default router;

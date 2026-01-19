@@ -1439,6 +1439,7 @@ export default function HomeClient({ homepageData: initialData }) {
             {/* Page-specific scripts from CMS - rendered safely via Next.js Script */}
             <PageScripts
                 customHeadTags={homepageData?.customHeadTags}
+                metaTags={homepageData?.metaTags}
                 pageId="homepage"
             />
         </>

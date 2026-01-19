@@ -125,7 +125,7 @@ export default function FAQClient({ faqData }) {
 
             <Footer />
 
-            <PageScripts customHeadTags={faqData?.customHeadTags} pageId="faq" />
+            <PageScripts customHeadTags={faqData?.customHeadTags} metaTags={faqData?.metaTags} pageId="faq" />
         </>
     );
 }

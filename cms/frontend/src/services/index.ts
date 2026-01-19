@@ -15,3 +15,9 @@ export * from './content.service';
 
 // Export image services
 export * from './image.service';
+
+// Export main service page services
+export * from './mainServicePage.service';
+
+// Export projects page services
+export * from './projectsPage.service';

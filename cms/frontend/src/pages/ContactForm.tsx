@@ -45,12 +45,9 @@ const contactFields: FormField<Contact>[] = [
             "Description for search engines (recommended: 150-160 characters)",
     },
     {
-        name: "customHeadTags",
-        label: "Custom Head Tags",
-        type: "textarea",
-        placeholder: "<meta name='keywords' content='...' />",
-        helpText:
-            "Add custom meta tags, scripts, or link tags here. These will be injected into the <head> of the page.",
+        name: "metaTags",
+        label: "Meta Tags",
+        type: "metaTags",
     },
 ];
 

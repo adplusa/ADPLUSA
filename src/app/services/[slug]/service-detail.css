@@ -327,3 +327,112 @@ p {
     font-size: 1.1rem;
   }
 }
+
+/* Why Work With Us Section - Requirements: 4.1, 4.2 */
+.why-work-service-detail {
+  padding: 60px 7%;
+  background-color: #f9f9f9;
+}
+
+.why-work-service-detail-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.why-work-service-detail-text {
+  flex: 1;
+}
+
+.why-work-service-detail-text h2 {
+  font-size: 2.2rem;
+  margin-bottom: 30px;
+  color: #333;
+  font-family: Lato-Bold;
+}
+
+.why-work-service-detail-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.why-work-service-detail-feature svg {
+  color: #902b2c;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.why-work-service-detail-info h3 {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+  color: #333;
+  font-family: Lato-Bold;
+}
+
+.why-work-service-detail-info p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.5;
+  font-family: "Lato-regular";
+}
+
+.why-work-service-detail-image {
+  flex: 0 0 45%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.why-work-service-detail-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* Responsive styles for Why Work With Us section */
+@media (max-width: 992px) {
+  .why-work-service-detail-content {
+    flex-direction: column;
+  }
+
+  .why-work-service-detail-image {
+    flex: none;
+    width: 100%;
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .why-work-service-detail {
+    padding: 40px 5%;
+  }
+
+  .why-work-service-detail-text h2 {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+
+  .why-work-service-detail-feature {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .why-work-service-detail-feature svg {
+    margin-top: 0;
+  }
+
+  .why-work-service-detail-info h3 {
+    font-size: 1.1rem;
+  }
+
+  .why-work-service-detail-info p {
+    font-size: 0.95rem;
+  }
+}

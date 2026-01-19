@@ -8,6 +8,43 @@ import Link from "next/link";
 import "./project-detail.css";
 import PageScripts from "../../Components/PageScripts";
 
+/**
+ * MediaItem component - renders either an image or video based on media type
+ */
+function MediaItem({ media, index, className = "", width = 600, height = 400 }) {
+    const isVideo = media.type === 'video';
+
+    if (isVideo) {
+        return (
+            <div className={`media-item video-container ${className}`}>
+                <video
+                    src={media.url}
+                    poster={media.thumbnailUrl || undefined}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    className="gallery-video"
+                    style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+                >
+                    <source src={media.url} type={media.url?.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        );
+    }
+
+    return (
+        <Image
+            src={media.url}
+            alt={media.alt || `Project media ${index + 1}`}
+            width={width}
+            height={height}
+            unoptimized
+            className={className}
+        />
+    );
+}
+
 export default function ProjectClient({ project, otherProjects, slug }) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [showForm, setShowForm] = useState(false);
@@ -182,18 +219,37 @@ export default function ProjectClient({ project, otherProjects, slug }) {
             {project.imageGalleries?.map((gallery, galleryIdx) => (
                 <div key={galleryIdx} className="internal-section-two">
                     {gallery.images?.length > 0 && (
-                        <div className="internal-section-two-top-imgs">
-                            {gallery.images.map((img, idx) => <Image key={idx} src={img.url} alt={img.alt || `Project image ${idx + 1}`} width={600} height={400} unoptimized />)}
+                        <div className="internal-section-two-top-imgs media-gallery">
+                            {gallery.images.map((media, idx) => (
+                                <MediaItem
+                                    key={idx}
+                                    media={media}
+                                    index={idx}
+                                    className="gallery-item"
+                                />
+                            ))}
                         </div>
                     )}
                     {gallery.topImages?.length > 0 && (
-                        <div className="internal-section-two-top-imgs">
-                            {gallery.topImages.map((img, idx) => <Image key={idx} src={img.url} alt={img.alt || `Project image ${idx + 1}`} width={600} height={400} unoptimized />)}
+                        <div className="internal-section-two-top-imgs media-gallery">
+                            {gallery.topImages.map((media, idx) => (
+                                <MediaItem
+                                    key={idx}
+                                    media={media}
+                                    index={idx}
+                                    className="gallery-item"
+                                />
+                            ))}
                         </div>
                     )}
                     {gallery.bottomImage?.url && (
                         <div className="internal-section-two-bottom">
-                            <Image src={gallery.bottomImage.url} alt={gallery.bottomImage.alt || "Project image"} width={1200} height={600} unoptimized />
+                            <MediaItem
+                                media={gallery.bottomImage}
+                                index={0}
+                                width={1200}
+                                height={600}
+                            />
                         </div>
                     )}
                 </div>
@@ -201,8 +257,15 @@ export default function ProjectClient({ project, otherProjects, slug }) {
 
             {project.images?.length > 0 && !project.imageGalleries?.length && (
                 <div className="internal-section-two">
-                    <div className="internal-section-two-top-imgs">
-                        {project.images.map((img, idx) => <Image key={idx} src={img.url} alt={img.alt || `Project image ${idx + 1}`} width={600} height={400} unoptimized />)}
+                    <div className="internal-section-two-top-imgs media-gallery">
+                        {project.images.map((media, idx) => (
+                            <MediaItem
+                                key={idx}
+                                media={media}
+                                index={idx}
+                                className="gallery-item"
+                            />
+                        ))}
                     </div>
                 </div>
             )}
@@ -268,7 +331,7 @@ export default function ProjectClient({ project, otherProjects, slug }) {
                 </svg>
             </div>
 
-            <PageScripts customHeadTags={project?.customHeadTags} pageId={`project-${slug}`} />
+            <PageScripts customHeadTags={project?.customHeadTags} metaTags={project?.metaTags} pageId={`project-${slug}`} />
         </div>
     );
 }

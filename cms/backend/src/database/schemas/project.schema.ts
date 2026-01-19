@@ -2,13 +2,20 @@ import { Schema, model, Document } from 'mongoose';
 import { BaseSchemaFields, baseSchemaOptions, addSEOFields } from './base.schema';
 
 /**
- * Image interface for project images
+ * Media type for project gallery items
+ */
+export type ProjectMediaType = 'image' | 'video';
+
+/**
+ * Media interface for project images and videos
  */
 export interface IProjectImage {
   url: string;
   alt?: string;
   width?: number;
   height?: number;
+  type?: ProjectMediaType;
+  thumbnailUrl?: string; // For video thumbnails
 }
 
 /**
@@ -60,7 +67,7 @@ export interface IProject extends Document, BaseSchemaFields {
 }
 
 /**
- * Image sub-schema (reusable)
+ * Image/Video sub-schema (reusable for media items)
  */
 const imageSubSchema = {
   url: {
@@ -78,6 +85,15 @@ const imageSubSchema = {
   height: {
     type: Number,
     min: 0,
+  },
+  type: {
+    type: String,
+    enum: ['image', 'video'],
+    default: 'image',
+  },
+  thumbnailUrl: {
+    type: String,
+    trim: true,
   },
 };
 

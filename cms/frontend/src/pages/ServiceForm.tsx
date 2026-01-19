@@ -14,6 +14,7 @@ import {
     updateService,
     getServiceBySlug,
 } from "../services/service.service";
+import MetaTagsInput from "../components/MetaTagsInput";
 
 // Generate slug from title
 function generateSlug(title: string): string {
@@ -59,6 +60,7 @@ const serviceSchema = z
         description: z.string().optional(),
         content: z.string().optional(),
         bannerImage: serviceImageSchema.optional(),
+        displayImage: serviceImageSchema.optional(),
         servicesList: z.array(serviceItemSchema).optional(),
         keyActivities: z.array(keyActivitySchema).optional(),
         features: z.array(serviceFeatureSchema).optional(),
@@ -96,6 +98,7 @@ export default function ServiceForm() {
             seoTitle: "",
             seoDescription: "",
             customHeadTags: "",
+            metaTags: [],
         },
     });
 
@@ -375,6 +378,45 @@ export default function ServiceForm() {
                             />
                             <p className="mt-1 text-xs text-gray-500">
                                 Recommended size: 3780x1340px for best display
+                            </p>
+                        </div>
+
+                        {/* Display Image */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Display Image
+                            </label>
+                            <Controller
+                                name="displayImage"
+                                control={control}
+                                render={({ field: { onChange, value } }) => (
+                                    <ImageUploader
+                                        multiple={false}
+                                        initialImages={
+                                            value?.url
+                                                ? [
+                                                    {
+                                                        url: value.url,
+                                                        status: "success" as const,
+                                                    },
+                                                ]
+                                                : []
+                                        }
+                                        onUploadComplete={(images) => {
+                                            if (images.length > 0) {
+                                                onChange({
+                                                    url: images[0].url,
+                                                    alt: "Display",
+                                                });
+                                            } else {
+                                                onChange(undefined);
+                                            }
+                                        }}
+                                    />
+                                )}
+                            />
+                            <p className="mt-1 text-xs text-gray-500">
+                                This image is used on the homepage and main services page. Recommended size: 800x600px.
                             </p>
                         </div>
 
@@ -781,16 +823,6 @@ export default function ServiceForm() {
                                             watch("description") ||
                                             "Page description will appear here..."}
                                     </p>
-                                    {watch("customHeadTags") && (
-                                        <div className="mt-2 pt-2 border-t border-gray-100">
-                                            <p className="text-xs font-semibold text-gray-500 mb-1">
-                                                Custom Head Tags:
-                                            </p>
-                                            <code className="block text-xs text-gray-600 bg-gray-50 p-2 rounded truncate font-mono">
-                                                {watch("customHeadTags")}
-                                            </code>
-                                        </div>
-                                    )}
                                 </div>
                             </div>
 
@@ -883,20 +915,17 @@ export default function ServiceForm() {
                                     </div>
                                 </FormField>
 
-                                <FormField
-                                    id="customHeadTags"
-                                    label="Custom Head Tags"
-                                    helpText="Add custom meta tags, scripts, or link tags here. These will be injected into the <head> of the page."
-                                    error={errors.customHeadTags?.message}
-                                >
-                                    <textarea
-                                        id="customHeadTags"
-                                        {...register("customHeadTags")}
-                                        rows={5}
-                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono text-sm"
-                                        placeholder="<meta name='keywords' content='...' />"
-                                    />
-                                </FormField>
+                                <Controller
+                                    name="metaTags"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <MetaTagsInput
+                                            value={field.value || []}
+                                            onChange={field.onChange}
+                                            disabled={isSubmitting}
+                                        />
+                                    )}
+                                />
                             </div>
                         </div>
                     </div>

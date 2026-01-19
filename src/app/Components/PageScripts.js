@@ -1,17 +1,72 @@
 "use client";
 
 import Script from "next/script";
+import Head from "next/head";
 import { useMemo } from "react";
 
 /**
- * PageScripts - Safely renders custom scripts from CMS
+ * MetaTag interface for structured meta tags
+ * @typedef {Object} MetaTag
+ * @property {string} name - The meta tag name attribute
+ * @property {string} content - The meta tag content attribute
+ */
+
+/**
+ * Generates HTML meta tag string from a MetaTag object
+ * @param {MetaTag} metaTag - The meta tag object
+ * @returns {string} HTML meta tag string
+ */
+export function generateMetaTagHtml(metaTag) {
+    if (!metaTag || !metaTag.name || !metaTag.content) {
+        return '';
+    }
+    // Escape HTML special characters to prevent XSS
+    const escapedName = escapeHtml(metaTag.name);
+    const escapedContent = escapeHtml(metaTag.content);
+    return `<meta name="${escapedName}" content="${escapedContent}" />`;
+}
+
+/**
+ * Generates HTML string from an array of MetaTag objects
+ * @param {MetaTag[]} metaTags - Array of meta tag objects
+ * @returns {string} HTML string containing all meta tags
+ */
+export function generateMetaTagsHtml(metaTags) {
+    if (!Array.isArray(metaTags) || metaTags.length === 0) {
+        return '';
+    }
+    return metaTags
+        .filter(tag => tag && tag.name && tag.content)
+        .map(generateMetaTagHtml)
+        .join('\n');
+}
+
+/**
+ * Escapes HTML special characters to prevent XSS attacks
+ * @param {string} str - String to escape
+ * @returns {string} Escaped string
+ */
+function escapeHtml(str) {
+    if (typeof str !== 'string') return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+/**
+ * PageScripts - Safely renders custom scripts and meta tags from CMS
  * Uses Next.js Script component to avoid hydration issues
+ * Supports both legacy customHeadTags string and new metaTags array
  * 
  * @param {Object} props
- * @param {string} props.customHeadTags - Raw HTML string containing script tags
+ * @param {string} props.customHeadTags - Raw HTML string containing script tags (legacy)
+ * @param {MetaTag[]} props.metaTags - Array of structured meta tag objects
  * @param {string} props.pageId - Unique identifier for this page's scripts
  */
-export default function PageScripts({ customHeadTags, pageId = "page" }) {
+export default function PageScripts({ customHeadTags, metaTags, pageId = "page" }) {
     const { scripts, inlineScripts } = useMemo(() => {
         if (!customHeadTags) return { scripts: [], inlineScripts: [] };
         
@@ -37,13 +92,35 @@ export default function PageScripts({ customHeadTags, pageId = "page" }) {
         return { scripts, inlineScripts };
     }, [customHeadTags]);
 
-    if (!scripts.length && !inlineScripts.length) {
+    // Process structured metaTags array
+    const validMetaTags = useMemo(() => {
+        if (!Array.isArray(metaTags)) return [];
+        return metaTags.filter(tag => tag && tag.name && tag.content);
+    }, [metaTags]);
+
+    const hasScripts = scripts.length > 0 || inlineScripts.length > 0;
+    const hasMetaTags = validMetaTags.length > 0;
+
+    if (!hasScripts && !hasMetaTags) {
         return null;
     }
 
     return (
         <>
-            {/* External scripts */}
+            {/* Structured meta tags from metaTags array */}
+            {hasMetaTags && (
+                <Head>
+                    {validMetaTags.map((tag, index) => (
+                        <meta
+                            key={`${pageId}-meta-${index}`}
+                            name={tag.name}
+                            content={tag.content}
+                        />
+                    ))}
+                </Head>
+            )}
+
+            {/* External scripts from legacy customHeadTags */}
             {scripts.map((src, index) => (
                 <Script 
                     key={`${pageId}-script-${index}`}
@@ -52,7 +129,7 @@ export default function PageScripts({ customHeadTags, pageId = "page" }) {
                 />
             ))}
             
-            {/* Inline scripts */}
+            {/* Inline scripts from legacy customHeadTags */}
             {inlineScripts.map((content, index) => (
                 <Script 
                     key={`${pageId}-inline-${index}`}

@@ -12,6 +12,8 @@ import type {
     Contact,
     FAQ,
     GeneralSettings,
+    MainServicePage,
+    ProjectsPage,
     CMSResponse,
 } from "./cms-types";
 
@@ -232,6 +234,40 @@ export async function getFAQ(options?: FetchOptions): Promise<FAQ | null> {
     return fetchCMS<FAQ>("/faq", {
         ...options,
         tags: ["faq", ...(options?.tags || [])],
+    });
+}
+
+// ============================================================================
+// Main Service Page
+// ============================================================================
+
+/**
+ * Fetch main service page content (singleton document)
+ * Used for the /mainservice page
+ */
+export async function getMainServicePage(
+    options?: FetchOptions
+): Promise<MainServicePage | null> {
+    return fetchCMS<MainServicePage>("/main-service-page", {
+        ...options,
+        tags: ["main-service-page", ...(options?.tags || [])],
+    });
+}
+
+// ============================================================================
+// Projects Page
+// ============================================================================
+
+/**
+ * Fetch projects page content (singleton document)
+ * Used for the /projects listing page SEO and heading
+ */
+export async function getProjectsPage(
+    options?: FetchOptions
+): Promise<ProjectsPage | null> {
+    return fetchCMS<ProjectsPage>("/projects-page", {
+        ...options,
+        tags: ["projects-page", ...(options?.tags || [])],
     });
 }
 

@@ -8,7 +8,12 @@ import Link from "next/link";
 import "./service-detail.css";
 import PageScripts from "../../Components/PageScripts";
 
-export default function ServiceClient({ service, otherServices, slug }) {
+/**
+ * Service Detail Client Component
+ * Displays individual service details with Why Work With Us section
+ * Requirements: 4.1, 4.2 - Display Why Work With Us section before Explore More Services carousel
+ */
+export default function ServiceClient({ service, otherServices, slug, contactData }) {
     const [showForm, setShowForm] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
@@ -201,6 +206,47 @@ export default function ServiceClient({ service, otherServices, slug }) {
                 </div>
             )}
 
+            {/* Why Work With Us Section - Requirements: 4.1, 4.2 */}
+            {contactData?.whyWorkWithUsItems?.length > 0 && (
+                <section className="why-work-service-detail">
+                    <div className="why-work-service-detail-content">
+                        <div className="why-work-service-detail-text">
+                            <h2>{contactData?.whyWorkWithUsHeading || "Why Work With Us?"}</h2>
+                            {contactData.whyWorkWithUsItems.map((item, idx) => (
+                                <div key={idx} className="why-work-service-detail-feature">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="currentColor"
+                                        className="bi bi-check2"
+                                        viewBox="0 0 16 16"
+                                        width="24"
+                                        height="24"
+                                    >
+                                        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"></path>
+                                    </svg>
+                                    <div className="why-work-service-detail-info">
+                                        <h3>{item.title}</h3>
+                                        <p>{item.description}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {contactData?.rightImage?.url && (
+                            <div className="why-work-service-detail-image">
+                                <Image
+                                    src={contactData.rightImage.url}
+                                    alt={contactData.rightImage.alt || "Why Work With Us"}
+                                    width={500}
+                                    height={400}
+                                    unoptimized
+                                />
+                            </div>
+                        )}
+                    </div>
+                </section>
+            )}
+
             {otherServices.length > 0 && (
                 <div className="professionals-section-internals">
                     <h1 className="professionals-heading-internals">Explore More Services</h1>
@@ -268,7 +314,7 @@ export default function ServiceClient({ service, otherServices, slug }) {
                 </svg>
             </div>
 
-            <PageScripts customHeadTags={service?.customHeadTags} pageId={`service-${slug}`} />
+            <PageScripts customHeadTags={service?.customHeadTags} metaTags={service?.metaTags} pageId={`service-${slug}`} />
         </div>
     );
 }

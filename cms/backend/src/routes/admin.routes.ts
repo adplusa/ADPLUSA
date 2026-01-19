@@ -25,6 +25,8 @@ import {
 } from "../controllers/content.controller";
 import { updateGeneralSettings } from "../controllers/generalSettings.controller";
 import { updateHomepage } from "../controllers/homepage.controller";
+import { updateMainServicePage } from "../controllers/mainServicePage.controller";
+import { updateProjectsPage } from "../controllers/projectsPage.controller";
 
 const router = Router();
 
@@ -119,5 +121,19 @@ router.put("/homepage", updateHomepage);
  * @access  Protected (Admin)
  */
 router.put("/general-settings", updateGeneralSettings);
+
+/**
+ * @route   PUT /api/admin/main-service-page
+ * @desc    Update Main Service Page (singleton document)
+ * @access  Protected (Admin)
+ */
+router.put("/main-service-page", updateMainServicePage);
+
+/**
+ * @route   PUT /api/admin/projects-page
+ * @desc    Update Projects Page (singleton document)
+ * @access  Protected (Admin)
+ */
+router.put("/projects-page", updateProjectsPage);
 
 export default router;

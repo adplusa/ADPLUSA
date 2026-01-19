@@ -15,6 +15,8 @@ export interface UploadedImage {
     status?: "pending" | "uploading" | "success" | "error";
     error?: string;
     fileName?: string;
+    type?: "image" | "video";
+    thumbnailUrl?: string;
 }
 
 export interface UploadError {
@@ -64,6 +66,18 @@ const DEFAULT_ACCEPTED_TYPES = [
     "image/gif",
     "image/webp",
     "image/svg+xml",
+];
+
+// Video types for media upload
+export const VIDEO_ACCEPTED_TYPES = [
+    "video/mp4",
+    "video/webm",
+];
+
+// Combined media types (images + videos)
+export const MEDIA_ACCEPTED_TYPES = [
+    ...DEFAULT_ACCEPTED_TYPES,
+    ...VIDEO_ACCEPTED_TYPES,
 ];
 
 export default function ImageUploader({
@@ -121,17 +135,19 @@ export default function ImageUploader({
         (file: File): ValidationError | null => {
             // Check file type
             const isIco = file.name.toLowerCase().endsWith(".ico");
+            const isVideo = file.type.startsWith("video/");
             if (
                 !acceptedTypes.includes(file.type) &&
                 !file.type.startsWith("image/") &&
+                !isVideo &&
                 !isIco
             ) {
                 return {
                     file,
                     message: `${
                         file.name
-                    } is not a supported image type. Accepted types: ${acceptedTypes
-                        .map((t) => t.replace("image/", ""))
+                        } is not a supported file type. Accepted types: ${acceptedTypes
+                            .map((t) => t.replace("image/", "").replace("video/", ""))
                         .join(", ")}`,
                     code: "INVALID_TYPE",
                 };
@@ -231,6 +247,7 @@ export default function ImageUploader({
                     file,
                     status: "success",
                     fileName: file.name,
+                    type: file.type.startsWith("video/") ? "video" : "image",
                 };
 
                 // Update to success
@@ -437,6 +454,7 @@ export default function ImageUploader({
                     const item = items[i];
                     if (
                         !item.type.startsWith("image/") &&
+                        !item.type.startsWith("video/") &&
                         !item.type.includes("icon") &&
                         !item.type.includes("ico")
                     ) {
