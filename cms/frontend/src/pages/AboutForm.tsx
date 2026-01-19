@@ -14,8 +14,8 @@ import MetaTagsInput from "../components/MetaTagsInput";
 
 // Validation schemas
 const anchorLinkSchema = z.object({
-    label: z.string().optional(),
-    targetId: z.string().optional(),
+    label: z.string().optional().or(z.literal("")),
+    targetId: z.number().min(1, "Target ID must be a positive number").optional(),
 });
 
 const imageSchema = z
@@ -369,11 +369,24 @@ export default function AboutForm() {
                                         </div>
                                         <div className="flex-1">
                                             <input
-                                                type="text"
+                                                type="number"
+                                                min="1"
                                                 {...register(
-                                                    `anchorLinks.${index}.targetId` as const
+                                                    `anchorLinks.${index}.targetId` as const,
+                                                    { valueAsNumber: true }
                                                 )}
-                                                placeholder="Target ID (e.g., #section-1)"
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    const filteredValue = value.replace(/[^0-9]/g, ''); // Keep only digits
+
+                                                    if (filteredValue === '') {
+                                                        setValue(`anchorLinks.${index}.targetId`, undefined); // Allow empty state
+                                                    } else {
+                                                        const numericValue = Math.max(1, parseInt(filteredValue, 10)); // Ensure min 1
+                                                        setValue(`anchorLinks.${index}.targetId`, numericValue);
+                                                    }
+                                                }}
+                                                placeholder="Target ID (e.g., 1)"
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                                 aria-label={`Anchor link ${
                                                     index + 1

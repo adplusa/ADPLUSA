@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getProjects } from '../services/project.service';
+import type { Project } from '../services/project.service';
 import { getServices } from '../services/service.service';
 import { getTags } from '../services/tag.service';
 import { getMedia } from '../services/media.service';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import {
   FolderOpen,
@@ -34,6 +34,24 @@ interface RecentActivity {
   timestamp: string;
 }
 
+function getTimeAgo(dateString: string) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  
+  let interval = seconds / 31536000;
+  if (interval > 1) return Math.floor(interval) + " years ago";
+  interval = seconds / 2592000;
+  if (interval > 1) return Math.floor(interval) + " months ago";
+  interval = seconds / 86400;
+  if (interval > 1) return Math.floor(interval) + " days ago";
+  interval = seconds / 3600;
+  if (interval > 1) return Math.floor(interval) + " hours ago";
+  interval = seconds / 60;
+  if (interval > 1) return Math.floor(interval) + " minutes ago";
+  return "Just now";
+}
+
 export default function Dashboard() {
   const [stats, setStats] = useState<DashboardStats>({
     projects: 0,
@@ -43,59 +61,69 @@ export default function Dashboard() {
     loading: true,
   });
 
-  const [recentProjects, setRecentProjects] = useState<any[]>([]);
-  const [recentActivity] = useState<RecentActivity[]>([
-    {
-      id: '1',
-      type: 'project',
-      title: 'Modern Office Building',
-      action: 'created',
-      timestamp: '2 hours ago'
-    },
-    {
-      id: '2',
-      type: 'media',
-      title: 'office-render-01.jpg',
-      action: 'uploaded',
-      timestamp: '4 hours ago'
-    },
-    {
-      id: '3',
-      type: 'service',
-      title: '3D Visualization',
-      action: 'updated',
-      timestamp: '1 day ago'
-    },
-    {
-      id: '4',
-      type: 'tag',
-      title: 'Architecture',
-      action: 'created',
-      timestamp: '2 days ago'
-    }
-  ]);
+  const [recentProjects, setRecentProjects] = useState<Project[]>([]);
+  const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
+        // Fetch recent items from all categories to build stats and activity feed
         const [projectsRes, servicesRes, tagsRes, mediaRes] = await Promise.all([
-          getProjects({ limit: 1 }),
-          getServices(),
-          getTags({ limit: 1 }),
-          getMedia({ limit: 1 }),
+          getProjects({ page: 1, limit: 5 }),
+          getServices({ page: 1, limit: 5 }),
+          getTags({ page: 1, limit: 5 }),
+          getMedia({ page: 1, limit: 5 }),
         ]);
-
-        // Get recent projects for the recent items section
-        const recentProjectsRes = await getProjects({ limit: 5 });
-        setRecentProjects(recentProjectsRes.data);
 
         setStats({
           projects: projectsRes.pagination?.total || projectsRes.data.length,
-          services: servicesRes.data.length,
+          services: servicesRes.pagination?.total || servicesRes.data.length,
           tags: tagsRes.pagination?.total || tagsRes.data.length,
           media: mediaRes.pagination?.total || mediaRes.data.length,
           loading: false,
         });
+
+        setRecentProjects(projectsRes.data);
+
+        // Build dynamic activity feed
+        const activities: RecentActivity[] = [];
+
+        projectsRes.data.forEach((item: any) => activities.push({
+          id: item._id,
+          type: 'project',
+          title: item.title,
+          action: 'created',
+          timestamp: item.createdAt
+        }));
+
+        servicesRes.data.forEach((item: any) => activities.push({
+          id: item._id,
+          type: 'service',
+          title: item.title,
+          action: 'created',
+          timestamp: item.createdAt
+        }));
+
+        tagsRes.data.forEach((item: any) => activities.push({
+          id: item._id,
+          type: 'tag',
+          title: item.name,
+          action: 'created',
+          timestamp: item.createdAt
+        }));
+
+        mediaRes.data.forEach((item: any) => activities.push({
+          id: item._id,
+          type: 'media',
+          title: item.title || item.filename,
+          action: 'uploaded',
+          timestamp: item.createdAt
+        }));
+
+        // Sort by newest first and take top 5
+        const sortedActivities = activities.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 5);
+        setRecentActivity(sortedActivities.map(a => ({...a, timestamp: getTimeAgo(a.timestamp)})));
+
       } catch (error) {
         console.error('Failed to fetch dashboard stats:', error);
         setStats(prev => ({ ...prev, loading: false }));
@@ -146,9 +174,6 @@ export default function Dashboard() {
             <div className="text-2xl font-bold">
               {stats.loading ? '...' : stats.projects}
             </div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+12%</span> from last month
-            </p>
           </CardContent>
         </Card>
 
@@ -161,9 +186,6 @@ export default function Dashboard() {
             <div className="text-2xl font-bold">
               {stats.loading ? '...' : stats.services}
             </div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+5%</span> from last month
-            </p>
           </CardContent>
         </Card>
 
@@ -176,9 +198,6 @@ export default function Dashboard() {
             <div className="text-2xl font-bold">
               {stats.loading ? '...' : stats.media}
             </div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+23%</span> from last month
-            </p>
           </CardContent>
         </Card>
 
@@ -191,9 +210,6 @@ export default function Dashboard() {
             <div className="text-2xl font-bold">
               {stats.loading ? '...' : stats.tags}
             </div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+8%</span> from last month
-            </p>
           </CardContent>
         </Card>
       </div>
@@ -219,7 +235,17 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {recentProjects.length > 0 ? (
+              {stats.loading ? (
+                Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex items-center space-x-4 animate-pulse">
+                    <div className="h-10 w-10 rounded-lg bg-muted"></div>
+                    <div className="flex-1 space-y-2">
+                      <div className="h-4 w-1/3 bg-muted rounded"></div>
+                      <div className="h-3 w-1/2 bg-muted rounded"></div>
+                    </div>
+                  </div>
+                ))
+              ) : recentProjects.length > 0 ? (
                 recentProjects.map((project) => (
                   <div key={project._id} className="flex items-center space-x-4">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
@@ -230,19 +256,16 @@ export default function Dashboard() {
                         {project.title}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        {project.description?.substring(0, 60)}...
+                        {project.description 
+                          ? (project.description.length > 60 ? `${project.description.substring(0, 60)}...` : project.description)
+                          : 'No description'}
                       </p>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Badge variant="secondary">
-                        {project.status || 'Active'}
-                      </Badge>
-                      <Button variant="ghost" size="sm" asChild>
-                        <Link to={`/dashboard/projects/${project._id}/edit`}>
-                          Edit
-                        </Link>
-                      </Button>
-                    </div>
+                    <Button variant="ghost" size="sm" asChild>
+                      <Link to={`/dashboard/projects/${project._id}/edit`}>
+                        Edit
+                      </Link>
+                    </Button>
                   </div>
                 ))
               ) : (
@@ -258,7 +281,7 @@ export default function Dashboard() {
                       Create Project
                     </Link>
                   </Button>
-                  </div>
+                </div>
               )}
             </div>
           </CardContent>
@@ -274,7 +297,21 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {recentActivity.map((activity) => (
+              {stats.loading ? (
+                Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex items-center space-x-4 animate-pulse">
+                    <div className="h-8 w-8 rounded-full bg-muted"></div>
+                    <div className="flex-1 space-y-2">
+                      <div className="h-4 w-1/3 bg-muted rounded"></div>
+                      <div className="h-3 w-1/4 bg-muted rounded"></div>
+                    </div>
+                  </div>
+                ))
+              ) : recentActivity.length === 0 ? (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  No recent activity found.
+                </p>
+              ) : recentActivity.map((activity) => (
                 <div key={activity.id} className="flex items-center space-x-4">
                   <div className={`flex h-8 w-8 items-center justify-center rounded-full ${getActivityColor(activity.type)}`}>
                     {getActivityIcon(activity.type)}

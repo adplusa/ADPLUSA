@@ -45,6 +45,15 @@ export interface IContactImage {
 }
 
 /**
+ * Social Link interface
+ */
+export interface ISocialLink {
+  platform: string;
+  url: string;
+  isActive: boolean;
+}
+
+/**
  * Contact page document interface
  * Note: This is a singleton document (only one Contact page document should exist)
  */
@@ -76,6 +85,9 @@ export interface IContact extends Document, BaseSchemaFields {
 
   // Talk Ideas heading
   talkIdeasHeading?: string;
+
+  // Social Links
+  socialLinks?: ISocialLink[];
 
   // Legacy fields
   title: string;
@@ -225,6 +237,26 @@ const contactSchema = new Schema<IContact>(
       maxlength: [200, 'Talk ideas heading cannot exceed 200 characters'],
       default: "Let's Talk Ideas",
     },
+
+    // Social Links
+    socialLinks: [
+      {
+        platform: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+        url: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+        isActive: {
+          type: Boolean,
+          default: true,
+        },
+      },
+    ],
 
     // Legacy fields
     title: {

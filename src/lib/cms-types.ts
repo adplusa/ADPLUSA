@@ -1,6 +1,6 @@
 /**
  * CMS Types - TypeScript interfaces matching backend schemas
- * These types are used by the CMS client to provide type safety
+ * These types are used by the CMS client
  */
 
 // ============================================================================

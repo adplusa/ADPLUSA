@@ -30,8 +30,6 @@ import MediaEdit from "./pages/MediaEdit";
 import Settings from "./pages/Settings";
 import GeneralSettings from "./pages/GeneralSettings";
 import Homepage from "./pages/Homepage";
-import MainServicePageForm from "./pages/MainServicePageForm";
-import ProjectsPageForm from "./pages/ProjectsPageForm";
 import "./App.css";
 
 function App() {
@@ -61,14 +59,6 @@ function App() {
                         <Route
                             path="homepage/edit"
                             element={<HomepageForm />}
-                        />
-                        <Route
-                            path="main-service-page"
-                            element={<MainServicePageForm />}
-                        />
-                        <Route
-                            path="projects-page"
-                            element={<ProjectsPageForm />}
                         />
                         <Route path="about" element={<About />} />
                         <Route path="about/edit" element={<AboutForm />} />

@@ -66,15 +66,14 @@ const aboutSchema = new Schema<IAbout>(
     },
     anchorLinks: [
       {
-        label: {
-          type: String,
-          required: true,
-          trim: true,
+                label: {
+                      type: String,
+                      required: false,          trim: true,
           maxlength: [100, 'Anchor link label cannot exceed 100 characters'],
         },
         targetId: {
           type: String,
-          required: true,
+          required: false,
           trim: true,
           // Allow any string for flexibility with Sanity data
         },

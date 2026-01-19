@@ -18,7 +18,6 @@ const tagSchema = new Schema<ITag>({
   },
   slug: {
     type: String,
-    required: true,
     unique: true,
     lowercase: true,
   },
@@ -36,8 +35,8 @@ const tagSchema = new Schema<ITag>({
 });
 
 // Create slug from name before saving
-tagSchema.pre('save', function(next) {
-  if (this.isModified('name')) {
+tagSchema.pre('save', function (next) {
+  if (this.isModified('name') || this.isNew) {
     this.slug = this.name
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
