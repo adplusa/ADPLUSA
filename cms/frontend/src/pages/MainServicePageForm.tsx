@@ -15,7 +15,7 @@ import {
     getMainServicePage,
     updateMainServicePage,
 } from "../services/mainServicePage.service";
-import MetaTagsInput, { type MetaTag } from "../components/MetaTagsInput";
+import MetaTagsInput from "../components/MetaTagsInput";
 
 // --- Validation Schemas ---
 
@@ -196,8 +196,14 @@ export default function MainServicePageForm() {
             if (response.data) {
                 reset({
                     ...response.data,
-                    bannerImage: response.data.bannerImage || { url: "", alt: "" },
-                    whyWorkWithUsImage: response.data.whyWorkWithUsImage || { url: "", alt: "" },
+                    bannerImage: response.data.bannerImage || {
+                        url: "",
+                        alt: "",
+                    },
+                    whyWorkWithUsImage: response.data.whyWorkWithUsImage || {
+                        url: "",
+                        alt: "",
+                    },
                     whyWorkWithUsItems: response.data.whyWorkWithUsItems || [],
                     metaTags: response.data.metaTags || [],
                 });
@@ -335,7 +341,10 @@ export default function MainServicePageForm() {
                             />
                         </div>
 
-                        <FormField id="bannerImage.alt" label="Banner Image Alt Text">
+                        <FormField
+                            id="bannerImage.alt"
+                            label="Banner Image Alt Text"
+                        >
                             <Input
                                 id="bannerImage.alt"
                                 type="text"
@@ -510,7 +519,7 @@ export default function MainServicePageForm() {
                                                 <Input
                                                     type="text"
                                                     {...register(
-                                                        `whyWorkWithUsItems.${index}.icon` as const
+                                                        `whyWorkWithUsItems.${index}.icon` as const,
                                                     )}
                                                     placeholder="e.g., ✓ or fa-check"
                                                     className="w-full"
@@ -528,7 +537,7 @@ export default function MainServicePageForm() {
                                                 <Input
                                                     type="text"
                                                     {...register(
-                                                        `whyWorkWithUsItems.${index}.title` as const
+                                                        `whyWorkWithUsItems.${index}.title` as const,
                                                     )}
                                                     placeholder="Enter item title"
                                                     className="w-full"
@@ -545,7 +554,7 @@ export default function MainServicePageForm() {
                                             >
                                                 <textarea
                                                     {...register(
-                                                        `whyWorkWithUsItems.${index}.description` as const
+                                                        `whyWorkWithUsItems.${index}.description` as const,
                                                     )}
                                                     placeholder="Enter item description"
                                                     className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 min-h-[80px]"

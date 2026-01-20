@@ -50,7 +50,7 @@ export const slugSchema = z
     .min(1, "Slug is required")
     .regex(
         /^[a-z0-9-]+$/,
-        "Slug must contain only lowercase letters, numbers, and hyphens"
+        "Slug must contain only lowercase letters, numbers, and hyphens",
     );
 
 /**
@@ -67,8 +67,14 @@ export const urlSchema = z
  * Schema for a single meta tag
  */
 export const metaTagSchema = z.object({
-    name: z.string().min(1, "Name is required").max(100, "Name must be 100 characters or less"),
-    content: z.string().min(1, "Content is required").max(500, "Content must be 500 characters or less"),
+    name: z
+        .string()
+        .min(1, "Name is required")
+        .max(100, "Name must be 100 characters or less"),
+    content: z
+        .string()
+        .min(1, "Content is required")
+        .max(500, "Content must be 500 characters or less"),
 });
 
 /**
@@ -83,7 +89,7 @@ export const seoSchema = z.object({
     seoTitle: z.string().optional().or(z.literal("")),
     seoDescription: z.string().optional().or(z.literal("")),
     customHeadTags: z.string().optional().or(z.literal("")), // Kept for backward compatibility
-    metaTags: z.array(metaTagSchema).optional().default([]),
+    metaTags: z.array(metaTagSchema).default([]),
 });
 
 /**

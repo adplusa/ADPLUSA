@@ -47,7 +47,7 @@ export default function FAQForm() {
     const [activeTab, setActiveTab] = useState<string>("general");
 
     const form = useForm<FAQFormData>({
-        resolver: zodResolver(faqSchema),
+        resolver: zodResolver(faqSchema) as any,
         defaultValues: {
             title: "",
             categories: [],
@@ -70,17 +70,16 @@ export default function FAQForm() {
     const watchSeoTitle = watch("seoTitle");
     const watchSeoDescription = watch("seoDescription");
 
-    useEffect(() => {
-        loadFAQ();
-    }, []);
-
-    const loadFAQ = async () => {
+    const loadFAQ = useCallback(async () => {
         try {
             setLoading(true);
             setError(null);
             const response = await getFAQ();
             if (response.data) {
-                reset(response.data as FAQFormData);
+                reset({
+                    ...response.data,
+                    metaTags: (response.data as any).metaTags || [],
+                } as any);
             }
         } catch (err: any) {
             const errorMessage =
@@ -89,7 +88,11 @@ export default function FAQForm() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [reset]);
+
+    useEffect(() => {
+        loadFAQ();
+    }, [loadFAQ]);
 
     const onSubmit = useCallback(
         async (data: FAQFormData) => {
@@ -113,7 +116,7 @@ export default function FAQForm() {
                 setIsSubmitting(false);
             }
         },
-        [navigate]
+        [navigate],
     );
 
     const handleCancel = useCallback(() => {
@@ -169,7 +172,7 @@ export default function FAQForm() {
                 title="Edit FAQ"
                 subtitle="Manage frequently asked questions and categories"
                 isEditMode={true}
-                form={form}
+                form={form as any}
                 isSubmitting={isSubmitting}
                 isLoading={loading}
                 onSubmit={onSubmit}
@@ -212,11 +215,15 @@ export default function FAQForm() {
                 {activeTab === "categories" && (
                     <div className="space-y-6">
                         <div>
-                            <h3 className="text-lg font-medium text-gray-900 mb-4">FAQ Categories</h3>
+                            <h3 className="text-lg font-medium text-gray-900 mb-4">
+                                FAQ Categories
+                            </h3>
                             <p className="text-sm text-gray-500 mb-6">
-                                Organize your questions into categories. Each category can have multiple questions and answers.
+                                Organize your questions into categories. Each
+                                category can have multiple questions and
+                                answers.
                             </p>
-                            
+
                             <Controller
                                 name="categories"
                                 control={control}
@@ -287,9 +294,9 @@ export default function FAQForm() {
                                                 60
                                                     ? "bg-red-500"
                                                     : (watchSeoTitle?.length ||
-                                                          0) > 50
-                                                    ? "bg-green-500"
-                                                    : "bg-yellow-500"
+                                                            0) > 50
+                                                      ? "bg-green-500"
+                                                      : "bg-yellow-500"
                                             }`}
                                             style={{
                                                 width: `${Math.min(
@@ -297,7 +304,7 @@ export default function FAQForm() {
                                                         0) /
                                                         60) *
                                                         100,
-                                                    100
+                                                    100,
                                                 )}%`,
                                             }}
                                         />
@@ -332,9 +339,9 @@ export default function FAQForm() {
                                                     0) > 160
                                                     ? "bg-red-500"
                                                     : (watchSeoDescription?.length ||
-                                                          0) > 150
-                                                    ? "bg-green-500"
-                                                    : "bg-yellow-500"
+                                                            0) > 150
+                                                      ? "bg-green-500"
+                                                      : "bg-yellow-500"
                                             }`}
                                             style={{
                                                 width: `${Math.min(
@@ -342,7 +349,7 @@ export default function FAQForm() {
                                                         0) /
                                                         160) *
                                                         100,
-                                                    100
+                                                    100,
                                                 )}%`,
                                             }}
                                         />

@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { FormWrapper, FormField } from "../components/FormWrapper";
 import type { FormTab } from "../components/FormWrapper";
@@ -50,11 +49,7 @@ export default function ProjectsPageForm() {
         },
     });
 
-    const {
-        register,
-        control,
-        reset,
-    } = form;
+    const { register, control, reset } = form;
 
     // Load Projects Page Data
     const loadProjectsPage = useCallback(async () => {
@@ -144,7 +139,7 @@ export default function ProjectsPageForm() {
                 </div>
             )}
 
-            <FormWrapper
+            <FormWrapper<ProjectsPageFormData>
                 title="Edit Projects Page"
                 subtitle="Manage your projects listing page content and SEO settings"
                 isEditMode={true}
@@ -163,7 +158,7 @@ export default function ProjectsPageForm() {
                 {/* Content Tab */}
                 {activeTab === "content" && (
                     <div className="space-y-6">
-                        <FormField
+                        {/* <FormField
                             id="pageTitle"
                             label="Page Title"
                             helpText="The main title displayed on the projects page"
@@ -175,7 +170,7 @@ export default function ProjectsPageForm() {
                                 placeholder="Enter page title (e.g., Our Projects)"
                                 className="w-full"
                             />
-                        </FormField>
+                        </FormField> */}
 
                         <FormField
                             id="heading"
@@ -191,7 +186,7 @@ export default function ProjectsPageForm() {
                             />
                         </FormField>
 
-                        <FormField
+                        {/* <FormField
                             id="pageSubtitle"
                             label="Page Subtitle"
                             helpText="Optional subtitle or description for the page"
@@ -202,7 +197,7 @@ export default function ProjectsPageForm() {
                                 placeholder="Enter page subtitle or description"
                                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 min-h-[100px]"
                             />
-                        </FormField>
+                        </FormField> */}
                     </div>
                 )}
 

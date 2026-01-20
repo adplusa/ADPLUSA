@@ -30,6 +30,8 @@ import MediaEdit from "./pages/MediaEdit";
 import Settings from "./pages/Settings";
 import GeneralSettings from "./pages/GeneralSettings";
 import Homepage from "./pages/Homepage";
+import MainServicePageForm from "./pages/MainServicePageForm";
+import ProjectsPageForm from "./pages/ProjectsPageForm";
 import "./App.css";
 
 function App() {
@@ -74,6 +76,14 @@ function App() {
                         <Route
                             path="general-settings"
                             element={<GeneralSettings />}
+                        />
+                        <Route
+                            path="main-service-page"
+                            element={<MainServicePageForm />}
+                        />
+                        <Route
+                            path="projects-page"
+                            element={<ProjectsPageForm />}
                         />
                         <Route path="settings" element={<Settings />} />
                     </Route>

@@ -1,438 +1,433 @@
 h1 {
-  font-family: Lato-Bold;
+    font-family: Lato-Bold;
 }
 
 p {
-  font-family: "Lato-regular";
+    font-family: "Lato-regular";
 }
 
 .service-detail-container {
-  min-height: 100vh;
+    min-height: 100vh;
 }
 
 /* Banner Section */
 .service-banner {
-  width: 100%;
-  background-position: top right;
-  background-size: contain;
-  background-repeat: no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 80px;
-  color: white;
-  position: relative;
-  margin-top: 5%;
-  aspect-ratio: 15 / 6;
+    width: 100%;
+    background-position: top right;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 80px;
+    color: white;
+    position: relative;
+    margin-top: 5%;
+    aspect-ratio: 15 / 6;
 }
 
 /* Service Info Section */
 .service-info {
-  padding: 2% 0;
+    padding: 2% 0;
 }
 
 .services-into-df {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .service-info-df {
-  gap: 5%;
-  display: flex;
-  padding: 3% 7%;
-  margin-top: 2%;
-  justify-content: space-around;
+    gap: 5%;
+    display: flex;
+    padding: 3% 7%;
+    margin-top: 2%;
+    justify-content: space-around;
 }
 
 .service-left {
-  flex: 0 0 42%;
+    flex: 0 0 42%;
 }
 
 .service-left h1 {
-  font-size: 2.1rem;
-  margin-top: 7%;
+    font-size: 2.1rem;
+    margin-top: 7%;
 }
 
 .service-left h4 {
-  margin-top: 7%;
-  font-size: 18px;
+    margin-top: 7%;
+    font-size: 18px;
 }
 
 .service-left p {
-  margin-top: 4%;
-  line-height: 1.5;
+    margin-top: 4%;
+    line-height: 1.5;
 }
 
 .service-right img {
-  width: 600px;
-  height: auto;
+    width: 600px;
+    height: auto;
 }
 
 .service-link-container {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 .service-link-btn {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #902b2c;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #902b2c;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
 .service-link-btn:hover {
-  background-color: #7a2425;
+    background-color: #7a2425;
 }
 
 /* Key Activities Section */
 .key-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-  text-align: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
-    Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    text-align: center;
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+        Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
 .key-heading {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-  color: var(--foreground);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--foreground);
 }
 
 .key-subheading {
-  font-size: 1.25rem;
-  margin-bottom: 3rem;
-  font-weight: normal;
-  color: #333;
+    font-size: 1.25rem;
+    margin-bottom: 3rem;
+    font-weight: normal;
+    color: #333;
 }
 
 .key-cards-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-top: 3%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3%;
 }
 
 .key-card {
-  position: relative;
-  background-color: #fff9f9;
-  border: 1px solid #a35f5f;
-  border-radius: 10px;
-  padding: 10px;
-  text-align: left;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+    position: relative;
+    background-color: #fff9f9;
+    border: 1px solid #a35f5f;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: left;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .key-asterisk {
-  font-size: 2.5rem;
-  color: #d9b9b9;
-  margin-bottom: 1rem;
+    font-size: 2.5rem;
+    color: #d9b9b9;
+    margin-bottom: 1rem;
 }
 
 .key-card-title {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333;
 }
 
 .key-card-description {
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #555;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #555;
 }
 
 /* Carousel Styles */
 .professionals-section-internals {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 20px;
-  text-align: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
-    Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+        Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
 .professionals-heading-internals {
-  font-size: 2.5rem;
-  margin-bottom: 40px;
-  color: var(--foreground);
-  text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: var(--foreground);
+    text-align: center;
 }
 
 .carousel-container-internals {
-  position: relative;
-  width: 100%;
-  height: 300px;
-  overflow: hidden;
-  margin-bottom: 20px;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 20px;
 }
 
 .carousel-slides-internals {
-  display: flex;
-  transition: transform 0.5s ease;
+    display: flex;
+    transition: transform 0.5s ease;
 }
 
 .carousel-slide-internals {
-  min-width: 25%;
-  flex: 0 0 25%;
-  padding: 0 10px;
-  box-sizing: border-box;
+    min-width: 25%;
+    flex: 0 0 25%;
+    padding: 0 10px;
+    box-sizing: border-box;
 }
 
 .professional-card-internals {
-  padding: 0 10px;
-  background-color: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  height: 230px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .professional-card-internals:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
 .image-container-internals {
-  width: 100%;
-  height: auto;
-  overflow: hidden;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
 }
 
 .image-container-internals img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  transition: transform 0.3s ease;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
 .professional-card-internals:hover .image-container-internals img {
-  transform: scale(1.05);
+    transform: scale(1.05);
 }
 
 .professional-card-internals h3 {
-  padding: 20px 15px;
-  margin: 0;
-  font-size: 1.2rem;
-  color: #333;
-  text-align: center;
+    padding: 20px 15px;
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+    text-align: center;
+    flex-shrink: 0;
 }
 
 #redirection-service {
-  text-decoration: none;
-  color: inherit;
+    text-decoration: none;
+    color: inherit;
 }
 
 /* Responsive Styles */
 @media (max-width: 992px) {
-  .key-cards-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
+    .key-cards-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
-  .service-banner {
-    flex-direction: column;
-    padding: 40px 20px;
-    aspect-ratio: auto;
-    gap: 40px;
-    margin-top: 13%;
-  }
+    .service-banner {
+        flex-direction: column;
+        padding: 40px 20px;
+        aspect-ratio: auto;
+        gap: 40px;
+        margin-top: 13%;
+    }
 
-  .service-info-df {
-    flex-direction: column;
-    gap: 20px;
-    padding: 5% 5%;
-  }
+    .service-info-df {
+        flex-direction: column;
+        gap: 20px;
+        padding: 5% 5%;
+    }
 
-  .service-left {
-    width: 100%;
-    flex: none;
-    text-align: center;
-  }
+    .service-left {
+        width: 100%;
+        flex: none;
+        text-align: center;
+    }
 
-  .service-left h1 {
-    font-size: 1.8rem;
-  }
+    .service-left h1 {
+        font-size: 1.8rem;
+    }
 
-  .service-right img {
-    width: 100%;
-    max-width: 400px;
-    height: auto;
-  }
+    .service-right img {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+    }
 
-  .key-cards-container {
-    grid-template-columns: 1fr;
-    margin-top: 7%;
-  }
+    .key-cards-container {
+        grid-template-columns: 1fr;
+        margin-top: 7%;
+    }
 
-  .key-heading {
-    font-size: 2rem;
-  }
+    .key-heading {
+        font-size: 2rem;
+    }
 
-  .key-asterisk {
-    font-size: 1.5rem;
-  }
+    .key-asterisk {
+        font-size: 1.5rem;
+    }
 
-  .key-card {
-    height: auto !important;
-  }
+    .key-card {
+        height: auto !important;
+    }
 
-  .key-card p {
-    font-size: 12px;
-  }
+    .key-card p {
+        font-size: 12px;
+    }
 
-  .key-container {
-    margin-top: 8%;
-  }
+    .key-container {
+        margin-top: 8%;
+    }
 
-  .key-card h3 {
-    margin-bottom: 7px !important;
-  }
+    .key-card h3 {
+        margin-bottom: 7px !important;
+    }
 
-  .carousel-slide-internals {
-    min-width: 100%;
-    flex: 0 0 100%;
-  }
+    .carousel-slide-internals {
+        min-width: 100%;
+        flex: 0 0 100%;
+    }
 
-  .professionals-heading-internals {
-    font-size: 1.8rem;
-  }
+    .professionals-heading-internals {
+        font-size: 1.8rem;
+    }
 
-  .image-container-internals img {
-    border-top-right-radius: 15px;
-    border-top-left-radius: 15px;
-  }
+    .image-container-internals img {
+        border-top-right-radius: 15px;
+        border-top-left-radius: 15px;
+    }
 }
 
 @media screen and (max-width: 1024px) and (min-width: 769px) {
-  .carousel-slide-internals {
-    min-width: 33.333%;
-    flex: 0 0 33.333%;
-  }
+    .carousel-slide-internals {
+        min-width: 33.333%;
+        flex: 0 0 33.333%;
+    }
 }
 
 @media (max-width: 576px) {
-  .key-heading {
+    .key-heading {
+        font-size: 2rem;
+    }
+
+    .key-subheading {
+        font-size: 1.1rem;
+    }
+}
+
+/* Old Why Work With Us styles removed to prevent conflicts */
+
+/* Why Work With Us Section - Synced from Main Service Page */
+.why-work-main-service-page {
+    padding: 40px 5%;
+    font-family: "Geist", sans-serif;
+}
+
+.content-two-main-service-page {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5%;
+}
+
+.text-main-service-page {
+    flex: 1 1 300px;
+}
+
+.text-main-service-page h2 {
     font-size: 2rem;
-  }
-
-  .key-subheading {
-    font-size: 1.1rem;
-  }
+    color: var(--foreGround, #333);
+    margin-bottom: 40px;
 }
 
-/* Why Work With Us Section - Requirements: 4.1, 4.2 */
-.why-work-service-detail {
-  padding: 60px 7%;
-  background-color: #f9f9f9;
+.feature-main-service-page {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #f0d8d2;
 }
 
-.why-work-service-detail-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 40px;
-  max-width: 1200px;
-  margin: 0 auto;
+.info-main-service-page h3 {
+    font-size: 20px;
+    color: var(--foreGround, #333);
+    margin-bottom: 10px;
 }
 
-.why-work-service-detail-text {
-  flex: 1;
+.info-main-service-page p {
+    font-size: 14px;
+    color: var(--foreGround, #555);
+    line-height: 1.5;
 }
 
-.why-work-service-detail-text h2 {
-  font-size: 2.2rem;
-  margin-bottom: 30px;
-  color: #333;
-  font-family: Lato-Bold;
+.image-wrapper-main-service-page {
+    position: relative;
+    flex: 1 1 100px;
+    margin-left: 10%;
+    margin-top: -5%;
 }
 
-.why-work-service-detail-feature {
-  display: flex;
-  align-items: flex-start;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.why-work-service-detail-feature svg {
-  color: #902b2c;
-  flex-shrink: 0;
-  margin-top: 4px;
-}
-
-.why-work-service-detail-info h3 {
-  font-size: 1.2rem;
-  margin-bottom: 5px;
-  color: #333;
-  font-family: Lato-Bold;
-}
-
-.why-work-service-detail-info p {
-  font-size: 1rem;
-  color: #666;
-  line-height: 1.5;
-  font-family: "Lato-regular";
-}
-
-.why-work-service-detail-image {
-  flex: 0 0 45%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.why-work-service-detail-image img {
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-  object-fit: cover;
-}
-
-/* Responsive styles for Why Work With Us section */
-@media (max-width: 992px) {
-  .why-work-service-detail-content {
-    flex-direction: column;
-  }
-
-  .why-work-service-detail-image {
-    flex: none;
+.image-wrapper-main-service-page img {
     width: 100%;
-    margin-top: 30px;
-  }
+    height: auto;
+    object-fit: contain;
 }
 
 @media (max-width: 768px) {
-  .why-work-service-detail {
-    padding: 40px 5%;
-  }
+    .content-two-main-service-page {
+        flex-direction: column-reverse;
+    }
 
-  .why-work-service-detail-text h2 {
-    font-size: 1.8rem;
-    text-align: center;
-  }
+    .text-main-service-page h2 {
+        font-size: 1.4rem;
+        text-align: center;
+        margin-bottom: 10px;
+    }
 
-  .why-work-service-detail-feature {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
+    .feature-main-service-page {
+        gap: 10px;
+        padding: 9px 11px;
+    }
 
-  .why-work-service-detail-feature svg {
-    margin-top: 0;
-  }
+    .info-main-service-page h3 {
+        font-size: 15px !important;
+    }
 
-  .why-work-service-detail-info h3 {
-    font-size: 1.1rem;
-  }
+    .info-main-service-page p {
+        font-size: 12px;
+    }
 
-  .why-work-service-detail-info p {
-    font-size: 0.95rem;
-  }
+    .image-wrapper-main-service-page {
+        margin: 0;
+        margin-top: 15%;
+    }
+
+    .image-wrapper-main-service-page img {
+        width: 250px;
+        height: 300px;
+    }
 }
