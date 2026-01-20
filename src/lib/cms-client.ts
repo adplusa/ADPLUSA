@@ -12,6 +12,8 @@ import type {
     Contact,
     FAQ,
     GeneralSettings,
+    MainServicePage,
+    ProjectsPage,
     CMSResponse,
 } from "./cms-types";
 
@@ -48,7 +50,7 @@ interface FetchOptions {
  */
 async function fetchCMS<T>(
     endpoint: string,
-    options: FetchOptions = {}
+    options: FetchOptions = {},
 ): Promise<T | null> {
     const { revalidate = DEFAULT_REVALIDATE, tags } = options;
 
@@ -80,7 +82,7 @@ async function fetchCMS<T>(
 
         if (!response.ok) {
             console.error(
-                `CMS fetch failed: ${endpoint} - Status: ${response.status}`
+                `CMS fetch failed: ${endpoint} - Status: ${response.status}`,
             );
             return null;
         }
@@ -107,7 +109,7 @@ async function fetchCMS<T>(
  * Fetch homepage content (singleton document)
  */
 export async function getHomepage(
-    options?: FetchOptions
+    options?: FetchOptions,
 ): Promise<Homepage | null> {
     return fetchCMS<Homepage>("/homepage", {
         ...options,
@@ -123,7 +125,7 @@ export async function getHomepage(
  * Fetch all projects sorted by order
  */
 export async function getProjects(
-    options?: FetchOptions
+    options?: FetchOptions,
 ): Promise<Project[] | null> {
     return fetchCMS<Project[]>("/projects", {
         ...options,
@@ -136,7 +138,7 @@ export async function getProjects(
  */
 export async function getProject(
     slug: string,
-    options?: FetchOptions
+    options?: FetchOptions,
 ): Promise<Project | null> {
     if (!slug) {
         console.error("getProject: slug is required");
@@ -145,6 +147,19 @@ export async function getProject(
     return fetchCMS<Project>(`/projects/${encodeURIComponent(slug)}`, {
         ...options,
         tags: ["projects", `project-${slug}`, ...(options?.tags || [])],
+    });
+}
+
+/**
+ * Fetch only featured projects
+ * Used for carousels and featured project sections
+ */
+export async function getFeaturedProjects(
+    options?: FetchOptions,
+): Promise<Project[] | null> {
+    return fetchCMS<Project[]>("/projects?featured=true", {
+        ...options,
+        tags: ["projects", "featured-projects", ...(options?.tags || [])],
     });
 }
 
@@ -165,7 +180,7 @@ export async function getProjectSlugs(): Promise<string[]> {
  * Fetch all services sorted by order
  */
 export async function getServices(
-    options?: FetchOptions
+    options?: FetchOptions,
 ): Promise<Service[] | null> {
     return fetchCMS<Service[]>("/services", {
         ...options,
@@ -178,7 +193,7 @@ export async function getServices(
  */
 export async function getService(
     slug: string,
-    options?: FetchOptions
+    options?: FetchOptions,
 ): Promise<Service | null> {
     if (!slug) {
         console.error("getService: slug is required");
@@ -217,7 +232,7 @@ export async function getAbout(options?: FetchOptions): Promise<About | null> {
  * Fetch contact page content (singleton document)
  */
 export async function getContact(
-    options?: FetchOptions
+    options?: FetchOptions,
 ): Promise<Contact | null> {
     return fetchCMS<Contact>("/contact", {
         ...options,
@@ -232,6 +247,40 @@ export async function getFAQ(options?: FetchOptions): Promise<FAQ | null> {
     return fetchCMS<FAQ>("/faq", {
         ...options,
         tags: ["faq", ...(options?.tags || [])],
+    });
+}
+
+// ============================================================================
+// Main Service Page
+// ============================================================================
+
+/**
+ * Fetch main service page content (singleton document)
+ * Used for the /mainservice page
+ */
+export async function getMainServicePage(
+    options?: FetchOptions,
+): Promise<MainServicePage | null> {
+    return fetchCMS<MainServicePage>("/main-service-page", {
+        ...options,
+        tags: ["main-service-page", ...(options?.tags || [])],
+    });
+}
+
+// ============================================================================
+// Projects Page
+// ============================================================================
+
+/**
+ * Fetch projects page content (singleton document)
+ * Used for the /projects listing page SEO and heading
+ */
+export async function getProjectsPage(
+    options?: FetchOptions,
+): Promise<ProjectsPage | null> {
+    return fetchCMS<ProjectsPage>("/projects-page", {
+        ...options,
+        tags: ["projects-page", ...(options?.tags || [])],
     });
 }
 
@@ -264,7 +313,7 @@ export async function checkCMSHealth(): Promise<boolean> {
  * @returns GeneralSettings data or null if not found/error
  */
 export async function getGeneralSettings(
-    options?: FetchOptions
+    options?: FetchOptions,
 ): Promise<GeneralSettings | null> {
     return fetchCMS<GeneralSettings>("/general-settings", {
         ...options,

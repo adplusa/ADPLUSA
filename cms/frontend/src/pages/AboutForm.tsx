@@ -10,11 +10,15 @@ import type { FormTab } from "../components/FormWrapper";
 import { seoSchema } from "../utils/validation";
 import { getAbout, updateAbout } from "../services/content.service";
 import PreviewModal from "../components/PreviewModal";
+import MetaTagsInput from "../components/MetaTagsInput";
 
 // Validation schemas
 const anchorLinkSchema = z.object({
     label: z.string().optional().or(z.literal("")),
-    targetId: z.number().min(1, "Target ID must be a positive number").optional(),
+    targetId: z
+        .number()
+        .min(1, "Target ID must be a positive number")
+        .optional(),
 });
 
 const imageSchema = z
@@ -69,7 +73,7 @@ export default function AboutForm() {
     const [activeTab, setActiveTab] = useState<string>("headings");
 
     const form = useForm<AboutFormData>({
-        resolver: zodResolver(aboutSchema),
+        resolver: zodResolver(aboutSchema) as any,
         defaultValues: {
             allowLightHeading: "",
             allowUsHeading: "",
@@ -80,6 +84,7 @@ export default function AboutForm() {
             seoTitle: "",
             seoDescription: "",
             customHeadTags: "",
+            metaTags: [],
         },
     });
 
@@ -89,6 +94,7 @@ export default function AboutForm() {
         reset,
         watch,
         getValues,
+        setValue,
         formState: { errors },
     } = form;
 
@@ -113,17 +119,16 @@ export default function AboutForm() {
     const watchSeoTitle = watch("seoTitle");
     const watchSeoDescription = watch("seoDescription");
 
-    useEffect(() => {
-        loadAbout();
-    }, []);
-
-    const loadAbout = async () => {
+    const loadAbout = useCallback(async () => {
         try {
             setLoading(true);
             setError(null);
             const response = await getAbout();
             if (response.data) {
-                reset(response.data as AboutFormData);
+                reset({
+                    ...response.data,
+                    metaTags: (response.data as any).metaTags || [],
+                } as any);
             }
         } catch (err: any) {
             const errorMessage =
@@ -133,7 +138,11 @@ export default function AboutForm() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [reset]);
+
+    useEffect(() => {
+        loadAbout();
+    }, [loadAbout]);
 
     const onSubmit = useCallback(
         async (data: AboutFormData) => {
@@ -158,7 +167,7 @@ export default function AboutForm() {
                 setIsSubmitting(false);
             }
         },
-        [navigate]
+        [navigate],
     );
 
     const handleCancel = useCallback(() => {
@@ -217,11 +226,11 @@ export default function AboutForm() {
                 </div>
             )}
 
-            <FormWrapper
+            <FormWrapper<AboutFormData>
                 title="Edit About Page"
                 subtitle="Manage your about page content and sections"
                 isEditMode={true}
-                form={form}
+                form={form as any}
                 isSubmitting={isSubmitting}
                 isLoading={loading}
                 onSubmit={onSubmit}
@@ -330,7 +339,10 @@ export default function AboutForm() {
                             <button
                                 type="button"
                                 onClick={() =>
-                                    appendAnchor({ label: "", targetId: "" })
+                                    appendAnchor({
+                                        label: "",
+                                        targetId: undefined,
+                                    })
                                 }
                                 className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
                             >
@@ -356,7 +368,7 @@ export default function AboutForm() {
                                             <input
                                                 type="text"
                                                 {...register(
-                                                    `anchorLinks.${index}.label` as const
+                                                    `anchorLinks.${index}.label` as const,
                                                 )}
                                                 placeholder="Link label"
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -371,17 +383,35 @@ export default function AboutForm() {
                                                 min="1"
                                                 {...register(
                                                     `anchorLinks.${index}.targetId` as const,
-                                                    { valueAsNumber: true }
+                                                    { valueAsNumber: true },
                                                 )}
                                                 onChange={(e) => {
-                                                    const value = e.target.value;
-                                                    const filteredValue = value.replace(/[^0-9]/g, ''); // Keep only digits
+                                                    const value =
+                                                        e.target.value;
+                                                    const filteredValue =
+                                                        value.replace(
+                                                            /[^0-9]/g,
+                                                            "",
+                                                        ); // Keep only digits
 
-                                                    if (filteredValue === '') {
-                                                        setValue(`anchorLinks.${index}.targetId`, undefined); // Allow empty state
+                                                    if (filteredValue === "") {
+                                                        setValue(
+                                                            `anchorLinks.${index}.targetId`,
+                                                            undefined,
+                                                        ); // Allow empty state
                                                     } else {
-                                                        const numericValue = Math.max(1, parseInt(filteredValue, 10)); // Ensure min 1
-                                                        setValue(`anchorLinks.${index}.targetId`, numericValue);
+                                                        const numericValue =
+                                                            Math.max(
+                                                                1,
+                                                                parseInt(
+                                                                    filteredValue,
+                                                                    10,
+                                                                ),
+                                                            ); // Ensure min 1
+                                                        setValue(
+                                                            `anchorLinks.${index}.targetId`,
+                                                            numericValue,
+                                                        );
                                                     }
                                                 }}
                                                 placeholder="Target ID (e.g., 1)"
@@ -481,7 +511,7 @@ export default function AboutForm() {
                                                     id={`sections.${index}.sectionId`}
                                                     type="text"
                                                     {...register(
-                                                        `sections.${index}.sectionId` as const
+                                                        `sections.${index}.sectionId` as const,
                                                     )}
                                                     placeholder="section-id"
                                                     className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors font-mono text-sm"
@@ -496,7 +526,7 @@ export default function AboutForm() {
                                                     id={`sections.${index}.title`}
                                                     type="text"
                                                     {...register(
-                                                        `sections.${index}.title` as const
+                                                        `sections.${index}.title` as const,
                                                     )}
                                                     placeholder="Section title"
                                                     className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
@@ -511,7 +541,7 @@ export default function AboutForm() {
                                                     id={`sections.${index}.body`}
                                                     rows={4}
                                                     {...register(
-                                                        `sections.${index}.body` as const
+                                                        `sections.${index}.body` as const,
                                                     )}
                                                     placeholder="Section content"
                                                     className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
@@ -549,16 +579,6 @@ export default function AboutForm() {
                                         {watchSeoDescription ||
                                             "Page description will appear here..."}
                                     </p>
-                                    {watch("customHeadTags") && (
-                                        <div className="mt-2 pt-2 border-t border-gray-100">
-                                            <p className="text-xs font-semibold text-gray-500 mb-1">
-                                                Custom Head Tags:
-                                            </p>
-                                            <code className="block text-xs text-gray-600 bg-gray-50 p-2 rounded truncate font-mono">
-                                                {watch("customHeadTags")}
-                                            </code>
-                                        </div>
-                                    )}
                                 </div>
                             </div>
 
@@ -589,9 +609,9 @@ export default function AboutForm() {
                                                 60
                                                     ? "bg-red-500"
                                                     : (watchSeoTitle?.length ||
-                                                          0) > 50
-                                                    ? "bg-green-500"
-                                                    : "bg-yellow-500"
+                                                            0) > 50
+                                                      ? "bg-green-500"
+                                                      : "bg-yellow-500"
                                             }`}
                                             style={{
                                                 width: `${Math.min(
@@ -599,7 +619,7 @@ export default function AboutForm() {
                                                         0) /
                                                         60) *
                                                         100,
-                                                    100
+                                                    100,
                                                 )}%`,
                                             }}
                                         />
@@ -634,9 +654,9 @@ export default function AboutForm() {
                                                     0) > 160
                                                     ? "bg-red-500"
                                                     : (watchSeoDescription?.length ||
-                                                          0) > 150
-                                                    ? "bg-green-500"
-                                                    : "bg-yellow-500"
+                                                            0) > 150
+                                                      ? "bg-green-500"
+                                                      : "bg-yellow-500"
                                             }`}
                                             style={{
                                                 width: `${Math.min(
@@ -644,27 +664,24 @@ export default function AboutForm() {
                                                         0) /
                                                         160) *
                                                         100,
-                                                    100
+                                                    100,
                                                 )}%`,
                                             }}
                                         />
                                     </div>
                                 </FormField>
 
-                                <FormField
-                                    id="customHeadTags"
-                                    label="Custom Head Tags"
-                                    helpText="Add custom meta tags, scripts, or link tags here. These will be injected into the <head> of the page."
-                                    error={errors.customHeadTags?.message}
-                                >
-                                    <textarea
-                                        id="customHeadTags"
-                                        {...register("customHeadTags")}
-                                        rows={5}
-                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono text-sm"
-                                        placeholder="<meta name='keywords' content='...' />"
-                                    />
-                                </FormField>
+                                <Controller
+                                    name="metaTags"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <MetaTagsInput
+                                            value={field.value || []}
+                                            onChange={field.onChange}
+                                            disabled={isSubmitting}
+                                        />
+                                    )}
+                                />
                             </div>
                         </div>
                     </div>

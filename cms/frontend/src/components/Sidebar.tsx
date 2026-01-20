@@ -14,6 +14,9 @@ import {
   Image,
   X,
   Settings,
+  Globe,
+  Layers,
+  FileText,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -33,6 +36,10 @@ const contentNavigation = [
 ];
 
 const pagesNavigation = [
+  { name: 'General Settings', href: '/dashboard/general-settings', icon: Globe },
+  { name: 'Homepage', href: '/dashboard/homepage', icon: Home },
+  { name: 'Main Service Page', href: '/dashboard/main-service-page', icon: Layers },
+  { name: 'Projects Page', href: '/dashboard/projects-page', icon: FileText },
   { name: 'About', href: '/dashboard/about', icon: Info },
   { name: 'Contact', href: '/dashboard/contact', icon: Phone },
   { name: 'FAQ', href: '/dashboard/faq', icon: HelpCircle },

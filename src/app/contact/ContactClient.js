@@ -276,7 +276,7 @@ export default function ContactClient({ data }) {
                 </svg>
             </div>
 
-            <PageScripts customHeadTags={data?.customHeadTags} pageId="contact" />
+            <PageScripts customHeadTags={data?.customHeadTags} metaTags={data?.metaTags} pageId="contact" />
         </>
     );
 }

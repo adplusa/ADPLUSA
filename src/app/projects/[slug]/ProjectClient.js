@@ -8,9 +8,68 @@ import Link from "next/link";
 import "./project-detail.css";
 import PageScripts from "../../Components/PageScripts";
 
+/**
+ * MediaItem component - renders either an image or video based on media type
+ */
+function MediaItem({
+    media,
+    index,
+    className = "",
+    width = 600,
+    height = 400,
+}) {
+    // Detect if the media is a video based on type field or file extension
+    const isVideo =
+        media.type === "video" || media.url?.match(/\.(mp4|webm|ogg|mov)$/i);
+
+    if (isVideo) {
+        return (
+            <div className={`media-item video-container ${className}`}>
+                <video
+                    src={media.url}
+                    poster={media.thumbnailUrl || undefined}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="metadata"
+                    className="gallery-video"
+                >
+                    <source
+                        src={media.url}
+                        type={
+                            media.url?.endsWith(".webm")
+                                ? "video/webm"
+                                : "video/mp4"
+                        }
+                    />
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        );
+    }
+
+    return (
+        <Image
+            src={media.url}
+            alt={media.alt || `Project media ${index + 1}`}
+            width={width}
+            height={height}
+            unoptimized
+            className={className}
+        />
+    );
+}
+
 export default function ProjectClient({ project, otherProjects, slug }) {
-    const [isExpanded, setIsExpanded] = useState(false);
+    // Only show featured projects in the carousel (similar to /projects page)
+    const featuredOtherProjects = (otherProjects || []).filter(
+        (p) => p.featured === true,
+    );
+
+    const [currentSection, setCurrentSection] = useState(null);
     const [showForm, setShowForm] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
@@ -28,11 +87,15 @@ export default function ProjectClient({ project, otherProjects, slug }) {
 
     const upwardHandler = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
-    const totalSlides = otherProjects.length || 1;
-    const slidesToShow = otherProjects.length > 0 ? [...otherProjects, ...otherProjects] : [];
+    const totalSlides = featuredOtherProjects.length || 1;
+    const slidesToShow =
+        featuredOtherProjects.length > 0
+            ? [...featuredOtherProjects, ...featuredOtherProjects]
+            : [];
 
     const nextSlide = useCallback(() => {
-        if (!isTransitioning && !isDragging) setCurrentIndex((prev) => prev + 1);
+        if (!isTransitioning && !isDragging)
+            setCurrentIndex((prev) => prev + 1);
     }, [isTransitioning, isDragging]);
 
     const startAutoPlay = useCallback(() => {
@@ -41,13 +104,16 @@ export default function ProjectClient({ project, otherProjects, slug }) {
     }, [nextSlide]);
 
     const stopAutoPlay = useCallback(() => {
-        if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
     }, []);
 
     useEffect(() => {
-        if (otherProjects.length > 0 && !isDragging) startAutoPlay();
+        if (featuredOtherProjects.length > 0 && !isDragging) startAutoPlay();
         return () => stopAutoPlay();
-    }, [otherProjects, startAutoPlay, stopAutoPlay, isDragging]);
+    }, [featuredOtherProjects, startAutoPlay, stopAutoPlay, isDragging]);
 
     useEffect(() => {
         if (currentIndex >= totalSlides && totalSlides > 0) {
@@ -59,63 +125,92 @@ export default function ProjectClient({ project, otherProjects, slug }) {
                     setCurrentIndex(0);
                     requestAnimationFrame(() => {
                         if (slideRef.current) {
-                            slideRef.current.style.transition = "transform 0.5s ease-in-out";
+                            slideRef.current.style.transition =
+                                "transform 0.5s ease-in-out";
                             setIsTransitioning(false);
                             if (!isDragging) startAutoPlay();
                         }
                     });
                 }
             }, 500);
-            return () => { clearTimeout(timer); setIsTransitioning(false); };
+            return () => {
+                clearTimeout(timer);
+                setIsTransitioning(false);
+            };
         }
     }, [currentIndex, totalSlides, stopAutoPlay, startAutoPlay, isDragging]);
 
-    const getPositionX = (e) => e.type.includes("mouse") ? e.clientX : e.touches[0].clientX;
+    const getPositionX = (e) =>
+        e.type.includes("mouse") ? e.clientX : e.touches[0].clientX;
 
     const handleDragStart = (e) => {
         if (e.type === "mousedown") e.preventDefault();
         setIsDragging(true);
         stopAutoPlay();
         setStartX(getPositionX(e));
-        if (slideRef.current) { slideRef.current.style.transition = "none"; slideRef.current.style.cursor = "grabbing"; }
+        if (slideRef.current) {
+            slideRef.current.style.transition = "none";
+            slideRef.current.style.cursor = "grabbing";
+        }
     };
 
-    const handleDragMove = useCallback((e) => {
-        if (!isDragging || !slideRef.current) return;
-        e.preventDefault();
-        const diff = getPositionX(e) - startX;
-        const slideWidth = isMobile ? 100 : 25;
-        const currentTransform = -currentIndex * slideWidth;
-        const dragOffset = (diff / slideRef.current.offsetWidth) * slideWidth;
-        slideRef.current.style.transform = `translateX(${currentTransform + dragOffset}%)`;
-    }, [isDragging, startX, currentIndex, isMobile]);
+    const handleDragMove = useCallback(
+        (e) => {
+            if (!isDragging || !slideRef.current) return;
+            e.preventDefault();
+            const diff = getPositionX(e) - startX;
+            const slideWidth = isMobile ? 100 : 25;
+            const currentTransform = -currentIndex * slideWidth;
+            const dragOffset =
+                (diff / slideRef.current.offsetWidth) * slideWidth;
+            slideRef.current.style.transform = `translateX(${currentTransform + dragOffset}%)`;
+        },
+        [isDragging, startX, currentIndex, isMobile],
+    );
 
     const handleDragEnd = useCallback(() => {
         if (!isDragging || !slideRef.current) return;
         setIsDragging(false);
         const transform = slideRef.current.style.transform;
         const currentTransform = transform.match(/-?\d+\.?\d*/);
-        const currentPos = currentTransform ? parseFloat(currentTransform[0]) : 0;
+        const currentPos = currentTransform
+            ? parseFloat(currentTransform[0])
+            : 0;
         const expectedPos = -currentIndex * (isMobile ? 100 : 25);
         const dragDistance = currentPos - expectedPos;
         let newIndex = currentIndex;
         if (Math.abs(dragDistance) > (isMobile ? 20 : 5)) {
-            if (dragDistance > 0 && currentIndex > 0) newIndex = currentIndex - 1;
-            else if (dragDistance < 0 && currentIndex < totalSlides - 1) newIndex = currentIndex + 1;
+            if (dragDistance > 0 && currentIndex > 0)
+                newIndex = currentIndex - 1;
+            else if (dragDistance < 0 && currentIndex < totalSlides - 1)
+                newIndex = currentIndex + 1;
         }
         slideRef.current.style.transition = "transform 0.3s ease-out";
         slideRef.current.style.cursor = "grab";
         setCurrentIndex(newIndex);
-        setTimeout(() => { if (!isTransitioning) startAutoPlay(); }, 300);
-    }, [isDragging, currentIndex, totalSlides, isMobile, isTransitioning, startAutoPlay]);
+        setTimeout(() => {
+            if (!isTransitioning) startAutoPlay();
+        }, 300);
+    }, [
+        isDragging,
+        currentIndex,
+        totalSlides,
+        isMobile,
+        isTransitioning,
+        startAutoPlay,
+    ]);
 
     useEffect(() => {
         if (isDragging) {
             const handleMouseMove = (e) => handleDragMove(e);
             const handleMouseUp = () => handleDragEnd();
-            document.addEventListener("mousemove", handleMouseMove, { passive: false });
+            document.addEventListener("mousemove", handleMouseMove, {
+                passive: false,
+            });
             document.addEventListener("mouseup", handleMouseUp);
-            document.addEventListener("touchmove", handleMouseMove, { passive: false });
+            document.addEventListener("touchmove", handleMouseMove, {
+                passive: false,
+            });
             document.addEventListener("touchend", handleMouseUp);
             return () => {
                 document.removeEventListener("mousemove", handleMouseMove);
@@ -127,7 +222,9 @@ export default function ProjectClient({ project, otherProjects, slug }) {
     }, [isDragging, handleDragMove, handleDragEnd]);
 
     const pauseAutoPlay = () => stopAutoPlay();
-    const resumeAutoPlay = () => { if (!isTransitioning && !isDragging) startAutoPlay(); };
+    const resumeAutoPlay = () => {
+        if (!isTransitioning && !isDragging) startAutoPlay();
+    };
 
     return (
         <div className="internal-container">
@@ -137,7 +234,21 @@ export default function ProjectClient({ project, otherProjects, slug }) {
                 <div className="internal-section-one-top">
                     <h1>{project.title}</h1>
                     {(project.mainImage?.url || project.images?.[0]?.url) && (
-                        <Image src={project.mainImage?.url || project.images?.[0]?.url} alt={project.mainImage?.alt || project.images?.[0]?.alt || project.title} width={1200} height={600} unoptimized priority />
+                        <Image
+                            src={
+                                project.mainImage?.url ||
+                                project.images?.[0]?.url
+                            }
+                            alt={
+                                project.mainImage?.alt ||
+                                project.images?.[0]?.alt ||
+                                project.title
+                            }
+                            width={1200}
+                            height={600}
+                            unoptimized
+                            priority
+                        />
                     )}
                 </div>
 
@@ -145,20 +256,54 @@ export default function ProjectClient({ project, otherProjects, slug }) {
                     <div className="internal-section-one-bottom-left">
                         {project.introText && <p>{project.introText}</p>}
                         {project.moreContent && (
-                            <div className={`load-content ${isExpanded ? "visible" : "hidden"}`} dangerouslySetInnerHTML={{ __html: project.moreContent }} />
+                            <div
+                                className={`load-content ${isExpanded ? "visible" : "hidden"}`}
+                                dangerouslySetInnerHTML={{
+                                    __html: project.moreContent,
+                                }}
+                            />
                         )}
                     </div>
 
                     <div className="internal-section-one-bottom-right">
                         {project.projectDetails?.map((detail, idx) => (
-                            <div key={idx} className={`load-content-li ${idx < 4 ? "visible" : isExpanded ? "visible" : ""}`}>
+                            <div
+                                key={idx}
+                                className={`load-content-li ${idx < 4 ? "visible" : isExpanded ? "visible" : ""}`}
+                            >
                                 <p>{detail?.label}</p>
                                 <ul>
                                     {detail?.items?.map((item, itemIdx) => (
-                                        <li key={itemIdx}>{item?.startsWith?.("http") ? <a href={item} target="_blank" rel="noopener noreferrer">{item}</a> : item}</li>
+                                        <li key={itemIdx}>
+                                            {item?.startsWith?.("http") ? (
+                                                <a
+                                                    href={item}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    {item}
+                                                </a>
+                                            ) : (
+                                                item
+                                            )}
+                                        </li>
                                     ))}
                                     {detail?.value && !detail?.items && (
-                                        <li>{detail.value.startsWith?.("http") ? <a href={detail.value} target="_blank" rel="noopener noreferrer">{detail.value}</a> : detail.value}</li>
+                                        <li>
+                                            {detail.value.startsWith?.(
+                                                "http",
+                                            ) ? (
+                                                <a
+                                                    href={detail.value}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    {detail.value}
+                                                </a>
+                                            ) : (
+                                                detail.value
+                                            )}
+                                        </li>
                                     )}
                                 </ul>
                             </div>
@@ -166,12 +311,29 @@ export default function ProjectClient({ project, otherProjects, slug }) {
                     </div>
                 </div>
 
-                {(project.moreContent || project.projectDetails?.length > 4) && (
-                    <div className="internal-section-one-btn" onClick={() => setIsExpanded(!isExpanded)}>
+                {(project.moreContent ||
+                    project.projectDetails?.length > 4) && (
+                    <div
+                        className="internal-section-one-btn"
+                        onClick={() => setIsExpanded(!isExpanded)}
+                    >
                         <button>
-                            {isExpanded ? "Less Information" : "More Information"}
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className={`bi ${isExpanded ? "bi-x-lg" : "bi-plus"}`} viewBox="0 0 16 16">
-                                {isExpanded ? <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" /> : <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />}
+                            {isExpanded
+                                ? "Less Information"
+                                : "More Information"}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                className={`bi ${isExpanded ? "bi-x-lg" : "bi-plus"}`}
+                                viewBox="0 0 16 16"
+                            >
+                                {isExpanded ? (
+                                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                                ) : (
+                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                                )}
                             </svg>
                         </button>
                     </div>
@@ -182,18 +344,37 @@ export default function ProjectClient({ project, otherProjects, slug }) {
             {project.imageGalleries?.map((gallery, galleryIdx) => (
                 <div key={galleryIdx} className="internal-section-two">
                     {gallery.images?.length > 0 && (
-                        <div className="internal-section-two-top-imgs">
-                            {gallery.images.map((img, idx) => <Image key={idx} src={img.url} alt={img.alt || `Project image ${idx + 1}`} width={600} height={400} unoptimized />)}
+                        <div className="media-gallery">
+                            {gallery.images.map((media, idx) => (
+                                <MediaItem
+                                    key={idx}
+                                    media={media}
+                                    index={idx}
+                                    className="gallery-item"
+                                />
+                            ))}
                         </div>
                     )}
                     {gallery.topImages?.length > 0 && (
-                        <div className="internal-section-two-top-imgs">
-                            {gallery.topImages.map((img, idx) => <Image key={idx} src={img.url} alt={img.alt || `Project image ${idx + 1}`} width={600} height={400} unoptimized />)}
+                        <div className="media-gallery">
+                            {gallery.topImages.map((media, idx) => (
+                                <MediaItem
+                                    key={idx}
+                                    media={media}
+                                    index={idx}
+                                    className="gallery-item"
+                                />
+                            ))}
                         </div>
                     )}
                     {gallery.bottomImage?.url && (
                         <div className="internal-section-two-bottom">
-                            <Image src={gallery.bottomImage.url} alt={gallery.bottomImage.alt || "Project image"} width={1200} height={600} unoptimized />
+                            <MediaItem
+                                media={gallery.bottomImage}
+                                index={0}
+                                width={1200}
+                                height={600}
+                            />
                         </div>
                     )}
                 </div>
@@ -201,29 +382,104 @@ export default function ProjectClient({ project, otherProjects, slug }) {
 
             {project.images?.length > 0 && !project.imageGalleries?.length && (
                 <div className="internal-section-two">
-                    <div className="internal-section-two-top-imgs">
-                        {project.images.map((img, idx) => <Image key={idx} src={img.url} alt={img.alt || `Project image ${idx + 1}`} width={600} height={400} unoptimized />)}
+                    <div className="media-gallery">
+                        {project.images.map((media, idx) => (
+                            <MediaItem
+                                key={idx}
+                                media={media}
+                                index={idx}
+                                className="gallery-item"
+                            />
+                        ))}
                     </div>
                 </div>
             )}
 
-            {otherProjects.length > 0 && (
+            {featuredOtherProjects.length > 0 && (
                 <div className="professionals-section-internals">
-                    <h1 className="professionals-heading-internals">Explore More Projects</h1>
-                    <div className="carousel-container-internals" onMouseEnter={pauseAutoPlay} onMouseLeave={resumeAutoPlay}>
-                        <div className="carousel-slides-internals" ref={slideRef} style={{ transform: `translateX(-${currentIndex * (isMobile ? 100 : 25)}%)`, transition: isDragging ? "none" : "transform 0.5s ease-in-out", cursor: isDragging ? "grabbing" : "grab", userSelect: "none" }} onMouseDown={handleDragStart} onTouchStart={handleDragStart}>
+                    <h1 className="professionals-heading-internals">
+                        Explore More Projects
+                    </h1>
+                    <div
+                        className="carousel-container-internals"
+                        onMouseEnter={pauseAutoPlay}
+                        onMouseLeave={resumeAutoPlay}
+                    >
+                        <div
+                            className="carousel-slides-internals"
+                            ref={slideRef}
+                            style={{
+                                transform: `translateX(-${currentIndex * (isMobile ? 100 : 25)}%)`,
+                                transition: isDragging
+                                    ? "none"
+                                    : "transform 0.5s ease-in-out",
+                                cursor: isDragging ? "grabbing" : "grab",
+                                userSelect: "none",
+                            }}
+                            onMouseDown={handleDragStart}
+                            onTouchStart={handleDragStart}
+                        >
                             {slidesToShow.map((proj, i) => (
-                                <Link key={i} href={`/projects/${proj.slug}`} id="redirection-service">
+                                <Link
+                                    key={i}
+                                    href={`/projects/${proj.slug}`}
+                                    id="redirection-service"
+                                >
                                     <div className="carousel-slide-internals">
-                                        <div className="professional-card-internals" id="project-caraousel">
+                                        <div
+                                            className="professional-card-internals"
+                                            id="project-caraousel"
+                                        >
                                             <div className="image-container-internals">
-                                                {proj.mainImage?.url || proj.images?.[0]?.url ? (
-                                                    <Image src={proj.mainImage?.url || proj.images?.[0]?.url} alt={proj.mainImage?.alt || proj.images?.[0]?.alt || proj.title} width={300} height={200} unoptimized draggable={false} style={{ pointerEvents: isDragging ? "none" : "auto", userSelect: "none" }} />
+                                                {proj.mainImage?.url ||
+                                                proj.images?.[0]?.url ? (
+                                                    <Image
+                                                        src={
+                                                            proj.mainImage
+                                                                ?.url ||
+                                                            proj.images?.[0]
+                                                                ?.url
+                                                        }
+                                                        alt={
+                                                            proj.mainImage
+                                                                ?.alt ||
+                                                            proj.images?.[0]
+                                                                ?.alt ||
+                                                            proj.title
+                                                        }
+                                                        width={300}
+                                                        height={200}
+                                                        unoptimized
+                                                        draggable={false}
+                                                        style={{
+                                                            pointerEvents:
+                                                                isDragging
+                                                                    ? "none"
+                                                                    : "auto",
+                                                            userSelect: "none",
+                                                        }}
+                                                    />
                                                 ) : (
-                                                    <div style={{ width: 300, height: 200, background: "#eee", display: "flex", alignItems: "center", justifyContent: "center", userSelect: "none" }}><p>No Image</p></div>
+                                                    <div
+                                                        style={{
+                                                            width: 300,
+                                                            height: 200,
+                                                            background: "#eee",
+                                                            display: "flex",
+                                                            alignItems:
+                                                                "center",
+                                                            justifyContent:
+                                                                "center",
+                                                            userSelect: "none",
+                                                        }}
+                                                    >
+                                                        <p>No Image</p>
+                                                    </div>
                                                 )}
                                             </div>
-                                            <h3 style={{ userSelect: "none" }}>{proj.title}</h3>
+                                            <h3 style={{ userSelect: "none" }}>
+                                                {proj.title}
+                                            </h3>
                                         </div>
                                     </div>
                                 </Link>
@@ -236,26 +492,71 @@ export default function ProjectClient({ project, otherProjects, slug }) {
             <Footer />
 
             <div className="whatsapp">
-                <a className="btn-whatsapp-pulse" target="_blank" href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!">
-                    <Image src="/whatsapp.png" width={40} height={40} alt="Whatsapp-img" unoptimized />
+                <a
+                    className="btn-whatsapp-pulse"
+                    target="_blank"
+                    href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
+                >
+                    <Image
+                        src="/whatsapp.png"
+                        width={40}
+                        height={40}
+                        alt="Whatsapp-img"
+                        unoptimized
+                    />
                 </a>
             </div>
 
-            <div className="enquire"><button onClick={() => setShowForm(true)}>Enquire Now</button></div>
+            <div className="enquire">
+                <button onClick={() => setShowForm(true)}>Enquire Now</button>
+            </div>
 
             {showForm && (
-                <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
-                    <div className="enquiry-container" onClick={(e) => e.stopPropagation()}>
+                <div
+                    className="enquiry-overlay"
+                    onClick={() => setShowForm(false)}
+                >
+                    <div
+                        className="enquiry-container"
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         <div className="enquiry-box">
-                            <div className="close-icon" onClick={() => setShowForm(false)}>✕</div>
+                            <div
+                                className="close-icon"
+                                onClick={() => setShowForm(false)}
+                            >
+                                ✕
+                            </div>
                             <h2 className="title">Quick Query</h2>
-                            <p className="subtitle">If you have any queries, we will be pleased to assist you.</p>
+                            <p className="subtitle">
+                                If you have any queries, we will be pleased to
+                                assist you.
+                            </p>
                             <form>
-                                <input type="text" placeholder="Name" className="form-input" />
-                                <input type="text" placeholder="Mobile No." className="form-input" />
-                                <select className="form-input"><option>Select Type</option><option>General</option><option>Support</option><option>Sales</option></select>
-                                <textarea placeholder="Query" className="form-input" rows="3" />
-                                <button type="submit" className="submit-button">Submit</button>
+                                <input
+                                    type="text"
+                                    placeholder="Name"
+                                    className="form-input"
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Mobile No."
+                                    className="form-input"
+                                />
+                                <select className="form-input">
+                                    <option>Select Type</option>
+                                    <option>General</option>
+                                    <option>Support</option>
+                                    <option>Sales</option>
+                                </select>
+                                <textarea
+                                    placeholder="Query"
+                                    className="form-input"
+                                    rows="3"
+                                />
+                                <button type="submit" className="submit-button">
+                                    Submit
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -263,12 +564,26 @@ export default function ProjectClient({ project, otherProjects, slug }) {
             )}
 
             <div className="upward" onClick={upwardHandler}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-chevron-up" viewBox="0 0 16 16">
-                    <path fillRule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z" />
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-chevron-up"
+                    viewBox="0 0 16 16"
+                >
+                    <path
+                        fillRule="evenodd"
+                        d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"
+                    />
                 </svg>
             </div>
 
-            <PageScripts customHeadTags={project?.customHeadTags} pageId={`project-${slug}`} />
+            <PageScripts
+                customHeadTags={project?.customHeadTags}
+                metaTags={project?.metaTags}
+                pageId={`project-${slug}`}
+            />
         </div>
     );
 }

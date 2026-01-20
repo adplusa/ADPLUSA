@@ -14,6 +14,7 @@ import type { FormTab } from "../components/FormWrapper";
 import { seoSchema } from "../utils/validation";
 import { getHomepage, updateHomepage } from "../services/homepage.service";
 import PreviewModal from "../components/PreviewModal";
+import MetaTagsInput from "../components/MetaTagsInput";
 
 // --- Validation Schemas ---
 
@@ -225,6 +226,7 @@ export default function HomepageForm() {
             seoTitle: "",
             seoDescription: "",
             customHeadTags: "",
+            metaTags: [],
         },
     });
 
@@ -310,7 +312,7 @@ export default function HomepageForm() {
                     trustIcons: transformOrder(response.data.trustIcons),
                     serviceBoxes: transformOrder(response.data.serviceBoxes),
                     technologyImages: transformOrder(
-                        response.data.technologyImages
+                        response.data.technologyImages,
                     ),
                     processSteps: transformOrder(response.data.processSteps),
                     founderSlides: transformOrder(response.data.founderSlides),
@@ -347,7 +349,7 @@ export default function HomepageForm() {
                     ...item,
                     order: Math.max(
                         0,
-                        typeof item.order === "number" ? item.order - 1 : 0
+                        typeof item.order === "number" ? item.order - 1 : 0,
                     ),
                 }));
 
@@ -548,20 +550,20 @@ export default function HomepageForm() {
                                             </Label>
                                             <FormImagePreview
                                                 url={watch(
-                                                    `slides.${index}.image.url`
+                                                    `slides.${index}.image.url`,
                                                 )}
                                                 onUpload={(url) =>
                                                     setValue(
                                                         `slides.${index}.image.url`,
                                                         url,
-                                                        { shouldDirty: true }
+                                                        { shouldDirty: true },
                                                     )
                                                 }
                                                 onRemove={() =>
                                                     setValue(
                                                         `slides.${index}.image.url`,
                                                         "",
-                                                        { shouldDirty: true }
+                                                        { shouldDirty: true },
                                                     )
                                                 }
                                                 folder="homepage-slides"
@@ -575,7 +577,7 @@ export default function HomepageForm() {
                                                 type="number"
                                                 {...register(
                                                     `slides.${index}.order` as const,
-                                                    { valueAsNumber: true }
+                                                    { valueAsNumber: true },
                                                 )}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                             />
@@ -639,7 +641,7 @@ export default function HomepageForm() {
                                             <input
                                                 type="text"
                                                 {...register(
-                                                    `trustIcons.${index}.name` as const
+                                                    `trustIcons.${index}.name` as const,
                                                 )}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                             />
@@ -651,7 +653,7 @@ export default function HomepageForm() {
                                             <input
                                                 type="text"
                                                 {...register(
-                                                    `trustIcons.${index}.number` as const
+                                                    `trustIcons.${index}.number` as const,
                                                 )}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                             />
@@ -662,20 +664,20 @@ export default function HomepageForm() {
                                             </Label>
                                             <FormImagePreview
                                                 url={watch(
-                                                    `trustIcons.${index}.image.url`
+                                                    `trustIcons.${index}.image.url`,
                                                 )}
                                                 onUpload={(url) =>
                                                     setValue(
                                                         `trustIcons.${index}.image.url`,
                                                         url,
-                                                        { shouldDirty: true }
+                                                        { shouldDirty: true },
                                                     )
                                                 }
                                                 onRemove={() =>
                                                     setValue(
                                                         `trustIcons.${index}.image.url`,
                                                         "",
-                                                        { shouldDirty: true }
+                                                        { shouldDirty: true },
                                                     )
                                                 }
                                                 folder="trust-icons"
@@ -689,7 +691,7 @@ export default function HomepageForm() {
                                                 type="number"
                                                 {...register(
                                                     `trustIcons.${index}.order` as const,
-                                                    { valueAsNumber: true }
+                                                    { valueAsNumber: true },
                                                 )}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                             />
@@ -760,7 +762,7 @@ export default function HomepageForm() {
                                             <input
                                                 type="text"
                                                 {...register(
-                                                    `serviceBoxes.${index}.title` as const
+                                                    `serviceBoxes.${index}.title` as const,
                                                 )}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                             />
@@ -772,7 +774,7 @@ export default function HomepageForm() {
                                             <input
                                                 type="text"
                                                 {...register(
-                                                    `serviceBoxes.${index}.url` as const
+                                                    `serviceBoxes.${index}.url` as const,
                                                 )}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                             />
@@ -783,20 +785,20 @@ export default function HomepageForm() {
                                             </Label>
                                             <FormImagePreview
                                                 url={watch(
-                                                    `serviceBoxes.${index}.image.url`
+                                                    `serviceBoxes.${index}.image.url`,
                                                 )}
                                                 onUpload={(url) =>
                                                     setValue(
                                                         `serviceBoxes.${index}.image.url`,
                                                         url,
-                                                        { shouldDirty: true }
+                                                        { shouldDirty: true },
                                                     )
                                                 }
                                                 onRemove={() =>
                                                     setValue(
                                                         `serviceBoxes.${index}.image.url`,
                                                         "",
-                                                        { shouldDirty: true }
+                                                        { shouldDirty: true },
                                                     )
                                                 }
                                                 folder="service-boxes"
@@ -810,7 +812,7 @@ export default function HomepageForm() {
                                                 type="number"
                                                 {...register(
                                                     `serviceBoxes.${index}.order` as const,
-                                                    { valueAsNumber: true }
+                                                    { valueAsNumber: true },
                                                 )}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                             />
@@ -862,20 +864,20 @@ export default function HomepageForm() {
                                         </Label>
                                         <FormImagePreview
                                             url={watch(
-                                                `technologyImages.${index}.image.url`
+                                                `technologyImages.${index}.image.url`,
                                             )}
                                             onUpload={(url) =>
                                                 setValue(
                                                     `technologyImages.${index}.image.url`,
                                                     url,
-                                                    { shouldDirty: true }
+                                                    { shouldDirty: true },
                                                 )
                                             }
                                             onRemove={() =>
                                                 setValue(
                                                     `technologyImages.${index}.image.url`,
                                                     "",
-                                                    { shouldDirty: true }
+                                                    { shouldDirty: true },
                                                 )
                                             }
                                             folder="technology-icons"
@@ -890,7 +892,7 @@ export default function HomepageForm() {
                                                 type="number"
                                                 {...register(
                                                     `technologyImages.${index}.order` as const,
-                                                    { valueAsNumber: true }
+                                                    { valueAsNumber: true },
                                                 )}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                             />
@@ -970,7 +972,7 @@ export default function HomepageForm() {
                                             <input
                                                 type="text"
                                                 {...register(
-                                                    `processSteps.${index}.title` as const
+                                                    `processSteps.${index}.title` as const,
                                                 )}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                             />
@@ -983,7 +985,7 @@ export default function HomepageForm() {
                                                 type="number"
                                                 {...register(
                                                     `processSteps.${index}.order` as const,
-                                                    { valueAsNumber: true }
+                                                    { valueAsNumber: true },
                                                 )}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                             />
@@ -995,7 +997,7 @@ export default function HomepageForm() {
                                             >
                                                 <textarea
                                                     {...register(
-                                                        `processSteps.${index}.description` as const
+                                                        `processSteps.${index}.description` as const,
                                                     )}
                                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                                     rows={3}
@@ -1008,20 +1010,20 @@ export default function HomepageForm() {
                                             </Label>
                                             <FormImagePreview
                                                 url={watch(
-                                                    `processSteps.${index}.image.url`
+                                                    `processSteps.${index}.image.url`,
                                                 )}
                                                 onUpload={(url) =>
                                                     setValue(
                                                         `processSteps.${index}.image.url`,
                                                         url,
-                                                        { shouldDirty: true }
+                                                        { shouldDirty: true },
                                                     )
                                                 }
                                                 onRemove={() =>
                                                     setValue(
                                                         `processSteps.${index}.image.url`,
                                                         "",
-                                                        { shouldDirty: true }
+                                                        { shouldDirty: true },
                                                     )
                                                 }
                                                 folder="process-steps"
@@ -1075,7 +1077,7 @@ export default function HomepageForm() {
                                     <input
                                         type="text"
                                         {...register(
-                                            `sliderTextsObjects.${index}.text` as const
+                                            `sliderTextsObjects.${index}.text` as const,
                                         )}
                                         className="flex-grow px-3 py-2 border border-gray-300 rounded-lg"
                                         placeholder="Enter text item"
@@ -1204,20 +1206,20 @@ export default function HomepageForm() {
                                         </Label>
                                         <FormImagePreview
                                             url={watch(
-                                                `aboutImages.${index}.url`
+                                                `aboutImages.${index}.url`,
                                             )}
                                             onUpload={(url) =>
                                                 setValue(
                                                     `aboutImages.${index}.url`,
                                                     url,
-                                                    { shouldDirty: true }
+                                                    { shouldDirty: true },
                                                 )
                                             }
                                             onRemove={() =>
                                                 setValue(
                                                     `aboutImages.${index}.url`,
                                                     "",
-                                                    { shouldDirty: true }
+                                                    { shouldDirty: true },
                                                 )
                                             }
                                             folder="about-images"
@@ -1273,7 +1275,7 @@ export default function HomepageForm() {
                                             <input
                                                 type="text"
                                                 {...register(
-                                                    `founderSlides.${index}.name` as const
+                                                    `founderSlides.${index}.name` as const,
                                                 )}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                             />
@@ -1285,7 +1287,7 @@ export default function HomepageForm() {
                                             <input
                                                 type="text"
                                                 {...register(
-                                                    `founderSlides.${index}.title` as const
+                                                    `founderSlides.${index}.title` as const,
                                                 )}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                             />
@@ -1297,7 +1299,7 @@ export default function HomepageForm() {
                                             <input
                                                 type="text"
                                                 {...register(
-                                                    `founderSlides.${index}.achievements` as const
+                                                    `founderSlides.${index}.achievements` as const,
                                                 )}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                             />
@@ -1308,20 +1310,20 @@ export default function HomepageForm() {
                                             </Label>
                                             <FormImagePreview
                                                 url={watch(
-                                                    `founderSlides.${index}.image.url`
+                                                    `founderSlides.${index}.image.url`,
                                                 )}
                                                 onUpload={(url) =>
                                                     setValue(
                                                         `founderSlides.${index}.image.url`,
                                                         url,
-                                                        { shouldDirty: true }
+                                                        { shouldDirty: true },
                                                     )
                                                 }
                                                 onRemove={() =>
                                                     setValue(
                                                         `founderSlides.${index}.image.url`,
                                                         "",
-                                                        { shouldDirty: true }
+                                                        { shouldDirty: true },
                                                     )
                                                 }
                                                 folder="founders"
@@ -1334,7 +1336,7 @@ export default function HomepageForm() {
                                             <input
                                                 type="text"
                                                 {...register(
-                                                    `founderSlides.${index}.partner` as const
+                                                    `founderSlides.${index}.partner` as const,
                                                 )}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                             />
@@ -1347,7 +1349,7 @@ export default function HomepageForm() {
                                                 type="number"
                                                 {...register(
                                                     `founderSlides.${index}.order` as const,
-                                                    { valueAsNumber: true }
+                                                    { valueAsNumber: true },
                                                 )}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                             />
@@ -1466,16 +1468,6 @@ export default function HomepageForm() {
                                         {watchSeoDescription ||
                                             "All the details about our business..."}
                                     </p>
-                                    {form.watch("customHeadTags") && (
-                                        <div className="mt-2 pt-2 border-t border-gray-100">
-                                            <p className="text-xs font-semibold text-gray-500 mb-1">
-                                                Custom Head Tags:
-                                            </p>
-                                            <code className="block text-xs text-gray-600 bg-gray-50 p-2 rounded truncate font-mono">
-                                                {form.watch("customHeadTags")}
-                                            </code>
-                                        </div>
-                                    )}
                                 </div>
                             </div>
                             <div className="space-y-4">
@@ -1512,20 +1504,17 @@ export default function HomepageForm() {
                                         placeholder="SEO optimized description"
                                     />
                                 </FormField>
-                                <FormField
-                                    id="customHeadTags"
-                                    label="Custom Head Tags"
-                                    helpText="Add custom meta tags, scripts, or link tags here (e.g., <meta name='robots' content='noindex' />). These will be injected into the <head> of the page."
-                                    error={errors.customHeadTags?.message}
-                                >
-                                    <textarea
-                                        id="customHeadTags"
-                                        {...register("customHeadTags")}
-                                        rows={5}
-                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono text-sm"
-                                        placeholder="<meta name='keywords' content='...' />"
-                                    />
-                                </FormField>
+                                <Controller
+                                    name="metaTags"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <MetaTagsInput
+                                            value={field.value || []}
+                                            onChange={field.onChange}
+                                            disabled={isSubmitting}
+                                        />
+                                    )}
+                                />
                             </div>
                         </div>
                     </div>

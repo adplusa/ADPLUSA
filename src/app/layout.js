@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import EnquiryForm from "@/app/Components/Enquiry/page";
 import { getGeneralSettings } from "@/lib/cms-client";
+import { ThemeProvider } from "@/app/Components/ThemeProvider";
 import Script from "next/script";
 
 const geistSans = Geist({
@@ -23,7 +24,8 @@ export async function generateMetadata() {
 
     return {
         title: settings?.siteName || "ADPL Consulting LLC",
-        description: settings?.siteDescription ||
+        description:
+            settings?.siteDescription ||
             "ADPL Consulting LLC is a trusted partner to architects, engineers, contractors, and real estate consultants across India and the U.S. Backed by 9 years of global exposure",
         icons: {
             icon: settings?.favicon?.url || "/icon.png",
@@ -53,7 +55,7 @@ function parseCustomHeadTags(htmlString) {
     const inlineScriptRegex = /<script[^>]*>([^<]+)<\/script>/gi;
     while ((match = inlineScriptRegex.exec(htmlString)) !== null) {
         // Skip if it has a src (already captured above)
-        if (!match[0].includes('src=')) {
+        if (!match[0].includes("src=")) {
             inlineScripts.push(match[1]);
         }
     }
@@ -63,12 +65,14 @@ function parseCustomHeadTags(htmlString) {
 
 export default async function RootLayout({ children }) {
     const settings = await getGeneralSettings({ revalidate: 60 });
-    const { scripts, inlineScripts } = parseCustomHeadTags(settings?.customHeadTags);
+    const { scripts, inlineScripts } = parseCustomHeadTags(
+        settings?.customHeadTags,
+    );
 
     return (
         <html lang="en">
             <body className={`${geistSans.variable} ${geistMono.variable}`}>
-                {children}
+                <ThemeProvider>{children}</ThemeProvider>
                 <EnquiryForm />
 
                 {/* External scripts from CMS - loaded after page is interactive */}

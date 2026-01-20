@@ -9,10 +9,15 @@ const ALLOWED_MIME_TYPES = [
     "image/webp",
     "image/x-icon",
     "image/vnd.microsoft.icon",
+    "video/mp4",
+    "video/mpeg",
+    "video/webm",
+    "video/quicktime",
+    "video/x-msvideo",
 ];
 
-// Maximum file size: 5MB
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
+// Maximum file size: 100MB
+const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
 /**
  * File filter to validate image types
@@ -20,7 +25,7 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 function fileFilter(
     req: Request,
     file: Express.Multer.File,
-    cb: FileFilterCallback
+    cb: FileFilterCallback,
 ): void {
     if (ALLOWED_MIME_TYPES.includes(file.mimetype)) {
         cb(null, true);
@@ -28,9 +33,9 @@ function fileFilter(
         cb(
             new Error(
                 `Invalid file type. Allowed types: ${ALLOWED_MIME_TYPES.join(
-                    ", "
-                )}`
-            )
+                    ", ",
+                )}`,
+            ),
         );
     }
 }
@@ -53,7 +58,7 @@ export function handleMulterError(
     error: any,
     req: Request,
     res: any,
-    next: any
+    next: any,
 ): void {
     if (error instanceof multer.MulterError) {
         if (error.code === "LIMIT_FILE_SIZE") {

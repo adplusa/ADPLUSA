@@ -14,6 +14,7 @@ import {
     updateService,
     getServiceBySlug,
 } from "../services/service.service";
+import MetaTagsInput from "../components/MetaTagsInput";
 
 // Generate slug from title
 function generateSlug(title: string): string {
@@ -59,6 +60,7 @@ const serviceSchema = z
         description: z.string().optional(),
         content: z.string().optional(),
         bannerImage: serviceImageSchema.optional(),
+        displayImage: serviceImageSchema.optional(),
         servicesList: z.array(serviceItemSchema).optional(),
         keyActivities: z.array(keyActivitySchema).optional(),
         features: z.array(serviceFeatureSchema).optional(),
@@ -83,7 +85,7 @@ export default function ServiceForm() {
     const [activeTab, setActiveTab] = useState<string>("basic");
 
     const form = useForm<ServiceFormData>({
-        resolver: zodResolver(serviceSchema),
+        resolver: zodResolver(serviceSchema) as any,
         defaultValues: {
             title: "",
             slug: "",
@@ -96,6 +98,7 @@ export default function ServiceForm() {
             seoTitle: "",
             seoDescription: "",
             customHeadTags: "",
+            metaTags: [],
         },
     });
 
@@ -147,26 +150,30 @@ export default function ServiceForm() {
         }
     }, [watchTitle, isEditMode, setValue]);
 
-    useEffect(() => {
-        if (isEditMode && id) {
-            loadService(id);
-        }
-    }, [id, isEditMode]);
-
-    const loadService = async (slug: string) => {
+    const loadService = useCallback(async () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await getServiceBySlug(slug);
-            reset(response.data as ServiceFormData);
+            const response = await getServiceBySlug(id!);
+            const service = response.data;
+            reset({
+                ...service,
+                metaTags: (service as any).metaTags || [],
+            } as any);
         } catch (err: any) {
             setError(
-                err.response?.data?.error?.message || "Failed to load service"
+                err.response?.data?.error?.message || "Failed to load service",
             );
         } finally {
             setLoading(false);
         }
-    };
+    }, [id, reset]);
+
+    useEffect(() => {
+        if (id) {
+            loadService();
+        }
+    }, [id, loadService]);
 
     const onSubmit = useCallback(
         async (data: ServiceFormData) => {
@@ -185,14 +192,14 @@ export default function ServiceForm() {
             } catch (err: any) {
                 setError(
                     err.response?.data?.error?.message ||
-                        "Failed to save service"
+                        "Failed to save service",
                 );
                 throw err;
             } finally {
                 setIsSubmitting(false);
             }
         },
-        [isEditMode, navigate]
+        [isEditMode, navigate],
     );
 
     const handleCancel = useCallback(() => {
@@ -253,7 +260,7 @@ export default function ServiceForm() {
                 </div>
             )}
 
-            <FormWrapper
+            <FormWrapper<ServiceFormData>
                 title={isEditMode ? "Edit Service" : "Create New Service"}
                 subtitle={
                     isEditMode
@@ -261,7 +268,7 @@ export default function ServiceForm() {
                         : "Fill in the details to create a new service"
                 }
                 isEditMode={isEditMode}
-                form={form}
+                form={form as any}
                 isSubmitting={isSubmitting}
                 isLoading={loading}
                 onSubmit={onSubmit}
@@ -378,6 +385,46 @@ export default function ServiceForm() {
                             </p>
                         </div>
 
+                        {/* Display Image */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Display Image
+                            </label>
+                            <Controller
+                                name="displayImage"
+                                control={control}
+                                render={({ field: { onChange, value } }) => (
+                                    <ImageUploader
+                                        multiple={false}
+                                        initialImages={
+                                            value?.url
+                                                ? [
+                                                      {
+                                                          url: value.url,
+                                                          status: "success" as const,
+                                                      },
+                                                  ]
+                                                : []
+                                        }
+                                        onUploadComplete={(images) => {
+                                            if (images.length > 0) {
+                                                onChange({
+                                                    url: images[0].url,
+                                                    alt: "Display",
+                                                });
+                                            } else {
+                                                onChange(undefined);
+                                            }
+                                        }}
+                                    />
+                                )}
+                            />
+                            <p className="mt-1 text-xs text-gray-500">
+                                This image is used on the homepage and main
+                                services page. Recommended size: 800x600px.
+                            </p>
+                        </div>
+
                         {/* Order */}
                         <FormField
                             id="order"
@@ -391,8 +438,14 @@ export default function ServiceForm() {
                                 {...register("order", { valueAsNumber: true })}
                                 onChange={(e) => {
                                     const value = e.target.value;
-                                    const filteredValue = value.replace(/[^0-9]/g, ''); // Keep only digits
-                                    const numericValue = Math.max(0, parseInt(filteredValue, 10) || 0);
+                                    const filteredValue = value.replace(
+                                        /[^0-9]/g,
+                                        "",
+                                    ); // Keep only digits
+                                    const numericValue = Math.max(
+                                        0,
+                                        parseInt(filteredValue, 10) || 0,
+                                    );
                                     setValue("order", numericValue);
                                 }}
                                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
@@ -470,7 +523,7 @@ export default function ServiceForm() {
                                                     id={`servicesList.${index}.title`}
                                                     type="text"
                                                     {...register(
-                                                        `servicesList.${index}.title`
+                                                        `servicesList.${index}.title`,
                                                     )}
                                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                                     placeholder="Service item title"
@@ -484,7 +537,7 @@ export default function ServiceForm() {
                                                     id={`servicesList.${index}.link`}
                                                     type="text"
                                                     {...register(
-                                                        `servicesList.${index}.link`
+                                                        `servicesList.${index}.link`,
                                                     )}
                                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                                     placeholder="/path or https://..."
@@ -499,7 +552,7 @@ export default function ServiceForm() {
                                                 <textarea
                                                     id={`servicesList.${index}.description`}
                                                     {...register(
-                                                        `servicesList.${index}.description`
+                                                        `servicesList.${index}.description`,
                                                     )}
                                                     rows={3}
                                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -530,7 +583,7 @@ export default function ServiceForm() {
                                                                 : []
                                                         }
                                                         onUploadComplete={(
-                                                            images
+                                                            images,
                                                         ) => {
                                                             if (
                                                                 images.length >
@@ -543,7 +596,7 @@ export default function ServiceForm() {
                                                                 });
                                                             } else {
                                                                 onChange(
-                                                                    undefined
+                                                                    undefined,
                                                                 );
                                                             }
                                                         }}
@@ -620,7 +673,7 @@ export default function ServiceForm() {
                                         <input
                                             type="text"
                                             {...register(
-                                                `keyActivities.${index}.title`
+                                                `keyActivities.${index}.title`,
                                             )}
                                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-2"
                                             placeholder="Activity title"
@@ -630,7 +683,7 @@ export default function ServiceForm() {
                                         />
                                         <textarea
                                             {...register(
-                                                `keyActivities.${index}.description`
+                                                `keyActivities.${index}.description`,
                                             )}
                                             rows={2}
                                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -716,7 +769,7 @@ export default function ServiceForm() {
                                                 id={`features.${index}.title`}
                                                 type="text"
                                                 {...register(
-                                                    `features.${index}.title`
+                                                    `features.${index}.title`,
                                                 )}
                                                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
                                                     errors.features?.[index]
@@ -740,7 +793,7 @@ export default function ServiceForm() {
                                                 <textarea
                                                     id={`features.${index}.description`}
                                                     {...register(
-                                                        `features.${index}.description`
+                                                        `features.${index}.description`,
                                                     )}
                                                     rows={2}
                                                     className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
@@ -788,16 +841,6 @@ export default function ServiceForm() {
                                             watch("description") ||
                                             "Page description will appear here..."}
                                     </p>
-                                    {watch("customHeadTags") && (
-                                        <div className="mt-2 pt-2 border-t border-gray-100">
-                                            <p className="text-xs font-semibold text-gray-500 mb-1">
-                                                Custom Head Tags:
-                                            </p>
-                                            <code className="block text-xs text-gray-600 bg-gray-50 p-2 rounded truncate font-mono">
-                                                {watch("customHeadTags")}
-                                            </code>
-                                        </div>
-                                    )}
                                 </div>
                             </div>
 
@@ -828,9 +871,9 @@ export default function ServiceForm() {
                                                 60
                                                     ? "bg-red-500"
                                                     : (watchSeoTitle?.length ||
-                                                          0) > 50
-                                                    ? "bg-green-500"
-                                                    : "bg-yellow-500"
+                                                            0) > 50
+                                                      ? "bg-green-500"
+                                                      : "bg-yellow-500"
                                             }`}
                                             style={{
                                                 width: `${Math.min(
@@ -838,7 +881,7 @@ export default function ServiceForm() {
                                                         0) /
                                                         60) *
                                                         100,
-                                                    100
+                                                    100,
                                                 )}%`,
                                             }}
                                         />
@@ -873,9 +916,9 @@ export default function ServiceForm() {
                                                     0) > 160
                                                     ? "bg-red-500"
                                                     : (watchSeoDescription?.length ||
-                                                          0) > 150
-                                                    ? "bg-green-500"
-                                                    : "bg-yellow-500"
+                                                            0) > 150
+                                                      ? "bg-green-500"
+                                                      : "bg-yellow-500"
                                             }`}
                                             style={{
                                                 width: `${Math.min(
@@ -883,27 +926,24 @@ export default function ServiceForm() {
                                                         0) /
                                                         160) *
                                                         100,
-                                                    100
+                                                    100,
                                                 )}%`,
                                             }}
                                         />
                                     </div>
                                 </FormField>
 
-                                <FormField
-                                    id="customHeadTags"
-                                    label="Custom Head Tags"
-                                    helpText="Add custom meta tags, scripts, or link tags here. These will be injected into the <head> of the page."
-                                    error={errors.customHeadTags?.message}
-                                >
-                                    <textarea
-                                        id="customHeadTags"
-                                        {...register("customHeadTags")}
-                                        rows={5}
-                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono text-sm"
-                                        placeholder="<meta name='keywords' content='...' />"
-                                    />
-                                </FormField>
+                                <Controller
+                                    name="metaTags"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <MetaTagsInput
+                                            value={field.value || []}
+                                            onChange={field.onChange}
+                                            disabled={isSubmitting}
+                                        />
+                                    )}
+                                />
                             </div>
                         </div>
                     </div>

@@ -5,11 +5,12 @@ import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import ImageUploader from './ImageUploader';
 import PreviewModal from './PreviewModal';
+import MetaTagsInput from './MetaTagsInput';
 
 export interface FormField<T extends FieldValues> {
   name: Path<T>;
   label: string;
-  type: 'text' | 'textarea' | 'richtext' | 'checkbox' | 'image' | 'images' | 'array' | 'object' | 'number';
+  type: 'text' | 'textarea' | 'richtext' | 'checkbox' | 'image' | 'images' | 'array' | 'object' | 'number' | 'metaTags';
   required?: boolean;
   placeholder?: string;
   maxLength?: number;
@@ -310,6 +311,24 @@ export default function ContentForm<T extends FieldValues>({
               )}
             />
             {field.helpText && <p className="mt-2 text-xs text-gray-500">{field.helpText}</p>}
+            {errorMessage && <p className="mt-1 text-sm text-red-600">{errorMessage}</p>}
+          </div>
+        );
+
+      case 'metaTags':
+        return (
+          <div key={field.name as string}>
+            <Controller
+              name={field.name}
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <MetaTagsInput
+                  value={value || []}
+                  onChange={onChange}
+                  disabled={isSubmitting}
+                />
+              )}
+            />
             {errorMessage && <p className="mt-1 text-sm text-red-600">{errorMessage}</p>}
           </div>
         );

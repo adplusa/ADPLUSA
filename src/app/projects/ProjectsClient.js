@@ -11,8 +11,11 @@ import "./project.css";
  * Projects Client Component
  * Receives data from server component and handles all interactivity
  * Uses infinite scroll for loading more projects
+ * Requirements: 8.2
  */
-export default function ProjectsClient({ projects }) {
+export default function ProjectsClient({ projects, pageData }) {
+    // Use CMS heading if available, otherwise use default
+    const pageHeading = pageData?.heading || pageData?.pageTitle || "Our Projects";
     const textRef = useRef(null);
     const [showForm, setShowForm] = useState(false);
     const [visibleCount, setVisibleCount] = useState(6);
@@ -76,7 +79,7 @@ export default function ProjectsClient({ projects }) {
                 <div className="project-container">
                     <div className="project-content">
                         <div className="project-heading">
-                            <h1>Our Projects</h1>
+                            <h1>{pageHeading}</h1>
                             <hr id="project-hr" />
                         </div>
                         <div style={{ padding: "50px", textAlign: "center" }}>
@@ -96,7 +99,7 @@ export default function ProjectsClient({ projects }) {
             <div className="project-container">
                 <div className="project-content">
                     <div className="project-heading">
-                        <h1 ref={textRef}>Our Projects</h1>
+                        <h1 ref={textRef}>{pageHeading}</h1>
                         <hr id="project-hr" />
                     </div>
 

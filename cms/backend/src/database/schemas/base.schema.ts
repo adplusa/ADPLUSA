@@ -1,6 +1,32 @@
 import { Schema } from "mongoose";
 
 /**
+ * Interface for structured meta tags with name and content fields
+ */
+export interface IMetaTag {
+    name: string;
+    content: string;
+}
+
+/**
+ * Meta tag sub-schema for use in other schemas
+ */
+export const metaTagSchema = {
+    name: {
+        type: String,
+        required: true,
+        trim: true,
+        maxlength: 100,
+    },
+    content: {
+        type: String,
+        required: true,
+        trim: true,
+        maxlength: 500,
+    },
+};
+
+/**
  * Base schema fields that are common to all content types
  */
 export interface BaseSchemaFields {
@@ -8,7 +34,8 @@ export interface BaseSchemaFields {
     updatedAt: Date;
     seoTitle?: string;
     seoDescription?: string;
-    customHeadTags?: string;
+    customHeadTags?: string; // Kept for backward compatibility during migration
+    metaTags?: IMetaTag[];
 }
 
 /**
@@ -35,6 +62,10 @@ export function addSEOFields(schema: Schema): void {
             type: String,
             trim: true,
             default: "",
+        },
+        metaTags: {
+            type: [metaTagSchema],
+            default: [],
         },
     });
 }

@@ -11,13 +11,19 @@ import gsap from "gsap";
 /**
  * Main Services Client Component
  * Receives data from server component and handles all interactivity
+ * Requirements: 1.3, 3.1, 4.1, 6.1, 6.2, 6.3, 6.4
  */
-export default function MainServiceClient({ services, homepageData }) {
+export default function MainServiceClient({ services, homepageData, mainServicePageData, contactData }) {
     const textRef = useRef(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
     const carouselRef = useRef(null);
     const [showForm, setShowForm] = useState(false);
+
+    // Contact form state (Requirements: 6.1, 6.2, 6.3, 6.4)
+    const contactFormRef = useRef(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [formStatus, setFormStatus] = useState(null);
 
     useEffect(() => {
         if (textRef.current) {
@@ -71,14 +77,114 @@ export default function MainServiceClient({ services, homepageData }) {
         setActiveIndex((prev) => prev + 1);
     };
 
+    // Contact form helper function to get field values flexibly
+    const getFlexible = (preferredNames, fallbackRegex) => {
+        const f = contactFormRef.current;
+        if (!f) return "";
+
+        for (const n of preferredNames) {
+            const el = f.elements[n];
+            if (el && typeof el.value === "string" && el.value.trim()) {
+                return el.value.trim();
+            }
+        }
+
+        const fields = Array.from(f.elements).filter(
+            (el) =>
+                (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT") &&
+                typeof el.name === "string"
+        );
+
+        const candidate =
+            fields.find((el) => fallbackRegex.test(el.name || "")) ||
+            fields.find((el) => typeof el.placeholder === "string" && fallbackRegex.test(el.placeholder));
+
+        return candidate && typeof candidate.value === "string" ? candidate.value.trim() : "";
+    };
+
+    // Contact form submit handler (Requirements: 6.3, 6.4)
+    const handleContactSubmit = async (e) => {
+        e.preventDefault();
+        setFormStatus(null);
+        setIsSubmitting(true);
+
+        const formEl = contactFormRef.current;
+
+        const nameVal = getFlexible(["name", "firstName", "fullName", "fullname", "title"], /(name|full\s*name|title)/i);
+        const emailVal = getFlexible(["email", "emailAddress"], /(email|e-mail)/i);
+        const phoneVal = getFlexible(["phone", "mobile", "phoneNo", "phone_number"], /(phone|mobile|contact\s*number)/i);
+        const serviceVal = getFlexible(["service", "services", "selectedService"], /(service|category|subject)/i);
+        const messageVal = getFlexible(["message", "msg", "messages", "comment"], /(message|query|comments?|details)/i);
+
+        if (!nameVal) {
+            setIsSubmitting(false);
+            setFormStatus({ type: "err", msg: "Please enter your name." });
+            return;
+        }
+        if (!emailVal) {
+            setIsSubmitting(false);
+            setFormStatus({ type: "err", msg: "Please enter your email." });
+            return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+            setIsSubmitting(false);
+            setFormStatus({ type: "err", msg: "Enter a valid email." });
+            return;
+        }
+        if (!phoneVal) {
+            setIsSubmitting(false);
+            setFormStatus({ type: "err", msg: "Please enter your phone number." });
+            return;
+        }
+
+        // Honeypot check
+        const hp = formEl?.querySelector('[name="website"]')?.value;
+        if (hp) {
+            setIsSubmitting(false);
+            setFormStatus({ type: "ok", msg: "Thanks!" });
+            return;
+        }
+
+        try {
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: nameVal,
+                    email: emailVal,
+                    phone: phoneVal,
+                    service: serviceVal,
+                    message: messageVal,
+                    website: hp,
+                }),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(result.error || "Could not send. Please try again.");
+            }
+
+            formEl?.reset();
+            setFormStatus({ type: "ok", msg: result.message || "Message sent! We'll get back to you within 24-48 hours." });
+        } catch (err) {
+            console.error("Contact form error:", err);
+            setFormStatus({ type: "err", msg: err?.message || "Could not send. Please try again." });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <>
             <Header />
 
-            {/* Banner Section - Use main-services banner */}
+            {/* Banner Section - Use CMS main service page banner or fallback */}
             {(() => {
-                const mainService = services.find(s => s.slug === 'main-services');
-                const bannerUrl = mainService?.bannerImage?.url || services[0]?.bannerImage?.url;
+                // Use mainServicePageData banner if available, otherwise fallback to main-services service
+                const bannerUrl = mainServicePageData?.bannerImage?.url ||
+                    services.find(s => s.slug === 'main-services')?.bannerImage?.url ||
+                    services[0]?.bannerImage?.url;
                 return bannerUrl ? (
                     <section
                         className="schematic-section"
@@ -89,12 +195,12 @@ export default function MainServiceClient({ services, homepageData }) {
                 ) : null;
             })()}
 
-            {/* Trust Icons Section */}
-            {homepageData?.trustIcons?.length > 0 && (
+            {/* Trust Icons Section - Use CMS data with fallback to homepage */}
+            {(mainServicePageData?.showTrustIcons !== false) && homepageData?.trustIcons?.length > 0 && (
                 <div className="feature-section">
                     <div className="feature-section-df">
                         <div className="feature-box">
-                            <h1>{homepageData.trustIconsHeading || "Why Choose Us"}</h1>
+                            <h1>{mainServicePageData?.trustIconsHeading || homepageData.trustIconsHeading || "Why Choose Us"}</h1>
                             <div className="features-name">
                                 {homepageData.trustIcons.map((icon, index) => (
                                     icon?.image?.url && (
@@ -118,18 +224,19 @@ export default function MainServiceClient({ services, homepageData }) {
                 </div>
             )}
 
-            {/* Services Grid - Display all services dynamically */}
+            {/* Services Grid - Display all services dynamically using displayImage for consistency */}
             <div className="home_services_unique">
-                <h1>{homepageData?.serviceHeading || "Our Services"}</h1>
+                <h1>{mainServicePageData?.servicesHeading || homepageData?.serviceHeading || "Our Services"}</h1>
                 <div className="home_services_box_unique">
                     {services.filter(s => s.slug !== 'main-services').map((service, index) => (
                         <Link href={`/services/${service.slug}`} key={service._id || index}>
                             <div className="service-box-home-unique">
                                 <div className="service-image-main-unique">
-                                    {service.bannerImage?.url || service.image?.url ? (
+                                    {/* Use displayImage for consistent image across homepage and main services page (Requirement 3.1, 3.2) */}
+                                    {service.displayImage?.url || service.bannerImage?.url || service.image?.url ? (
                                         <Image
-                                            src={service.bannerImage?.url || service.image?.url}
-                                            alt={service.title || 'Service'}
+                                            src={service.displayImage?.url || service.bannerImage?.url || service.image?.url}
+                                            alt={service.displayImage?.alt || service.title || 'Service'}
                                             width={400}
                                             height={200}
                                             unoptimized
@@ -156,16 +263,24 @@ export default function MainServiceClient({ services, homepageData }) {
                 </div>
             </div>
 
-            {/* Why Work With Us Section - Using main-services features */}
+            {/* Why Work With Us Section - Using CMS data with fallback to contact page (Requirement 4.1) */}
             {(() => {
-                const mainService = services.find(s => s.slug === 'main-services');
-                if (!mainService?.features?.length) return null;
+                // Use mainServicePageData if available, otherwise fallback to contactData
+                const showSection = mainServicePageData?.showWhyWorkWithUs !== false;
+                const whyWorkItems = mainServicePageData?.whyWorkWithUsItems?.length > 0
+                    ? mainServicePageData.whyWorkWithUsItems
+                    : contactData?.whyWorkWithUsItems;
+                const whyWorkHeading = mainServicePageData?.whyWorkWithUsHeading || contactData?.whyWorkWithUsHeading || "Why Work With Us?";
+                const whyWorkImage = mainServicePageData?.whyWorkWithUsImage?.url || contactData?.rightImage?.url;
+
+                if (!showSection || !whyWorkItems?.length) return null;
+
                 return (
                     <section className="why-work-main-service-page">
                         <div className="content-two-main-service-page">
                             <div className="text-main-service-page">
-                                <h2>Why Work With Us?</h2>
-                                {mainService.features.map((feature, idx) => (
+                                <h2>{whyWorkHeading}</h2>
+                                {whyWorkItems.map((item, idx) => (
                                     <div key={idx} className="feature-main-service-page">
                                         <svg
                                             id="tick"
@@ -179,17 +294,17 @@ export default function MainServiceClient({ services, homepageData }) {
                                             <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"></path>
                                         </svg>
                                         <div className="info-main-service-page">
-                                            <h3>{feature.title}</h3>
-                                            <p>{feature.description}</p>
+                                            <h3>{item.title}</h3>
+                                            <p>{item.description}</p>
                                         </div>
                                     </div>
                                 ))}
                             </div>
 
                             <div className="image-wrapper-main-service-page">
-                                {mainService?.image?.url && (
+                                {whyWorkImage && (
                                     <Image
-                                        src={mainService.image.url}
+                                        src={whyWorkImage}
                                         alt="Why Work With Us"
                                         width={500}
                                         height={400}
@@ -201,6 +316,114 @@ export default function MainServiceClient({ services, homepageData }) {
                     </section>
                 );
             })()}
+
+            {/* Contact Form Section - Requirements: 6.1, 6.2, 6.3, 6.4, 6.5 */}
+            {mainServicePageData?.showContactForm !== false && (
+                <section className="main-service-contact-section">
+                    <div className="main-service-contact-container">
+                        <div className="main-service-contact-form-wrapper">
+                            <h2 className="main-service-contact-title">
+                                {mainServicePageData?.contactFormHeading || "Get in Touch"}
+                            </h2>
+                            {mainServicePageData?.contactFormSubheading && (
+                                <p className="main-service-contact-subtitle">
+                                    {mainServicePageData.contactFormSubheading}
+                                </p>
+                            )}
+                            <div className="main-service-contact-underline"></div>
+
+                            <form ref={contactFormRef} onSubmit={handleContactSubmit} className="main-service-contact-form">
+                                {/* Name field */}
+                                <div className="main-service-form-field">
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        placeholder="Your Name *"
+                                        required
+                                    />
+                                </div>
+
+                                {/* Email field */}
+                                <div className="main-service-form-field">
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        placeholder="Your Email *"
+                                        required
+                                    />
+                                </div>
+
+                                {/* Phone field */}
+                                <div className="main-service-form-field">
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        placeholder="Your Phone *"
+                                        required
+                                    />
+                                </div>
+
+                                {/* Service selection - populated from services list */}
+                                <div className="main-service-form-field">
+                                    <select name="service">
+                                        <option value="">Select a Service</option>
+                                        {services.filter(s => s.slug !== 'main-services').map((service, idx) => (
+                                            <option key={idx} value={service.title}>
+                                                {service.title}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                {/* Message field */}
+                                <div className="main-service-form-field">
+                                    <textarea
+                                        name="message"
+                                        placeholder="Your Message"
+                                        rows="4"
+                                    ></textarea>
+                                </div>
+
+                                {/* Honeypot field for spam protection */}
+                                <input
+                                    type="text"
+                                    name="website"
+                                    style={{ display: "none" }}
+                                    tabIndex={-1}
+                                    autoComplete="off"
+                                />
+
+                                <button
+                                    type="submit"
+                                    className="main-service-submit-button"
+                                    disabled={isSubmitting}
+                                >
+                                    {isSubmitting ? "Sending..." : "Submit"}
+                                </button>
+
+                                {formStatus && (
+                                    <p className={`main-service-form-status ${formStatus.type === "ok" ? "success" : "error"}`}>
+                                        {formStatus.msg}
+                                    </p>
+                                )}
+                            </form>
+                        </div>
+
+                        {/* Contact image */}
+                        {contactData?.contactImage?.url && (
+                            <div className="main-service-contact-image">
+                                <Image
+                                    src={contactData.contactImage.url}
+                                    alt={contactData.contactImage.alt || "Contact Us"}
+                                    width={500}
+                                    height={400}
+                                    unoptimized
+                                />
+                            </div>
+                        )}
+                    </div>
+                </section>
+            )}
 
             <Footer />
 

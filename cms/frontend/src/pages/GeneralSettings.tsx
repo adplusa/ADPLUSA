@@ -551,7 +551,7 @@ export default function GeneralSettingsForm() {
                     </Card>
 
                     {/* Global SEO / Head Tags */}
-                    <Card>
+                    {/* <Card>
                         <CardHeader>
                             <div className="flex items-center space-x-2">
                                 <SettingsIcon className="h-5 w-5" />
@@ -585,7 +585,7 @@ export default function GeneralSettingsForm() {
                                 </p>
                             </div>
                         </CardContent>
-                    </Card>
+                    </Card> */}
 
                     {/* Save Button */}
                     <div className="flex justify-end gap-4">

@@ -1,4 +1,4 @@
-import { getService, getServices } from "@/lib/cms-client";
+import { getService, getServices, getContact } from "@/lib/cms-client";
 import ServiceClient from "./ServiceClient";
 import Loading from "@/app/Components/Loading/page";
 import Header from "@/app/Components/Header/page";
@@ -29,9 +29,11 @@ export async function generateMetadata({ params }) {
 
 export default async function ServicePage({ params }) {
     const { slug } = await params;
-    const [service, allServices] = await Promise.all([
+    // Fetch service, all services, and contact data for Why Work With Us section (Requirements: 4.1, 4.2)
+    const [service, allServices, contactData] = await Promise.all([
         getService(slug, { revalidate: 60 }),
         getServices({ revalidate: 60 }),
+        getContact({ revalidate: 60 }),
     ]);
 
     if (!service) {
@@ -52,5 +54,5 @@ export default async function ServicePage({ params }) {
 
     const otherServices = allServices?.filter((s) => s.slug !== slug) || [];
 
-    return <ServiceClient service={service} otherServices={otherServices} slug={slug} />;
+    return <ServiceClient service={service} otherServices={otherServices} slug={slug} contactData={contactData} />;
 }

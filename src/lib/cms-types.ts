@@ -8,6 +8,14 @@
 // ============================================================================
 
 /**
+ * Structured meta tag with name and content fields
+ */
+export interface MetaTag {
+    name: string;
+    content: string;
+}
+
+/**
  * Base fields present on all CMS documents
  */
 export interface BaseFields {
@@ -16,7 +24,8 @@ export interface BaseFields {
     updatedAt: string;
     seoTitle?: string;
     seoDescription?: string;
-    customHeadTags?: string;
+    customHeadTags?: string; // Legacy field for backward compatibility
+    metaTags?: MetaTag[]; // Structured meta tags array
 }
 
 /**
@@ -33,6 +42,19 @@ export interface CMSImage {
 export interface CMSImageWithDimensions extends CMSImage {
     width?: number;
     height?: number;
+}
+
+/**
+ * Media type for project gallery items
+ */
+export type ProjectMediaType = 'image' | 'video';
+
+/**
+ * Project media interface supporting both images and videos
+ */
+export interface ProjectMedia extends CMSImageWithDimensions {
+    type?: ProjectMediaType;
+    thumbnailUrl?: string; // For video thumbnails
 }
 
 /**
@@ -145,8 +167,8 @@ export interface ProjectDetail {
 }
 
 export interface ProjectImageGroup {
-    topImages: CMSImageWithDimensions[];
-    bottomImage?: CMSImageWithDimensions;
+    topImages: ProjectMedia[];
+    bottomImage?: ProjectMedia;
 }
 
 export interface Project extends BaseFields {
@@ -155,7 +177,7 @@ export interface Project extends BaseFields {
     description?: string;
 
     // Main/Hero image
-    mainImage?: CMSImageWithDimensions;
+    mainImage?: ProjectMedia;
 
     // Content
     introText?: string;
@@ -167,8 +189,8 @@ export interface Project extends BaseFields {
     // Image galleries
     imageGalleries: ProjectImageGroup[];
 
-    // Legacy images array
-    images: CMSImageWithDimensions[];
+    // Legacy images array (supports both images and videos)
+    images: ProjectMedia[];
 
     // Metadata
     category?: string;
@@ -356,6 +378,66 @@ export interface GeneralSettings {
     customHeadTags?: string;
     createdAt: string;
     updatedAt: string;
+}
+
+// ============================================================================
+// Main Service Page Types (Singleton)
+// ============================================================================
+
+/**
+ * Why Work With Us item interface
+ */
+export interface MainServiceWhyWorkWithUsItem {
+    icon?: string;
+    title: string;
+    description: string;
+}
+
+/**
+ * Main Service Page for the /mainservice page
+ */
+export interface MainServicePage extends BaseFields {
+    // Banner
+    bannerImage?: CMSImage;
+    bannerTitle?: string;
+
+    // Page Content
+    pageTitle?: string;
+    pageSubtitle?: string;
+
+    // Trust Icons Section
+    showTrustIcons: boolean;
+    trustIconsHeading?: string;
+
+    // Services Section
+    servicesHeading?: string;
+
+    // Why Work With Us Section
+    showWhyWorkWithUs: boolean;
+    whyWorkWithUsHeading?: string;
+    whyWorkWithUsItems: MainServiceWhyWorkWithUsItem[];
+    whyWorkWithUsImage?: CMSImage;
+
+    // Contact Form Section
+    showContactForm: boolean;
+    contactFormHeading?: string;
+    contactFormSubheading?: string;
+}
+
+// ============================================================================
+// Projects Page Types (Singleton)
+// ============================================================================
+
+/**
+ * Projects Page for the /projects listing page
+ */
+export interface ProjectsPage extends BaseFields {
+    // Page Content
+    pageTitle?: string;
+    pageSubtitle?: string;
+
+    // Heading displayed on the page
+    heading?: string;
 }
 
 // ============================================================================

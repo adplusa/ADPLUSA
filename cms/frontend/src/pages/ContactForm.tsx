@@ -16,16 +16,22 @@ const contactSchema = z
         _id: z.string().optional(),
         title: z.string().min(1, "Title is required"),
         description: z.string().optional(),
-        contactInfo: z.object({
-            email: z.string().optional(),
-            phone: z.string().optional(),
-            address: z.string().optional(),
-        }).optional(),
-        socialLinks: z.array(z.object({
-            platform: z.string(),
-            url: z.string(),
-            isActive: z.boolean()
-        })).optional(),
+        contactInfo: z
+            .object({
+                email: z.string().optional(),
+                phone: z.string().optional(),
+                address: z.string().optional(),
+            })
+            .optional(),
+        socialLinks: z
+            .array(
+                z.object({
+                    platform: z.string(),
+                    url: z.string(),
+                    isActive: z.boolean(),
+                }),
+            )
+            .optional(),
         customHeadTags: z.string().optional(),
     })
     .merge(seoSchema);
@@ -42,7 +48,7 @@ export default function ContactForm() {
     const [activeTab, setActiveTab] = useState<string>("general");
 
     const form = useForm<ContactFormData>({
-        resolver: zodResolver(contactSchema),
+        resolver: zodResolver(contactSchema) as any,
         defaultValues: {
             title: "",
             description: "",
@@ -70,26 +76,30 @@ export default function ContactForm() {
     const watchSeoTitle = watch("seoTitle");
     const watchSeoDescription = watch("seoDescription");
 
-    useEffect(() => {
-        loadContact();
-    }, []);
-
-    const loadContact = async () => {
+    const loadContact = useCallback(async () => {
         try {
             setLoading(true);
             setError(null);
             const response = await getContact();
             if (response.data) {
-                reset(response.data as ContactFormData);
+                reset({
+                    ...response.data,
+                    metaTags: (response.data as any).metaTags || [],
+                } as any);
             }
         } catch (err: any) {
             const errorMessage =
-                err.response?.data?.error?.message || "Failed to load Contact page";
+                err.response?.data?.error?.message ||
+                "Failed to load Contact page";
             setError(errorMessage);
         } finally {
             setLoading(false);
         }
-    };
+    }, [reset]);
+
+    useEffect(() => {
+        loadContact();
+    }, [loadContact]);
 
     const onSubmit = useCallback(
         async (data: ContactFormData) => {
@@ -107,14 +117,15 @@ export default function ContactForm() {
                 }, 1500);
             } catch (err: any) {
                 const errorMessage =
-                    err.response?.data?.error?.message || "Failed to save Contact page";
+                    err.response?.data?.error?.message ||
+                    "Failed to save Contact page";
                 setError(errorMessage);
                 throw err;
             } finally {
                 setIsSubmitting(false);
             }
         },
-        [navigate]
+        [navigate],
     );
 
     const handleCancel = useCallback(() => {
@@ -165,7 +176,7 @@ export default function ContactForm() {
                 title="Edit Contact Page"
                 subtitle="Manage contact information and social links"
                 isEditMode={true}
-                form={form}
+                form={form as any}
                 isSubmitting={isSubmitting}
                 isLoading={loading}
                 onSubmit={onSubmit}
@@ -180,7 +191,12 @@ export default function ContactForm() {
                 {/* General Tab */}
                 {activeTab === "general" && (
                     <div className="space-y-6">
-                        <FormField id="title" label="Page Title" required error={errors.title?.message}>
+                        <FormField
+                            id="title"
+                            label="Page Title"
+                            required
+                            error={errors.title?.message}
+                        >
                             <input
                                 id="title"
                                 type="text"
@@ -201,7 +217,10 @@ export default function ContactForm() {
                         </FormField>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <FormField id="contactInfo.email" label="Email Address">
+                            <FormField
+                                id="contactInfo.email"
+                                label="Email Address"
+                            >
                                 <input
                                     id="contactInfo.email"
                                     type="email"
@@ -211,7 +230,10 @@ export default function ContactForm() {
                                 />
                             </FormField>
 
-                            <FormField id="contactInfo.phone" label="Phone Number">
+                            <FormField
+                                id="contactInfo.phone"
+                                label="Phone Number"
+                            >
                                 <input
                                     id="contactInfo.phone"
                                     type="text"
@@ -250,11 +272,14 @@ export default function ContactForm() {
                 {activeTab === "social" && (
                     <div className="space-y-6">
                         <div>
-                            <h3 className="text-lg font-medium text-gray-900 mb-4">Social Media Links</h3>
+                            <h3 className="text-lg font-medium text-gray-900 mb-4">
+                                Social Media Links
+                            </h3>
                             <p className="text-sm text-gray-500 mb-6">
-                                Add links to your social media profiles. These will be displayed in the "Follow Us" section.
+                                Add links to your social media profiles. These
+                                will be displayed in the "Follow Us" section.
                             </p>
-                            
+
                             <Controller
                                 name="socialLinks"
                                 control={control}
@@ -284,7 +309,9 @@ export default function ContactForm() {
                                 </p>
                                 <div className="space-y-1">
                                     <p className="text-blue-600 text-lg hover:underline cursor-pointer truncate">
-                                        {watchSeoTitle || watch("title") || "Contact Us"}
+                                        {watchSeoTitle ||
+                                            watch("title") ||
+                                            "Contact Us"}
                                     </p>
                                     <p className="text-green-700 text-sm">
                                         https://yoursite.com/contact
@@ -323,7 +350,9 @@ export default function ContactForm() {
                                     id="seoDescription"
                                     label="SEO Description"
                                     maxLength={160}
-                                    currentLength={watchSeoDescription?.length || 0}
+                                    currentLength={
+                                        watchSeoDescription?.length || 0
+                                    }
                                     error={errors.seoDescription?.message}
                                 >
                                     <textarea
