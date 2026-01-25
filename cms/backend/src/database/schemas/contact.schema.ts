@@ -27,6 +27,7 @@ export interface IContactInfo {
   email?: string;
   phone?: string;
   address?: string;
+  destinationEmail?: string;
   socialMedia?: {
     facebook?: string;
     twitter?: string;
@@ -72,6 +73,9 @@ export interface IContact extends Document, BaseSchemaFields {
 
   // Contact info
   contactInfo: IContactInfo;
+
+  // Destination Email for form submissions
+  destinationEmail?: string;
 
   // Google Map
   googleMapEmbedUrl?: string;
@@ -172,6 +176,15 @@ const contactSchema = new Schema<IContact>(
         trim: true,
         maxlength: [500, 'Address cannot exceed 500 characters'],
       },
+      destinationEmail: {
+        type: String,
+        trim: true,
+        lowercase: true,
+        validate: {
+          validator: (v: string) => v === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
+          message: 'Please provide a valid email address'
+        }
+      },
       socialMedia: {
         facebook: {
           type: String,
@@ -194,6 +207,17 @@ const contactSchema = new Schema<IContact>(
           trim: true,
         },
       },
+    },
+
+    // Destination Email
+    destinationEmail: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      validate: {
+        validator: (v: string) => v === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
+        message: 'Please provide a valid email address'
+      }
     },
 
     // Google Map

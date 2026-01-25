@@ -23,6 +23,9 @@ function MediaItem({
         media.type === "video" ||
         media.contentType?.startsWith("video/") ||
         media.url?.match(/\.(mp4|webm|ogg|mov)$/i);
+    // Detect if the media is a video based on type field or file extension
+    const isVideo =
+        media.type === "video" || media.url?.match(/\.(mp4|webm|ogg|mov)$/i);
 
     if (isVideo) {
         return (
@@ -39,6 +42,12 @@ function MediaItem({
                         height: "100%",
                         objectFit: "cover",
                     }}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="metadata"
+                    className="gallery-video"
                 >
                     <source
                         src={media.url}
@@ -47,6 +56,9 @@ function MediaItem({
                             (media.url?.endsWith(".webm")
                                 ? "video/webm"
                                 : "video/mp4")
+                            media.url?.endsWith(".webm")
+                                ? "video/webm"
+                                : "video/mp4"
                         }
                     />
                     Your browser does not support the video tag.
@@ -386,6 +398,44 @@ export default function ProjectClient({ project, otherProjects, slug }) {
                         )}
                     </div>
                 ))}
+            {project.imageGalleries?.map((gallery, galleryIdx) => (
+                <div key={galleryIdx} className="internal-section-two">
+                    {gallery.images?.length > 0 && (
+                        <div className="media-gallery">
+                            {gallery.images.map((media, idx) => (
+                                <MediaItem
+                                    key={idx}
+                                    media={media}
+                                    index={idx}
+                                    className="gallery-item"
+                                />
+                            ))}
+                        </div>
+                    )}
+                    {gallery.topImages?.length > 0 && (
+                        <div className="media-gallery">
+                            {gallery.topImages.map((media, idx) => (
+                                <MediaItem
+                                    key={idx}
+                                    media={media}
+                                    index={idx}
+                                    className="gallery-item"
+                                />
+                            ))}
+                        </div>
+                    )}
+                    {gallery.bottomImage?.url && (
+                        <div className="internal-section-two-bottom">
+                            <MediaItem
+                                media={gallery.bottomImage}
+                                index={0}
+                                width={1200}
+                                height={600}
+                            />
+                        </div>
+                    )}
+                </div>
+            ))}
 
             {project.images?.length > 0 && (
                 <div className="internal-section-two">

@@ -12,7 +12,11 @@ import projectRoutes from './routes/project.routes';
 import serviceRoutes from './routes/service.routes';
 import contentRoutes from './routes/content.routes';
 import publicRoutes from './routes/public.routes';
+import contactRoutes from './routes/contact.routes';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware';
+import nodemailer from 'nodemailer';
+import mongoose from 'mongoose';
+import { GeneralSettingsSchema } from './database/schemas/generalSettings.schema';
 
 const app: Application = express();
 
@@ -70,6 +74,7 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api', contentRoutes);
 app.use('/api/public', publicRoutes);
+app.use('/api/contact', contactRoutes);
 
 // 404 handler for undefined routes
 app.use(notFoundHandler);
