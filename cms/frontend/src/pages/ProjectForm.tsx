@@ -197,7 +197,13 @@ export default function ProjectForm() {
                 slug: data.slug,
                 category: data.category,
                 featured: data.featured,
-                link: data.link,
+                // Sanitize Link
+                link:
+                    data.link && data.link.trim() !== ""
+                        ? data.link.match(/^https?:\/\//)
+                            ? data.link
+                            : `https://${data.link}`
+                        : "",
 
                 // Content
                 description: data.description,
@@ -232,10 +238,21 @@ export default function ProjectForm() {
                 setSuccess(true);
                 setTimeout(() => navigate("/dashboard/projects"), 1500);
             } catch (err: any) {
-                setError(
-                    err.response?.data?.error?.message ||
-                        "Failed to save project",
-                );
+                const errorData = err.response?.data?.error;
+                let errorMessage =
+                    errorData?.message || "Failed to save project";
+
+                // Append detailed validation errors if available
+                if (errorData?.details) {
+                    const details = Object.entries(errorData.details)
+                        .map(([key, msg]) => `${key}: ${msg}`)
+                        .join(", ");
+                    if (details) {
+                        errorMessage += ` (${details})`;
+                    }
+                }
+
+                setError(errorMessage);
                 throw err; // Re-throw to let FormWrapper know submission failed
             } finally {
                 setIsSubmitting(false);
@@ -604,8 +621,18 @@ export default function ProjectForm() {
                                                 (img) => ({
                                                     url: img.url,
                                                     alt: "",
-                                                    width: img.width,
-                                                    height: img.height,
+                                                    width:
+                                                        typeof img.width ===
+                                                            "number" &&
+                                                        !isNaN(img.width)
+                                                            ? img.width
+                                                            : undefined,
+                                                    height:
+                                                        typeof img.height ===
+                                                            "number" &&
+                                                        !isNaN(img.height)
+                                                            ? img.height
+                                                            : undefined,
                                                     type:
                                                         img.contentType?.startsWith(
                                                             "video/",
