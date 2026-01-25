@@ -18,6 +18,11 @@ function MediaItem({
     width = 600,
     height = 400,
 }) {
+    // Detect if the media is a video based on type field, contentType, or file extension
+    const isVideo =
+        media.type === "video" ||
+        media.contentType?.startsWith("video/") ||
+        media.url?.match(/\.(mp4|webm|ogg|mov)$/i);
     // Detect if the media is a video based on type field or file extension
     const isVideo =
         media.type === "video" || media.url?.match(/\.(mp4|webm|ogg|mov)$/i);
@@ -28,6 +33,15 @@ function MediaItem({
                 <video
                     src={media.url}
                     poster={media.thumbnailUrl || undefined}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    className="gallery-video"
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                    }}
                     autoPlay
                     loop
                     muted
@@ -38,6 +52,10 @@ function MediaItem({
                     <source
                         src={media.url}
                         type={
+                            media.contentType ||
+                            (media.url?.endsWith(".webm")
+                                ? "video/webm"
+                                : "video/mp4")
                             media.url?.endsWith(".webm")
                                 ? "video/webm"
                                 : "video/mp4"
@@ -341,6 +359,45 @@ export default function ProjectClient({ project, otherProjects, slug }) {
                 <hr id="internal-line" />
             </div>
 
+            {!project.images?.length &&
+                project.imageGalleries?.map((gallery, galleryIdx) => (
+                    <div key={galleryIdx} className="internal-section-two">
+                        {gallery.images?.length > 0 && (
+                            <div className="media-gallery">
+                                {gallery.images.map((media, idx) => (
+                                    <MediaItem
+                                        key={idx}
+                                        media={media}
+                                        index={idx}
+                                        className="gallery-item"
+                                    />
+                                ))}
+                            </div>
+                        )}
+                        {gallery.topImages?.length > 0 && (
+                            <div className="media-gallery">
+                                {gallery.topImages.map((media, idx) => (
+                                    <MediaItem
+                                        key={idx}
+                                        media={media}
+                                        index={idx}
+                                        className="gallery-item"
+                                    />
+                                ))}
+                            </div>
+                        )}
+                        {gallery.bottomImage?.url && (
+                            <div className="internal-section-two-bottom">
+                                <MediaItem
+                                    media={gallery.bottomImage}
+                                    index={0}
+                                    width={1200}
+                                    height={600}
+                                />
+                            </div>
+                        )}
+                    </div>
+                ))}
             {project.imageGalleries?.map((gallery, galleryIdx) => (
                 <div key={galleryIdx} className="internal-section-two">
                     {gallery.images?.length > 0 && (
@@ -380,7 +437,7 @@ export default function ProjectClient({ project, otherProjects, slug }) {
                 </div>
             ))}
 
-            {project.images?.length > 0 && !project.imageGalleries?.length && (
+            {project.images?.length > 0 && (
                 <div className="internal-section-two">
                     <div className="media-gallery">
                         {project.images.map((media, idx) => (

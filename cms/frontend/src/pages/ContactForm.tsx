@@ -15,18 +15,28 @@ const contactSchema = z
     .object({
         _id: z.string().optional(),
         title: z.string().min(1, "Title is required"),
-        contactInfo: z.object({
-            email: z.string().optional(),
-            phone: z.string().optional(),
-            address: z.string().optional(),
-            destinationEmail: z.string().email("Invalid email address").optional().or(z.literal("")),
-        }).optional(),
-        socialLinks: z.array(z.object({
-            platform: z.string(),
-            url: z.string(),
-            isActive: z.boolean()
-        })).optional(),
-        // --------------------------------------------------
+        description: z.string().optional(),
+        contactInfo: z
+            .object({
+                email: z.string().optional(),
+                phone: z.string().optional(),
+                address: z.string().optional(),
+                destinationEmail: z
+                    .string()
+                    .email("Invalid email address")
+                    .optional()
+                    .or(z.literal("")),
+            })
+            .optional(),
+        socialLinks: z
+            .array(
+                z.object({
+                    platform: z.string(),
+                    url: z.string(),
+                    isActive: z.boolean(),
+                }),
+            )
+            .optional(),
         customHeadTags: z.string().optional(),
     })
     .merge(seoSchema);
@@ -81,7 +91,9 @@ export default function ContactForm() {
                     ...response.data,
                     contactInfo: {
                         ...(response.data as any).contactInfo,
-                        destinationEmail: (response.data as any).contactInfo?.destinationEmail || "",
+                        destinationEmail:
+                            (response.data as any).contactInfo
+                                ?.destinationEmail || "",
                     },
                     metaTags: (response.data as any).metaTags || [],
                 } as any);
@@ -109,7 +121,7 @@ export default function ContactForm() {
             try {
                 // Create a copy of data and remove _id to prevent Mongoose update errors
                 const { _id, ...updateData } = data;
-                
+
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const response = await updateContact(updateData as any);
                 setSubmitSuccess(true);
@@ -295,17 +307,27 @@ export default function ContactForm() {
                                 <div className="flex-shrink-0">ℹ️</div>
                                 <div className="ml-3">
                                     <p className="text-sm text-blue-800">
-                                        Configure the email address where contact form submissions will be sent.
+                                        Configure the email address where
+                                        contact form submissions will be sent.
                                         <br />
                                         <span className="text-xs opacity-80 mt-1 block">
-                                            If left empty, the system will try to use the <strong>Email Address</strong> from the General Info tab.
+                                            If left empty, the system will try
+                                            to use the{" "}
+                                            <strong>Email Address</strong> from
+                                            the General Info tab.
                                         </span>
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        <FormField id="contactInfo.destinationEmail" label="Destination Email Address" error={errors.contactInfo?.destinationEmail?.message}>
+                        <FormField
+                            id="contactInfo.destinationEmail"
+                            label="Destination Email Address"
+                            error={
+                                errors.contactInfo?.destinationEmail?.message
+                            }
+                        >
                             <input
                                 id="contactInfo.destinationEmail"
                                 type="email"

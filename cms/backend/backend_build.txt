@@ -1,0 +1,4 @@
+
+> architect-cms-api@1.0.0 build
+> tsc || true
+
