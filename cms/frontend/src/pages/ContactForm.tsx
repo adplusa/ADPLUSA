@@ -15,23 +15,18 @@ const contactSchema = z
     .object({
         _id: z.string().optional(),
         title: z.string().min(1, "Title is required"),
-        description: z.string().optional(),
-        contactInfo: z
-            .object({
-                email: z.string().optional(),
-                phone: z.string().optional(),
-                address: z.string().optional(),
-            })
-            .optional(),
-        socialLinks: z
-            .array(
-                z.object({
-                    platform: z.string(),
-                    url: z.string(),
-                    isActive: z.boolean(),
-                }),
-            )
-            .optional(),
+        contactInfo: z.object({
+            email: z.string().optional(),
+            phone: z.string().optional(),
+            address: z.string().optional(),
+            destinationEmail: z.string().email("Invalid email address").optional().or(z.literal("")),
+        }).optional(),
+        socialLinks: z.array(z.object({
+            platform: z.string(),
+            url: z.string(),
+            isActive: z.boolean()
+        })).optional(),
+        // --------------------------------------------------
         customHeadTags: z.string().optional(),
     })
     .merge(seoSchema);
@@ -51,11 +46,11 @@ export default function ContactForm() {
         resolver: zodResolver(contactSchema) as any,
         defaultValues: {
             title: "",
-            description: "",
             contactInfo: {
                 email: "",
                 phone: "",
                 address: "",
+                destinationEmail: "",
             },
             socialLinks: [],
             seoTitle: "",
@@ -84,6 +79,10 @@ export default function ContactForm() {
             if (response.data) {
                 reset({
                     ...response.data,
+                    contactInfo: {
+                        ...(response.data as any).contactInfo,
+                        destinationEmail: (response.data as any).contactInfo?.destinationEmail || "",
+                    },
                     metaTags: (response.data as any).metaTags || [],
                 } as any);
             }
@@ -108,8 +107,11 @@ export default function ContactForm() {
             setSubmitSuccess(false);
 
             try {
+                // Create a copy of data and remove _id to prevent Mongoose update errors
+                const { _id, ...updateData } = data;
+                
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                await updateContact(data as any);
+                const response = await updateContact(updateData as any);
                 setSubmitSuccess(true);
 
                 setTimeout(() => {
@@ -143,6 +145,7 @@ export default function ContactForm() {
     const tabs: FormTab[] = [
         { id: "general", label: "General Info", icon: "📝" },
         { id: "social", label: "Social Media", icon: "🌐" },
+        { id: "destination", label: "Destination Email", icon: "📧" },
         { id: "seo", label: "SEO", icon: "🔍" },
     ];
 
@@ -203,16 +206,6 @@ export default function ContactForm() {
                                 {...register("title")}
                                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                                 placeholder="Contact Us"
-                            />
-                        </FormField>
-
-                        <FormField id="description" label="Description">
-                            <textarea
-                                id="description"
-                                {...register("description")}
-                                rows={3}
-                                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
-                                placeholder="Get in touch with us..."
                             />
                         </FormField>
 
@@ -294,6 +287,36 @@ export default function ContactForm() {
                     </div>
                 )}
 
+                {/* Destination Email Tab */}
+                {activeTab === "destination" && (
+                    <div className="space-y-6">
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                            <div className="flex">
+                                <div className="flex-shrink-0">ℹ️</div>
+                                <div className="ml-3">
+                                    <p className="text-sm text-blue-800">
+                                        Configure the email address where contact form submissions will be sent.
+                                        <br />
+                                        <span className="text-xs opacity-80 mt-1 block">
+                                            If left empty, the system will try to use the <strong>Email Address</strong> from the General Info tab.
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <FormField id="contactInfo.destinationEmail" label="Destination Email Address" error={errors.contactInfo?.destinationEmail?.message}>
+                            <input
+                                id="contactInfo.destinationEmail"
+                                type="email"
+                                {...register("contactInfo.destinationEmail")}
+                                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                placeholder="admin@example.com"
+                            />
+                        </FormField>
+                    </div>
+                )}
+
                 {/* SEO Tab */}
                 {activeTab === "seo" && (
                     <div className="space-y-6">
@@ -318,7 +341,6 @@ export default function ContactForm() {
                                     </p>
                                     <p className="text-gray-600 text-sm line-clamp-2">
                                         {watchSeoDescription ||
-                                            watch("description") ||
                                             "Page description will appear here..."}
                                     </p>
                                 </div>
