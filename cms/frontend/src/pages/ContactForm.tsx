@@ -123,7 +123,7 @@ export default function ContactForm() {
                 const { _id, ...updateData } = data;
 
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const response = await updateContact(updateData as any);
+                await updateContact(updateData as any);
                 setSubmitSuccess(true);
 
                 setTimeout(() => {
