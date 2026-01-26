@@ -7,9 +7,7 @@
 // Common Types
 // ============================================================================
 
-/**
- * Structured meta tag with name and content fields
- */
+
 export interface MetaTag {
     name: string;
     content: string;
