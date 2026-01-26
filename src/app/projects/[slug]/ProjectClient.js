@@ -23,9 +23,6 @@ function MediaItem({
         media.type === "video" ||
         media.contentType?.startsWith("video/") ||
         media.url?.match(/\.(mp4|webm|ogg|mov)$/i);
-    // Detect if the media is a video based on type field or file extension
-    const isVideo =
-        media.type === "video" || media.url?.match(/\.(mp4|webm|ogg|mov)$/i);
 
     if (isVideo) {
         return (
@@ -45,9 +42,6 @@ function MediaItem({
                     autoPlay
                     loop
                     muted
-                    playsInline
-                    preload="metadata"
-                    className="gallery-video"
                 >
                     <source
                         src={media.url}
@@ -56,9 +50,6 @@ function MediaItem({
                             (media.url?.endsWith(".webm")
                                 ? "video/webm"
                                 : "video/mp4")
-                            media.url?.endsWith(".webm")
-                                ? "video/webm"
-                                : "video/mp4"
                         }
                     />
                     Your browser does not support the video tag.
