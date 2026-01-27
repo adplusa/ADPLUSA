@@ -52,7 +52,7 @@ async function seedGeneralSettings(): Promise<void> {
     const existingSettings = await GeneralSettings.findOne();
     if (existingSettings) {
         console.log(
-            "⚠️  GeneralSettings already exists. Updating with new uploads...\n"
+            "⚠️  GeneralSettings already exists. Updating with new uploads...\n",
         );
     }
 
@@ -107,7 +107,7 @@ async function seedGeneralSettings(): Promise<void> {
                 existingSettings.footerLogo = uploadedAssets.footerLogo;
             if (uploadedAssets.favicon)
                 existingSettings.favicon = uploadedAssets.favicon;
-            existingSettings.siteName = "ADPL Consulting LLC";
+            existingSettings.siteTitle = "ADPL Consulting LLC";
             existingSettings.siteDescription =
                 "A trusted partner to architects, engineers, contractors, and real estate consultants across India and the U.S.";
 
@@ -119,7 +119,7 @@ async function seedGeneralSettings(): Promise<void> {
                 headerLogo: uploadedAssets.headerLogo,
                 footerLogo: uploadedAssets.footerLogo,
                 favicon: uploadedAssets.favicon,
-                siteName: "ADPL Consulting LLC",
+                siteTitle: "ADPL Consulting LLC",
                 siteDescription:
                     "A trusted partner to architects, engineers, contractors, and real estate consultants across India and the U.S.",
             });

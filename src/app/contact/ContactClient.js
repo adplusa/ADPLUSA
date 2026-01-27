@@ -42,15 +42,23 @@ export default function ContactClient({ data }) {
 
         const fields = Array.from(f.elements).filter(
             (el) =>
-                (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT") &&
-                typeof el.name === "string"
+                (el.tagName === "INPUT" ||
+                    el.tagName === "TEXTAREA" ||
+                    el.tagName === "SELECT") &&
+                typeof el.name === "string",
         );
 
         const candidate =
             fields.find((el) => fallbackRegex.test(el.name || "")) ||
-            fields.find((el) => typeof el.placeholder === "string" && fallbackRegex.test(el.placeholder));
+            fields.find(
+                (el) =>
+                    typeof el.placeholder === "string" &&
+                    fallbackRegex.test(el.placeholder),
+            );
 
-        return candidate && typeof candidate.value === "string" ? candidate.value.trim() : "";
+        return candidate && typeof candidate.value === "string"
+            ? candidate.value.trim()
+            : "";
     };
 
     const handleSubmit = async (e) => {
@@ -60,11 +68,26 @@ export default function ContactClient({ data }) {
 
         const formEl = formRef.current;
 
-        const nameVal = getFlexible(["name", "firstName", "fullName", "fullname", "title"], /(name|full\s*name|title)/i);
-        const emailVal = getFlexible(["email", "emailAddress"], /(email|e-mail)/i);
-        const phoneVal = getFlexible(["phone", "mobile", "phoneNo", "phone_number"], /(phone|mobile|contact\s*number)/i);
-        const serviceVal = getFlexible(["service", "services", "selectedService"], /(service|category|subject)/i);
-        const messageVal = getFlexible(["message", "msg", "messages", "comment"], /(message|query|comments?|details)/i);
+        const nameVal = getFlexible(
+            ["name", "firstName", "fullName", "fullname", "title"],
+            /(name|full\s*name|title)/i,
+        );
+        const emailVal = getFlexible(
+            ["email", "emailAddress"],
+            /(email|e-mail)/i,
+        );
+        const phoneVal = getFlexible(
+            ["phone", "mobile", "phoneNo", "phone_number"],
+            /(phone|mobile|contact\s*number)/i,
+        );
+        const serviceVal = getFlexible(
+            ["service", "services", "selectedService"],
+            /(service|category|subject)/i,
+        );
+        const messageVal = getFlexible(
+            ["message", "msg", "messages", "comment"],
+            /(message|query|comments?|details)/i,
+        );
 
         if (!nameVal) {
             setIsSubmitting(false);
@@ -111,14 +134,24 @@ export default function ContactClient({ data }) {
             const result = await response.json();
 
             if (!response.ok || !result.success) {
-                throw new Error(result.error || "Could not send. Please try again.");
+                throw new Error(
+                    result.error || "Could not send. Please try again.",
+                );
             }
 
             formEl?.reset();
-            setStatus({ type: "ok", msg: result.message || "Message sent! We'll get back to you within 24-48 hours." });
+            setStatus({
+                type: "ok",
+                msg:
+                    result.message ||
+                    "Message sent! We'll get back to you within 24-48 hours.",
+            });
         } catch (err) {
             console.error("Contact form error:", err);
-            setStatus({ type: "err", msg: err?.message || "Could not send. Please try again." });
+            setStatus({
+                type: "err",
+                msg: err?.message || "Could not send. Please try again.",
+            });
         } finally {
             setIsSubmitting(false);
         }
@@ -130,28 +163,54 @@ export default function ContactClient({ data }) {
 
             <div className="contact-container">
                 <div className="contact-form-section">
-                    <h1 className="contact-title">{data?.mainHeading || "Get in touch"}</h1>
+                    <h1 className="contact-title">
+                        {data?.mainHeading || "Get in touch"}
+                    </h1>
                     <div className="title-underline"></div>
 
                     <form ref={formRef} onSubmit={handleSubmit}>
                         {data.formFields?.map((field, idx) => (
                             <div className="form-field" key={idx}>
                                 {field.type === "textarea" ? (
-                                    <textarea name={field.name} placeholder={field.label} required={!!field.required} />
+                                    <textarea
+                                        name={field.name}
+                                        placeholder={field.label}
+                                        required={!!field.required}
+                                    />
                                 ) : (
-                                    <input type={field.type} name={field.name} placeholder={field.label} required={!!field.required} />
+                                    <input
+                                        type={field.type}
+                                        name={field.name}
+                                        placeholder={field.label}
+                                        required={!!field.required}
+                                    />
                                 )}
                             </div>
                         ))}
 
-                        <input type="text" name="website" style={{ display: "none" }} tabIndex={-1} autoComplete="off" />
+                        <input
+                            type="text"
+                            name="website"
+                            style={{ display: "none" }}
+                            tabIndex={-1}
+                            autoComplete="off"
+                        />
 
-                        <button type="submit" className="submit-button" disabled={isSubmitting}>
+                        <button
+                            type="submit"
+                            className="submit-button"
+                            disabled={isSubmitting}
+                        >
                             {isSubmitting ? "Sending…" : "Submit"}
                         </button>
 
                         {status && (
-                            <p style={{ marginTop: 10 }} className={status.type === "ok" ? "success" : "error"}>
+                            <p
+                                style={{ marginTop: 10 }}
+                                className={
+                                    status.type === "ok" ? "success" : "error"
+                                }
+                            >
                                 {status.msg}
                             </p>
                         )}
@@ -177,31 +236,46 @@ export default function ContactClient({ data }) {
             <section className="for-map-wrapper">
                 <div className="for-map-container">
                     <div className="for-map-left">
-                        <h2 className="for-map-heading">{data?.talkIdeasHeading || "Let's Talk Ideas"}</h2>
+                        <h2 className="for-map-heading">
+                            {data?.talkIdeasHeading || "Let's Talk Ideas"}
+                        </h2>
                         <p className="for-map-description">
-                            Connect with us to transform your ideas into reality. Whether you&apos;re seeking expert advice,
-                            have project inquiries, or are ready to begin, our team is here to guide you every step of the way.
+                            Connect with us to transform your ideas into
+                            reality. Whether you&apos;re seeking expert advice,
+                            have project inquiries, or are ready to begin, our
+                            team is here to guide you every step of the way.
                         </p>
 
                         <div className="for-map-info">
                             <div className="for-map-item">
                                 <span className="for-map-label">Address:</span>
-                                <span className="for-map-value">{data.contactInfo?.address}</span>
+                                <span className="for-map-value">
+                                    {data.contactInfo?.address}
+                                </span>
                             </div>
                             <div className="for-map-item">
                                 <span className="for-map-label">Phone:</span>
-                                <span className="for-map-value">{data.contactInfo?.phone}</span>
+                                <span className="for-map-value">
+                                    {data.contactInfo?.phone}
+                                </span>
                             </div>
                             <div className="for-map-item">
                                 <span className="for-map-label">Email:</span>
-                                <span className="for-map-value">{data.contactInfo?.email}</span>
+                                <span className="for-map-value">
+                                    {data.contactInfo?.email}
+                                </span>
                             </div>
                         </div>
                     </div>
 
                     {data?.googleMapEmbedUrl && (
                         <div className="for-map-right">
-                            <iframe title="Google Map" src={data.googleMapEmbedUrl} loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+                            <iframe
+                                title="Google Map"
+                                src={data.googleMapEmbedUrl}
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                            />
                         </div>
                     )}
                 </div>
@@ -213,7 +287,12 @@ export default function ContactClient({ data }) {
                         <h2>{data?.whyWorkWithUsHeading}</h2>
                         {data?.whyWorkWithUsItems?.map((item, idx) => (
                             <div className="feature" key={idx}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-check2" viewBox="0 0 16 16">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    className="bi bi-check2"
+                                    viewBox="0 0 16 16"
+                                >
                                     <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"></path>
                                 </svg>
                                 <div className="info">
@@ -227,7 +306,14 @@ export default function ContactClient({ data }) {
                     <div className="image-wrapper-contact">
                         <div className="background-contact">
                             {data?.rightImage?.url && (
-                                <Image src={data.rightImage.url} alt={data.rightImage.alt || "Why Work Image"} width={500} height={400} />
+                                <Image
+                                    src={data.rightImage.url}
+                                    alt={
+                                        data.rightImage.alt || "Why Work Image"
+                                    }
+                                    width={500}
+                                    height={400}
+                                />
                             )}
                         </div>
                     </div>
@@ -237,8 +323,17 @@ export default function ContactClient({ data }) {
             <Footer />
 
             <div className="whatsapp">
-                <a className="btn-whatsapp-pulse" target="_blank" href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!">
-                    <Image src="/whatsapp.png" width={40} height={40} alt="Whatsapp-img" unoptimized />
+                <a
+                    className="btn-whatsapp-pulse"
+                    target="_blank"
+                    href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
+                >
+                    <img
+                        src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
+                        width={40}
+                        height={40}
+                        alt="Whatsapp-img"
+                    />
                 </a>
             </div>
 
@@ -247,23 +342,51 @@ export default function ContactClient({ data }) {
             </div>
 
             {showForm && (
-                <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
-                    <div className="enquiry-container" onClick={(e) => e.stopPropagation()}>
+                <div
+                    className="enquiry-overlay"
+                    onClick={() => setShowForm(false)}
+                >
+                    <div
+                        className="enquiry-container"
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         <div className="enquiry-box">
-                            <div className="close-icon" onClick={() => setShowForm(false)}>✕</div>
+                            <div
+                                className="close-icon"
+                                onClick={() => setShowForm(false)}
+                            >
+                                ✕
+                            </div>
                             <h2 className="title">Quick Query</h2>
-                            <p className="subtitle">If you have any queries, we will be pleased to assist you.</p>
+                            <p className="subtitle">
+                                If you have any queries, we will be pleased to
+                                assist you.
+                            </p>
                             <form>
-                                <input type="text" placeholder="Name" className="form-input" />
-                                <input type="text" placeholder="Mobile No." className="form-input" />
+                                <input
+                                    type="text"
+                                    placeholder="Name"
+                                    className="form-input"
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Mobile No."
+                                    className="form-input"
+                                />
                                 <select className="form-input">
                                     <option>Select Type</option>
                                     <option>General</option>
                                     <option>Support</option>
                                     <option>Sales</option>
                                 </select>
-                                <textarea placeholder="Query" className="form-input" rows="3" />
-                                <button type="submit" className="submit-button">Submit</button>
+                                <textarea
+                                    placeholder="Query"
+                                    className="form-input"
+                                    rows="3"
+                                />
+                                <button type="submit" className="submit-button">
+                                    Submit
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -271,12 +394,26 @@ export default function ContactClient({ data }) {
             )}
 
             <div className="upward" onClick={upwardHandler}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-chevron-up" viewBox="0 0 16 16">
-                    <path fillRule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z" />
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-chevron-up"
+                    viewBox="0 0 16 16"
+                >
+                    <path
+                        fillRule="evenodd"
+                        d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"
+                    />
                 </svg>
             </div>
 
-            <PageScripts customHeadTags={data?.customHeadTags} metaTags={data?.metaTags} pageId="contact" />
+            <PageScripts
+                customHeadTags={data?.customHeadTags}
+                metaTags={data?.metaTags}
+                pageId="contact"
+            />
         </>
     );
 }

@@ -3,17 +3,26 @@
 import Header from "../Components/Header/page";
 import Footer from "../Components/Footer/page";
 import "./servicetwo.css";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
+import {
+    createServiceImageMap,
+    getServiceGridImage,
+} from "@/lib/service-image-mapper";
 
 /**
  * Main Services Client Component
  * Receives data from server component and handles all interactivity
  * Requirements: 1.3, 3.1, 4.1, 6.1, 6.2, 6.3, 6.4
  */
-export default function MainServiceClient({ services, homepageData, mainServicePageData, contactData }) {
+export default function MainServiceClient({
+    services,
+    homepageData,
+    mainServicePageData,
+    contactData,
+}) {
     const textRef = useRef(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
@@ -24,6 +33,11 @@ export default function MainServiceClient({ services, homepageData, mainServiceP
     const contactFormRef = useRef(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formStatus, setFormStatus] = useState(null);
+
+    // Create image map from homepage serviceBoxes for consistent images between homepage and main services page
+    const serviceImageMap = useMemo(() => {
+        return createServiceImageMap(homepageData?.serviceBoxes);
+    }, [homepageData?.serviceBoxes]);
 
     useEffect(() => {
         if (textRef.current) {
@@ -91,15 +105,23 @@ export default function MainServiceClient({ services, homepageData, mainServiceP
 
         const fields = Array.from(f.elements).filter(
             (el) =>
-                (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT") &&
-                typeof el.name === "string"
+                (el.tagName === "INPUT" ||
+                    el.tagName === "TEXTAREA" ||
+                    el.tagName === "SELECT") &&
+                typeof el.name === "string",
         );
 
         const candidate =
             fields.find((el) => fallbackRegex.test(el.name || "")) ||
-            fields.find((el) => typeof el.placeholder === "string" && fallbackRegex.test(el.placeholder));
+            fields.find(
+                (el) =>
+                    typeof el.placeholder === "string" &&
+                    fallbackRegex.test(el.placeholder),
+            );
 
-        return candidate && typeof candidate.value === "string" ? candidate.value.trim() : "";
+        return candidate && typeof candidate.value === "string"
+            ? candidate.value.trim()
+            : "";
     };
 
     // Contact form submit handler (Requirements: 6.3, 6.4)
@@ -110,11 +132,26 @@ export default function MainServiceClient({ services, homepageData, mainServiceP
 
         const formEl = contactFormRef.current;
 
-        const nameVal = getFlexible(["name", "firstName", "fullName", "fullname", "title"], /(name|full\s*name|title)/i);
-        const emailVal = getFlexible(["email", "emailAddress"], /(email|e-mail)/i);
-        const phoneVal = getFlexible(["phone", "mobile", "phoneNo", "phone_number"], /(phone|mobile|contact\s*number)/i);
-        const serviceVal = getFlexible(["service", "services", "selectedService"], /(service|category|subject)/i);
-        const messageVal = getFlexible(["message", "msg", "messages", "comment"], /(message|query|comments?|details)/i);
+        const nameVal = getFlexible(
+            ["name", "firstName", "fullName", "fullname", "title"],
+            /(name|full\s*name|title)/i,
+        );
+        const emailVal = getFlexible(
+            ["email", "emailAddress"],
+            /(email|e-mail)/i,
+        );
+        const phoneVal = getFlexible(
+            ["phone", "mobile", "phoneNo", "phone_number"],
+            /(phone|mobile|contact\s*number)/i,
+        );
+        const serviceVal = getFlexible(
+            ["service", "services", "selectedService"],
+            /(service|category|subject)/i,
+        );
+        const messageVal = getFlexible(
+            ["message", "msg", "messages", "comment"],
+            /(message|query|comments?|details)/i,
+        );
 
         if (!nameVal) {
             setIsSubmitting(false);
@@ -133,7 +170,10 @@ export default function MainServiceClient({ services, homepageData, mainServiceP
         }
         if (!phoneVal) {
             setIsSubmitting(false);
-            setFormStatus({ type: "err", msg: "Please enter your phone number." });
+            setFormStatus({
+                type: "err",
+                msg: "Please enter your phone number.",
+            });
             return;
         }
 
@@ -162,14 +202,24 @@ export default function MainServiceClient({ services, homepageData, mainServiceP
             const result = await response.json();
 
             if (!response.ok || !result.success) {
-                throw new Error(result.error || "Could not send. Please try again.");
+                throw new Error(
+                    result.error || "Could not send. Please try again.",
+                );
             }
 
             formEl?.reset();
-            setFormStatus({ type: "ok", msg: result.message || "Message sent! We'll get back to you within 24-48 hours." });
+            setFormStatus({
+                type: "ok",
+                msg:
+                    result.message ||
+                    "Message sent! We'll get back to you within 24-48 hours.",
+            });
         } catch (err) {
             console.error("Contact form error:", err);
-            setFormStatus({ type: "err", msg: err?.message || "Could not send. Please try again." });
+            setFormStatus({
+                type: "err",
+                msg: err?.message || "Could not send. Please try again.",
+            });
         } finally {
             setIsSubmitting(false);
         }
@@ -182,8 +232,10 @@ export default function MainServiceClient({ services, homepageData, mainServiceP
             {/* Banner Section - Use CMS main service page banner or fallback */}
             {(() => {
                 // Use mainServicePageData banner if available, otherwise fallback to main-services service
-                const bannerUrl = mainServicePageData?.bannerImage?.url ||
-                    services.find(s => s.slug === 'main-services')?.bannerImage?.url ||
+                const bannerUrl =
+                    mainServicePageData?.bannerImage?.url ||
+                    services.find((s) => s.slug === "main-services")
+                        ?.bannerImage?.url ||
                     services[0]?.bannerImage?.url;
                 return bannerUrl ? (
                     <section
@@ -196,82 +248,118 @@ export default function MainServiceClient({ services, homepageData, mainServiceP
             })()}
 
             {/* Trust Icons Section - Use CMS data with fallback to homepage */}
-            {(mainServicePageData?.showTrustIcons !== false) && homepageData?.trustIcons?.length > 0 && (
-                <div className="feature-section">
-                    <div className="feature-section-df">
-                        <div className="feature-box">
-                            <h1>{mainServicePageData?.trustIconsHeading || homepageData.trustIconsHeading || "Why Choose Us"}</h1>
-                            <div className="features-name">
-                                {homepageData.trustIcons.map((icon, index) => (
-                                    icon?.image?.url && (
-                                        <div key={index} className="service-related-item">
-                                            <Image
-                                                src={icon.image.url}
-                                                alt={icon.name || "Trust Icon"}
-                                                width={70}
-                                                height={70}
-                                                unoptimized
-                                                priority
-                                            />
-                                            <p>{icon.number}</p>
-                                            <h3>{icon.name}</h3>
-                                        </div>
-                                    )
-                                ))}
+            {mainServicePageData?.showTrustIcons !== false &&
+                homepageData?.trustIcons?.length > 0 && (
+                    <div className="feature-section">
+                        <div className="feature-section-df">
+                            <div className="feature-box">
+                                <h1>
+                                    {mainServicePageData?.trustIconsHeading ||
+                                        homepageData.trustIconsHeading ||
+                                        "Why Choose Us"}
+                                </h1>
+                                <div className="features-name">
+                                    {homepageData.trustIcons.map(
+                                        (icon, index) =>
+                                            icon?.image?.url && (
+                                                <div
+                                                    key={index}
+                                                    className="service-related-item"
+                                                >
+                                                    <Image
+                                                        src={icon.image.url}
+                                                        alt={
+                                                            icon.name ||
+                                                            "Trust Icon"
+                                                        }
+                                                        width={70}
+                                                        height={70}
+                                                        unoptimized
+                                                        priority
+                                                    />
+                                                    <p>{icon.number}</p>
+                                                    <h3>{icon.name}</h3>
+                                                </div>
+                                            ),
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
 
-            {/* Services Grid - Display all services dynamically using displayImage for consistency */}
+            {/* Services Grid - Use homepage images for consistency, with fallback to service images */}
             <div className="home_services_unique">
-                <h1>{mainServicePageData?.servicesHeading || homepageData?.serviceHeading || "Our Services"}</h1>
+                <h1>
+                    {mainServicePageData?.servicesHeading ||
+                        homepageData?.serviceHeading ||
+                        "Our Services"}
+                </h1>
                 <div className="home_services_box_unique">
-                    {services.filter(s => s.slug !== 'main-services').map((service, index) => (
-                        <Link href={`/services/${service.slug}`} key={service._id || index}>
-                            <div className="service-box-home-unique">
-                                <div className="service-image-main-unique">
-                                    {/* Use displayImage for consistent image across homepage and main services page (Requirement 3.1, 3.2) */}
-                                    {service.displayImage?.url || service.bannerImage?.url || service.image?.url ? (
-                                        <Image
-                                            src={service.displayImage?.url || service.bannerImage?.url || service.image?.url}
-                                            alt={service.displayImage?.alt || service.title || 'Service'}
-                                            width={400}
-                                            height={200}
-                                            unoptimized
-                                        />
-                                    ) : (
-                                        <div
-                                            style={{
-                                                width: "100%",
-                                                height: 200,
-                                                background: "#eee",
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                            }}
-                                        >
-                                            <p>No Image</p>
+                    {services
+                        .filter((s) => s.slug !== "main-services")
+                        .map((service, index) => {
+                            // Get the appropriate image - prioritizes homepage images for consistency
+                            const gridImage = getServiceGridImage(
+                                service,
+                                serviceImageMap,
+                            );
+
+                            return (
+                                <Link
+                                    href={`/services/${service.slug}`}
+                                    key={service._id || index}
+                                >
+                                    <div className="service-box-home-unique">
+                                        <div className="service-image-main-unique">
+                                            {gridImage ? (
+                                                <Image
+                                                    src={gridImage.url}
+                                                    alt={gridImage.alt}
+                                                    width={400}
+                                                    height={200}
+                                                    unoptimized
+                                                />
+                                            ) : (
+                                                <div
+                                                    style={{
+                                                        width: "100%",
+                                                        height: 200,
+                                                        background: "#eee",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent:
+                                                            "center",
+                                                    }}
+                                                >
+                                                    <p>No Image</p>
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
-                                </div>
-                                <h2>{service.title}</h2>
-                            </div>
-                        </Link>
-                    ))}
+                                        <h2>{service.title}</h2>
+                                    </div>
+                                </Link>
+                            );
+                        })}
                 </div>
             </div>
 
             {/* Why Work With Us Section - Using CMS data with fallback to contact page (Requirement 4.1) */}
             {(() => {
                 // Use mainServicePageData if available, otherwise fallback to contactData
-                const showSection = mainServicePageData?.showWhyWorkWithUs !== false;
-                const whyWorkItems = mainServicePageData?.whyWorkWithUsItems?.length > 0
-                    ? mainServicePageData.whyWorkWithUsItems
-                    : contactData?.whyWorkWithUsItems;
-                const whyWorkHeading = mainServicePageData?.whyWorkWithUsHeading || contactData?.whyWorkWithUsHeading || "Why Work With Us?";
-                const whyWorkImage = mainServicePageData?.whyWorkWithUsImage?.url || contactData?.rightImage?.url;
+                const showSection =
+                    mainServicePageData?.showWhyWorkWithUs !== false;
+                const whyWorkItems =
+                    mainServicePageData?.whyWorkWithUsItems?.length > 0
+                        ? mainServicePageData.whyWorkWithUsItems
+                        : contactData?.whyWorkWithUsItems;
+                const whyWorkHeading =
+                    mainServicePageData?.whyWorkWithUsHeading ||
+                    contactData?.whyWorkWithUsHeading ||
+                    "Why Work With Us?";
+                const whyWorkImage =
+                    mainServicePageData?.whyWorkWithUsImage?.url ||
+                    contactData?.rightImage?.url;
 
                 if (!showSection || !whyWorkItems?.length) return null;
 
@@ -281,7 +369,10 @@ export default function MainServiceClient({ services, homepageData, mainServiceP
                             <div className="text-main-service-page">
                                 <h2>{whyWorkHeading}</h2>
                                 {whyWorkItems.map((item, idx) => (
-                                    <div key={idx} className="feature-main-service-page">
+                                    <div
+                                        key={idx}
+                                        className="feature-main-service-page"
+                                    >
                                         <svg
                                             id="tick"
                                             xmlns="http://www.w3.org/2000/svg"
@@ -323,7 +414,8 @@ export default function MainServiceClient({ services, homepageData, mainServiceP
                     <div className="main-service-contact-container">
                         <div className="main-service-contact-form-wrapper">
                             <h2 className="main-service-contact-title">
-                                {mainServicePageData?.contactFormHeading || "Get in Touch"}
+                                {mainServicePageData?.contactFormHeading ||
+                                    "Get in Touch"}
                             </h2>
                             {mainServicePageData?.contactFormSubheading && (
                                 <p className="main-service-contact-subtitle">
@@ -332,7 +424,11 @@ export default function MainServiceClient({ services, homepageData, mainServiceP
                             )}
                             <div className="main-service-contact-underline"></div>
 
-                            <form ref={contactFormRef} onSubmit={handleContactSubmit} className="main-service-contact-form">
+                            <form
+                                ref={contactFormRef}
+                                onSubmit={handleContactSubmit}
+                                className="main-service-contact-form"
+                            >
                                 {/* Name field */}
                                 <div className="main-service-form-field">
                                     <input
@@ -366,12 +462,22 @@ export default function MainServiceClient({ services, homepageData, mainServiceP
                                 {/* Service selection - populated from services list */}
                                 <div className="main-service-form-field">
                                     <select name="service">
-                                        <option value="">Select a Service</option>
-                                        {services.filter(s => s.slug !== 'main-services').map((service, idx) => (
-                                            <option key={idx} value={service.title}>
-                                                {service.title}
-                                            </option>
-                                        ))}
+                                        <option value="">
+                                            Select a Service
+                                        </option>
+                                        {services
+                                            .filter(
+                                                (s) =>
+                                                    s.slug !== "main-services",
+                                            )
+                                            .map((service, idx) => (
+                                                <option
+                                                    key={idx}
+                                                    value={service.title}
+                                                >
+                                                    {service.title}
+                                                </option>
+                                            ))}
                                     </select>
                                 </div>
 
@@ -402,7 +508,9 @@ export default function MainServiceClient({ services, homepageData, mainServiceP
                                 </button>
 
                                 {formStatus && (
-                                    <p className={`main-service-form-status ${formStatus.type === "ok" ? "success" : "error"}`}>
+                                    <p
+                                        className={`main-service-form-status ${formStatus.type === "ok" ? "success" : "error"}`}
+                                    >
                                         {formStatus.msg}
                                     </p>
                                 )}
@@ -414,7 +522,10 @@ export default function MainServiceClient({ services, homepageData, mainServiceP
                             <div className="main-service-contact-image">
                                 <Image
                                     src={contactData.contactImage.url}
-                                    alt={contactData.contactImage.alt || "Contact Us"}
+                                    alt={
+                                        contactData.contactImage.alt ||
+                                        "Contact Us"
+                                    }
                                     width={500}
                                     height={400}
                                     unoptimized
@@ -448,21 +559,32 @@ export default function MainServiceClient({ services, homepageData, mainServiceP
                 <button onClick={() => setShowForm(true)}>Enquire Now</button>
             </div>
             {showForm && (
-                <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
+                <div
+                    className="enquiry-overlay"
+                    onClick={() => setShowForm(false)}
+                >
                     <div
                         className="enquiry-container"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="enquiry-box">
-                            <div className="close-icon" onClick={() => setShowForm(false)}>
+                            <div
+                                className="close-icon"
+                                onClick={() => setShowForm(false)}
+                            >
                                 ✕
                             </div>
                             <h2 className="title">Quick Query</h2>
                             <p className="subtitle">
-                                If you have any queries, we will be pleased to assist you.
+                                If you have any queries, we will be pleased to
+                                assist you.
                             </p>
                             <form>
-                                <input type="text" placeholder="Name" className="form-input" />
+                                <input
+                                    type="text"
+                                    placeholder="Name"
+                                    className="form-input"
+                                />
                                 <input
                                     type="text"
                                     placeholder="Mobile No."

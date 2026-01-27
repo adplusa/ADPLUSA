@@ -64,11 +64,16 @@ export default function AboutClient({ data }) {
 
                                     {data.anchorLinks?.length > 0 && (
                                         <span className="four-p">
-                                            {data.anchorLinks.map((link, idx) => (
-                                                <a href={`#${link.targetId}`} key={idx}>
-                                                    {link.label}
-                                                </a>
-                                            ))}
+                                            {data.anchorLinks.map(
+                                                (link, idx) => (
+                                                    <a
+                                                        href={`#${link.targetId}`}
+                                                        key={idx}
+                                                    >
+                                                        {link.label}
+                                                    </a>
+                                                ),
+                                            )}
                                         </span>
                                     )}
                                 </div>
@@ -82,7 +87,9 @@ export default function AboutClient({ data }) {
                             {data.sections.map((section, idx) => (
                                 <div
                                     className={`about-section-row ${
-                                        idx % 2 === 0 ? "section-left" : "section-right"
+                                        idx % 2 === 0
+                                            ? "section-left"
+                                            : "section-right"
                                     }`}
                                     key={section.sectionId || idx}
                                     id={section.sectionId?.replace(/^#/, "")}
@@ -129,12 +136,11 @@ export default function AboutClient({ data }) {
                     target="_blank"
                     href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
                 >
-                    <Image
-                        src="/whatsapp.png"
+                    <img
+                        src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
                         width={40}
                         height={40}
                         alt="Whatsapp-img"
-                        unoptimized
                     />
                 </a>
             </div>
@@ -144,27 +150,51 @@ export default function AboutClient({ data }) {
             </div>
 
             {showForm && (
-                <div className="enquiry-overlay" onClick={() => setShowForm(false)}>
-                    <div className="enquiry-container" onClick={(e) => e.stopPropagation()}>
+                <div
+                    className="enquiry-overlay"
+                    onClick={() => setShowForm(false)}
+                >
+                    <div
+                        className="enquiry-container"
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         <div className="enquiry-box">
-                            <div className="close-icon" onClick={() => setShowForm(false)}>
+                            <div
+                                className="close-icon"
+                                onClick={() => setShowForm(false)}
+                            >
                                 ✕
                             </div>
                             <h2 className="title">Quick Query</h2>
                             <p className="subtitle">
-                                If you have any queries, we will be pleased to assist you.
+                                If you have any queries, we will be pleased to
+                                assist you.
                             </p>
                             <form>
-                                <input type="text" placeholder="Name" className="form-input" />
-                                <input type="text" placeholder="Mobile No." className="form-input" />
+                                <input
+                                    type="text"
+                                    placeholder="Name"
+                                    className="form-input"
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Mobile No."
+                                    className="form-input"
+                                />
                                 <select className="form-input">
                                     <option>Select Type</option>
                                     <option>General</option>
                                     <option>Support</option>
                                     <option>Sales</option>
                                 </select>
-                                <textarea placeholder="Query" className="form-input" rows="3" />
-                                <button type="submit" className="submit-button">Submit</button>
+                                <textarea
+                                    placeholder="Query"
+                                    className="form-input"
+                                    rows="3"
+                                />
+                                <button type="submit" className="submit-button">
+                                    Submit
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -187,7 +217,11 @@ export default function AboutClient({ data }) {
                 </svg>
             </div>
 
-            <PageScripts customHeadTags={data?.customHeadTags} metaTags={data?.metaTags} pageId="about" />
+            <PageScripts
+                customHeadTags={data?.customHeadTags}
+                metaTags={data?.metaTags}
+                pageId="about"
+            />
         </div>
     );
 }
