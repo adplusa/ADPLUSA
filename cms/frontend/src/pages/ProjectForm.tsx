@@ -617,7 +617,8 @@ export default function ProjectForm() {
                                             })) || []
                                         }
                                         onUploadComplete={(images) => {
-                                            const imageData = images.map(
+                                            // Map newly uploaded images to form format
+                                            const newImageData = images.map(
                                                 (img) => ({
                                                     url: img.url,
                                                     alt: "",
@@ -644,7 +645,12 @@ export default function ProjectForm() {
                                                             : "image",
                                                 }),
                                             );
-                                            onChange(imageData);
+                                            // Append new images to existing ones
+                                            const existingImages = value || [];
+                                            onChange([
+                                                ...existingImages,
+                                                ...newImageData,
+                                            ]);
                                         }}
                                         onImagesReorder={(images) => {
                                             const imageData = images.map(

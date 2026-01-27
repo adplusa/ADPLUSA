@@ -350,84 +350,7 @@ export default function ProjectClient({ project, otherProjects, slug }) {
                 <hr id="internal-line" />
             </div>
 
-            {!project.images?.length &&
-                project.imageGalleries?.map((gallery, galleryIdx) => (
-                    <div key={galleryIdx} className="internal-section-two">
-                        {gallery.images?.length > 0 && (
-                            <div className="media-gallery">
-                                {gallery.images.map((media, idx) => (
-                                    <MediaItem
-                                        key={idx}
-                                        media={media}
-                                        index={idx}
-                                        className="gallery-item"
-                                    />
-                                ))}
-                            </div>
-                        )}
-                        {gallery.topImages?.length > 0 && (
-                            <div className="media-gallery">
-                                {gallery.topImages.map((media, idx) => (
-                                    <MediaItem
-                                        key={idx}
-                                        media={media}
-                                        index={idx}
-                                        className="gallery-item"
-                                    />
-                                ))}
-                            </div>
-                        )}
-                        {gallery.bottomImage?.url && (
-                            <div className="internal-section-two-bottom">
-                                <MediaItem
-                                    media={gallery.bottomImage}
-                                    index={0}
-                                    width={1200}
-                                    height={600}
-                                />
-                            </div>
-                        )}
-                    </div>
-                ))}
-            {project.imageGalleries?.map((gallery, galleryIdx) => (
-                <div key={galleryIdx} className="internal-section-two">
-                    {gallery.images?.length > 0 && (
-                        <div className="media-gallery">
-                            {gallery.images.map((media, idx) => (
-                                <MediaItem
-                                    key={idx}
-                                    media={media}
-                                    index={idx}
-                                    className="gallery-item"
-                                />
-                            ))}
-                        </div>
-                    )}
-                    {gallery.topImages?.length > 0 && (
-                        <div className="media-gallery">
-                            {gallery.topImages.map((media, idx) => (
-                                <MediaItem
-                                    key={idx}
-                                    media={media}
-                                    index={idx}
-                                    className="gallery-item"
-                                />
-                            ))}
-                        </div>
-                    )}
-                    {gallery.bottomImage?.url && (
-                        <div className="internal-section-two-bottom">
-                            <MediaItem
-                                media={gallery.bottomImage}
-                                index={0}
-                                width={1200}
-                                height={600}
-                            />
-                        </div>
-                    )}
-                </div>
-            ))}
-
+            {/* Display all project images from the single images array */}
             {project.images?.length > 0 && (
                 <div className="internal-section-two">
                     <div className="media-gallery">
@@ -545,12 +468,11 @@ export default function ProjectClient({ project, otherProjects, slug }) {
                     target="_blank"
                     href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
                 >
-                    <Image
-                        src="/whatsapp.png"
+                    <img
+                        src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
                         width={40}
                         height={40}
                         alt="Whatsapp-img"
-                        unoptimized
                     />
                 </a>
             </div>

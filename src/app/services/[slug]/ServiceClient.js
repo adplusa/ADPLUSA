@@ -1,12 +1,22 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, {
+    useState,
+    useEffect,
+    useCallback,
+    useRef,
+    useMemo,
+} from "react";
 import Header from "@/app/Components/Header/page";
 import Footer from "@/app/Components/Footer/page";
 import Image from "next/image";
 import Link from "next/link";
 import "./service-detail.css";
 import PageScripts from "../../Components/PageScripts";
+import {
+    createServiceImageMap,
+    getServiceGridImage,
+} from "@/lib/service-image-mapper";
 
 /**
  * Service Detail Client Component
@@ -18,6 +28,7 @@ export default function ServiceClient({
     otherServices,
     slug,
     contactData,
+    homepageData,
 }) {
     const [showForm, setShowForm] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -27,6 +38,11 @@ export default function ServiceClient({
     const [isMobile, setIsMobile] = useState(false);
     const slideRef = useRef(null);
     const intervalRef = useRef(null);
+
+    // Create image map from homepage serviceBoxes for consistent images
+    const serviceImageMap = useMemo(() => {
+        return createServiceImageMap(homepageData?.serviceBoxes);
+    }, [homepageData?.serviceBoxes]);
 
     useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -347,61 +363,74 @@ export default function ServiceClient({
                             onMouseDown={handleDragStart}
                             onTouchStart={handleDragStart}
                         >
-                            {slidesToShow.map((svc, i) => (
-                                <Link
-                                    key={i}
-                                    href={`/services/${svc.slug}`}
-                                    id="redirection-service"
-                                >
-                                    <div className="carousel-slide-internals">
-                                        <div className="professional-card-internals">
-                                            <div className="image-container-internals">
-                                                {svc.bannerImage?.url ||
-                                                svc.image?.url ? (
-                                                    <Image
-                                                        src={
-                                                            svc.bannerImage
-                                                                ?.url ||
-                                                            svc.image?.url
-                                                        }
-                                                        alt={svc.title}
-                                                        width={300}
-                                                        height={200}
-                                                        unoptimized
-                                                        draggable={false}
-                                                        style={{
-                                                            pointerEvents:
-                                                                isDragging
-                                                                    ? "none"
-                                                                    : "auto",
-                                                            userSelect: "none",
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <div
-                                                        style={{
-                                                            width: 300,
-                                                            height: 200,
-                                                            background: "#eee",
-                                                            display: "flex",
-                                                            alignItems:
-                                                                "center",
-                                                            justifyContent:
-                                                                "center",
-                                                            userSelect: "none",
-                                                        }}
-                                                    >
-                                                        <p>No Image</p>
-                                                    </div>
-                                                )}
+                            {slidesToShow.map((svc, i) => {
+                                // Use the service image mapper for consistent images
+                                const gridImage = getServiceGridImage(
+                                    svc,
+                                    serviceImageMap,
+                                );
+
+                                return (
+                                    <Link
+                                        key={i}
+                                        href={`/services/${svc.slug}`}
+                                        id="redirection-service"
+                                    >
+                                        <div className="carousel-slide-internals">
+                                            <div className="professional-card-internals">
+                                                <div className="image-container-internals">
+                                                    {gridImage?.url ? (
+                                                        <Image
+                                                            src={gridImage.url}
+                                                            alt={
+                                                                gridImage.alt ||
+                                                                svc.title
+                                                            }
+                                                            width={300}
+                                                            height={200}
+                                                            unoptimized
+                                                            draggable={false}
+                                                            style={{
+                                                                pointerEvents:
+                                                                    isDragging
+                                                                        ? "none"
+                                                                        : "auto",
+                                                                userSelect:
+                                                                    "none",
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <div
+                                                            style={{
+                                                                width: 300,
+                                                                height: 200,
+                                                                background:
+                                                                    "#eee",
+                                                                display: "flex",
+                                                                alignItems:
+                                                                    "center",
+                                                                justifyContent:
+                                                                    "center",
+                                                                userSelect:
+                                                                    "none",
+                                                            }}
+                                                        >
+                                                            <p>No Image</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <h3
+                                                    style={{
+                                                        userSelect: "none",
+                                                    }}
+                                                >
+                                                    {svc.title}
+                                                </h3>
                                             </div>
-                                            <h3 style={{ userSelect: "none" }}>
-                                                {svc.title}
-                                            </h3>
                                         </div>
-                                    </div>
-                                </Link>
-                            ))}
+                                    </Link>
+                                );
+                            })}
                         </div>
                     </div>
                 </div>
@@ -415,12 +444,11 @@ export default function ServiceClient({
                     target="_blank"
                     href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
                 >
-                    <Image
-                        src="/whatsapp.png"
+                    <img
+                        src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
                         width={40}
                         height={40}
                         alt="Whatsapp-img"
-                        unoptimized
                     />
                 </a>
             </div>

@@ -169,7 +169,7 @@ export default function HomeClient({ homepageData: initialData }) {
                 slider.on("animationEnded", nextTimeout);
                 slider.on("updated", nextTimeout);
             },
-        ]
+        ],
     );
 
     // Fixed localStorage check and intro logic
@@ -255,12 +255,12 @@ export default function HomeClient({ homepageData: initialData }) {
                         ease: "expo.inOut",
                         duration: 0.4,
                     },
-                    "-=0.4"
+                    "-=0.4",
                 )
                 .fromTo(
                     ".logo",
                     { opacity: 0, scale: 0.8 },
-                    { opacity: 1, scale: 1, ease: "expo.inOut", duration: 0.4 }
+                    { opacity: 1, scale: 1, ease: "expo.inOut", duration: 0.4 },
                 )
                 .set(".main-content", {
                     opacity: 1,
@@ -269,7 +269,6 @@ export default function HomeClient({ homepageData: initialData }) {
 
         checkAndAnimate();
     };
-
 
     useEffect(() => {
         if (window.innerWidth >= 768) {
@@ -367,7 +366,7 @@ export default function HomeClient({ homepageData: initialData }) {
 
     const prevSlide = () => {
         setCurrentSlideHeroBanner(
-            (prev) => (prev - 1 + slides.length) % slides.length
+            (prev) => (prev - 1 + slides.length) % slides.length,
         );
     };
 
@@ -497,7 +496,6 @@ export default function HomeClient({ homepageData: initialData }) {
         }
     }
 
-
     return (
         <>
             {!homepageData ? (
@@ -520,7 +518,10 @@ export default function HomeClient({ homepageData: initialData }) {
                             <div className="logo-container">
                                 <Image
                                     className="logo"
-                                    src="/white-logo.png"
+                                    src={
+                                        homepageData?.headerLogo?.url ||
+                                        "/white-logo.png"
+                                    }
                                     alt="logo"
                                     width={200}
                                     height={200}
@@ -579,7 +580,7 @@ export default function HomeClient({ homepageData: initialData }) {
                                                             "Slide Image"
                                                         }
                                                     ></div>
-                                                )
+                                                ),
                                         )}
                                     </div>
 
@@ -647,7 +648,7 @@ export default function HomeClient({ homepageData: initialData }) {
                                                 }`}
                                                 onClick={() =>
                                                     setCurrentSlideHeroBanner(
-                                                        index
+                                                        index,
                                                     )
                                                 }
                                             ></button>
@@ -696,7 +697,7 @@ export default function HomeClient({ homepageData: initialData }) {
                                                                     {icon.name}
                                                                 </h3>
                                                             </div>
-                                                        )
+                                                        ),
                                                 )}
                                             </div>
                                         </div>
@@ -738,7 +739,7 @@ export default function HomeClient({ homepageData: initialData }) {
                                                             </h2>
                                                         </div>
                                                     </Link>
-                                                )
+                                                ),
                                         )}
                                     </div>
                                 </div>
@@ -770,7 +771,7 @@ export default function HomeClient({ homepageData: initialData }) {
                                                                 unoptimized
                                                             />
                                                         </span>
-                                                    ) : null
+                                                    ) : null,
                                             )
                                         ) : (
                                             <p>No image available</p>
@@ -793,7 +794,7 @@ export default function HomeClient({ homepageData: initialData }) {
                                                 ?.filter(
                                                     (step) =>
                                                         step.title &&
-                                                        step.description
+                                                        step.description,
                                                 )
                                                 .map((step, idx) => (
                                                     <div
@@ -805,7 +806,7 @@ export default function HomeClient({ homepageData: initialData }) {
                                                         }`}
                                                         onClick={() =>
                                                             handleImageChange(
-                                                                idx
+                                                                idx,
                                                             )
                                                         }
                                                     >
@@ -875,7 +876,7 @@ export default function HomeClient({ homepageData: initialData }) {
                                                             />
                                                         )}
                                                     </span>
-                                                )
+                                                ),
                                             )}
                                         </div>
 
@@ -900,12 +901,11 @@ export default function HomeClient({ homepageData: initialData }) {
                                                             />
                                                         )}
                                                     </span>
-                                                )
+                                                ),
                                             )}
                                         </div>
                                     </div>
                                 </div>
-
 
                                 <div className="home-about">
                                     <div className="about-us">
@@ -1134,7 +1134,7 @@ export default function HomeClient({ homepageData: initialData }) {
                                                             </div>
                                                         </section>
                                                     </div>
-                                                )
+                                                ),
                                             )}
                                         </div>
 
@@ -1160,7 +1160,6 @@ export default function HomeClient({ homepageData: initialData }) {
                                         </button>
                                     </div>
                                 </div>
-
 
                                 <section className="contact-us">
                                     <div className="contact-container-two">

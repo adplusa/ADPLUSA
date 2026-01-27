@@ -15,7 +15,8 @@ import "./project.css";
  */
 export default function ProjectsClient({ projects, pageData }) {
     // Use CMS heading if available, otherwise use default
-    const pageHeading = pageData?.heading || pageData?.pageTitle || "Our Projects";
+    const pageHeading =
+        pageData?.heading || pageData?.pageTitle || "Our Projects";
     const textRef = useRef(null);
     const [showForm, setShowForm] = useState(false);
     const [visibleCount, setVisibleCount] = useState(6);
@@ -53,7 +54,7 @@ export default function ProjectsClient({ projects, pageData }) {
                     loadMore();
                 }
             },
-            { threshold: 0.1, rootMargin: "100px" }
+            { threshold: 0.1, rootMargin: "100px" },
         );
 
         const currentLoader = loaderRef.current;
@@ -175,7 +176,7 @@ export default function ProjectsClient({ projects, pageData }) {
                                                                 {detail.value ||
                                                                     (detail.items &&
                                                                         detail.items.join(
-                                                                            ", "
+                                                                            ", ",
                                                                         ))}
                                                             </span>
                                                         </div>
@@ -225,12 +226,11 @@ export default function ProjectsClient({ projects, pageData }) {
                         target="_blank"
                         href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
                     >
-                        <Image
-                            src="/whatsapp.png"
+                        <img
+                            src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
                             width={40}
                             height={40}
                             alt="Whatsapp-img"
-                            unoptimized
                         />
                     </a>
                 </div>

@@ -35,14 +35,16 @@ const Footer = () => {
         <div>
             <div className="footer">
                 <div className="footer-logo">
-                    <Image
-                        src={footerLogo}
-                        alt={logoAlt}
-                        id="footer-logo"
-                        width={0}
-                        height={0}
-                        unoptimized
-                    ></Image>
+                    {footerLogo && (
+                        <Image
+                            src={footerLogo}
+                            alt={logoAlt}
+                            id="footer-logo"
+                            width={200}
+                            height={100}
+                            unoptimized
+                        />
+                    )}
                     <p>
                         ADPL CONSULTING LLC works as a leading Architectural and
                         Engineering
@@ -56,7 +58,17 @@ const Footer = () => {
                     <div id="second-navbar" className="second-navbar">
                         <ul>
                             <li>
-                                <Link href="/">Home</Link>
+                                <Link
+                                    href="/"
+                                    onClick={() =>
+                                        window.scrollTo({
+                                            top: 0,
+                                            behavior: "smooth",
+                                        })
+                                    }
+                                >
+                                    Home
+                                </Link>
                             </li>
                             <li>
                                 <Link href="/about">About Us</Link>

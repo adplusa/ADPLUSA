@@ -51,7 +51,12 @@ export default function SocialMediaClient() {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <Image src="/linkedin.png" alt="Linkedin" width={50} height={50} />
+                        <img
+                            src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
+                            alt="Linkedin"
+                            width={50}
+                            height={50}
+                        />
                         <span>Linkedin</span>
                     </a>
                 </div>
@@ -80,7 +85,12 @@ export default function SocialMediaClient() {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <Image src="/youtube.webp" alt="YouTube" width={50} height={50} />
+                        <img
+                            src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
+                            alt="YouTube"
+                            width={50}
+                            height={50}
+                        />
                         <span>YouTube</span>
                     </a>
                 </div>
