@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ProjectsPage } from "../database/schemas/projectsPage.schema";
+import { CacheService } from "../services/cache.service";
 
 /**
  * @route   GET /api/public/projects-page
@@ -8,7 +9,7 @@ import { ProjectsPage } from "../database/schemas/projectsPage.schema";
  */
 export const getProjectsPage = async (
     _req: Request,
-    res: Response
+    res: Response,
 ): Promise<void> => {
     try {
         // ProjectsPage is a singleton document, so we get the first one
@@ -48,7 +49,7 @@ export const getProjectsPage = async (
  */
 export const updateProjectsPage = async (
     req: Request,
-    res: Response
+    res: Response,
 ): Promise<void> => {
     try {
         console.log("Updating projects page...");
@@ -63,8 +64,12 @@ export const updateProjectsPage = async (
                 upsert: true,
                 runValidators: true,
                 setDefaultsOnInsert: true,
-            }
+            },
         ).lean();
+
+        // Invalidate Cache
+        // This clears both the projects list AND the projects page singleton info
+        await CacheService.invalidateProjects();
 
         console.log("Projects page updated successfully");
 

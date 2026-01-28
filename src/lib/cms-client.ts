@@ -53,6 +53,35 @@ async function fetchCMS<T>(
     options: FetchOptions = {},
 ): Promise<T | null> {
     const { revalidate = DEFAULT_REVALIDATE, tags } = options;
+    const isServer = typeof window === "undefined";
+
+    let cacheKey = "";
+    let redis: any = null;
+
+    // 1. Try to get from Redis cache first (Server only)
+    if (isServer) {
+        try {
+            // Dynamic import to prevent client-side bundling of ioredis
+            const redisModule = await import("./redis");
+            redis = redisModule.redis;
+
+            // We use the full endpoint as part of the key to match backend invalidation
+            cacheKey = `cms:${endpoint}`;
+
+            try {
+                const cachedData = await redis.get(cacheKey);
+                if (cachedData) {
+                    // console.log(`[Redis] HIT: ${cacheKey}`);
+                    return JSON.parse(cachedData) as T;
+                }
+                // console.log(`[Redis] MISS: ${cacheKey}`);
+            } catch (redisError) {
+                console.error(`Redis get error: ${cacheKey}`, redisError);
+            }
+        } catch (importError) {
+            console.error("Failed to import Redis module:", importError);
+        }
+    }
 
     try {
         const url = `${CMS_API_URL}/api/public${endpoint}`;
@@ -92,6 +121,17 @@ async function fetchCMS<T>(
         if (!result.success) {
             console.error(`CMS API error: ${endpoint} - ${result.error}`);
             return null;
+        }
+
+        // 2. Save successful response to Redis (Server only)
+        if (isServer && redis && cacheKey) {
+            try {
+                // Store with no expiry (or very long one), relying on backend invalidation
+                await redis.set(cacheKey, JSON.stringify(result.data));
+                // console.log(`[Redis] SET: ${cacheKey}`);
+            } catch (redisError) {
+                console.error(`Redis set error: ${cacheKey}`, redisError);
+            }
         }
 
         return result.data;
