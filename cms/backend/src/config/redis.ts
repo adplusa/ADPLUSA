@@ -2,11 +2,10 @@ import Redis from "ioredis";
 
 // Local Redis configuration
 const redisConfig = {
-    port: 6379,
-    host: "127.0.0.1",
-    // username: undefined,
-    // password: undefined,
-    // tls: undefined,
+    port: parseInt(process.env.REDIS_PORT || "6379", 10),
+    host: process.env.REDIS_HOST || "127.0.0.1",
+    username: process.env.REDIS_USERNAME || undefined,
+    password: process.env.REDIS_PASSWORD || undefined,
     maxRetriesPerRequest: null,
 };
 
