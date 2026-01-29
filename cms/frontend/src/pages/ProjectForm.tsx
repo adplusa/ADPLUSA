@@ -616,9 +616,9 @@ export default function ProjectForm() {
                                                 status: "success" as const,
                                             })) || []
                                         }
-                                        onUploadComplete={(images) => {
-                                            // Map newly uploaded images to form format
-                                            const newImageData = images.map(
+                                        onImagesChange={(images) => {
+                                            // Sync all image changes (uploads, deletes, reorders) to form state
+                                            const imageData = images.map(
                                                 (img) => ({
                                                     url: img.url,
                                                     alt: "",
@@ -641,33 +641,8 @@ export default function ProjectForm() {
                                                         img.url.match(
                                                             /\.(mp4|webm|mov)$/i,
                                                         )
-                                                            ? "video"
-                                                            : "image",
-                                                }),
-                                            );
-                                            // Append new images to existing ones
-                                            const existingImages = value || [];
-                                            onChange([
-                                                ...existingImages,
-                                                ...newImageData,
-                                            ]);
-                                        }}
-                                        onImagesReorder={(images) => {
-                                            const imageData = images.map(
-                                                (img) => ({
-                                                    url: img.url,
-                                                    alt: "",
-                                                    width: img.width,
-                                                    height: img.height,
-                                                    type:
-                                                        img.contentType?.startsWith(
-                                                            "video/",
-                                                        ) ||
-                                                        img.url.match(
-                                                            /\.(mp4|webm|mov)$/i,
-                                                        )
-                                                            ? "video"
-                                                            : "image",
+                                                            ? ("video" as const)
+                                                            : ("image" as const),
                                                 }),
                                             );
                                             onChange(imageData);

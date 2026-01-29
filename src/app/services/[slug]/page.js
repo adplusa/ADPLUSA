@@ -12,7 +12,7 @@ import Link from "next/link";
 
 export async function generateMetadata({ params }) {
     const { slug } = await params;
-    const service = await getService(slug, { revalidate: 60 });
+    const service = await getService(slug, { revalidate: 0 });
 
     if (!service) {
         return {
@@ -42,10 +42,10 @@ export default async function ServicePage({ params }) {
     // Fetch service, all services, contact data, and homepage data for consistent service images
     const [service, allServices, contactData, homepageData] = await Promise.all(
         [
-            getService(slug, { revalidate: 60 }),
-            getServices({ revalidate: 60 }),
-            getContact({ revalidate: 60 }),
-            getHomepage({ revalidate: 60 }),
+            getService(slug, { revalidate: 0 }),
+            getServices({ revalidate: 0 }),
+            getContact({ revalidate: 0 }),
+            getHomepage({ revalidate: 0 }),
         ],
     );
 

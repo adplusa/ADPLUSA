@@ -71,10 +71,10 @@ async function fetchCMS<T>(
             try {
                 const cachedData = await redis.get(cacheKey);
                 if (cachedData) {
-                    // console.log(`[Redis] HIT: ${cacheKey}`);
+                    console.log(`[Redis] HIT 🚀: ${cacheKey}`);
                     return JSON.parse(cachedData) as T;
                 }
-                // console.log(`[Redis] MISS: ${cacheKey}`);
+                console.log(`[Redis] MISS 💨: ${cacheKey}`);
             } catch (redisError) {
                 console.error(`Redis get error: ${cacheKey}`, redisError);
             }
@@ -85,6 +85,8 @@ async function fetchCMS<T>(
 
     try {
         const url = `${CMS_API_URL}/api/public${endpoint}`;
+
+        console.log(`[API] Fetching from DB 📦: ${endpoint}`);
 
         const fetchOptions: RequestInit & {
             next?: { revalidate?: number | false; tags?: string[] };
@@ -128,7 +130,7 @@ async function fetchCMS<T>(
             try {
                 // Store with no expiry (or very long one), relying on backend invalidation
                 await redis.set(cacheKey, JSON.stringify(result.data));
-                // console.log(`[Redis] SET: ${cacheKey}`);
+                console.log(`[Redis] SET 💾: ${cacheKey}`);
             } catch (redisError) {
                 console.error(`Redis set error: ${cacheKey}`, redisError);
             }
