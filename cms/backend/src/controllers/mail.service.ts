@@ -9,6 +9,8 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+console.log(`[MailService] Configured with User: ${process.env.GMAIL_USER ? 'SET' : 'MISSING'}, Pass: ${process.env.GMAIL_APP_PASSWORD ? 'SET' : 'MISSING'}`);
+
 /**
  * Action B: The actual email sending function
  * @param userEmail - The email of the person filling out the form

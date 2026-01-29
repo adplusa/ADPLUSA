@@ -307,6 +307,7 @@ export const updateContact = async (
                 description,
                 contactInfo: contactInfo || {},
                 socialLinks: socialLinks || [],
+                serviceOptions: req.body.serviceOptions || [],
                 seoTitle,
                 seoDescription,
             });
@@ -320,6 +321,10 @@ export const updateContact = async (
                 contact.seoDescription = seoDescription;
             if (customHeadTags !== undefined)
                 contact.customHeadTags = customHeadTags;
+            if (req.body.serviceOptions !== undefined)
+                contact.serviceOptions = req.body.serviceOptions;
+            if (req.body.googleMapEmbedUrl !== undefined)
+                contact.googleMapEmbedUrl = req.body.googleMapEmbedUrl;
         }
 
         await contact.save();

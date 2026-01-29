@@ -38,6 +38,8 @@ const contactSchema = z
             )
             .optional(),
         customHeadTags: z.string().optional(),
+        serviceOptions: z.array(z.string()).optional(),
+        googleMapEmbedUrl: z.string().optional(),
     })
     .merge(seoSchema);
 
@@ -63,6 +65,8 @@ export default function ContactForm() {
                 destinationEmail: "",
             },
             socialLinks: [],
+            serviceOptions: [],
+            googleMapEmbedUrl: "",
             seoTitle: "",
             seoDescription: "",
             customHeadTags: "",
@@ -95,6 +99,20 @@ export default function ContactForm() {
                             (response.data as any).contactInfo
                                 ?.destinationEmail || "",
                     },
+                    serviceOptions:
+                        (response.data as any).serviceOptions &&
+                            (response.data as any).serviceOptions.length > 0
+                            ? (response.data as any).serviceOptions
+                            : [
+                                "Drafting to CAD (PDF to CAD)",
+                                "Permit Drawing and Documentation",
+                                "Working Drawing and Detailing",
+                                "3D Modelling, Rendering and Walkthrough",
+                                "360 Degree Views",
+                                "BIM Services",
+                                "Bill of Quantities (BOQ)",
+                                "MEP Drafting",
+                            ],
                     metaTags: (response.data as any).metaTags || [],
                 } as any);
             }
@@ -156,6 +174,7 @@ export default function ContactForm() {
 
     const tabs: FormTab[] = [
         { id: "general", label: "General Info", icon: "📝" },
+        { id: "services", label: "Services", icon: "🛠️" },
         { id: "social", label: "Social Media", icon: "🌐" },
         { id: "destination", label: "Destination Email", icon: "📧" },
         { id: "seo", label: "SEO", icon: "🔍" },
@@ -259,6 +278,20 @@ export default function ContactForm() {
                             />
                         </FormField>
 
+                        <FormField
+                            id="googleMapEmbedUrl"
+                            label="Google Map Embed URL"
+                            helpText="Paste the 'Embed a map' HTML src URL from Google Maps here (starts with https://www.google.com/maps/embed...)"
+                        >
+                            <input
+                                id="googleMapEmbedUrl"
+                                type="text"
+                                {...register("googleMapEmbedUrl")}
+                                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                placeholder="https://www.google.com/maps/embed?pb=..."
+                            />
+                        </FormField>
+
                         {/* Preview Button */}
                         <div className="pt-4">
                             <button
@@ -269,6 +302,132 @@ export default function ContactForm() {
                             >
                                 Preview Contact Page
                             </button>
+                        </div>
+                    </div>
+                )}
+
+                {/* Services Tab */}
+                {activeTab === "services" && (
+                    <div className="space-y-6">
+                        <div>
+                            <h3 className="text-lg font-medium text-gray-900 mb-4">
+                                Service Dropdown Options
+                            </h3>
+                            <p className="text-sm text-gray-500 mb-6">
+                                Manage the options that appear in the "Service
+                                Required" dropdown on the contact form.
+                            </p>
+                            <Controller
+                                name="serviceOptions"
+                                control={control}
+                                render={({ field: { value = [], onChange } }) => (
+                                    <div className="space-y-4">
+                                        <div className="flex gap-2">
+                                            <input
+                                                type="text"
+                                                id="newService"
+                                                placeholder="Add a new service..."
+                                                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                                onKeyDown={(e) => {
+                                                    if (
+                                                        e.key === "Enter" &&
+                                                        e.currentTarget.value.trim()
+                                                    ) {
+                                                        e.preventDefault();
+                                                        const newVal =
+                                                            e.currentTarget.value.trim();
+                                                        if (
+                                                            !value?.includes(
+                                                                newVal,
+                                                            )
+                                                        ) {
+                                                            onChange([
+                                                                ...(value ||
+                                                                    []),
+                                                                newVal,
+                                                            ]);
+                                                        }
+                                                        e.currentTarget.value =
+                                                            "";
+                                                    }
+                                                }}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const input =
+                                                        document.getElementById(
+                                                            "newService",
+                                                        ) as HTMLInputElement;
+                                                    if (
+                                                        input &&
+                                                        input.value.trim()
+                                                    ) {
+                                                        const newVal =
+                                                            input.value.trim();
+                                                        if (
+                                                            !value?.includes(
+                                                                newVal,
+                                                            )
+                                                        ) {
+                                                            onChange([
+                                                                ...(value ||
+                                                                    []),
+                                                                newVal,
+                                                            ]);
+                                                        }
+                                                        input.value = "";
+                                                    }
+                                                }}
+                                                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                                            >
+                                                Add
+                                            </button>
+                                        </div>
+
+                                        <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 min-h-[100px]">
+                                            {value?.length === 0 ? (
+                                                <p className="text-gray-400 text-center py-4">
+                                                    No services added yet.
+                                                </p>
+                                            ) : (
+                                                <ul className="space-y-2">
+                                                    {value?.map(
+                                                        (service, index) => (
+                                                            <li
+                                                                key={index}
+                                                                className="flex items-center justify-between bg-white p-3 rounded border border-gray-200 shadow-sm"
+                                                            >
+                                                                <span>
+                                                                    {service}
+                                                                </span>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        const newOptions =
+                                                                            [...value];
+                                                                        newOptions.splice(
+                                                                            index,
+                                                                            1,
+                                                                        );
+                                                                        onChange(
+                                                                            newOptions,
+                                                                        );
+                                                                    }}
+                                                                    className="text-red-500 hover:text-red-700 p-1"
+                                                                    title="Remove"
+                                                                >
+                                                                    🗑️
+                                                                </button>
+                                                            </li>
+                                                        ),
+                                                    )}
+                                                </ul>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            />
                         </div>
                     </div>
                 )}
@@ -381,11 +540,10 @@ export default function ContactForm() {
                                         type="text"
                                         {...register("seoTitle")}
                                         maxLength={60}
-                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-                                            errors.seoTitle
-                                                ? "border-red-300 bg-red-50"
-                                                : "border-gray-300"
-                                        }`}
+                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.seoTitle
+                                            ? "border-red-300 bg-red-50"
+                                            : "border-gray-300"
+                                            }`}
                                         placeholder="SEO optimized title (50-60 characters)"
                                     />
                                 </FormField>
@@ -404,11 +562,10 @@ export default function ContactForm() {
                                         {...register("seoDescription")}
                                         maxLength={160}
                                         rows={3}
-                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-                                            errors.seoDescription
-                                                ? "border-red-300 bg-red-50"
-                                                : "border-gray-300"
-                                        }`}
+                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.seoDescription
+                                            ? "border-red-300 bg-red-50"
+                                            : "border-gray-300"
+                                            }`}
                                         placeholder="SEO optimized description (150-160 characters)"
                                     />
                                 </FormField>

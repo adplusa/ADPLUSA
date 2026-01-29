@@ -2,6 +2,7 @@
 
 import Header from "../Components/Header/page";
 import Footer from "../Components/Footer/page";
+import ContactForm from "../Components/ContactForm/page";
 import "./servicetwo.css";
 import { useEffect, useState, useRef, useMemo } from "react";
 import Image from "next/image";
@@ -29,10 +30,7 @@ export default function MainServiceClient({
     const carouselRef = useRef(null);
     const [showForm, setShowForm] = useState(false);
 
-    // Contact form state (Requirements: 6.1, 6.2, 6.3, 6.4)
-    const contactFormRef = useRef(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [formStatus, setFormStatus] = useState(null);
+
 
     // Create image map from homepage serviceBoxes for consistent images between homepage and main services page
     const serviceImageMap = useMemo(() => {
@@ -91,139 +89,7 @@ export default function MainServiceClient({
         setActiveIndex((prev) => prev + 1);
     };
 
-    // Contact form helper function to get field values flexibly
-    const getFlexible = (preferredNames, fallbackRegex) => {
-        const f = contactFormRef.current;
-        if (!f) return "";
 
-        for (const n of preferredNames) {
-            const el = f.elements[n];
-            if (el && typeof el.value === "string" && el.value.trim()) {
-                return el.value.trim();
-            }
-        }
-
-        const fields = Array.from(f.elements).filter(
-            (el) =>
-                (el.tagName === "INPUT" ||
-                    el.tagName === "TEXTAREA" ||
-                    el.tagName === "SELECT") &&
-                typeof el.name === "string",
-        );
-
-        const candidate =
-            fields.find((el) => fallbackRegex.test(el.name || "")) ||
-            fields.find(
-                (el) =>
-                    typeof el.placeholder === "string" &&
-                    fallbackRegex.test(el.placeholder),
-            );
-
-        return candidate && typeof candidate.value === "string"
-            ? candidate.value.trim()
-            : "";
-    };
-
-    // Contact form submit handler (Requirements: 6.3, 6.4)
-    const handleContactSubmit = async (e) => {
-        e.preventDefault();
-        setFormStatus(null);
-        setIsSubmitting(true);
-
-        const formEl = contactFormRef.current;
-
-        const nameVal = getFlexible(
-            ["name", "firstName", "fullName", "fullname", "title"],
-            /(name|full\s*name|title)/i,
-        );
-        const emailVal = getFlexible(
-            ["email", "emailAddress"],
-            /(email|e-mail)/i,
-        );
-        const phoneVal = getFlexible(
-            ["phone", "mobile", "phoneNo", "phone_number"],
-            /(phone|mobile|contact\s*number)/i,
-        );
-        const serviceVal = getFlexible(
-            ["service", "services", "selectedService"],
-            /(service|category|subject)/i,
-        );
-        const messageVal = getFlexible(
-            ["message", "msg", "messages", "comment"],
-            /(message|query|comments?|details)/i,
-        );
-
-        if (!nameVal) {
-            setIsSubmitting(false);
-            setFormStatus({ type: "err", msg: "Please enter your name." });
-            return;
-        }
-        if (!emailVal) {
-            setIsSubmitting(false);
-            setFormStatus({ type: "err", msg: "Please enter your email." });
-            return;
-        }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
-            setIsSubmitting(false);
-            setFormStatus({ type: "err", msg: "Enter a valid email." });
-            return;
-        }
-        if (!phoneVal) {
-            setIsSubmitting(false);
-            setFormStatus({
-                type: "err",
-                msg: "Please enter your phone number.",
-            });
-            return;
-        }
-
-        // Honeypot check
-        const hp = formEl?.querySelector('[name="website"]')?.value;
-        if (hp) {
-            setIsSubmitting(false);
-            setFormStatus({ type: "ok", msg: "Thanks!" });
-            return;
-        }
-
-        try {
-            const response = await fetch("/api/contact", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    name: nameVal,
-                    email: emailVal,
-                    phone: phoneVal,
-                    service: serviceVal,
-                    message: messageVal,
-                    website: hp,
-                }),
-            });
-
-            const result = await response.json();
-
-            if (!response.ok || !result.success) {
-                throw new Error(
-                    result.error || "Could not send. Please try again.",
-                );
-            }
-
-            formEl?.reset();
-            setFormStatus({
-                type: "ok",
-                msg:
-                    result.message ||
-                    "Message sent! We'll get back to you within 24-48 hours.",
-            });
-        } catch (err) {
-            console.error("Contact form error:", err);
-            setFormStatus({
-                type: "err",
-                msg: err?.message || "Could not send. Please try again.",
-            });
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
 
     return (
         <>
@@ -424,97 +290,11 @@ export default function MainServiceClient({
                             )}
                             <div className="main-service-contact-underline"></div>
 
-                            <form
-                                ref={contactFormRef}
-                                onSubmit={handleContactSubmit}
-                                className="main-service-contact-form"
-                            >
-                                {/* Name field */}
-                                <div className="main-service-form-field">
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        placeholder="Your Name *"
-                                        required
-                                    />
-                                </div>
-
-                                {/* Email field */}
-                                <div className="main-service-form-field">
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        placeholder="Your Email *"
-                                        required
-                                    />
-                                </div>
-
-                                {/* Phone field */}
-                                <div className="main-service-form-field">
-                                    <input
-                                        type="tel"
-                                        name="phone"
-                                        placeholder="Your Phone *"
-                                        required
-                                    />
-                                </div>
-
-                                {/* Service selection - populated from services list */}
-                                <div className="main-service-form-field">
-                                    <select name="service">
-                                        <option value="">
-                                            Select a Service
-                                        </option>
-                                        {services
-                                            .filter(
-                                                (s) =>
-                                                    s.slug !== "main-services",
-                                            )
-                                            .map((service, idx) => (
-                                                <option
-                                                    key={idx}
-                                                    value={service.title}
-                                                >
-                                                    {service.title}
-                                                </option>
-                                            ))}
-                                    </select>
-                                </div>
-
-                                {/* Message field */}
-                                <div className="main-service-form-field">
-                                    <textarea
-                                        name="message"
-                                        placeholder="Your Message"
-                                        rows="4"
-                                    ></textarea>
-                                </div>
-
-                                {/* Honeypot field for spam protection */}
-                                <input
-                                    type="text"
-                                    name="website"
-                                    style={{ display: "none" }}
-                                    tabIndex={-1}
-                                    autoComplete="off"
-                                />
-
-                                <button
-                                    type="submit"
-                                    className="main-service-submit-button"
-                                    disabled={isSubmitting}
-                                >
-                                    {isSubmitting ? "Sending..." : "Submit"}
-                                </button>
-
-                                {formStatus && (
-                                    <p
-                                        className={`main-service-form-status ${formStatus.type === "ok" ? "success" : "error"}`}
-                                    >
-                                        {formStatus.msg}
-                                    </p>
-                                )}
-                            </form>
+                            <ContactForm
+                                title={mainServicePageData?.contactFormHeading || "Get in Touch"}
+                                description={mainServicePageData?.contactFormSubheading || ""}
+                                serviceOptions={services.filter(s => s.slug !== "main-services").map(s => s.title)}
+                            />
                         </div>
 
                         {/* Contact image */}

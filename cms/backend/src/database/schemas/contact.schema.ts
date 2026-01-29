@@ -7,8 +7,9 @@ import { BaseSchemaFields, baseSchemaOptions, addSEOFields } from './base.schema
 export interface IFormField {
   label: string;
   name: string;
-  type: 'text' | 'email' | 'phone' | 'textarea' | 'checkbox';
+  type: 'text' | 'email' | 'phone' | 'textarea' | 'checkbox' | 'select';
   required: boolean;
+  options?: string[];
 }
 
 /**
@@ -93,6 +94,9 @@ export interface IContact extends Document, BaseSchemaFields {
   // Social Links
   socialLinks?: ISocialLink[];
 
+  // Service Options for Dropdown
+  serviceOptions?: string[];
+
   // Legacy fields
   title: string;
   description?: string;
@@ -140,13 +144,19 @@ const contactSchema = new Schema<IContact>(
         },
         type: {
           type: String,
-          enum: ['text', 'email', 'phone', 'textarea', 'checkbox'],
+          enum: ['text', 'email', 'phone', 'textarea', 'checkbox', 'select'],
           default: 'text',
         },
         required: {
           type: Boolean,
           default: true,
         },
+        options: [
+          {
+            type: String,
+            trim: true,
+          },
+        ],
       },
     ],
 
@@ -280,6 +290,14 @@ const contactSchema = new Schema<IContact>(
           default: true,
         },
       },
+    ],
+
+    // Service Options for Dropdown
+    serviceOptions: [
+      {
+        type: String,
+        trim: true,
+      }
     ],
 
     // Legacy fields

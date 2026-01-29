@@ -2,6 +2,7 @@
 import Image from "next/image";
 import styles from "./page.css";
 import Header from "./Components/Header/page";
+import ContactForm from "./Components/ContactForm/page";
 import Loading from "./Components/Loading/page";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -48,92 +49,8 @@ export default function HomeClient({ homepageData: initialData }) {
     const [showForm, setShowForm] = useState(false);
     const [showScrollUp, setShowScrollUp] = useState(false);
 
-    const formRef = useRef(null);
-    const [errors, setErrors] = useState({});
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [status, setStatus] = useState(null);
+    // Contact Form Logic removed (using shared component)
 
-    const validate = (form) => {
-        const newErrors = {};
-        const firstName = form.firstName?.value?.trim();
-        const email = form.email?.value?.trim();
-        const phone = form.phone?.value?.trim();
-        const service = form.service?.value?.trim();
-
-        if (!firstName) newErrors.firstName = "Please enter your name.";
-        if (!email) newErrors.email = "Please enter your email.";
-        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-            newErrors.email = "Enter a valid email.";
-        if (!phone) newErrors.phone = "Please enter your phone number.";
-        if (!service) newErrors.service = "Please select a service.";
-
-        return newErrors;
-    };
-
-    const handleSubmitContact = async (e) => {
-        e.preventDefault();
-        setStatus(null);
-        setIsSubmitting(true);
-
-        const formEl = e.currentTarget;
-        const v = validate(formEl);
-        setErrors(v);
-        if (Object.keys(v).length) {
-            setIsSubmitting(false);
-            return;
-        }
-
-        const honeypot = formEl.querySelector('[name="website"]')?.value;
-        if (honeypot) {
-            setIsSubmitting(false);
-            setStatus({ type: "ok", msg: "Thanks!" });
-            return;
-        }
-
-        try {
-            const submitted_at = new Date().toLocaleString("en-IN", {
-                timeZone: "Asia/Kolkata",
-                hour12: true,
-            });
-            const year = String(new Date().getFullYear());
-
-            const formData = {
-                name: formEl.firstName.value.trim(),
-                email: formEl.email.value.trim(),
-                phone: formEl.phone.value.trim(),
-                service: formEl.service.value.trim() || "General",
-                message: formEl.message.value.trim(),
-                submitted_at,
-                year,
-            };
-
-            const res = await fetch("/api/sendEmail", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            });
-
-            const data = await res.json();
-
-            if (data.success) {
-                formEl.reset();
-                setStatus({
-                    type: "ok",
-                    msg: "Message sent! We'll get back to you shortly.",
-                });
-            } else {
-                throw new Error(data.error || "Failed to send email.");
-            }
-        } catch (err) {
-            console.error("Form Submit Error:", err);
-            setStatus({
-                type: "err",
-                msg: err.message || "Something went wrong. Please try again.",
-            });
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
 
     const [shouldAnimate, setShouldAnimate] = useState(false);
 
@@ -411,90 +328,7 @@ export default function HomeClient({ homepageData: initialData }) {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    async function handleSubmit(e) {
-        e.preventDefault();
-        setStatus(null);
-        setIsSubmitting(true);
 
-        const formEl = e.currentTarget;
-        const v = (name) => formEl[name]?.value?.trim();
-
-        if (!v("firstName"))
-            return (
-                setIsSubmitting(false),
-                setStatus({ type: "err", msg: "Please enter your name." })
-            );
-        if (!v("email"))
-            return (
-                setIsSubmitting(false),
-                setStatus({ type: "err", msg: "Please enter your email." })
-            );
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v("email")))
-            return (
-                setIsSubmitting(false),
-                setStatus({ type: "err", msg: "Enter a valid email." })
-            );
-        if (!v("phone"))
-            return (
-                setIsSubmitting(false),
-                setStatus({
-                    type: "err",
-                    msg: "Please enter your phone number.",
-                })
-            );
-
-        if (v("website")) {
-            setIsSubmitting(false);
-            setStatus({ type: "ok", msg: "Thanks!" });
-            return;
-        }
-
-        try {
-            const submitted_at = new Date().toLocaleString("en-IN", {
-                timeZone: "Asia/Kolkata",
-                hour12: true,
-            });
-            const year = String(new Date().getFullYear());
-
-            const formData = {
-                name: v("firstName"),
-                email: v("email"),
-                phone: v("phone"),
-                service: v("service") || "General",
-                message: v("message"),
-                submitted_at,
-                year,
-                type: "contact",
-            };
-
-            const res = await fetch("/api/sendEmail", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            });
-
-            const data = await res.json();
-
-            if (data.success) {
-                formRef.current?.reset();
-                setStatus({
-                    type: "ok",
-                    msg: "Message sent! We'll get back to you shortly.",
-                });
-                setOpen(false);
-            } else {
-                throw new Error(data.error || "Failed to send email.");
-            }
-        } catch (err) {
-            console.error("Form Submit Error:", err);
-            setStatus({
-                type: "err",
-                msg: err.message || "Something went wrong. Please try again.",
-            });
-        } finally {
-            setIsSubmitting(false);
-        }
-    }
 
     return (
         <>
@@ -559,9 +393,8 @@ export default function HomeClient({ homepageData: initialData }) {
                                     <div
                                         className="animation-slider-df"
                                         style={{
-                                            transform: `translateX(-${
-                                                currentSlideHeroBanner * 100
-                                            }%)`,
+                                            transform: `translateX(-${currentSlideHeroBanner * 100
+                                                }%)`,
                                         }}
                                     >
                                         {slides.map(
@@ -587,11 +420,10 @@ export default function HomeClient({ homepageData: initialData }) {
                                     {/* Custom Cursor Only on Desktop */}
                                     {isDesktop && showCustomCursor && (
                                         <div
-                                            className={`custom-cursor ${
-                                                isLeftHalf
-                                                    ? "left-btn"
-                                                    : "right-btn"
-                                            }`}
+                                            className={`custom-cursor ${isLeftHalf
+                                                ? "left-btn"
+                                                : "right-btn"
+                                                }`}
                                             style={{
                                                 left: `${renderCursorPos.x}px`,
                                                 top: `${renderCursorPos.y}px`,
@@ -640,12 +472,11 @@ export default function HomeClient({ homepageData: initialData }) {
                                         {slides.map((_, index) => (
                                             <button
                                                 key={index}
-                                                className={`dot ${
-                                                    index ===
+                                                className={`dot ${index ===
                                                     currentSlideHeroBanner
-                                                        ? "active"
-                                                        : ""
-                                                }`}
+                                                    ? "active"
+                                                    : ""
+                                                    }`}
                                                 onClick={() =>
                                                     setCurrentSlideHeroBanner(
                                                         index,
@@ -751,7 +582,7 @@ export default function HomeClient({ homepageData: initialData }) {
                                     </h1>
                                     <div className="technology-grid">
                                         {homepageData.technologyImages?.length >
-                                        0 ? (
+                                            0 ? (
                                             homepageData.technologyImages.map(
                                                 (tech, index) =>
                                                     tech?.image?.url ? (
@@ -799,11 +630,10 @@ export default function HomeClient({ homepageData: initialData }) {
                                                 .map((step, idx) => (
                                                     <div
                                                         key={idx}
-                                                        className={`card ${
-                                                            idx === activeIndex
-                                                                ? "active"
-                                                                : ""
-                                                        }`}
+                                                        className={`card ${idx === activeIndex
+                                                            ? "active"
+                                                            : ""
+                                                            }`}
                                                         onClick={() =>
                                                             handleImageChange(
                                                                 idx,
@@ -831,24 +661,24 @@ export default function HomeClient({ homepageData: initialData }) {
                                             {homepageData.processSteps?.[
                                                 activeIndex
                                             ]?.image?.url && (
-                                                <Image
-                                                    src={
-                                                        homepageData
-                                                            .processSteps[
-                                                            activeIndex
-                                                        ].image.url
-                                                    }
-                                                    alt={
-                                                        homepageData
-                                                            .processSteps[
-                                                            activeIndex
-                                                        ]?.title || "Step Image"
-                                                    }
-                                                    width={500}
-                                                    height={500}
-                                                    unoptimized
-                                                />
-                                            )}
+                                                    <Image
+                                                        src={
+                                                            homepageData
+                                                                .processSteps[
+                                                                activeIndex
+                                                            ].image.url
+                                                        }
+                                                        alt={
+                                                            homepageData
+                                                                .processSteps[
+                                                                activeIndex
+                                                            ]?.title || "Step Image"
+                                                        }
+                                                        width={500}
+                                                        height={500}
+                                                        unoptimized
+                                                    />
+                                                )}
                                         </div>
                                     </div>
                                 </section>
@@ -864,17 +694,17 @@ export default function HomeClient({ homepageData: initialData }) {
                                                         {homepageData
                                                             .sliderImage
                                                             ?.url && (
-                                                            <Image
-                                                                src={
-                                                                    homepageData
-                                                                        .sliderImage
-                                                                        .url
-                                                                }
-                                                                alt="Slider Icon"
-                                                                width="30"
-                                                                height="30"
-                                                            />
-                                                        )}
+                                                                <Image
+                                                                    src={
+                                                                        homepageData
+                                                                            .sliderImage
+                                                                            .url
+                                                                    }
+                                                                    alt="Slider Icon"
+                                                                    width="30"
+                                                                    height="30"
+                                                                />
+                                                            )}
                                                     </span>
                                                 ),
                                             )}
@@ -889,17 +719,17 @@ export default function HomeClient({ homepageData: initialData }) {
                                                         {homepageData
                                                             .sliderImage
                                                             ?.url && (
-                                                            <Image
-                                                                src={
-                                                                    homepageData
-                                                                        .sliderImage
-                                                                        .url
-                                                                }
-                                                                alt="Slider Icon"
-                                                                width="30"
-                                                                height="30"
-                                                            />
-                                                        )}
+                                                                <Image
+                                                                    src={
+                                                                        homepageData
+                                                                            .sliderImage
+                                                                            .url
+                                                                    }
+                                                                    alt="Slider Icon"
+                                                                    width="30"
+                                                                    height="30"
+                                                                />
+                                                            )}
                                                     </span>
                                                 ),
                                             )}
@@ -953,22 +783,22 @@ export default function HomeClient({ homepageData: initialData }) {
                                         <div className="about-us-img">
                                             {homepageData.aboutImages?.[0]
                                                 ?.url && (
-                                                <Image
-                                                    src={
-                                                        homepageData
-                                                            .aboutImages[0].url
-                                                    }
-                                                    width={500}
-                                                    height={500}
-                                                    alt={
-                                                        homepageData
-                                                            .aboutImages[0]
-                                                            .alt ||
-                                                        "People image one"
-                                                    }
-                                                    unoptimized
-                                                />
-                                            )}
+                                                    <Image
+                                                        src={
+                                                            homepageData
+                                                                .aboutImages[0].url
+                                                        }
+                                                        width={500}
+                                                        height={500}
+                                                        alt={
+                                                            homepageData
+                                                                .aboutImages[0]
+                                                                .alt ||
+                                                            "People image one"
+                                                        }
+                                                        unoptimized
+                                                    />
+                                                )}
 
                                             {videos.peopleVideo && (
                                                 <video
@@ -987,22 +817,22 @@ export default function HomeClient({ homepageData: initialData }) {
 
                                             {homepageData.aboutImages?.[1]
                                                 ?.url && (
-                                                <Image
-                                                    src={
-                                                        homepageData
-                                                            .aboutImages[1].url
-                                                    }
-                                                    width={500}
-                                                    height={500}
-                                                    alt={
-                                                        homepageData
-                                                            .aboutImages[1]
-                                                            .alt ||
-                                                        "People image two"
-                                                    }
-                                                    unoptimized
-                                                />
-                                            )}
+                                                    <Image
+                                                        src={
+                                                            homepageData
+                                                                .aboutImages[1].url
+                                                        }
+                                                        width={500}
+                                                        height={500}
+                                                        alt={
+                                                            homepageData
+                                                                .aboutImages[1]
+                                                                .alt ||
+                                                            "People image two"
+                                                        }
+                                                        unoptimized
+                                                    />
+                                                )}
                                         </div>
                                         <div className="about-us-video-text">
                                             <h1>{homepageData.peopleText}</h1>
@@ -1041,9 +871,8 @@ export default function HomeClient({ homepageData: initialData }) {
                                                 (slide, idx) => (
                                                     <div
                                                         key={idx}
-                                                        className={`keen-slider__slide number-slide${
-                                                            idx + 1
-                                                        }`}
+                                                        className={`keen-slider__slide number-slide${idx + 1
+                                                            }`}
                                                     >
                                                         <section className="why-work-home">
                                                             <div className="content-two">
@@ -1107,28 +936,28 @@ export default function HomeClient({ homepageData: initialData }) {
                                                                         {slide
                                                                             ?.image
                                                                             ?.url && (
-                                                                            <Image
-                                                                                src={
-                                                                                    slide
-                                                                                        .image
-                                                                                        .url
-                                                                                }
-                                                                                alt={
-                                                                                    slide.title ||
-                                                                                    "Slide Image"
-                                                                                }
-                                                                                width={
-                                                                                    400
-                                                                                }
-                                                                                height={
-                                                                                    300
-                                                                                }
-                                                                                priority={
-                                                                                    idx ===
-                                                                                    0
-                                                                                }
-                                                                            />
-                                                                        )}
+                                                                                <Image
+                                                                                    src={
+                                                                                        slide
+                                                                                            .image
+                                                                                            .url
+                                                                                    }
+                                                                                    alt={
+                                                                                        slide.title ||
+                                                                                        "Slide Image"
+                                                                                    }
+                                                                                    width={
+                                                                                        400
+                                                                                    }
+                                                                                    height={
+                                                                                        300
+                                                                                    }
+                                                                                    priority={
+                                                                                        idx ===
+                                                                                        0
+                                                                                    }
+                                                                                />
+                                                                            )}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1167,230 +996,31 @@ export default function HomeClient({ homepageData: initialData }) {
                                             <div className="contact-left">
                                                 {homepageData.contactImage
                                                     ?.url && (
-                                                    <Image
-                                                        src={
-                                                            homepageData
-                                                                .contactImage
-                                                                .url
-                                                        }
-                                                        width={500}
-                                                        height={500}
-                                                        alt={
-                                                            homepageData
-                                                                .contactImage
-                                                                .alt ||
-                                                            "footer-img"
-                                                        }
-                                                        unoptimized
-                                                    />
-                                                )}
+                                                        <Image
+                                                            src={
+                                                                homepageData
+                                                                    .contactImage
+                                                                    .url
+                                                            }
+                                                            width={500}
+                                                            height={500}
+                                                            alt={
+                                                                homepageData
+                                                                    .contactImage
+                                                                    .alt ||
+                                                                "footer-img"
+                                                            }
+                                                            unoptimized
+                                                        />
+                                                    )}
                                             </div>
                                             <div className="contact-right">
-                                                <h1>
-                                                    {homepageData.contactTitle}
-                                                </h1>
-
-                                                <div>
-                                                    <form
-                                                        ref={formRef}
-                                                        id="contactform"
-                                                        className="contact-form"
-                                                        onSubmit={
-                                                            handleSubmitContact
-                                                        }
-                                                    >
-                                                        <div className="form-fields">
-                                                            <label htmlFor="fname">
-                                                                Name
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                name="firstName"
-                                                                id="fname"
-                                                                placeholder="Your name"
-                                                            />
-                                                            {errors.firstName && (
-                                                                <span className="error">
-                                                                    {
-                                                                        errors.firstName
-                                                                    }
-                                                                </span>
-                                                            )}
-                                                        </div>
-
-                                                        <div className="form-fields">
-                                                            <label htmlFor="email">
-                                                                Email
-                                                            </label>
-                                                            <input
-                                                                type="email"
-                                                                name="email"
-                                                                id="email"
-                                                                placeholder="Your Email"
-                                                            />
-                                                            {errors.email && (
-                                                                <span className="error">
-                                                                    {
-                                                                        errors.email
-                                                                    }
-                                                                </span>
-                                                            )}
-                                                        </div>
-
-                                                        <div className="form-fields">
-                                                            <label htmlFor="phone">
-                                                                Phone no
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                name="phone"
-                                                                id="phone"
-                                                                placeholder="Your Phone Number"
-                                                            />
-                                                            {errors.phone && (
-                                                                <span className="error">
-                                                                    {
-                                                                        errors.phone
-                                                                    }
-                                                                </span>
-                                                            )}
-                                                        </div>
-
-                                                        <div className="form-fields">
-                                                            <label htmlFor="service">
-                                                                Services
-                                                            </label>
-                                                            <select
-                                                                name="service"
-                                                                id="service"
-                                                                defaultValue=""
-                                                            >
-                                                                <option
-                                                                    value=""
-                                                                    disabled
-                                                                >
-                                                                    Select
-                                                                    Service
-                                                                </option>
-                                                                <option>
-                                                                    Drafting to
-                                                                    CAD (PDF to
-                                                                    CAD)
-                                                                </option>
-                                                                <option>
-                                                                    Permit
-                                                                    Drawing and
-                                                                    Documentation
-                                                                </option>
-                                                                <option>
-                                                                    Working
-                                                                    Drawing and
-                                                                    Detailing
-                                                                </option>
-                                                                <option>
-                                                                    3D
-                                                                    Modelling,
-                                                                    Rendering
-                                                                    and
-                                                                    Walkthrough
-                                                                </option>
-                                                                <option>
-                                                                    360 Degree
-                                                                    Views
-                                                                </option>
-                                                                <option>
-                                                                    BIM Services
-                                                                </option>
-                                                                <option>
-                                                                    Bill of
-                                                                    Quantities
-                                                                    (BOQ)
-                                                                </option>
-                                                                <option>
-                                                                    MEP Drafting
-                                                                </option>
-                                                            </select>
-                                                            {errors.service && (
-                                                                <span className="error">
-                                                                    {
-                                                                        errors.service
-                                                                    }
-                                                                </span>
-                                                            )}
-                                                        </div>
-
-                                                        <div className="form-fields message">
-                                                            <label htmlFor="message">
-                                                                Message
-                                                            </label>
-                                                            <textarea
-                                                                name="message"
-                                                                id="message"
-                                                                placeholder="Send Your Message"
-                                                            ></textarea>
-                                                        </div>
-
-                                                        <input
-                                                            type="text"
-                                                            name="website"
-                                                            style={{
-                                                                display: "none",
-                                                            }}
-                                                            tabIndex={-1}
-                                                            autoComplete="off"
-                                                        />
-
-                                                        {/* System fields (hidden) */}
-                                                        <input
-                                                            type="hidden"
-                                                            name="submitted_at"
-                                                        />
-                                                        <input
-                                                            type="hidden"
-                                                            name="year"
-                                                        />
-
-                                                        <button
-                                                            type="submit"
-                                                            disabled={
-                                                                isSubmitting
-                                                            }
-                                                        >
-                                                            {isSubmitting
-                                                                ? "Sending…"
-                                                                : "Send Message"}
-                                                        </button>
-                                                    </form>
-
-                                                    {status && (
-                                                        <p
-                                                            className={
-                                                                status.type ===
-                                                                "ok"
-                                                                    ? "success"
-                                                                    : "error"
-                                                            }
-                                                            style={{
-                                                                marginTop: 12,
-                                                            }}
-                                                        >
-                                                            {status.msg}
-                                                        </p>
-                                                    )}
-                                                </div>
-                                                <div className="contact-btn">
-                                                    <span>
-                                                        <button
-                                                            type="submit"
-                                                            form="contactform"
-                                                        >
-                                                            {
-                                                                homepageData.contactButton
-                                                            }
-                                                        </button>
-                                                    </span>
-                                                </div>
+                                                <ContactForm
+                                                    title={homepageData.contactTitle}
+                                                    buttonText={homepageData.contactButton}
+                                                />
                                             </div>
+
                                         </div>
                                     </div>
                                 </section>
@@ -1430,9 +1060,10 @@ export default function HomeClient({ homepageData: initialData }) {
                                     </svg>
                                 </div>
                             )}
-                        </div>
-                    )}
-                </div>
+                        </div >
+                    )
+                    }
+                </div >
             )}
 
             {/* Page-specific scripts from CMS - rendered safely via Next.js Script */}

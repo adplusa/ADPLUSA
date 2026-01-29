@@ -1,19 +1,15 @@
 "use client";
-
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import Header from "../Components/Header/page";
 import Footer from "../Components/Footer/page";
 import Image from "next/image";
 import PageScripts from "../Components/PageScripts";
+import ContactForm from "../Components/ContactForm/page";
 import gsap from "gsap";
 import "./contact.css";
 
 export default function ContactClient({ data }) {
     const textRef = useRef(null);
-    const formRef = useRef(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [status, setStatus] = useState(null);
-    const [showForm, setShowForm] = useState(false);
 
     const upwardHandler = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -29,133 +25,18 @@ export default function ContactClient({ data }) {
         }
     }, []);
 
-    const getFlexible = (preferredNames, fallbackRegex) => {
-        const f = formRef.current;
-        if (!f) return "";
-
-        for (const n of preferredNames) {
-            const el = f.elements[n];
-            if (el && typeof el.value === "string" && el.value.trim()) {
-                return el.value.trim();
-            }
-        }
-
-        const fields = Array.from(f.elements).filter(
-            (el) =>
-                (el.tagName === "INPUT" ||
-                    el.tagName === "TEXTAREA" ||
-                    el.tagName === "SELECT") &&
-                typeof el.name === "string",
-        );
-
-        const candidate =
-            fields.find((el) => fallbackRegex.test(el.name || "")) ||
-            fields.find(
-                (el) =>
-                    typeof el.placeholder === "string" &&
-                    fallbackRegex.test(el.placeholder),
-            );
-
-        return candidate && typeof candidate.value === "string"
-            ? candidate.value.trim()
-            : "";
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setStatus(null);
-        setIsSubmitting(true);
-
-        const formEl = formRef.current;
-
-        const nameVal = getFlexible(
-            ["name", "firstName", "fullName", "fullname", "title"],
-            /(name|full\s*name|title)/i,
-        );
-        const emailVal = getFlexible(
-            ["email", "emailAddress"],
-            /(email|e-mail)/i,
-        );
-        const phoneVal = getFlexible(
-            ["phone", "mobile", "phoneNo", "phone_number"],
-            /(phone|mobile|contact\s*number)/i,
-        );
-        const serviceVal = getFlexible(
-            ["service", "services", "selectedService"],
-            /(service|category|subject)/i,
-        );
-        const messageVal = getFlexible(
-            ["message", "msg", "messages", "comment"],
-            /(message|query|comments?|details)/i,
-        );
-
-        if (!nameVal) {
-            setIsSubmitting(false);
-            setStatus({ type: "err", msg: "Please enter your name." });
-            return;
-        }
-        if (!emailVal) {
-            setIsSubmitting(false);
-            setStatus({ type: "err", msg: "Please enter your email." });
-            return;
-        }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
-            setIsSubmitting(false);
-            setStatus({ type: "err", msg: "Enter a valid email." });
-            return;
-        }
-        if (!phoneVal) {
-            setIsSubmitting(false);
-            setStatus({ type: "err", msg: "Please enter your phone number." });
-            return;
-        }
-
-        const hp = formEl?.querySelector('[name="website"]')?.value;
-        if (hp) {
-            setIsSubmitting(false);
-            setStatus({ type: "ok", msg: "Thanks!" });
-            return;
-        }
-
-        try {
-            const response = await fetch("/api/contact", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    name: nameVal,
-                    email: emailVal,
-                    phone: phoneVal,
-                    service: serviceVal,
-                    message: messageVal,
-                    website: hp,
-                }),
-            });
-
-            const result = await response.json();
-
-            if (!response.ok || !result.success) {
-                throw new Error(
-                    result.error || "Could not send. Please try again.",
-                );
-            }
-
-            formEl?.reset();
-            setStatus({
-                type: "ok",
-                msg:
-                    result.message ||
-                    "Message sent! We'll get back to you within 24-48 hours.",
-            });
-        } catch (err) {
-            console.error("Contact form error:", err);
-            setStatus({
-                type: "err",
-                msg: err?.message || "Could not send. Please try again.",
-            });
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
+    const serviceOptions = data?.serviceOptions?.length > 0
+        ? data.serviceOptions
+        : [
+            "Drafting to CAD (PDF to CAD)",
+            "Permit Drawing and Documentation",
+            "Working Drawing and Detailing",
+            "3D Modelling, Rendering and Walkthrough",
+            "360 Degree Views",
+            "BIM Services",
+            "Bill of Quantities (BOQ)",
+            "MEP Drafting",
+        ];
 
     return (
         <>
@@ -163,58 +44,12 @@ export default function ContactClient({ data }) {
 
             <div className="contact-container">
                 <div className="contact-form-section">
-                    <h1 className="contact-title">
-                        {data?.mainHeading || "Get in touch"}
-                    </h1>
-                    <div className="title-underline"></div>
-
-                    <form ref={formRef} onSubmit={handleSubmit}>
-                        {data.formFields?.map((field, idx) => (
-                            <div className="form-field" key={idx}>
-                                {field.type === "textarea" ? (
-                                    <textarea
-                                        name={field.name}
-                                        placeholder={field.label}
-                                        required={!!field.required}
-                                    />
-                                ) : (
-                                    <input
-                                        type={field.type}
-                                        name={field.name}
-                                        placeholder={field.label}
-                                        required={!!field.required}
-                                    />
-                                )}
-                            </div>
-                        ))}
-
-                        <input
-                            type="text"
-                            name="website"
-                            style={{ display: "none" }}
-                            tabIndex={-1}
-                            autoComplete="off"
-                        />
-
-                        <button
-                            type="submit"
-                            className="submit-button"
-                            disabled={isSubmitting}
-                        >
-                            {isSubmitting ? "Sending…" : "Submit"}
-                        </button>
-
-                        {status && (
-                            <p
-                                style={{ marginTop: 10 }}
-                                className={
-                                    status.type === "ok" ? "success" : "error"
-                                }
-                            >
-                                {status.msg}
-                            </p>
-                        )}
-                    </form>
+                    <ContactForm
+                        title={data?.mainHeading || "Get in touch"}
+                        description={data?.contactDescription}
+                        buttonText={data?.contactButtonText || "Send Message"}
+                        serviceOptions={serviceOptions}
+                    />
                 </div>
 
                 <div className="contact-info-section">
@@ -328,70 +163,15 @@ export default function ContactClient({ data }) {
                     target="_blank"
                     href="https://wa.me/919910085603/?text=I%20would%20like%20to%20know%20about%20ADPL%20Consulting%20LLC%20!"
                 >
-                    <img
-                        src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
+                    <Image
+                        src="/whatsapp.png"
                         width={40}
                         height={40}
                         alt="Whatsapp-img"
+                        unoptimized
                     />
                 </a>
             </div>
-
-            <div className="enquire">
-                <button onClick={() => setShowForm(true)}>Enquire Now</button>
-            </div>
-
-            {showForm && (
-                <div
-                    className="enquiry-overlay"
-                    onClick={() => setShowForm(false)}
-                >
-                    <div
-                        className="enquiry-container"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div className="enquiry-box">
-                            <div
-                                className="close-icon"
-                                onClick={() => setShowForm(false)}
-                            >
-                                ✕
-                            </div>
-                            <h2 className="title">Quick Query</h2>
-                            <p className="subtitle">
-                                If you have any queries, we will be pleased to
-                                assist you.
-                            </p>
-                            <form>
-                                <input
-                                    type="text"
-                                    placeholder="Name"
-                                    className="form-input"
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Mobile No."
-                                    className="form-input"
-                                />
-                                <select className="form-input">
-                                    <option>Select Type</option>
-                                    <option>General</option>
-                                    <option>Support</option>
-                                    <option>Sales</option>
-                                </select>
-                                <textarea
-                                    placeholder="Query"
-                                    className="form-input"
-                                    rows="3"
-                                />
-                                <button type="submit" className="submit-button">
-                                    Submit
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             <div className="upward" onClick={upwardHandler}>
                 <svg

@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import "./header.css";
 import Image from "next/image";
@@ -68,15 +67,17 @@ const Header = () => {
             <div className="header-df desktop">
                 <Link href="/">
                     <div className="flip-logo">
-                        <span className="flip-container">
+                        <span className="flip-container" suppressHydrationWarning>
                             <Image
                                 id="flip-one"
                                 className="flip-front"
                                 src={logo}
                                 alt={logoAlt}
                                 width={0}
+
                                 height={0}
                                 unoptimized
+                                priority
                             />
                         </span>
                     </div>
@@ -150,9 +151,8 @@ const Header = () => {
 
                 <div
                     id="second-navbar"
-                    className={`second-navbar ${
-                        isMobileMenuOpen ? "mobile-open" : ""
-                    }`}
+                    className={`second-navbar ${isMobileMenuOpen ? "mobile-open" : ""
+                        }`}
                 >
                     <ul>
                         <li>
@@ -178,15 +178,17 @@ const Header = () => {
 
                 <Link href="/">
                     <div className="flip-logo">
-                        <span className="flip-container">
+                        <span className="flip-container" suppressHydrationWarning>
                             <Image
                                 id="flip-one"
                                 className="flip-front"
                                 src={logo}
                                 alt={logoAlt}
                                 width={0}
+
                                 height={0}
                                 unoptimized
+                                priority
                             />
                         </span>
                     </div>
