@@ -8,10 +8,14 @@ export async function generateMetadata() {
 
     return {
         title: data?.seoTitle || "Contact | ADPL Consulting",
-        description: data?.seoDescription || "Contact ADPL Consulting for your project needs",
+        description:
+            data?.seoDescription ||
+            "Contact ADPL Consulting for your project needs",
         openGraph: {
             title: data?.seoTitle || "Contact | ADPL Consulting",
-            description: data?.seoDescription || "Contact ADPL Consulting for your project needs",
+            description:
+                data?.seoDescription ||
+                "Contact ADPL Consulting for your project needs",
         },
     };
 }

@@ -17,11 +17,16 @@ export async function generateMetadata({ params }) {
 
     return {
         title: project.seoTitle || `${project.title} | ADPL Consulting`,
-        description: project.seoDescription || project.description || `View ${project.title} project at ADPL Consulting`,
+        description:
+            project.seoDescription ||
+            project.description ||
+            `View ${project.title} project at ADPL Consulting`,
         openGraph: {
             title: project.seoTitle || `${project.title} | ADPL Consulting`,
             description: project.seoDescription || project.description,
-            images: project.mainImage?.url ? [{ url: project.mainImage.url }] : [],
+            images: project.mainImage?.url
+                ? [{ url: project.mainImage.url }]
+                : [],
         },
     };
 }
@@ -29,8 +34,8 @@ export async function generateMetadata({ params }) {
 export default async function ProjectPage({ params }) {
     const { slug } = await params;
     const [project, allProjects] = await Promise.all([
-        getProject(slug, { revalidate: 60 }),
-        getProjects({ revalidate: 60 }),
+        getProject(slug, { revalidate: 0 }),
+        getProjects({ revalidate: 0 }),
     ]);
 
     if (!project) {
@@ -39,8 +44,13 @@ export default async function ProjectPage({ params }) {
                 <Header />
                 <div style={{ padding: "150px 20px", textAlign: "center" }}>
                     <h1>Project Not Found</h1>
-                    <p>The project you&apos;re looking for doesn&apos;t exist.</p>
-                    <Link href="/projects" style={{ color: "blue", textDecoration: "underline" }}>
+                    <p>
+                        The project you&apos;re looking for doesn&apos;t exist.
+                    </p>
+                    <Link
+                        href="/projects"
+                        style={{ color: "blue", textDecoration: "underline" }}
+                    >
                         ← Back to Projects
                     </Link>
                 </div>
@@ -51,5 +61,11 @@ export default async function ProjectPage({ params }) {
 
     const otherProjects = allProjects?.filter((p) => p.slug !== slug) || [];
 
-    return <ProjectClient project={project} otherProjects={otherProjects} slug={slug} />;
+    return (
+        <ProjectClient
+            project={project}
+            otherProjects={otherProjects}
+            slug={slug}
+        />
+    );
 }

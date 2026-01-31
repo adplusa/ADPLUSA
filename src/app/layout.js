@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
  * This is the recommended Next.js approach - no hydration issues
  */
 export async function generateMetadata() {
-    const settings = await getGeneralSettings({ revalidate: 60 });
+    const settings = await getGeneralSettings({ revalidate: 0 });
 
     return {
         title: settings?.siteName || "ADPL Consulting LLC",
@@ -64,7 +64,7 @@ function parseCustomHeadTags(htmlString) {
 }
 
 export default async function RootLayout({ children }) {
-    const settings = await getGeneralSettings({ revalidate: 60 });
+    const settings = await getGeneralSettings({ revalidate: 0 });
     const { scripts, inlineScripts } = parseCustomHeadTags(
         settings?.customHeadTags,
     );

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { MainServicePage } from "../database/schemas/mainServicePage.schema";
+import { CacheService } from "../services/cache.service";
 
 /**
  * @route   GET /api/public/main-service-page
@@ -8,7 +9,7 @@ import { MainServicePage } from "../database/schemas/mainServicePage.schema";
  */
 export const getMainServicePage = async (
     _req: Request,
-    res: Response
+    res: Response,
 ): Promise<void> => {
     try {
         // MainServicePage is a singleton document, so we get the first one
@@ -48,7 +49,7 @@ export const getMainServicePage = async (
  */
 export const updateMainServicePage = async (
     req: Request,
-    res: Response
+    res: Response,
 ): Promise<void> => {
     try {
         console.log("Updating main service page...");
@@ -63,8 +64,15 @@ export const updateMainServicePage = async (
                 upsert: true,
                 runValidators: true,
                 setDefaultsOnInsert: true,
-            }
+            },
         ).lean();
+
+        // Invalidate Cache
+        // We use the direct key or a helper. CacheService.invalidateServices() clears this too.
+        // Let's use the explicit key for clarity if possible or just the service helper.
+        // Actually, let's use the helper we used in CacheService that targets this key.
+        // CacheService.invalidateServices() does clear 'cms:/main-service-page'.
+        await CacheService.invalidateServices();
 
         console.log("Main service page updated successfully");
 

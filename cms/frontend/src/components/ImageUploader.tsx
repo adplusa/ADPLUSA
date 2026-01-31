@@ -806,6 +806,7 @@ export default function ImageUploader({
                         </div>
                         <div className="ml-auto pl-3">
                             <button
+                                type="button"
                                 onClick={() => setValidationErrors([])}
                                 className="inline-flex text-red-400 hover:text-red-500"
                                 aria-label="Dismiss validation errors"
@@ -925,6 +926,7 @@ export default function ImageUploader({
                                                 {fileState.error}
                                             </p>
                                             <button
+                                                type="button"
                                                 onClick={() =>
                                                     retryUpload(fileKey)
                                                 }
@@ -939,6 +941,7 @@ export default function ImageUploader({
                                     {/* Remove button */}
                                     {fileState.status !== "uploading" && (
                                         <button
+                                            type="button"
                                             onClick={() =>
                                                 handleRemoveFileUpload(fileKey)
                                             }
@@ -1082,6 +1085,7 @@ export default function ImageUploader({
 
                                 {/* Remove button */}
                                 <button
+                                    type="button"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         handleRemoveUploaded(image);
@@ -1261,12 +1265,14 @@ export default function ImageUploader({
                             </div>
                             <div className="mt-6 flex justify-end space-x-3">
                                 <button
+                                    type="button"
                                     onClick={() => setDeleteConfirmImage(null)}
                                     className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
                                 >
                                     Cancel
                                 </button>
                                 <button
+                                    type="button"
                                     onClick={() =>
                                         performDelete(deleteConfirmImage)
                                     }

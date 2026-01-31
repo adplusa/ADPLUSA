@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { FAQ } from "../database/schemas/faq.schema";
 import { About } from "../database/schemas/about.schema";
 import { Contact } from "../database/schemas/contact.schema";
+import { CacheService } from "../services/cache.service";
 
 /**
  * @route   GET /api/faq
@@ -84,7 +85,7 @@ export const getAbout = async (_req: Request, res: Response): Promise<void> => {
  */
 export const getContact = async (
     _req: Request,
-    res: Response
+    res: Response,
 ): Promise<void> => {
     try {
         // Contact is a singleton document, so we get the first one
@@ -149,6 +150,9 @@ export const updateFAQ = async (req: Request, res: Response): Promise<void> => {
 
         await faq.save();
 
+        // Invalidate Cache
+        await CacheService.invalidateFAQ();
+
         res.status(200).json({
             success: true,
             data: faq,
@@ -192,7 +196,7 @@ export const updateFAQ = async (req: Request, res: Response): Promise<void> => {
  */
 export const updateAbout = async (
     req: Request,
-    res: Response
+    res: Response,
 ): Promise<void> => {
     try {
         const {
@@ -241,6 +245,9 @@ export const updateAbout = async (
 
         await about.save();
 
+        // Invalidate Cache
+        await CacheService.invalidateAbout();
+
         res.status(200).json({
             success: true,
             data: about,
@@ -284,7 +291,7 @@ export const updateAbout = async (
  */
 export const updateContact = async (
     req: Request,
-    res: Response
+    res: Response,
 ): Promise<void> => {
     try {
         const {
@@ -328,6 +335,9 @@ export const updateContact = async (
         }
 
         await contact.save();
+
+        // Invalidate Cache
+        await CacheService.invalidateContact();
 
         res.status(200).json({
             success: true,

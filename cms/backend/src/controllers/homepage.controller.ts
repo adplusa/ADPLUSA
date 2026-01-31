@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Homepage } from "../database/schemas/homepage.schema";
+import { CacheService } from "../services/cache.service";
 
 /**
  * @route   PUT /api/admin/homepage
@@ -8,11 +9,9 @@ import { Homepage } from "../database/schemas/homepage.schema";
  */
 export const updateHomepage = async (
     req: Request,
-    res: Response
+    res: Response,
 ): Promise<void> => {
     try {
-
-
         // Use findOneAndUpdate with upsert to ensure we always have one document
         const homepage = await Homepage.findOneAndUpdate(
             {}, // Empty filter because it's a singleton
@@ -22,10 +21,11 @@ export const updateHomepage = async (
                 upsert: true,
                 runValidators: true,
                 setDefaultsOnInsert: true,
-            }
+            },
         ).lean();
 
-
+        // Invalidate Cache
+        await CacheService.invalidateHomepage();
 
         res.status(200).json({
             success: true,
