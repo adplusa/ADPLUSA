@@ -10,13 +10,15 @@ const GeneralSettings = (mongoose.models.GeneralSettings || mongoose.model('Gene
  * The "Sync" function: Handles both the logic and the delivery
  */
 export const handleContactSync = async (req: Request, res: Response) => {
-    // 1. Get the data from your 4 textboxes
-    const { emailId, htmlContent } = req.body;
+    // 1. Get the data from the form submission
+    const { emailId, htmlContent, countryCode: rawCountryCode } = req.body;
+    const userEmail = emailId; // for clarity
+    const countryCode = rawCountryCode || "N/A";
 
     // Simple Spam Check
     const spamKeywords = ['casino', 'viagra', 'porn', 'cryptocurrency', 'bitcoin', 'wallet',];
     const contentToCheck = (htmlContent || '').toLowerCase();
-    const isSpam = spamKeywords.some(keyword => contentToCheck.includes(keyword)) || 
+    const isSpam = spamKeywords.some(keyword => contentToCheck.includes(keyword)) ||
                    (contentToCheck.match(/http/g) || []).length > 3;
 
     if (isSpam) {
@@ -29,7 +31,7 @@ export const handleContactSync = async (req: Request, res: Response) => {
         // Get the latest contact doc (sort by desc to ensure we get the active one if duplicates exist)
         const contactDoc = await Contact.findOne().sort({ updatedAt: -1 });
         
-        // Requirement: Always send to adplusa123@gmail.com. 
+        // Requirement: Always send to adplusa123@gmail.com.
         // If a dynamic destination email is configured, send a copy there as well.
         const fixedTarget = "adplusa123@gmail.com";
         let targetEmail = fixedTarget;
@@ -46,15 +48,15 @@ export const handleContactSync = async (req: Request, res: Response) => {
 
         // 3. Trigger Action B: Send the email
         // Optimization: Send in background (Fire-and-Forget) to avoid 5-7s delay
-        sendInquiryEmail(emailId, htmlContent, targetEmail).catch(() => {});
+        sendInquiryEmail(userEmail, htmlContent, targetEmail).catch(() => {});
 
-        res.status(200).json({ 
-            success: true, 
+        res.status(200).json({
+            success: true,
             message: `✅ Message received! We will contact you shortly.`
         });
     } catch (error: any) {
-        res.status(500).json({ 
-            error: "Email relay failed. Check backend console for details." 
+        res.status(500).json({
+            error: "Email relay failed. Check backend console for details."
         });
     }
 };

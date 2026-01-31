@@ -21,22 +21,16 @@ import { GeneralSettingsSchema } from './database/schemas/generalSettings.schema
 const app: Application = express();
 
 // Middleware
-// CORS configuration for frontend access
-const corsOptions = {
-  origin: true,
-  credentials: true, // Allow credentials (cookies, authorization headers),
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-};
-
-app.use(cors(corsOptions));
+// CORS configuration
+const origins = config.corsOrigin.split(',').map(o => o.trim());
+app.use(cors({ origin: origins, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Health check endpoint
 app.get('/health', (_req: Request, res: Response) => {
   const dbStatus = dbConnection.getConnectionStatus();
-  
+
   res.status(dbStatus ? 200 : 503).json({
     success: dbStatus,
     message: dbStatus ? 'API is running' : 'API is running but database is disconnected',
@@ -92,7 +86,7 @@ async function startServer() {
 
     // Start Express server
     app.listen(PORT, () => {
-          });
+    });
   } catch (error) {
     console.error('❌ Failed to start server:', error);
     process.exit(1);

@@ -1,0 +1,121 @@
+.shared-contact-form h1 {
+    font-size: 38px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #222;
+}
+
+.contact-form-internal {
+    margin-top: 30px;
+}
+
+.form-fields {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-fields label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+
+.form-fields input,
+.form-fields select,
+.form-fields textarea {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 15px;
+    color: #333;
+    background: #fff;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+/* Phone Group Styling */
+.phone-group {
+    display: flex;
+    gap: 10px;
+}
+
+.country-select {
+    width: auto !important;
+    min-width: 80px;
+    padding-right: 25px;
+}
+
+.phone-group input {
+    flex: 1;
+}
+
+.form-fields input:focus,
+.form-fields select:focus,
+.form-fields textarea:focus {
+    border-color: #8a0b0e;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(138, 11, 14, 0.1);
+}
+
+.form-fields textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.error {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.contact-btn {
+    margin-top: 20px;
+}
+
+.contact-btn button {
+    background-color: #8a0b0e;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 500;
+}
+
+.contact-btn button:hover {
+    background-color: #a51216;
+}
+
+.contact-btn button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.status-msg {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.status-msg.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-msg.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .shared-contact-form h1 {
+        font-size: 28px;
+    }
+}

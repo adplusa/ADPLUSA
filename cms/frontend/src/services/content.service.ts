@@ -120,6 +120,13 @@ export interface Contact {
             youtube?: string;
         };
     };
+    socialLinks?: Array<{
+        platform: string;
+        url: string;
+        isActive: boolean;
+    }>;
+    serviceOptions?: string[];
+    googleMapEmbedUrl?: string;
     seoTitle?: string;
     seoDescription?: string;
     customHeadTags?: string;
@@ -147,6 +154,13 @@ export interface UpdateContactData {
             youtube?: string;
         };
     };
+    socialLinks?: Array<{
+        platform: string;
+        url: string;
+        isActive: boolean;
+    }>;
+    serviceOptions?: string[];
+    googleMapEmbedUrl?: string;
     seoTitle?: string;
     seoDescription?: string;
     customHeadTags?: string;

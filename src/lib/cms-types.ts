@@ -332,6 +332,9 @@ export interface Contact extends BaseFields {
     // Talk Ideas heading
     talkIdeasHeading?: string;
 
+    // Service Dropdown Options
+    serviceOptions?: string[];
+
     // Legacy fields
     title: string;
     description?: string;
