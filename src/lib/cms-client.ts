@@ -59,27 +59,34 @@ async function fetchCMS<T>(
     let redis: any = null;
 
     // 1. Try to get from Redis cache first (Server only)
+    // 1. Try to get from Redis cache first (Server only)
     if (isServer) {
         try {
             // Dynamic import to prevent client-side bundling of ioredis
             const redisModule = await import("./redis");
             redis = redisModule.redis;
 
-            // We use the full endpoint as part of the key to match backend invalidation
-            cacheKey = `cms:${endpoint}`;
+            if (redis) {
+                // We use the full endpoint as part of the key to match backend invalidation
+                cacheKey = `cms:${endpoint}`;
 
-            try {
-                const cachedData = await redis.get(cacheKey);
-                if (cachedData) {
-                    console.log(`[Redis] HIT 🚀: ${cacheKey}`);
-                    return JSON.parse(cachedData) as T;
+                try {
+                    const cachedData = await redis.get(cacheKey);
+                    if (cachedData) {
+                        console.log(`[Redis] HIT 🚀: ${cacheKey}`);
+                        return JSON.parse(cachedData) as T;
+                    }
+                    console.log(`[Redis] MISS 💨: ${cacheKey}`);
+                } catch (redisError) {
+                    // Gracefully handle Redis errors (e.g., connection lost) and fall back to DB
+                    console.warn(
+                        `[Redis] Error getting key ${cacheKey}, falling back to DB:`,
+                        redisError,
+                    );
                 }
-                console.log(`[Redis] MISS 💨: ${cacheKey}`);
-            } catch (redisError) {
-                console.error(`Redis get error: ${cacheKey}`, redisError);
             }
         } catch (importError) {
-            console.error("Failed to import Redis module:", importError);
+            console.error("Failed to import or use Redis module:", importError);
         }
     }
 
@@ -132,7 +139,11 @@ async function fetchCMS<T>(
                 await redis.set(cacheKey, JSON.stringify(result.data));
                 console.log(`[Redis] SET 💾: ${cacheKey}`);
             } catch (redisError) {
-                console.error(`Redis set error: ${cacheKey}`, redisError);
+                // Similarly, if setting cache fails, just log it and move on
+                console.warn(
+                    `[Redis] Error setting key ${cacheKey}:`,
+                    redisError,
+                );
             }
         }
 
