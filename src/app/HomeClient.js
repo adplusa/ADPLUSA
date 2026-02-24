@@ -11,8 +11,6 @@ import "keen-slider/keen-slider.min.css";
 import { gsap, CSSPlugin, Expo } from "gsap";
 import SplitType from "split-type";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import "swiper/css";
-import "swiper/css/pagination";
 import Footer from "./Components/Footer/page";
 import PageScripts from "./Components/PageScripts";
 
@@ -148,7 +146,6 @@ export default function HomeClient({ homepageData: initialData }) {
             const tl = gsap.timeline({
                 onComplete: () => {
                     setLoading(false);
-                    console.log("Animation completed");
                 },
             });
 

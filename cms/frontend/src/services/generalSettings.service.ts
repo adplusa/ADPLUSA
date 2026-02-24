@@ -1,52 +1,6 @@
-import { axiosApi } from "./axios";
+import { ApiHelper } from "./api-helper";
 
-// General Settings Types
-export interface SettingsImage {
-    url: string;
-    alt?: string;
-}
-
-export interface GeneralSettings {
-    _id: string;
-    headerLogo?: SettingsImage;
-    footerLogo?: SettingsImage;
-    favicon?: SettingsImage;
-    siteName?: string;
-    siteDescription?: string;
-    customHeadTags?: string;
-    createdAt: string;
-    updatedAt: string;
-}
-
-export interface GeneralSettingsResponse {
-    success: boolean;
-    data: GeneralSettings;
-}
-
-export interface UpdateGeneralSettingsData {
-    headerLogo?: SettingsImage | null;
-    footerLogo?: SettingsImage | null;
-    favicon?: SettingsImage | null;
-    siteName?: string;
-    siteDescription?: string;
-    customHeadTags?: string;
-}
-
-// General Settings API Functions
-export const getGeneralSettings =
-    async (): Promise<GeneralSettingsResponse> => {
-        const response = await axiosApi.get<GeneralSettingsResponse>(
-            "/public/general-settings"
-        );
-        return response.data;
-    };
-
-export const updateGeneralSettings = async (
-    data: UpdateGeneralSettingsData
-): Promise<GeneralSettingsResponse> => {
-    const response = await axiosApi.put<GeneralSettingsResponse>(
-        "/admin/general-settings",
-        data
-    );
-    return response.data;
+export const generalSettingsService = {
+    get: () => ApiHelper.get("/api/admin/general-settings"),
+    update: (data: any) => ApiHelper.put("/api/admin/general-settings", data),
 };

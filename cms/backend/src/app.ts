@@ -14,6 +14,7 @@ import contentRoutes from './routes/content.routes';
 import publicRoutes from './routes/public.routes';
 import contactRoutes from './routes/contact.routes';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware';
+import { cacheMiddleware } from './middleware/cache.middleware';
 
 const app: Application = express();
 
@@ -23,6 +24,8 @@ const origins = config.corsOrigin.split(',').map(o => o.trim());
 app.use(cors({ origin: origins, credentials: true, methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], allowedHeaders: ['Content-Type', 'Authorization'] }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cacheMiddleware);
 
 // Health check endpoint
 app.get('/health', (_req: Request, res: Response) => {

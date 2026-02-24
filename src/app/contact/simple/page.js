@@ -9,11 +9,7 @@ export default function SimpleContactPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("--- Simple Contact Form Submission ---");
-        console.log("Name:", name);
-        console.log("Email:", email);
-        console.log("Message:", message);
-        alert("Form submitted! Check the console for the values.");
+        alert("Form submitted!");
     };
 
     return (
