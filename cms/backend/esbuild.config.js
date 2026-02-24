@@ -14,6 +14,6 @@ esbuild.build({
     'nock',
     '@mapbox/node-pre-gyp',
   ],
-  minify: true,
+  minify: false,
   sourcemap: true,
-});
+}).catch(() => process.exit(1));
