@@ -7,13 +7,15 @@ import { Label } from '../components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Alert, AlertDescription } from '../components/ui/alert';
 import { Badge } from '../components/ui/badge';
-import { uploadMedia } from '../services/media.service';
+import { mediaService } from '../services/media.service';
 import { getTags } from '../services/tag.service';
-import type { CreateMediaData } from '../services/media.service';
 import type { Tag } from '../services/tag.service';
 import { Upload, X, Image, FileText, Film } from 'lucide-react';
 
-interface MediaUploadData extends CreateMediaData {
+interface MediaUploadData {
+  title: string;
+  alt?: string;
+  description?: string;
   file: FileList;
 }
 
@@ -107,17 +109,47 @@ export default function MediaUpload() {
       setError(null);
 
       const file = data.file[0];
-      const uploadData: CreateMediaData = {
+
+      // Step 1: Get presigned URL from backend
+      const presignedResponse = await mediaService.getPresignedUploadUrl(
+        file.name,
+        file.type,
+        'media'
+      );
+
+      if (!presignedResponse.data) {
+        throw new Error('Failed to get presigned URL');
+      }
+
+      const { uploadUrl, key, cdnUrl } = presignedResponse.data;
+
+      // Step 2: Upload file directly to S3 using presigned URL
+      const uploadResponse = await fetch(uploadUrl, {
+        method: 'PUT',
+        body: file,
+        headers: {
+          'Content-Type': file.type,
+        },
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error(`S3 upload failed: ${uploadResponse.statusText}`);
+      }
+
+      // Step 3: Register media in database with metadata
+      await mediaService.registerMedia({
         title: data.title,
         alt: data.alt,
         description: data.description,
         tags: selectedTags,
-      };
+        s3Path: key,
+        mimeType: file.type,
+        size: file.size,
+      });
 
-      await uploadMedia(file, uploadData);
       navigate('/dashboard/media');
     } catch (err: any) {
-      const errorMessage = err.response?.data?.error?.message || 'Failed to upload media';
+      const errorMessage = err.response?.data?.error?.message || err.message || 'Failed to upload media';
       setError(errorMessage);
     } finally {
       setLoading(false);

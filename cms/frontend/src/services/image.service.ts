@@ -56,49 +56,110 @@ export interface ImageQueryParams {
 }
 
 /**
- * Upload single image
+ * Upload single image using presigned URL
  */
 export const uploadImage = async (
     file: File,
     onUploadProgress?: (progressEvent: AxiosProgressEvent) => void,
 ): Promise<ImageUploadResponse> => {
-    const formData = new FormData();
-    formData.append("image", file);
+    try {
+        // Step 1: Get presigned URL from backend
+        const presignedResponse = await axiosApi.post("/admin/presigned-upload", {
+            fileName: file.name,
+            contentType: file.type,
+            folder: "images",
+        });
 
-    const response = await axiosApi.post<ImageUploadResponse>(
-        "/admin/upload",
-        formData,
-        {
+        if (!presignedResponse.data?.data) {
+            throw new Error("Failed to get presigned URL");
+        }
+
+        const { uploadUrl, key, cdnUrl } = presignedResponse.data.data;
+
+        // Step 2: Upload file directly to S3 using presigned URL
+        const uploadResponse = await fetch(uploadUrl, {
+            method: "PUT",
+            body: file,
             headers: {
-                "Content-Type": "multipart/form-data",
+                "Content-Type": file.type,
             },
-            onUploadProgress,
-        },
-    );
-    return response.data;
+        });
+
+        if (!uploadResponse.ok) {
+            throw new Error(`S3 upload failed: ${uploadResponse.statusText}`);
+        }
+
+        // Step 3: Return image metadata
+        return {
+            success: true,
+            data: {
+                key,
+                url: cdnUrl,
+                cdnUrl,
+                contentType: file.type,
+                size: file.size,
+            },
+        };
+    } catch (error: any) {
+        throw error;
+    }
 };
 
 /**
- * Upload multiple images
+ * Upload multiple images using presigned URLs
  */
 export const uploadMultipleImages = async (
     files: File[],
 ): Promise<MultipleImageUploadResponse> => {
-    const formData = new FormData();
-    files.forEach((file) => {
-        formData.append("images", file);
-    });
+    try {
+        // Step 1: Get presigned URLs for all files
+        const presignedResponse = await axiosApi.post("/admin/presigned-upload/batch", {
+            files: files.map((f) => ({
+                fileName: f.name,
+                contentType: f.type,
+            })),
+            folder: "images",
+        });
 
-    const response = await axiosApi.post<MultipleImageUploadResponse>(
-        "/admin/upload/multiple",
-        formData,
-        {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        },
-    );
-    return response.data;
+        if (!presignedResponse.data?.data) {
+            throw new Error("Failed to get presigned URLs");
+        }
+
+        const presignedUrls = presignedResponse.data.data;
+
+        // Step 2: Upload all files directly to S3 in parallel
+        const uploadPromises = files.map((file, index) => {
+            const { uploadUrl, key, cdnUrl } = presignedUrls[index];
+            return fetch(uploadUrl, {
+                method: "PUT",
+                body: file,
+                headers: {
+                    "Content-Type": file.type,
+                },
+            }).then((response) => {
+                if (!response.ok) {
+                    throw new Error(`S3 upload failed for ${file.name}`);
+                }
+                return {
+                    key,
+                    url: cdnUrl,
+                    cdnUrl,
+                    contentType: file.type,
+                    size: file.size,
+                };
+            });
+        });
+
+        const uploadedImages = await Promise.all(uploadPromises);
+
+        // Step 3: Return image metadata
+        return {
+            success: true,
+            data: uploadedImages,
+        };
+    } catch (error: any) {
+        throw error;
+    }
 };
 
 /**
