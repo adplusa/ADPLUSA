@@ -9,7 +9,7 @@ export class ApiHelper {
       return data.success ? data.data : null;
     } catch (error) {
       console.error(`GET ${endpoint}:`, error);
-      return null;
+      throw error;
     }
   }
 
@@ -19,7 +19,7 @@ export class ApiHelper {
       return data.success ? data.data : null;
     } catch (error) {
       console.error(`POST ${endpoint}:`, error);
-      return null;
+      throw error;
     }
   }
 
@@ -29,7 +29,7 @@ export class ApiHelper {
       return data.success ? data.data : null;
     } catch (error) {
       console.error(`PUT ${endpoint}:`, error);
-      return null;
+      throw error;
     }
   }
 
@@ -39,7 +39,7 @@ export class ApiHelper {
       return data.success ? data.data : null;
     } catch (error) {
       console.error(`DELETE ${endpoint}:`, error);
-      return null;
+      throw error;
     }
   }
 }

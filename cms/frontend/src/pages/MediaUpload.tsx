@@ -117,11 +117,11 @@ export default function MediaUpload() {
         'media'
       );
 
-      if (!presignedResponse.data) {
+      if (!presignedResponse) {
         throw new Error('Failed to get presigned URL');
       }
 
-      const { uploadUrl, key, cdnUrl } = presignedResponse.data;
+      const { uploadUrl, key, cdnUrl } = presignedResponse;
 
       // Step 2: Upload file directly to S3 using presigned URL
       const uploadResponse = await fetch(uploadUrl, {
@@ -137,7 +137,7 @@ export default function MediaUpload() {
       }
 
       // Step 3: Register media in database with metadata
-      await mediaService.registerMedia({
+      const registrationData = {
         title: data.title,
         alt: data.alt,
         description: data.description,
@@ -145,7 +145,11 @@ export default function MediaUpload() {
         s3Path: key,
         mimeType: file.type,
         size: file.size,
-      });
+      };
+
+      console.log('Registering media with data:', registrationData);
+
+      await mediaService.registerMedia(registrationData);
 
       navigate('/dashboard/media');
     } catch (err: any) {
