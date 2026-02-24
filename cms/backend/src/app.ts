@@ -1,4 +1,5 @@
 import express, { Application, Request, Response } from 'express';
+import cors from 'cors';
 import { config } from './config/env';
 import { dbConnection } from './database/connection';
 import authRoutes from './routes/auth.routes';
@@ -18,6 +19,12 @@ import { cacheMiddleware } from './middleware/cache.middleware';
 const app: Application = express();
 
 // Middleware
+app.use(cors({
+  origin: true,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
