@@ -15,6 +15,7 @@ interface EnvConfig {
     bucketName: string;
     region: string;
     cloudFrontUrl?: string;
+    useIamRole: boolean;
   };
   sanity: {
     projectId: string;
@@ -54,8 +55,9 @@ export const config: EnvConfig = {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
     bucketName: process.env.AWS_BUCKET_NAME || '',
-    region: process.env.AWS_REGION || 'us-east-1',
+    region: process.env.APP_AWS_REGION || process.env.AWS_REGION || 'us-east-1',
     cloudFrontUrl: process.env.AWS_CLOUDFRONT_URL,
+    useIamRole: process.env.NODE_ENV === 'production',
   },
   sanity: {
     projectId: process.env.SANITY_PROJECT_ID || '',

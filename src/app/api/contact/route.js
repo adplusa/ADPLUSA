@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_CMS_API_URL || "http://localhost:4000";
+
 export async function POST(request) {
     try {
         const payload = await request.json();
 
         // Forward the request to the CMS backend
-        const backendResponse = await fetch("http://localhost:4000/api/contact/sync", {
+        const backendResponse = await fetch(`${BACKEND_URL}/api/contact/sync`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

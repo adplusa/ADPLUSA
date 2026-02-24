@@ -3,12 +3,17 @@ import { config } from "../config/env";
 import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
 
-// Configure AWS SDK
-const s3 = new AWS.S3({
-    accessKeyId: config.aws.accessKeyId,
-    secretAccessKey: config.aws.secretAccessKey,
+const s3Options: AWS.S3.ClientConfiguration = {
     region: config.aws.region,
-});
+};
+
+// Only pass explicit credentials for local dev (not in Lambda)
+if (!config.aws.useIamRole && config.aws.accessKeyId && config.aws.secretAccessKey) {
+    s3Options.accessKeyId = config.aws.accessKeyId;
+    s3Options.secretAccessKey = config.aws.secretAccessKey;
+}
+
+const s3 = new AWS.S3(s3Options);
 
 export interface ImageUploadOptions {
     buffer: Buffer;
@@ -109,13 +114,14 @@ export async function uploadImageToS3(
     }
 
     // Validate AWS configuration
-    if (
-        !config.aws.accessKeyId ||
-        !config.aws.secretAccessKey ||
-        !config.aws.bucketName
-    ) {
+    if (!config.aws.bucketName) {
         throw new Error(
-            "AWS S3 configuration is incomplete. Please check environment variables.",
+            "AWS S3 bucket name is not configured. Please check environment variables.",
+        );
+    }
+    if (!config.aws.useIamRole && (!config.aws.accessKeyId || !config.aws.secretAccessKey)) {
+        throw new Error(
+            "AWS S3 credentials are not configured. Please check environment variables.",
         );
     }
 
@@ -264,6 +270,10 @@ export async function deleteMultipleImagesFromS3(
  * Check if S3 is properly configured
  */
 export function isS3Configured(): boolean {
+    // In Lambda with IAM role, we only need the bucket name
+    if (config.aws.useIamRole) {
+        return !!config.aws.bucketName;
+    }
     return !!(
         config.aws.accessKeyId &&
         config.aws.secretAccessKey &&

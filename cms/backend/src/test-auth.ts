@@ -4,7 +4,7 @@
  */
 
 import jwt, { SignOptions } from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 const JWT_SECRET = 'test-secret-key';
 const JWT_EXPIRES_IN = '7d';

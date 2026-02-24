@@ -1,5 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { BaseSchemaFields, baseSchemaOptions } from './base.schema';
 
 /**

@@ -1,0 +1,91 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  CMS Backend API — Lambda + API Gateway + S3 + CloudFront + Upstash Redis
+  Deployed in us-east-1 (N. Virginia).
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: nodejs20.x
+
+Parameters:
+  Stage:
+    Type: String
+    Default: prod
+    AllowedValues: [dev, staging, prod]
+  MongoDbUri:
+    Type: String
+    NoEcho: true
+    Description: MongoDB Atlas connection string
+  JwtSecret:
+    Type: String
+    NoEcho: true
+    Description: Secret key for JWT token signing
+  JwtExpiresIn:
+    Type: String
+    Default: '7d'
+  AwsBucketName:
+    Type: String
+    Description: S3 bucket name for media uploads
+  AwsCloudFrontUrl:
+    Type: String
+    Default: ''
+    Description: CloudFront distribution domain
+  RedisUrl:
+    Type: String
+    NoEcho: true
+    Description: Upstash Redis URL (rediss://...)
+  CorsOrigin:
+    Type: String
+    Default: '*'
+    Description: Allowed CORS origin(s)
+  GmailUser:
+    Type: String
+    Default: ''
+  GmailAppPassword:
+    Type: String
+    NoEcho: true
+    Default: ''
+
+Resources:
+  CmsApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/
+      Handler: lambda.handler
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          NODE_ENV: production
+          MONGODB_URI: !Ref MongoDbUri
+          JWT_SECRET: !Ref JwtSecret
+          JWT_EXPIRES_IN: !Ref JwtExpiresIn
+          AWS_BUCKET_NAME: !Ref AwsBucketName
+          APP_AWS_REGION: !Ref AWS::Region
+          AWS_CLOUDFRONT_URL: !Ref AwsCloudFrontUrl
+          REDIS_URL: !Ref RedisUrl
+          CORS_ORIGIN: !Ref CorsOrigin
+          GMAIL_USER: !Ref GmailUser
+          GMAIL_APP_PASSWORD: !Ref GmailAppPassword
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+        Root:
+          Type: HttpApi
+          Properties:
+            Path: /
+            Method: ANY
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref AwsBucketName
+
+Outputs:
+  ApiEndpoint:
+    Description: API Gateway endpoint URL
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com"

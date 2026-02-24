@@ -35,12 +35,13 @@ class DatabaseConnection {
       // Configure Mongoose connection options
       mongoose.set('strictQuery', false);
 
-      // Connect to MongoDB with connection pooling
+      // Connect to MongoDB with serverless-optimized connection pooling
+      mongoose.set('bufferCommands', false); // Fail fast instead of buffering commands
       await mongoose.connect(config.mongodbUri, {
-        maxPoolSize: 10, // Maximum number of connections in the pool
-        minPoolSize: 2,  // Minimum number of connections in the pool
+        maxPoolSize: 2,  // Reduced pool size for serverless (Lambda)
+        minPoolSize: 1,  // Minimum connections for serverless
         socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-        serverSelectionTimeoutMS: 5000, // Timeout for initial server selection
+        serverSelectionTimeoutMS: 3000, // Reduced timeout for faster failure in serverless
       });
 
       this.isConnected = true;
