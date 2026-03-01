@@ -95,7 +95,8 @@ async function handleGet(req: Request, res: Response, next: NextFunction): Promi
             return;
         }
     } catch (err) {
-        console.error(`[Cache] Redis GET error:`, err);
+        console.error(`[Cache] Redis GET error (continuing without cache):`, err);
+        // Don't block the request if Redis fails
     }
 
     // Cache MISS — intercept res.json() to capture the response body
@@ -108,7 +109,8 @@ async function handleGet(req: Request, res: Response, next: NextFunction): Promi
         if (res.statusCode >= 200 && res.statusCode < 300) {
             const serialized = JSON.stringify(body);
             redisClient.set(cacheKey, serialized, "EX", TTL).catch((err) => {
-                console.error(`[Cache] Redis SET error:`, err);
+                console.error(`[Cache] Redis SET error (continuing without cache):`, err);
+                // Don't block the response if Redis fails
             });
         }
         return originalJson(body);
