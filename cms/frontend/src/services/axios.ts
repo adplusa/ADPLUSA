@@ -1,6 +1,11 @@
 import axios from 'axios';
+import { store } from '../store/store';
+import { logout } from '../store/authSlice';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5050';
+
+// Track if we're already redirecting to prevent multiple 401s from causing a loop
+let isRedirectingToLogin = false;
 
 // Create axios instance
 export const axiosApi = axios.create({
@@ -28,11 +33,15 @@ axiosApi.interceptors.request.use(
 axiosApi.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Token expired or invalid
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+    if (error.response?.status === 401 && !isRedirectingToLogin) {
+      isRedirectingToLogin = true;
+      // Clean up auth state through Redux (which also clears localStorage)
+      store.dispatch(logout());
+      // Use a small delay to let React re-render via ProtectedRoute redirect
+      // instead of a hard window.location reload
+      setTimeout(() => {
+        isRedirectingToLogin = false;
+      }, 1000);
     }
     return Promise.reject(error);
   }

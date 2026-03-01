@@ -149,7 +149,12 @@ export default function MediaUpload() {
 
       console.log('Registering media with data:', registrationData);
 
-      await mediaService.registerMedia(registrationData);
+      const response = await mediaService.registerMedia(registrationData);
+      console.log('Media registration response:', response);
+
+      if (!response || !response.success) {
+        throw new Error(response?.error?.message || 'Failed to register media in database');
+      }
 
       navigate('/dashboard/media');
     } catch (err: any) {

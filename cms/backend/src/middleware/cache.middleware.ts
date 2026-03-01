@@ -127,7 +127,14 @@ function handleWrite(req: Request, res: Response, next: NextFunction): void {
         if (res.statusCode >= 200 && res.statusCode < 300) {
             const resource = getResource(req.path);
             if (resource && INVALIDATION_MAP[resource]) {
+                console.log(`[Cache] Invalidating cache for resource: ${resource}`);
                 invalidatePatterns(INVALIDATION_MAP[resource]).catch((err) => {
+                    console.error(`[Cache] Invalidation error:`, err);
+                });
+            } else if (resource) {
+                // Fallback: if resource not in map, invalidate all cache for that resource
+                console.log(`[Cache] Resource ${resource} not in invalidation map, invalidating all admin cache`);
+                invalidatePatterns([`cache:/api/admin/${resource}*`, `cache:/api/${resource}*`]).catch((err) => {
                     console.error(`[Cache] Invalidation error:`, err);
                 });
             }

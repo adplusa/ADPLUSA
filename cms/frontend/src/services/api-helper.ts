@@ -13,10 +13,10 @@ export class ApiHelper {
     }
   }
 
-  static async post<T>(endpoint: string, payload: any): Promise<T | null> {
+  static async post<T>(endpoint: string, payload: any): Promise<any> {
     try {
       const { data } = await axios.post(`${API_URL}${endpoint}`, payload);
-      return data.success ? data.data : null;
+      return data;
     } catch (error) {
       console.error(`POST ${endpoint}:`, error);
       throw error;

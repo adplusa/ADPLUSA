@@ -139,10 +139,13 @@ export const registerMedia = async (req: Request, res: Response) => {
         }
 
         // Create media record
+        const filename = s3Path.split("/").pop() || s3Path;
         const media = new Media({
             title,
-            filename: s3Path.split("/").pop(),
+            filename,
+            originalName: filename,
             s3Path,
+            s3Url: getCdnUrl(s3Path),
             mimeType,
             size: size || 0,
             width,

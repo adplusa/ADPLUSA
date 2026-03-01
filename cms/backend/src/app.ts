@@ -56,6 +56,27 @@ app.get('/', (_req: Request, res: Response) => {
   });
 });
 
+// Cache clear endpoint (for debugging/admin)
+app.post('/api/admin/cache/clear', async (_req: Request, res: Response) => {
+  try {
+    const redisClient = require('./config/redis').default;
+    const keys = await redisClient.keys('cache:*');
+    if (keys.length > 0) {
+      await redisClient.del(...keys);
+    }
+    res.json({
+      success: true,
+      message: `Cleared ${keys.length} cache keys`,
+    });
+  } catch (error) {
+    console.error('Error clearing cache:', error);
+    res.status(500).json({
+      success: false,
+      error: { message: 'Failed to clear cache' },
+    });
+  }
+});
+
 // API Routes
 app.use('/api/auth', authRoutes);
 
