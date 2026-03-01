@@ -4,7 +4,11 @@ const nextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "cdn.sanity.io" },
       { protocol: "https", hostname: "placehold.co" },
-      { protocol: "https", hostname: "d33bb8xwyugywj.cloudfront.net" },
+      {
+        protocol: "https",
+        hostname: "d33bb8xwyugywj.cloudfront.net",
+        pathname: "/**"
+      },
     ],
   },
 };
