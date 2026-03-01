@@ -76,10 +76,10 @@ export default function Dashboard() {
         ]);
 
         setStats({
-          projects: projectsRes.pagination?.total || projectsRes.data.length,
-          services: servicesRes.pagination?.total || servicesRes.data.length,
-          tags: tagsRes.pagination?.total || tagsRes.data.length,
-          media: mediaRes.pagination?.total || mediaRes.data.length,
+          projects: projectsRes?.pagination?.total || projectsRes?.data?.length || 0,
+          services: servicesRes?.pagination?.total || servicesRes?.data?.length || 0,
+          tags: tagsRes?.pagination?.total || tagsRes?.data?.length || 0,
+          media: mediaRes?.pagination?.total || mediaRes?.data?.length || 0,
           loading: false,
         });
 
