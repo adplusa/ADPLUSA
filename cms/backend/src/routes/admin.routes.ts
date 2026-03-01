@@ -29,7 +29,7 @@ import {
 } from "../controllers/content.controller";
 import { getTags, createTag, updateTag, deleteTag } from "../controllers/tag.controller";
 import { getMedia, getMediaById, registerMedia, updateMedia, deleteMedia } from "../controllers/media.controller";
-import { updateGeneralSettings } from "../controllers/generalSettings.controller";
+import { updateGeneralSettings, getGeneralSettings } from "../controllers/generalSettings.controller";
 import { updateHomepage } from "../controllers/homepage.controller";
 import { updateMainServicePage } from "../controllers/mainServicePage.controller";
 import { updateProjectsPage } from "../controllers/projectsPage.controller";
@@ -148,6 +148,13 @@ router.put("/contact", updateContact);
  * @access  Protected (Admin)
  */
 router.put("/homepage", updateHomepage);
+
+/**
+ * @route   GET /api/admin/general-settings
+ * @desc    Get General Settings
+ * @access  Protected (Admin)
+ */
+router.get("/general-settings", getGeneralSettings);
 
 /**
  * @route   PUT /api/admin/general-settings
