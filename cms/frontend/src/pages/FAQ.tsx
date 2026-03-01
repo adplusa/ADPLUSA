@@ -138,7 +138,7 @@ export default function FAQ() {
             </div>
 
             <div className="space-y-3">
-              {category.faqs.map((faqItem, faqIndex) => {
+              {category.faqs.map((faqItem: any, faqIndex: number) => {
                 const key = `${categoryIndex}-${faqIndex}`;
                 const isExpanded = expandedItems.has(key);
                 return (

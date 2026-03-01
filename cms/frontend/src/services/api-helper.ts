@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 export class ApiHelper {
-  static async get<T>(endpoint: string): Promise<T | null> {
+  static async get<T = any>(endpoint: string): Promise<T | null> {
     try {
       const { data } = await axios.get(`${API_URL}${endpoint}`);
       return data.success ? data.data : null;
@@ -13,7 +13,7 @@ export class ApiHelper {
     }
   }
 
-  static async post<T>(endpoint: string, payload: any): Promise<any> {
+  static async post(endpoint: string, payload: any): Promise<any> {
     try {
       const { data } = await axios.post(`${API_URL}${endpoint}`, payload);
       return data;
@@ -23,7 +23,7 @@ export class ApiHelper {
     }
   }
 
-  static async put<T>(endpoint: string, payload: any): Promise<T | null> {
+  static async put<T = any>(endpoint: string, payload: any): Promise<T | null> {
     try {
       const { data } = await axios.put(`${API_URL}${endpoint}`, payload);
       return data.success ? data.data : null;
@@ -33,7 +33,7 @@ export class ApiHelper {
     }
   }
 
-  static async delete<T>(endpoint: string): Promise<T | null> {
+  static async delete<T = any>(endpoint: string): Promise<T | null> {
     try {
       const { data } = await axios.delete(`${API_URL}${endpoint}`);
       return data.success ? data.data : null;

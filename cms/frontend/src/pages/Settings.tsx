@@ -102,13 +102,13 @@ export default function Settings() {
       // Fetch all data concurrently
       // We use catch(() => []) to ensure one failure doesn't stop the whole backup
       const [projects, services, tags, media, about, contact, faq] = await Promise.all([
-        getProjects({ limit: 1000 }).then(res => res.data).catch(() => []),
-        getServices({ limit: 1000 }).then(res => res.data).catch(() => []),
-        getTags({ limit: 1000 }).then(res => res.data).catch(() => []),
-        getMedia({ limit: 1000 }).then(res => res.data).catch(() => []),
-        getAbout().then(res => res.data).catch(() => null),
-        getContact().then(res => res.data).catch(() => null),
-        getFAQ().then(res => res.data).catch(() => null),
+        getProjects({ limit: 1000 }).then((res: any) => res.data).catch(() => []),
+        getServices({ limit: 1000 }).then((res: any) => res.data).catch(() => []),
+        getTags({ limit: 1000 }).then((res: any) => res.data).catch(() => []),
+        getMedia({ limit: 1000 }).then((res: any) => res.data).catch(() => []),
+        getAbout().then((res: any) => res.data).catch(() => null),
+        getContact().then((res: any) => res.data).catch(() => null),
+        getFAQ().then((res: any) => res.data).catch(() => null),
       ]);
 
       const backupData = {

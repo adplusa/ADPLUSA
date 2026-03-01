@@ -64,13 +64,13 @@ export default function GeneralSettingsForm() {
             setLoading(true);
             setError(null);
             const response = await getGeneralSettings();
-            if (response.data) {
-                setHeaderLogo(response.data.headerLogo || null);
-                setFooterLogo(response.data.footerLogo || null);
-                setFavicon(response.data.favicon || null);
-                setSiteName(response.data.siteName || "");
-                setSiteDescription(response.data.siteDescription || "");
-                setCustomHeadTags(response.data.customHeadTags || "");
+            if (response) {
+                setHeaderLogo(response.headerLogo || null);
+                setFooterLogo(response.footerLogo || null);
+                setFavicon(response.favicon || null);
+                setSiteName(response.siteName || "");
+                setSiteDescription(response.siteDescription || "");
+                setCustomHeadTags(response.customHeadTags || "");
             }
         } catch (err: unknown) {
             const apiError = err as ApiError;

@@ -47,6 +47,13 @@ export interface MediaListResponse {
   };
 }
 
+export interface UpdateMediaData {
+  title: string;
+  alt?: string;
+  description?: string;
+  tags?: string[];
+}
+
 export const mediaService = {
   getAll: () => ApiHelper.get("/api/admin/media"),
   getById: (id: string) => ApiHelper.get(`/api/admin/media/${id}`),
@@ -88,6 +95,14 @@ export async function getMedia(params: {
 
 export async function deleteMedia(id: string): Promise<any> {
   return ApiHelper.delete(`/api/admin/media/${id}`);
+}
+
+export async function getMediaById(id: string): Promise<any> {
+  return ApiHelper.get(`/api/admin/media/${id}`);
+}
+
+export async function updateMedia(id: string, data: UpdateMediaData): Promise<any> {
+  return ApiHelper.put(`/api/admin/media/${id}`, data);
 }
 
 export function formatFileSize(bytes: number): string {

@@ -60,7 +60,7 @@ export interface ImageQueryParams {
  */
 export const uploadImage = async (
     file: File,
-    onUploadProgress?: (progressEvent: AxiosProgressEvent) => void,
+    _onUploadProgress?: (progressEvent: AxiosProgressEvent) => void,
 ): Promise<ImageUploadResponse> => {
     try {
         // Step 1: Get presigned URL from backend

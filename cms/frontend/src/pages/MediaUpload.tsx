@@ -121,7 +121,7 @@ export default function MediaUpload() {
         throw new Error('Failed to get presigned URL');
       }
 
-      const { uploadUrl, key, cdnUrl } = presignedResponse;
+      const { uploadUrl, key } = presignedResponse;
 
       // Step 2: Upload file directly to S3 using presigned URL
       const uploadResponse = await fetch(uploadUrl, {
