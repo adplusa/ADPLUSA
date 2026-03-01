@@ -63,5 +63,5 @@ export async function getServices(params: {
 }
 
 export async function getServiceBySlug(slug: string): Promise<any> {
-  return ApiHelper.get(`/api/admin/services/slug/${slug}`);
+  return ApiHelper.get(`/api/admin/services/${slug}`);
 }

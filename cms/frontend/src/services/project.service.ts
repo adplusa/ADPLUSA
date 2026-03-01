@@ -60,5 +60,5 @@ export async function deleteProject(id: string): Promise<any> {
 }
 
 export async function getProjectBySlug(slug: string): Promise<any> {
-  return ApiHelper.get(`/api/admin/projects/slug/${slug}`);
+  return ApiHelper.get(`/api/admin/projects/${slug}`);
 }
