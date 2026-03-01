@@ -19,7 +19,7 @@ export class ApiHelper {
       const { data } = await axios.get(`${API_URL}${endpoint}`, {
         headers: getAuthHeader(),
       });
-      return data.success ? data.data : null;
+      return data.success ? data : null;
     } catch (error) {
       console.error(`GET ${endpoint}:`, error);
       throw error;
@@ -43,7 +43,7 @@ export class ApiHelper {
       const { data } = await axios.put(`${API_URL}${endpoint}`, payload, {
         headers: getAuthHeader(),
       });
-      return data.success ? data.data : null;
+      return data.success ? data : null;
     } catch (error) {
       console.error(`PUT ${endpoint}:`, error);
       throw error;
@@ -55,7 +55,7 @@ export class ApiHelper {
       const { data } = await axios.delete(`${API_URL}${endpoint}`, {
         headers: getAuthHeader(),
       });
-      return data.success ? data.data : null;
+      return data.success ? data : null;
     } catch (error) {
       console.error(`DELETE ${endpoint}:`, error);
       throw error;
