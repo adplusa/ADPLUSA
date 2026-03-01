@@ -198,7 +198,7 @@ export default function FAQ() {
       )}
 
       <div className="mt-6 text-sm text-muted-foreground">
-        Last updated: {new Date(faq.updatedAt).toLocaleDateString()}
+        Last updated: {new Date(faq.updatedAt || "").toLocaleDateString()}
       </div>
     </div>
   );

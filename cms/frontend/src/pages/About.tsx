@@ -371,7 +371,7 @@ export default function About() {
                                                         {section.title}
                                                     </h4>
                                                 </div>
-                                                {section.image?.url && (
+                                                {typeof section.image === 'object' && section.image?.url && (
                                                     <div className="flex items-center gap-1 text-xs text-muted-foreground">
                                                         <ImageIcon className="h-3 w-3" />
                                                         Has image
@@ -382,11 +382,11 @@ export default function About() {
                                             <div
                                                 className="prose prose-sm max-w-none text-muted-foreground break-words"
                                                 dangerouslySetInnerHTML={{
-                                                    __html: section.body,
+                                                    __html: section.body || "",
                                                 }}
                                             />
 
-                                            {section.image?.url && (
+                                            {typeof section.image === 'object' && section.image?.url && (
                                                 <div className="mt-4 grid gap-2 sm:grid-cols-2">
                                                     <div className="space-y-1">
                                                         <label className="text-xs font-medium text-muted-foreground">
@@ -397,7 +397,7 @@ export default function About() {
                                                                 src={
                                                                     section
                                                                         .image
-                                                                        .url
+                                                                        ?.url
                                                                 }
                                                                 alt={`${section.title} - Light mode`}
                                                                 className="w-full h-full object-cover"
@@ -405,7 +405,7 @@ export default function About() {
                                                         </div>
                                                     </div>
                                                     {section.image
-                                                        .darkModeUrl && (
+                                                        ?.darkModeUrl && (
                                                         <div className="space-y-1">
                                                             <label className="text-xs font-medium text-muted-foreground">
                                                                 Dark Mode Image
@@ -415,7 +415,7 @@ export default function About() {
                                                                     src={
                                                                         section
                                                                             .image
-                                                                            .darkModeUrl
+                                                                            ?.darkModeUrl
                                                                     }
                                                                     alt={`${section.title} - Dark mode`}
                                                                     className="w-full h-full object-cover"
@@ -473,7 +473,7 @@ export default function About() {
             {/* Last Updated */}
             <div className="text-sm text-muted-foreground">
                 Last updated:{" "}
-                {new Date(about.updatedAt).toLocaleDateString("en-US", {
+                {new Date(about.updatedAt || "").toLocaleDateString("en-US", {
                     weekday: "long",
                     year: "numeric",
                     month: "long",

@@ -46,8 +46,14 @@ export interface Contact {
         email: string;
         phone: string;
         address: string;
-        socialMedia?: Array<{ platform: string; url: string }>;
-    };
+      socialMedia?: {
+          facebook?: string;
+          instagram?: string;
+          linkedin?: string;
+          twitter?: string;
+          youtube?: string;
+      };
+  };
     googleMapEmbedUrl?: string;
     seoTitle?: string;
     seoDescription?: string;
