@@ -16,6 +16,16 @@ module.exports = {
       },
       {
         protocol: 'https',
+        hostname: 'placehold.co',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'd33bb8xwyugywj.cloudfront.net',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'd1umvm78v43sxr.cloudfront.net',
         pathname: '/**',
       },
@@ -39,8 +49,6 @@ module.exports = {
   poweredByHeader: false,
   // Redirect legacy routes (can be removed once old URLs are no longer in use)
   async redirects() {
-
-
     return [
       // Redirect /services to /mainservice (main services listing page)
       { source: '/services', destination: '/mainservice', permanent: true },
