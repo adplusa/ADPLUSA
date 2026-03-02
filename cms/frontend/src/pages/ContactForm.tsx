@@ -21,11 +21,6 @@ const contactSchema = z
                 email: z.string().optional(),
                 phone: z.string().optional(),
                 address: z.string().optional(),
-                destinationEmail: z
-                    .string()
-                    .email("Invalid email address")
-                    .optional()
-                    .or(z.literal("")),
             })
             .optional(),
         socialLinks: z
@@ -62,7 +57,6 @@ export default function ContactForm() {
                 email: "",
                 phone: "",
                 address: "",
-                destinationEmail: "",
             },
             socialLinks: [],
             serviceOptions: [],
@@ -95,9 +89,6 @@ export default function ContactForm() {
                     ...response.data,
                     contactInfo: {
                         ...(response.data as any).contactInfo,
-                        destinationEmail:
-                            (response.data as any).contactInfo
-                                ?.destinationEmail || "",
                     },
                     serviceOptions:
                         (response.data as any).serviceOptions &&
@@ -176,7 +167,6 @@ export default function ContactForm() {
         { id: "general", label: "General Info", icon: "📝" },
         { id: "services", label: "Services", icon: "🛠️" },
         { id: "social", label: "Social Media", icon: "🌐" },
-        { id: "destination", label: "Destination Email", icon: "📧" },
         { id: "seo", label: "SEO", icon: "🔍" },
     ];
 
@@ -455,46 +445,6 @@ export default function ContactForm() {
                                 )}
                             />
                         </div>
-                    </div>
-                )}
-
-                {/* Destination Email Tab */}
-                {activeTab === "destination" && (
-                    <div className="space-y-6">
-                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                            <div className="flex">
-                                <div className="flex-shrink-0">ℹ️</div>
-                                <div className="ml-3">
-                                    <p className="text-sm text-blue-800">
-                                        Configure the email address where
-                                        contact form submissions will be sent.
-                                        <br />
-                                        <span className="text-xs opacity-80 mt-1 block">
-                                            If left empty, the system will try
-                                            to use the{" "}
-                                            <strong>Email Address</strong> from
-                                            the General Info tab.
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <FormField
-                            id="contactInfo.destinationEmail"
-                            label="Destination Email Address"
-                            error={
-                                errors.contactInfo?.destinationEmail?.message
-                            }
-                        >
-                            <input
-                                id="contactInfo.destinationEmail"
-                                type="email"
-                                {...register("contactInfo.destinationEmail")}
-                                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
-                                placeholder="admin@example.com"
-                            />
-                        </FormField>
                     </div>
                 )}
 
