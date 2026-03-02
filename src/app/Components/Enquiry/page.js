@@ -48,18 +48,30 @@ export default function Page() {
 
     // Simulate form submission (replace with your backend API call)
     try {
-      // TODO: Replace with actual API call to your backend
-      // await fetch('/api/contact', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     name: v("name"),
-      //     email: v("email"),
-      //     phone: v("phone"),
-      //     service: v("service"),
-      //     message: v("message"),
-      //   }),
-      // });
+      const name = v("name");
+      const emailId = v("email");
+      const phone = v("phone");
+      const service = v("service");
+      const message = v("message");
+
+      const htmlContent = `
+        <h2>New Quick Inquiry from Website</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${emailId}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Service:</strong> ${service}</p>
+        <p><strong>Query:</strong> ${message}</p>
+      `;
+
+      await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          emailId,
+          htmlContent,
+          countryCode: "N/A"
+        }),
+      });
 
       formRef.current?.reset();
       setStatus({
