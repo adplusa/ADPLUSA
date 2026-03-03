@@ -20,52 +20,6 @@ const FRONTEND_TAGS_MAP: Record<string, string[]> = {
 };
 
 /**
- * Map of resource paths to their related cache key patterns.
- * When a write hits /api/admin/projects, we clear all project-related cache.
- */
-const INVALIDATION_MAP: Record<string, string[]> = {
-    projects: ["cache:/api/public/projects*", "cache:/api/projects*"],
-    services: ["cache:/api/public/services*", "cache:/api/services*", "cache:/api/public/main-service-page*"],
-    homepage: ["cache:/api/public/homepage*"],
-    about: ["cache:/api/public/about*", "cache:/api/about*"],
-    contact: ["cache:/api/public/contact*", "cache:/api/contact*"],
-    faq: ["cache:/api/public/faq*", "cache:/api/faq*"],
-    "general-settings": ["cache:/api/public/general-settings*"],
-    "main-service-page": ["cache:/api/public/main-service-page*", "cache:/api/public/services*"],
-    "projects-page": ["cache:/api/public/projects-page*", "cache:/api/public/projects*"],
-    tags: ["cache:/api/public/*"],
-    media: ["cache:/api/public/*"],
-};
-
-/**
- * Extract the resource name from a URL path.
- * e.g. /api/admin/projects/123 -> "projects"
- *      /api/public/homepage -> "homepage"
- */
-function getResource(path: string): string | null {
-    // Match /api/admin/<resource> or /api/public/<resource> or /api/<resource>
-    const match = path.match(/^\/api\/(?:admin\/|public\/)?([a-z-]+)/);
-    return match ? match[1] : null;
-}
-
-/**
- * Clear all cache keys matching the given patterns.
- */
-async function invalidatePatterns(patterns: string[]): Promise<void> {
-    for (const pattern of patterns) {
-        try {
-            const keys = await redisClient.keys(pattern);
-            if (keys.length > 0) {
-                await redisClient.del(...keys);
-                console.log(`[Cache] Invalidated ${keys.length} keys for pattern: ${pattern}`);
-            }
-        } catch (err) {
-            console.error(`[Cache] Error invalidating pattern ${pattern}:`, err);
-        }
-    }
-}
-
-/**
  * Trigger frontend revalidation for the given tags.
  * This calls the Next.js revalidation endpoint on the main frontend.
  */
@@ -176,39 +130,31 @@ async function handleGet(req: Request, res: Response, next: NextFunction): Promi
 }
 
 /**
- * Handle POST/PUT/DELETE: let the handler run, then invalidate related cache.
+ * Handle POST/PUT/DELETE: let the handler run, then clear ALL cache.
  */
 function handleWrite(req: Request, res: Response, next: NextFunction): void {
     const originalJson = res.json.bind(res);
     res.json = function (body: any) {
         // Only invalidate on successful writes
         if (res.statusCode >= 200 && res.statusCode < 300) {
-            const resource = getResource(req.path);
-            if (resource && INVALIDATION_MAP[resource]) {
-                console.log(`[Cache] Invalidating cache for resource: ${resource}`);
-                console.log(`[Cache] Patterns to invalidate:`, INVALIDATION_MAP[resource]);
-                // Fire invalidation in background (don't await)
-                invalidatePatterns(INVALIDATION_MAP[resource]).catch((err) => {
-                    console.error(`[Cache] Invalidation error:`, err);
-                });
+            console.log(`[Cache] Clearing all cache after ${req.method} ${req.path}`);
 
-                // Trigger frontend revalidation
-                const frontendTags = FRONTEND_TAGS_MAP[resource] || [];
-                if (frontendTags.length > 0) {
-                    triggerFrontendRevalidation(frontendTags).catch((err) => {
-                        console.error(`[Frontend Revalidation] Error:`, err);
-                    });
+            // Clear all cache keys
+            redisClient.keys('cache:*').then(keys => {
+                if (keys.length > 0) {
+                    return redisClient.del(...keys);
                 }
-            } else if (resource) {
-                // Fallback: if resource not in map, invalidate all cache for that resource
-                const fallbackPatterns = [`cache:/api/public/${resource}*`, `cache:/api/${resource}*`];
-                console.log(`[Cache] Resource ${resource} not in invalidation map, using fallback patterns:`, fallbackPatterns);
-                invalidatePatterns(fallbackPatterns).catch((err) => {
-                    console.error(`[Cache] Invalidation error:`, err);
-                });
-            } else {
-                console.log(`[Cache] Could not extract resource from path: ${req.path}`);
-            }
+            }).then(() => {
+                console.log(`[Cache] All cache cleared successfully`);
+            }).catch((err) => {
+                console.error(`[Cache] Error clearing cache:`, err);
+            });
+
+            // Trigger frontend revalidation for all tags
+            const allTags = Array.from(new Set(Object.values(FRONTEND_TAGS_MAP).flat()));
+            triggerFrontendRevalidation(allTags).catch((err) => {
+                console.error(`[Frontend Revalidation] Error:`, err);
+            });
         }
         return originalJson(body);
     } as any;
