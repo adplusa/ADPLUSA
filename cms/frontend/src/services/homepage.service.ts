@@ -131,7 +131,7 @@ export interface UpdateHomepageData {
 
 // Homepage API Functions
 export const getHomepage = async (): Promise<HomepageResponse> => {
-    const response = await axiosApi.get<HomepageResponse>("/public/homepage");
+    const response = await axiosApi.get<HomepageResponse>("/admin/homepage");
     return response.data;
 };
 

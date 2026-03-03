@@ -81,8 +81,17 @@ export function cacheMiddleware(req: Request, res: Response, next: NextFunction)
 
 /**
  * Handle GET: try cache first, fall through to handler, then cache the response.
+ * Admin endpoints (/api/admin/*) are never cached to ensure fresh data in CMS.
  */
 async function handleGet(req: Request, res: Response, next: NextFunction): Promise<void> {
+    // Skip caching for admin endpoints — always serve fresh data in CMS
+    if (req.path.startsWith("/api/admin/")) {
+        console.log(`[Cache] SKIP (admin endpoint): ${req.originalUrl}`);
+        res.setHeader("X-Cache", "SKIP");
+        next();
+        return;
+    }
+
     const cacheKey = PREFIX + req.originalUrl;
 
     try {
@@ -130,15 +139,19 @@ function handleWrite(req: Request, res: Response, next: NextFunction): void {
             const resource = getResource(req.path);
             if (resource && INVALIDATION_MAP[resource]) {
                 console.log(`[Cache] Invalidating cache for resource: ${resource}`);
+                console.log(`[Cache] Patterns to invalidate:`, INVALIDATION_MAP[resource]);
                 invalidatePatterns(INVALIDATION_MAP[resource]).catch((err) => {
                     console.error(`[Cache] Invalidation error:`, err);
                 });
             } else if (resource) {
                 // Fallback: if resource not in map, invalidate all cache for that resource
-                console.log(`[Cache] Resource ${resource} not in invalidation map, invalidating all admin cache`);
-                invalidatePatterns([`cache:/api/admin/${resource}*`, `cache:/api/${resource}*`]).catch((err) => {
+                const fallbackPatterns = [`cache:/api/public/${resource}*`, `cache:/api/${resource}*`];
+                console.log(`[Cache] Resource ${resource} not in invalidation map, using fallback patterns:`, fallbackPatterns);
+                invalidatePatterns(fallbackPatterns).catch((err) => {
                     console.error(`[Cache] Invalidation error:`, err);
                 });
+            } else {
+                console.log(`[Cache] Could not extract resource from path: ${req.path}`);
             }
         }
         return originalJson(body);

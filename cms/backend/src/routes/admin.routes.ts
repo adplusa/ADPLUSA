@@ -6,7 +6,6 @@ import {
     validateService,
     validateFAQ,
     validateAbout,
-    validateContact,
 } from "../middleware/validation.middleware";
 import {
     getProjects,
@@ -23,8 +22,11 @@ import {
     deleteService,
 } from "../controllers/service.controller";
 import {
+    getFAQ,
     updateFAQ,
+    getAbout,
     updateAbout,
+    getContact,
     updateContact,
 } from "../controllers/content.controller";
 import { getTags, createTag, updateTag, deleteTag } from "../controllers/tag.controller";
@@ -122,6 +124,13 @@ router.delete("/services/:id", deleteService);
  */
 
 /**
+ * @route   GET /api/admin/faq
+ * @desc    Get FAQ data
+ * @access  Protected (Admin)
+ */
+router.get("/faq", getFAQ);
+
+/**
  * @route   PUT /api/admin/faq
  * @desc    Update FAQ data
  * @access  Protected (Admin)
@@ -129,11 +138,25 @@ router.delete("/services/:id", deleteService);
 router.put("/faq", validateFAQ, updateFAQ);
 
 /**
+ * @route   GET /api/admin/about
+ * @desc    Get About page data
+ * @access  Protected (Admin)
+ */
+router.get("/about", getAbout);
+
+/**
  * @route   PUT /api/admin/about
  * @desc    Update About page data
  * @access  Protected (Admin)
  */
 router.put("/about", validateAbout, updateAbout);
+
+/**
+ * @route   GET /api/admin/contact
+ * @desc    Get Contact page data
+ * @access  Protected (Admin)
+ */
+router.get("/contact", getContact);
 
 /**
  * @route   PUT /api/admin/contact
