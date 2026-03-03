@@ -58,6 +58,63 @@ async function fetchCMS<T>(endpoint: string, options: FetchOptions = {}): Promis
     }
 }
 
+/**
+ * Fetch all pages of paginated data until the end.
+ * Used for endpoints that return paginated results.
+ */
+async function fetchAllPages<T>(endpoint: string, options: FetchOptions = {}): Promise<T[] | null> {
+    const { revalidate = DEFAULT_REVALIDATE, tags } = options;
+    const allData: T[] = [];
+    let page = 1;
+    let hasMore = true;
+
+    try {
+        while (hasMore) {
+            const paginatedEndpoint = `${endpoint}${endpoint.includes("?") ? "&" : "?"}page=${page}`;
+            const url = `${CMS_API_URL}/api/public${paginatedEndpoint}`;
+            const fetchOptions: RequestInit & { next?: { revalidate?: number | false; tags?: string[] } } = {
+                headers: { "Content-Type": "application/json" },
+            };
+
+            if (typeof revalidate === "number" || revalidate === false) {
+                fetchOptions.next = { revalidate };
+            }
+            if (tags && tags.length > 0) {
+                fetchOptions.next = { ...fetchOptions.next, tags };
+            }
+            if (revalidate === 0) {
+                fetchOptions.cache = "no-store";
+            }
+
+            const response = await fetch(url, fetchOptions);
+            if (!response.ok) {
+                console.error(`CMS fetch failed: ${paginatedEndpoint} - Status: ${response.status}`);
+                break;
+            }
+
+            const result: CMSResponse<T[]> = await response.json();
+            if (!result.success || !result.data) {
+                break;
+            }
+
+            allData.push(...result.data);
+
+            // Check if there are more pages
+            // If we got fewer items than the limit (default 20), we've reached the end
+            if (result.data.length < 20) {
+                hasMore = false;
+            }
+
+            page++;
+        }
+
+        return allData.length > 0 ? allData : null;
+    } catch (error) {
+        console.error(`CMS fetch all pages error: ${endpoint}`, error);
+        return null;
+    }
+}
+
 // Homepage
 export async function getHomepage(options?: FetchOptions): Promise<Homepage | null> {
     return fetchCMS<Homepage>("/homepage", { ...options, tags: ["homepage", ...(options?.tags || [])] });
@@ -65,7 +122,7 @@ export async function getHomepage(options?: FetchOptions): Promise<Homepage | nu
 
 // Projects
 export async function getProjects(options?: FetchOptions): Promise<Project[] | null> {
-    return fetchCMS<Project[]>("/projects", { ...options, tags: ["projects", ...(options?.tags || [])] });
+    return fetchAllPages<Project>("/projects", { ...options, tags: ["projects", ...(options?.tags || [])] });
 }
 
 export async function getProject(slug: string, options?: FetchOptions): Promise<Project | null> {
@@ -74,7 +131,7 @@ export async function getProject(slug: string, options?: FetchOptions): Promise<
 }
 
 export async function getFeaturedProjects(options?: FetchOptions): Promise<Project[] | null> {
-    return fetchCMS<Project[]>("/projects?featured=true", { ...options, tags: ["projects", "featured-projects", ...(options?.tags || [])] });
+    return fetchAllPages<Project>("/projects?featured=true", { ...options, tags: ["projects", "featured-projects", ...(options?.tags || [])] });
 }
 
 export async function getProjectSlugs(): Promise<string[]> {
@@ -84,7 +141,7 @@ export async function getProjectSlugs(): Promise<string[]> {
 
 // Services
 export async function getServices(options?: FetchOptions): Promise<Service[] | null> {
-    return fetchCMS<Service[]>("/services", { ...options, tags: ["services", ...(options?.tags || [])] });
+    return fetchAllPages<Service>("/services", { ...options, tags: ["services", ...(options?.tags || [])] });
 }
 
 export async function getService(slug: string, options?: FetchOptions): Promise<Service | null> {
