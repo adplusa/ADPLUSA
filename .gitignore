@@ -57,3 +57,5 @@ docker-compose.override.yml
 .kiro/
 
 cms/backend/.aws-sam/*
+
+cms/backend/samconfig.toml
