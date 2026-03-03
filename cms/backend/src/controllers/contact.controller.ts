@@ -14,7 +14,7 @@ export const handleContactSync = async (req: Request, res: Response) => {
     const spamKeywords = ['casino', 'viagra', 'porn', 'cryptocurrency', 'bitcoin', 'wallet',];
     const contentToCheck = (htmlContent || '').toLowerCase();
     const isSpam = spamKeywords.some(keyword => contentToCheck.includes(keyword)) ||
-                   (contentToCheck.match(/http/g) || []).length > 3;
+        (contentToCheck.match(/http/g) || []).length > 3;
 
     if (isSpam) {
         return res.status(400).json({ error: "Message rejected due to suspicious content." });
