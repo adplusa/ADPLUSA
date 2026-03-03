@@ -34,6 +34,10 @@ export {
     IWhyWorkWithUsItem,
     IContactImage,
 } from "./contact.schema";
+export {
+    Inquiry,
+    IInquiry,
+} from "./inquiry.schema";
 export { User, IUser, UserRole } from "./user.schema";
 export { Image, IImage } from "./image.schema";
 export {

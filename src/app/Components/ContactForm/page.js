@@ -125,7 +125,9 @@ export default function ContactForm({
                 </div>
             `;
 
-            const response = await fetch("/api/contact-proxy", {
+            // Call backend API directly
+            const apiUrl = process.env.NEXT_PUBLIC_CMS_API_URL || "https://szlvt92np8.execute-api.us-east-1.amazonaws.com";
+            const response = await fetch(`${apiUrl}/api/contact/sync`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
