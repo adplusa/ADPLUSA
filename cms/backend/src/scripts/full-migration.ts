@@ -59,6 +59,104 @@ const stats = {
 };
 
 /**
+ * Process array items in parallel with concurrency limit
+ */
+async function processBatch<T, R>(
+    items: T[],
+    processor: (item: T, index: number) => Promise<R>,
+    concurrency: number = 100
+): Promise<R[]> {
+    const results: R[] = [];
+    for (let i = 0; i < items.length; i += concurrency) {
+        const batch = items.slice(i, i + concurrency);
+        const batchResults = await Promise.all(
+            batch.map((item, batchIndex) => processor(item, i + batchIndex))
+        );
+        results.push(...batchResults);
+    }
+    return results;
+}
+
+/**
+ * Migrate all images for a project in parallel
+ */
+async function migrateProjectImages(
+    page: any,
+    baseSlug: string,
+    title: string,
+    listingImageRef?: string
+): Promise<any[]> {
+    const imagePromises: Promise<{ url: string; alt: string } | null>[] = [];
+
+    // Listing image
+    if (listingImageRef) {
+        imagePromises.push(
+            migrateImage(listingImageRef, `projects/${baseSlug}`, "listing.jpg")
+                .then(url => url ? { url, alt: title } : null)
+        );
+    }
+
+    // Main image
+    if (page.mainImage?.asset?._id || page.mainImage?.asset?._ref) {
+        const mainRef = page.mainImage.asset._id || page.mainImage.asset._ref;
+        imagePromises.push(
+            migrateImage(mainRef, `projects/${baseSlug}`, "main.jpg")
+                .then(url => url ? { url, alt: `${title} - Main` } : null)
+        );
+    }
+
+    // projectImages.topImages
+    if (page.projectImages?.topImages) {
+        page.projectImages.topImages.forEach((img: any, j: number) => {
+            const ref = img.asset?._id || img.asset?._ref;
+            if (ref) {
+                imagePromises.push(
+                    migrateImage(ref, `projects/${baseSlug}`, `gallery1-img-${j + 1}.jpg`)
+                        .then(url => url ? { url, alt: `${title} - Image ${j + 1}` } : null)
+                );
+            }
+        });
+    }
+
+    // projectImages.bottomImage
+    if (page.projectImages?.bottomImage?.asset) {
+        const ref = page.projectImages.bottomImage.asset._id || page.projectImages.bottomImage.asset._ref;
+        if (ref) {
+            imagePromises.push(
+                migrateImage(ref, `projects/${baseSlug}`, "gallery1-bottom.jpg")
+                    .then(url => url ? { url, alt: `${title} - Bottom` } : null)
+            );
+        }
+    }
+
+    // projectImagesTwo.topImagesTwo
+    if (page.projectImagesTwo?.topImagesTwo) {
+        page.projectImagesTwo.topImagesTwo.forEach((img: any, j: number) => {
+            const ref = img.asset?._id || img.asset?._ref;
+            if (ref) {
+                imagePromises.push(
+                    migrateImage(ref, `projects/${baseSlug}`, `gallery2-img-${j + 1}.jpg`)
+                        .then(url => url ? { url, alt: `${title} - Image ${j + 1}` } : null)
+                );
+            }
+        });
+    }
+
+    // Process all images in parallel
+    const results = await Promise.all(imagePromises);
+    
+    // Filter out nulls and duplicates
+    const uniqueImages = new Map<string, { url: string; alt: string }>();
+    results.forEach(img => {
+        if (img && img.url) {
+            uniqueImages.set(img.url, img);
+        }
+    });
+    
+    return Array.from(uniqueImages.values());
+}
+
+/**
  * Build Sanity image URL from reference or ID
  */
 function buildSanityImageUrl(refOrId: string): string {
@@ -308,116 +406,130 @@ async function migrateHomepage() {
 
     console.log("  Migrating images...");
 
-    // Migrate slides
+    // Migrate slides - parallel
     const slides: any[] = [];
     if (data.slides) {
-        for (let i = 0; i < data.slides.length; i++) {
-            const slide = data.slides[i];
-            // Get image ref from either _ref or construct from _id
-            let ref = slide.image?.asset?._ref;
-            if (!ref && slide.image?.asset?._id) {
-                ref = slide.image.asset._id;
+        const slideResults = await processBatch(
+            data.slides,
+            async (slide: any, i: number) => {
+                let ref = slide.image?.asset?._ref;
+                if (!ref && slide.image?.asset?._id) {
+                    ref = slide.image.asset._id;
+                }
+                const url = await migrateImage(
+                    ref,
+                    "homepage/slides",
+                    `slide-${i + 1}.jpg`,
+                );
+                return {
+                    image: { url, alt: slide.image?.alt || `Slide ${i + 1}` },
+                    order: i,
+                };
             }
-            const url = await migrateImage(
-                ref,
-                "homepage/slides",
-                `slide-${i + 1}.jpg`,
-            );
-            slides.push({
-                image: { url, alt: slide.image?.alt || `Slide ${i + 1}` },
-                order: i,
-            });
-        }
+        );
+        slides.push(...slideResults);
     }
 
-    // Migrate trust icons (serviceRelatedIcon)
+    // Migrate trust icons (serviceRelatedIcon) - parallel
     const trustIcons: any[] = [];
     if (data.serviceRelatedIcon) {
-        for (let i = 0; i < data.serviceRelatedIcon.length; i++) {
-            const icon = data.serviceRelatedIcon[i];
-            let ref = icon.serviceRelatedImg?.asset?._ref;
-            if (!ref && icon.serviceRelatedImg?.asset?._id) {
-                ref = icon.serviceRelatedImg.asset._id;
+        const iconResults = await processBatch(
+            data.serviceRelatedIcon,
+            async (icon: any, i: number) => {
+                let ref = icon.serviceRelatedImg?.asset?._ref;
+                if (!ref && icon.serviceRelatedImg?.asset?._id) {
+                    ref = icon.serviceRelatedImg.asset._id;
+                }
+                const url = await migrateImage(
+                    ref,
+                    "homepage/trust-icons",
+                    `icon-${i + 1}.png`,
+                );
+                return {
+                    image: { url, alt: icon.serviceRelatedName || "" },
+                    number: icon.serviceRelatedNumber || "",
+                    name: icon.serviceRelatedName || "",
+                    order: i,
+                };
             }
-            const url = await migrateImage(
-                ref,
-                "homepage/trust-icons",
-                `icon-${i + 1}.png`,
-            );
-            trustIcons.push({
-                image: { url, alt: icon.serviceRelatedName || "" },
-                number: icon.serviceRelatedNumber || "",
-                name: icon.serviceRelatedName || "",
-                order: i,
-            });
-        }
+        );
+        trustIcons.push(...iconResults);
     }
 
-    // Migrate service boxes
+    // Migrate service boxes - parallel
     const serviceBoxes: any[] = [];
     if (data.serviceBox) {
-        for (let i = 0; i < data.serviceBox.length; i++) {
-            const box = data.serviceBox[i];
-            let ref = box.serviceBoxImg?.asset?._ref;
-            if (!ref && box.serviceBoxImg?.asset?._id) {
-                ref = box.serviceBoxImg.asset._id;
+        const boxResults = await processBatch(
+            data.serviceBox,
+            async (box: any, i: number) => {
+                let ref = box.serviceBoxImg?.asset?._ref;
+                if (!ref && box.serviceBoxImg?.asset?._id) {
+                    ref = box.serviceBoxImg.asset._id;
+                }
+                const url = await migrateImage(
+                    ref,
+                    "homepage/services",
+                    `service-${i + 1}.jpg`,
+                );
+                return {
+                    url: transformServiceUrl(box.boxUrl || ""),
+                    image: { url, alt: box.serviceBoxTitle || "" },
+                    title: box.serviceBoxTitle || "",
+                    order: i,
+                };
             }
-            const url = await migrateImage(
-                ref,
-                "homepage/services",
-                `service-${i + 1}.jpg`,
-            );
-            serviceBoxes.push({
-                url: transformServiceUrl(box.boxUrl || ""),
-                image: { url, alt: box.serviceBoxTitle || "" },
-                title: box.serviceBoxTitle || "",
-                order: i,
-            });
-        }
+        );
+        serviceBoxes.push(...boxResults);
     }
 
-    // Migrate technology images
+    // Migrate technology images - parallel
     const technologyImages: any[] = [];
     if (data.technologyImgs) {
-        for (let i = 0; i < data.technologyImgs.length; i++) {
-            const tech = data.technologyImgs[i];
-            let ref = tech.technologyImage?.asset?._ref;
-            if (!ref && tech.technologyImage?.asset?._id) {
-                ref = tech.technologyImage.asset._id;
+        const techResults = await processBatch(
+            data.technologyImgs,
+            async (tech: any, i: number) => {
+                let ref = tech.technologyImage?.asset?._ref;
+                if (!ref && tech.technologyImage?.asset?._id) {
+                    ref = tech.technologyImage.asset._id;
+                }
+                const url = await migrateImage(
+                    ref,
+                    "homepage/technology",
+                    `tech-${i + 1}.jpg`,
+                );
+                return {
+                    image: { url, alt: `Technology ${i + 1}` },
+                    order: i,
+                };
             }
-            const url = await migrateImage(
-                ref,
-                "homepage/technology",
-                `tech-${i + 1}.jpg`,
-            );
-            technologyImages.push({
-                image: { url, alt: `Technology ${i + 1}` },
-                order: i,
-            });
-        }
+        );
+        technologyImages.push(...techResults);
     }
 
-    // Migrate process steps
+    // Migrate process steps - parallel
     const processSteps: any[] = [];
     if (data.processSteps) {
-        for (let i = 0; i < data.processSteps.length; i++) {
-            const step = data.processSteps[i];
-            let ref = step.stepImage?.asset?._ref;
-            if (!ref && step.stepImage?.asset?._id) {
-                ref = step.stepImage.asset._id;
+        const stepResults = await processBatch(
+            data.processSteps,
+            async (step: any, i: number) => {
+                let ref = step.stepImage?.asset?._ref;
+                if (!ref && step.stepImage?.asset?._id) {
+                    ref = step.stepImage.asset._id;
+                }
+                const url = await migrateImage(
+                    ref,
+                    "homepage/process",
+                    `step-${i + 1}.jpg`,
+                );
+                return {
+                    title: step.stepTitle || "",
+                    description: step.stepText || "",
+                    image: { url, alt: step.stepTitle || "" },
+                    order: i,
+                };
             }
-            const url = await migrateImage(
-                ref,
-                "homepage/process",
-                `step-${i + 1}.jpg`,
-            );
-            processSteps.push({
-                title: step.stepTitle || "",
-                description: step.stepText || "",
-                image: { url, alt: step.stepTitle || "" },
-                order: i,
-            });
-        }
+        );
+        processSteps.push(...stepResults);
     }
 
     // Migrate slider image
@@ -449,34 +561,37 @@ async function migrateHomepage() {
         aboutImages.push({ url, alt: "About 1" });
     }
 
-    // Migrate founder slides
+    // Migrate founder slides - parallel
     const founderSlides: any[] = [];
     if (data.founderSlider) {
-        for (let i = 0; i < data.founderSlider.length; i++) {
-            const founder = data.founderSlider[i];
-            let ref = founder.image?.asset?._ref;
-            if (!ref && founder.image?.asset?._id) {
-                ref = founder.image.asset._id;
+        const founderResults = await processBatch(
+            data.founderSlider,
+            async (founder: any, i: number) => {
+                let ref = founder.image?.asset?._ref;
+                if (!ref && founder.image?.asset?._id) {
+                    ref = founder.image.asset._id;
+                }
+                const url = await migrateImage(
+                    ref,
+                    "homepage/founders",
+                    `founder-${i + 1}.jpg`,
+                );
+                return {
+                    title: founder.founderTitle || "",
+                    description: portableTextToPlain(founder.founderDescription),
+                    descriptionTwo: portableTextToPlain(
+                        founder.founderDescriptionTwo,
+                    ),
+                    name: founder.founderName || "",
+                    achievements: founder.founderAchievements || "",
+                    partnerLabel: founder.partnerLabel || "",
+                    partner: founder.partner || "",
+                    image: { url, alt: founder.founderName || "" },
+                    order: i,
+                };
             }
-            const url = await migrateImage(
-                ref,
-                "homepage/founders",
-                `founder-${i + 1}.jpg`,
-            );
-            founderSlides.push({
-                title: founder.founderTitle || "",
-                description: portableTextToPlain(founder.founderDescription),
-                descriptionTwo: portableTextToPlain(
-                    founder.founderDescriptionTwo,
-                ),
-                name: founder.founderName || "",
-                achievements: founder.founderAchievements || "",
-                partnerLabel: founder.partnerLabel || "",
-                partner: founder.partner || "",
-                image: { url, alt: founder.founderName || "" },
-                order: i,
-            });
-        }
+        );
+        founderSlides.push(...founderResults);
     }
 
     // Migrate contact image
@@ -635,106 +750,13 @@ async function migrateProjects() {
         const listingInfo = listingImageMap.get(sanitySlug);
         const isFeatured = listingImageMap.has(sanitySlug);
 
-        // Collect all images for the gallery
-        const allImages: any[] = [];
-
-        // First, try to use listing image if available
-        if (listingInfo?.imageRef) {
-            const listingImageUrl = await migrateImage(
-                listingInfo.imageRef,
-                `projects/${baseSlug}`,
-                "listing.jpg",
-            );
-            if (listingImageUrl) {
-                allImages.push({ url: listingImageUrl, alt: title });
-            }
-        }
-
-        // Migrate internal page main image
-        if (page.mainImage?.asset?._id || page.mainImage?.asset?._ref) {
-            const mainRef =
-                page.mainImage.asset._id || page.mainImage.asset._ref;
-            const mainImageUrl = await migrateImage(
-                mainRef,
-                `projects/${baseSlug}`,
-                "main.jpg",
-            );
-            if (mainImageUrl) {
-                // Only add if different from listing image
-                if (!allImages.some((img) => img.url === mainImageUrl)) {
-                    allImages.push({
-                        url: mainImageUrl,
-                        alt: `${title} - Main`,
-                    });
-                }
-            }
-        }
-
-        // Migrate projectImages.topImages - add directly to allImages
-        if (page.projectImages?.topImages) {
-            for (let j = 0; j < page.projectImages.topImages.length; j++) {
-                const img = page.projectImages.topImages[j];
-                const ref = img.asset?._id || img.asset?._ref;
-                if (ref) {
-                    const url = await migrateImage(
-                        ref,
-                        `projects/${baseSlug}`,
-                        `gallery1-img-${j + 1}.jpg`,
-                    );
-                    if (url && !allImages.some((i) => i.url === url)) {
-                        allImages.push({
-                            url,
-                            alt: `${title} - Image ${allImages.length + 1}`,
-                        });
-                    }
-                }
-            }
-        }
-
-        // Migrate projectImages.bottomImage - add directly to allImages
-        if (page.projectImages?.bottomImage?.asset) {
-            const ref =
-                page.projectImages.bottomImage.asset._id ||
-                page.projectImages.bottomImage.asset._ref;
-            if (ref) {
-                const url = await migrateImage(
-                    ref,
-                    `projects/${baseSlug}`,
-                    "gallery1-bottom.jpg",
-                );
-                if (url && !allImages.some((i) => i.url === url)) {
-                    allImages.push({
-                        url,
-                        alt: `${title} - Image ${allImages.length + 1}`,
-                    });
-                }
-            }
-        }
-
-        // Migrate projectImagesTwo.topImagesTwo - add directly to allImages
-        if (page.projectImagesTwo?.topImagesTwo) {
-            for (
-                let j = 0;
-                j < page.projectImagesTwo.topImagesTwo.length;
-                j++
-            ) {
-                const img = page.projectImagesTwo.topImagesTwo[j];
-                const ref = img.asset?._id || img.asset?._ref;
-                if (ref) {
-                    const url = await migrateImage(
-                        ref,
-                        `projects/${baseSlug}`,
-                        `gallery2-img-${j + 1}.jpg`,
-                    );
-                    if (url && !allImages.some((i) => i.url === url)) {
-                        allImages.push({
-                            url,
-                            alt: `${title} - Image ${allImages.length + 1}`,
-                        });
-                    }
-                }
-            }
-        }
+        // Migrate all images in parallel
+        const allImages = await migrateProjectImages(
+            page,
+            baseSlug,
+            title,
+            listingInfo?.imageRef
+        );
 
         // Build project details - keep items as array for frontend compatibility
         const projectDetails: any[] = [];
@@ -1027,33 +1049,36 @@ async function migrateServices() {
             listingImage = { url: bannerUrl, alt: title };
         }
 
-        // Migrate services list items with images
+        // Migrate services list items with images - parallel
         const servicesList: any[] = [];
         if (service.servicesList) {
-            for (let j = 0; j < service.servicesList.length; j++) {
-                const item = service.servicesList[j];
-                let imageUrl = "";
-                const imageRef =
-                    item.image?.asset?._ref || item.image?.asset?._id;
-                if (imageRef) {
-                    imageUrl = await migrateImage(
-                        imageRef,
-                        `services/${slug}`,
-                        `service-item-${j + 1}.jpg`,
-                    );
-                }
+            const servicesListResults = await processBatch(
+                service.servicesList,
+                async (item: any, j: number) => {
+                    let imageUrl = "";
+                    const imageRef =
+                        item.image?.asset?._ref || item.image?.asset?._id;
+                    if (imageRef) {
+                        imageUrl = await migrateImage(
+                            imageRef,
+                            `services/${slug}`,
+                            `service-item-${j + 1}.jpg`,
+                        );
+                    }
 
-                servicesList.push({
-                    title: item.title || "",
-                    description: item.description || "",
-                    image: imageUrl
-                        ? { url: imageUrl, alt: item.title || "" }
-                        : undefined,
-                    link: "",
-                    isExternal: false,
-                    order: j,
-                });
-            }
+                    return {
+                        title: item.title || "",
+                        description: item.description || "",
+                        image: imageUrl
+                            ? { url: imageUrl, alt: item.title || "" }
+                            : undefined,
+                        link: "",
+                        isExternal: false,
+                        order: j,
+                    };
+                }
+            );
+            servicesList.push(...servicesListResults);
         }
 
         // Migrate key activities
@@ -1225,30 +1250,32 @@ async function migrateFAQ() {
 
     const categories: any[] = [];
     if (data.categories) {
-        for (let i = 0; i < data.categories.length; i++) {
-            const cat = data.categories[i];
-            let imageUrl = "";
-            // Handle both _ref and _id formats
-            const imageRef = cat.image?.asset?._ref || cat.image?.asset?._id;
-            if (imageRef) {
-                imageUrl = await migrateImage(
-                    imageRef,
-                    "faq",
-                    `category-${i + 1}.jpg`,
-                );
-            }
+        const categoryResults = await processBatch(
+            data.categories,
+            async (cat: any, i: number) => {
+                let imageUrl = "";
+                const imageRef = cat.image?.asset?._ref || cat.image?.asset?._id;
+                if (imageRef) {
+                    imageUrl = await migrateImage(
+                        imageRef,
+                        "faq",
+                        `category-${i + 1}.jpg`,
+                    );
+                }
 
-            categories.push({
-                title: cat.title || "",
-                description: cat.description || "",
-                chatLink: cat.chatLink || "",
-                image: { url: imageUrl, darkModeUrl: "" },
-                faqs: (cat.faqs || []).map((faq: any) => ({
-                    question: faq.question || "",
-                    answer: faq.answer || "",
-                })),
-            });
-        }
+                return {
+                    title: cat.title || "",
+                    description: cat.description || "",
+                    chatLink: cat.chatLink || "",
+                    image: { url: imageUrl, darkModeUrl: "" },
+                    faqs: (cat.faqs || []).map((faq: any) => ({
+                        question: faq.question || "",
+                        answer: faq.answer || "",
+                    })),
+                };
+            }
+        );
+        categories.push(...categoryResults);
     }
 
     await FAQ.create({
@@ -1295,58 +1322,58 @@ async function migrateAbout() {
 
     const sections: any[] = [];
     if (data.sections) {
-        for (let i = 0; i < data.sections.length; i++) {
-            const sec = data.sections[i];
-            let imageUrl = "";
+        const sectionResults = await processBatch(
+            data.sections,
+            async (sec: any, i: number) => {
+                let imageUrl = "";
 
-            // Handle both dereferenced asset (asset->{_id, url}) and reference (asset._ref)
-            if (sec.image?.asset?.url) {
-                // Asset was dereferenced, use URL directly or migrate from Sanity CDN
-                imageUrl = sec.image.asset.url;
-            } else if (sec.image?.asset?._id) {
-                // Asset was dereferenced but only has _id
-                imageUrl = await migrateImage(
-                    sec.image.asset._id,
-                    "about",
-                    `section-${i + 1}.jpg`,
-                );
-            } else if (sec.image?.asset?._ref) {
-                // Asset is a reference
-                imageUrl = await migrateImage(
-                    sec.image.asset._ref,
-                    "about",
-                    `section-${i + 1}.jpg`,
-                );
+                // Handle both dereferenced asset (asset->{_id, url}) and reference (asset._ref)
+                if (sec.image?.asset?.url) {
+                    imageUrl = sec.image.asset.url;
+                } else if (sec.image?.asset?._id) {
+                    imageUrl = await migrateImage(
+                        sec.image.asset._id,
+                        "about",
+                        `section-${i + 1}.jpg`,
+                    );
+                } else if (sec.image?.asset?._ref) {
+                    imageUrl = await migrateImage(
+                        sec.image.asset._ref,
+                        "about",
+                        `section-${i + 1}.jpg`,
+                    );
+                }
+
+                // Handle dark mode image
+                let darkModeUrl = "";
+                if (sec.imageDarkMode?.asset?.url) {
+                    darkModeUrl = sec.imageDarkMode.asset.url;
+                } else if (sec.imageDarkMode?.asset?._id) {
+                    darkModeUrl = await migrateImage(
+                        sec.imageDarkMode.asset._id,
+                        "about",
+                        `section-${i + 1}-dark.jpg`,
+                    );
+                } else if (sec.imageDarkMode?.asset?._ref) {
+                    darkModeUrl = await migrateImage(
+                        sec.imageDarkMode.asset._ref,
+                        "about",
+                        `section-${i + 1}-dark.jpg`,
+                    );
+                }
+
+                return {
+                    sectionId: sec.sectionId || "",
+                    title: sec.title || "",
+                    body:
+                        portableTextToHTML(sec.body) ||
+                        sec.body ||
+                        "Content coming soon",
+                    image: { url: imageUrl, darkModeUrl },
+                };
             }
-
-            // Handle dark mode image
-            let darkModeUrl = "";
-            if (sec.imageDarkMode?.asset?.url) {
-                darkModeUrl = sec.imageDarkMode.asset.url;
-            } else if (sec.imageDarkMode?.asset?._id) {
-                darkModeUrl = await migrateImage(
-                    sec.imageDarkMode.asset._id,
-                    "about",
-                    `section-${i + 1}-dark.jpg`,
-                );
-            } else if (sec.imageDarkMode?.asset?._ref) {
-                darkModeUrl = await migrateImage(
-                    sec.imageDarkMode.asset._ref,
-                    "about",
-                    `section-${i + 1}-dark.jpg`,
-                );
-            }
-
-            sections.push({
-                sectionId: sec.sectionId || "",
-                title: sec.title || "",
-                body:
-                    portableTextToHTML(sec.body) ||
-                    sec.body ||
-                    "Content coming soon",
-                image: { url: imageUrl, darkModeUrl },
-            });
-        }
+        );
+        sections.push(...sectionResults);
     }
 
     await About.create({
