@@ -1,0 +1,24 @@
+# SAM Configuration Template
+# Copy this to samconfig.toml and fill in your values
+# DO NOT commit samconfig.toml to git
+
+version = 0.1
+
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "cms-backend-stack"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-xxxxx"
+s3_prefix = "cms-backend"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = [
+  "MongoDbUri=your_mongodb_uri",
+  "JwtSecret=your-super-secret-jwt-key-change-this-in-production-2024",
+  "JwtExpiresIn=7d",
+  "RedisUrl=your_redis_url",
+  "GmailAppPassword=your_gmail_app_password",
+  "FrontendUrl=https://adpl.vercel.app",
+  "RevalidationSecret=your_revalidation_secret"
+]
