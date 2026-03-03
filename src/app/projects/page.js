@@ -21,8 +21,15 @@ export default function ProjectsPage() {
             try {
                 const cmsUrl = getCMSApiUrl();
                 const response = await fetch(
-                    `${cmsUrl}/api/public/projects?page=${page}&limit=${LIMIT}`,
-                    { cache: "no-store" }
+                    `${cmsUrl}/api/public/projects?page=${page}&limit=${LIMIT}&t=${Date.now()}`,
+                    {
+                        cache: "no-store",
+                        headers: {
+                            'Cache-Control': 'no-cache, no-store, must-revalidate',
+                            'Pragma': 'no-cache',
+                            'Expires': '0'
+                        }
+                    }
                 );
 
                 if (!response.ok) throw new Error("Failed to fetch projects");
@@ -49,11 +56,23 @@ export default function ProjectsPage() {
                 const cmsUrl = getCMSApiUrl();
                 const [projectsRes, pageRes] = await Promise.all([
                     fetch(
-                        `${cmsUrl}/api/public/projects?page=1&limit=${LIMIT}`,
-                        { cache: "no-store" }
+                        `${cmsUrl}/api/public/projects?page=1&limit=${LIMIT}&t=${Date.now()}`,
+                        {
+                            cache: "no-store",
+                            headers: {
+                                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                                'Pragma': 'no-cache',
+                                'Expires': '0'
+                            }
+                        }
                     ),
-                    fetch(`${cmsUrl}/api/public/projects-page`, {
+                    fetch(`${cmsUrl}/api/public/projects-page?t=${Date.now()}`, {
                         cache: "no-store",
+                        headers: {
+                            'Cache-Control': 'no-cache, no-store, must-revalidate',
+                            'Pragma': 'no-cache',
+                            'Expires': '0'
+                        }
                     }),
                 ]);
 

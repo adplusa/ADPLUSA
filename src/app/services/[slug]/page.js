@@ -28,8 +28,15 @@ export default function ServicePage() {
 
             while (hasNextPage) {
                 const response = await fetch(
-                    `${cmsUrl}/api/public/services?page=${page}&limit=100`,
-                    { cache: "no-store" }
+                    `${cmsUrl}/api/public/services?page=${page}&limit=100&t=${Date.now()}`,
+                    {
+                        cache: "no-store",
+                        headers: {
+                            'Cache-Control': 'no-cache, no-store, must-revalidate',
+                            'Pragma': 'no-cache',
+                            'Expires': '0'
+                        }
+                    }
                 );
 
                 if (!response.ok) throw new Error("Failed to fetch services");
@@ -59,15 +66,30 @@ export default function ServicePage() {
                 const cmsUrl = getCMSApiUrl();
                 const [serviceRes, allServicesData, contactRes, homepageRes] =
                     await Promise.all([
-                        fetch(`${cmsUrl}/api/public/services/${slug}`, {
+                        fetch(`${cmsUrl}/api/public/services/${slug}?t=${Date.now()}`, {
                             cache: "no-store",
+                            headers: {
+                                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                                'Pragma': 'no-cache',
+                                'Expires': '0'
+                            }
                         }),
                         fetchAllServices(),
-                        fetch(`${cmsUrl}/api/public/contact`, {
+                        fetch(`${cmsUrl}/api/public/contact?t=${Date.now()}`, {
                             cache: "no-store",
+                            headers: {
+                                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                                'Pragma': 'no-cache',
+                                'Expires': '0'
+                            }
                         }),
-                        fetch(`${cmsUrl}/api/public/homepage`, {
+                        fetch(`${cmsUrl}/api/public/homepage?t=${Date.now()}`, {
                             cache: "no-store",
+                            headers: {
+                                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                                'Pragma': 'no-cache',
+                                'Expires': '0'
+                            }
                         }),
                     ]);
 

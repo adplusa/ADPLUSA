@@ -26,8 +26,15 @@ export default function ProjectPage() {
 
             while (hasNextPage) {
                 const response = await fetch(
-                    `${cmsUrl}/api/public/projects?page=${page}&limit=100`,
-                    { cache: "no-store" }
+                    `${cmsUrl}/api/public/projects?page=${page}&limit=100&t=${Date.now()}`,
+                    {
+                        cache: "no-store",
+                        headers: {
+                            'Cache-Control': 'no-cache, no-store, must-revalidate',
+                            'Pragma': 'no-cache',
+                            'Expires': '0'
+                        }
+                    }
                 );
 
                 if (!response.ok) throw new Error("Failed to fetch projects");
@@ -56,8 +63,13 @@ export default function ProjectPage() {
             try {
                 const cmsUrl = getCMSApiUrl();
                 const [projectRes, allProjectsData] = await Promise.all([
-                    fetch(`${cmsUrl}/api/public/projects/${slug}`, {
+                    fetch(`${cmsUrl}/api/public/projects/${slug}?t=${Date.now()}`, {
                         cache: "no-store",
+                        headers: {
+                            'Cache-Control': 'no-cache, no-store, must-revalidate',
+                            'Pragma': 'no-cache',
+                            'Expires': '0'
+                        }
                     }),
                     fetchAllProjects(),
                 ]);
