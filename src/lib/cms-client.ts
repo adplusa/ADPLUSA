@@ -70,8 +70,11 @@ async function fetchAllPages<T>(endpoint: string, options: FetchOptions = {}): P
 
     try {
         while (hasMore) {
-            const paginatedEndpoint = `${endpoint}${endpoint.includes("?") ? "&" : "?"}page=${page}`;
+            // Build URL with proper query parameter handling
+            const separator = endpoint.includes("?") ? "&" : "?";
+            const paginatedEndpoint = `${endpoint}${separator}page=${page}`;
             const url = `${CMS_API_URL}/api/public${paginatedEndpoint}`;
+
             const fetchOptions: RequestInit & { next?: { revalidate?: number | false; tags?: string[] } } = {
                 headers: { "Content-Type": "application/json" },
             };
@@ -86,31 +89,37 @@ async function fetchAllPages<T>(endpoint: string, options: FetchOptions = {}): P
                 fetchOptions.cache = "no-store";
             }
 
+            console.log(`[CMS] Fetching page ${page}: ${paginatedEndpoint}`);
+
             const response = await fetch(url, fetchOptions);
             if (!response.ok) {
-                console.error(`CMS fetch failed: ${paginatedEndpoint} - Status: ${response.status}`);
+                console.error(`[CMS] Fetch failed for page ${page}: ${response.status}`);
                 break;
             }
 
             const result: CMSResponse<T[]> = await response.json();
             if (!result.success || !result.data) {
+                console.error(`[CMS] Invalid response for page ${page}`);
                 break;
             }
 
+            console.log(`[CMS] Got ${result.data.length} items on page ${page}`);
             allData.push(...result.data);
 
             // Check if there are more pages
             // If we got fewer items than the limit (default 20), we've reached the end
             if (result.data.length < 20) {
                 hasMore = false;
+                console.log(`[CMS] Reached end of pagination (got ${result.data.length} items)`);
             }
 
             page++;
         }
 
+        console.log(`[CMS] Total items fetched: ${allData.length}`);
         return allData.length > 0 ? allData : null;
     } catch (error) {
-        console.error(`CMS fetch all pages error: ${endpoint}`, error);
+        console.error(`[CMS] Fetch all pages error: ${endpoint}`, error);
         return null;
     }
 }
@@ -122,7 +131,8 @@ export async function getHomepage(options?: FetchOptions): Promise<Homepage | nu
 
 // Projects
 export async function getProjects(options?: FetchOptions): Promise<Project[] | null> {
-    return fetchAllPages<Project>("/projects", { ...options, tags: ["projects", ...(options?.tags || [])] });
+    // Fetch with a large limit to get all projects in one request
+    return fetchCMS<Project[]>("/projects?limit=1000", { ...options, tags: ["projects", ...(options?.tags || [])] });
 }
 
 export async function getProject(slug: string, options?: FetchOptions): Promise<Project | null> {
@@ -131,7 +141,7 @@ export async function getProject(slug: string, options?: FetchOptions): Promise<
 }
 
 export async function getFeaturedProjects(options?: FetchOptions): Promise<Project[] | null> {
-    return fetchAllPages<Project>("/projects?featured=true", { ...options, tags: ["projects", "featured-projects", ...(options?.tags || [])] });
+    return fetchCMS<Project[]>("/projects?featured=true&limit=1000", { ...options, tags: ["projects", "featured-projects", ...(options?.tags || [])] });
 }
 
 export async function getProjectSlugs(): Promise<string[]> {
@@ -141,7 +151,8 @@ export async function getProjectSlugs(): Promise<string[]> {
 
 // Services
 export async function getServices(options?: FetchOptions): Promise<Service[] | null> {
-    return fetchAllPages<Service>("/services", { ...options, tags: ["services", ...(options?.tags || [])] });
+    // Fetch with a large limit to get all services in one request
+    return fetchCMS<Service[]>("/services?limit=1000", { ...options, tags: ["services", ...(options?.tags || [])] });
 }
 
 export async function getService(slug: string, options?: FetchOptions): Promise<Service | null> {
