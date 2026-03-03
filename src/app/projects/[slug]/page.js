@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { getCMSApiUrl } from "@/lib/cms-client";
 import ProjectClient from "./ProjectClient";
@@ -17,19 +17,49 @@ export default function ProjectPage() {
     const [loading, setLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
 
+    const fetchAllProjects = useCallback(async () => {
+        try {
+            const cmsUrl = getCMSApiUrl();
+            let allProjects = [];
+            let page = 1;
+            let hasNextPage = true;
+
+            while (hasNextPage) {
+                const response = await fetch(
+                    `${cmsUrl}/api/public/projects?page=${page}&limit=100`,
+                    { cache: "no-store" }
+                );
+
+                if (!response.ok) throw new Error("Failed to fetch projects");
+
+                const result = await response.json();
+                if (result.success) {
+                    allProjects = [...allProjects, ...result.data];
+                    hasNextPage = result.pagination?.hasNextPage || false;
+                    page++;
+                } else {
+                    break;
+                }
+            }
+
+            return allProjects;
+        } catch (error) {
+            console.error("Error fetching all projects:", error);
+            return [];
+        }
+    }, []);
+
     useEffect(() => {
         if (!slug) return;
 
         const fetchData = async () => {
             try {
                 const cmsUrl = getCMSApiUrl();
-                const [projectRes, projectsRes] = await Promise.all([
+                const [projectRes, allProjectsData] = await Promise.all([
                     fetch(`${cmsUrl}/api/public/projects/${slug}`, {
                         cache: "no-store",
                     }),
-                    fetch(`${cmsUrl}/api/public/projects`, {
-                        cache: "no-store",
-                    }),
+                    fetchAllProjects(),
                 ]);
 
                 if (!projectRes.ok) {
@@ -38,13 +68,10 @@ export default function ProjectPage() {
                 }
 
                 const projectResult = await projectRes.json();
-                const projectsResult = await projectsRes.json();
 
                 if (projectResult.success) {
                     setProject(projectResult.data);
-                }
-                if (projectsResult.success) {
-                    const others = projectsResult.data.filter(
+                    const others = allProjectsData.filter(
                         (p) => p.slug !== slug
                     );
                     setOtherProjects(others);
@@ -58,7 +85,7 @@ export default function ProjectPage() {
         };
 
         fetchData();
-    }, [slug]);
+    }, [slug, fetchAllProjects]);
 
     if (loading) {
         return <Loading text="Loading" fullScreen={true} />;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { getCMSApiUrl } from "@/lib/cms-client";
 import ServiceClient from "./ServiceClient";
@@ -19,20 +19,50 @@ export default function ServicePage() {
     const [loading, setLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
 
+    const fetchAllServices = useCallback(async () => {
+        try {
+            const cmsUrl = getCMSApiUrl();
+            let allServices = [];
+            let page = 1;
+            let hasNextPage = true;
+
+            while (hasNextPage) {
+                const response = await fetch(
+                    `${cmsUrl}/api/public/services?page=${page}&limit=100`,
+                    { cache: "no-store" }
+                );
+
+                if (!response.ok) throw new Error("Failed to fetch services");
+
+                const result = await response.json();
+                if (result.success) {
+                    allServices = [...allServices, ...result.data];
+                    hasNextPage = result.pagination?.hasNextPage || false;
+                    page++;
+                } else {
+                    break;
+                }
+            }
+
+            return allServices;
+        } catch (error) {
+            console.error("Error fetching all services:", error);
+            return [];
+        }
+    }, []);
+
     useEffect(() => {
         if (!slug) return;
 
         const fetchData = async () => {
             try {
                 const cmsUrl = getCMSApiUrl();
-                const [serviceRes, servicesRes, contactRes, homepageRes] =
+                const [serviceRes, allServicesData, contactRes, homepageRes] =
                     await Promise.all([
                         fetch(`${cmsUrl}/api/public/services/${slug}`, {
                             cache: "no-store",
                         }),
-                        fetch(`${cmsUrl}/api/public/services`, {
-                            cache: "no-store",
-                        }),
+                        fetchAllServices(),
                         fetch(`${cmsUrl}/api/public/contact`, {
                             cache: "no-store",
                         }),
@@ -47,15 +77,12 @@ export default function ServicePage() {
                 }
 
                 const serviceResult = await serviceRes.json();
-                const servicesResult = await servicesRes.json();
                 const contactResult = await contactRes.json();
                 const homepageResult = await homepageRes.json();
 
                 if (serviceResult.success) {
                     setService(serviceResult.data);
-                }
-                if (servicesResult.success) {
-                    const others = servicesResult.data.filter(
+                    const others = allServicesData.filter(
                         (s) => s.slug !== slug
                     );
                     setOtherServices(others);
@@ -75,7 +102,7 @@ export default function ServicePage() {
         };
 
         fetchData();
-    }, [slug]);
+    }, [slug, fetchAllServices]);
 
     if (loading) {
         return <Loading text="Loading" fullScreen={true} />;

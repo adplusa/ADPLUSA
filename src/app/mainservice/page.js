@@ -1,26 +1,60 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { getCMSApiUrl } from "@/lib/cms-client";
 import MainServiceClient from "./MainServiceClient";
 import Loading from "../Components/Loading/page";
 
 export default function MainServicePage() {
-    const [services, setServices] = useState(null);
+    const [services, setServices] = useState([]);
     const [homepageData, setHomepageData] = useState(null);
     const [mainServicePageData, setMainServicePageData] = useState(null);
     const [contactData, setContactData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [hasNextPage, setHasNextPage] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const observerTarget = useRef(null);
+
+    const LIMIT = 20;
+
+    const fetchServices = useCallback(
+        async (page) => {
+            try {
+                const cmsUrl = getCMSApiUrl();
+                const response = await fetch(
+                    `${cmsUrl}/api/public/services?page=${page}&limit=${LIMIT}`,
+                    { cache: "no-store" }
+                );
+
+                if (!response.ok) throw new Error("Failed to fetch services");
+
+                const result = await response.json();
+                if (result.success) {
+                    if (page === 1) {
+                        setServices(result.data);
+                    } else {
+                        setServices((prev) => [...prev, ...result.data]);
+                    }
+                    setHasNextPage(result.pagination?.hasNextPage || false);
+                }
+            } catch (error) {
+                console.error("Error fetching services:", error);
+            }
+        },
+        []
+    );
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchInitialData = async () => {
             try {
                 const cmsUrl = getCMSApiUrl();
                 const [servicesRes, homepageRes, mainServiceRes, contactRes] =
                     await Promise.all([
-                        fetch(`${cmsUrl}/api/public/services`, {
-                            cache: "no-store",
-                        }),
+                        fetch(
+                            `${cmsUrl}/api/public/services?page=1&limit=${LIMIT}`,
+                            { cache: "no-store" }
+                        ),
                         fetch(`${cmsUrl}/api/public/homepage`, {
                             cache: "no-store",
                         }),
@@ -47,6 +81,7 @@ export default function MainServicePage() {
 
                 if (servicesResult.success) {
                     setServices(servicesResult.data);
+                    setHasNextPage(servicesResult.pagination?.hasNextPage || false);
                 }
                 if (homepageResult.success) {
                     setHomepageData(homepageResult.data);
@@ -64,23 +99,57 @@ export default function MainServicePage() {
             }
         };
 
-        fetchData();
+        fetchInitialData();
     }, []);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (
+                    entries[0].isIntersecting &&
+                    hasNextPage &&
+                    !loadingMore &&
+                    !loading
+                ) {
+                    setLoadingMore(true);
+                    const nextPage = currentPage + 1;
+                    setCurrentPage(nextPage);
+                    fetchServices(nextPage).finally(() => setLoadingMore(false));
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        if (observerTarget.current) {
+            observer.observe(observerTarget.current);
+        }
+
+        return () => {
+            if (observerTarget.current) {
+                observer.unobserve(observerTarget.current);
+            }
+        };
+    }, [hasNextPage, loadingMore, loading, currentPage, fetchServices]);
 
     if (loading) {
         return <Loading text="Loading Services" fullScreen={true} />;
     }
 
-    if (!services) {
+    if (services.length === 0) {
         return <Loading text="Loading Services" fullScreen={true} />;
     }
 
     return (
-        <MainServiceClient
-            services={services}
-            homepageData={homepageData}
-            mainServicePageData={mainServicePageData}
-            contactData={contactData}
-        />
+        <>
+            <MainServiceClient
+                services={services}
+                homepageData={homepageData}
+                mainServicePageData={mainServicePageData}
+                contactData={contactData}
+            />
+            <div ref={observerTarget} style={{ height: "20px", margin: "20px 0" }}>
+                {loadingMore && <Loading text="Loading more services" fullScreen={false} />}
+            </div>
+        </>
     );
 }
