@@ -1,6 +1,45 @@
 import { Request, Response } from "express";
 import { Homepage } from "../database/schemas/homepage.schema";
-import { CacheService } from "../services/cache.service";
+
+/**
+ * @route   GET /api/admin/homepage
+ * @desc    Get homepage (singleton document)
+ * @access  Protected (Admin)
+ */
+export const getHomepage = async (
+    _req: Request,
+    res: Response,
+): Promise<void> => {
+    try {
+        const homepage = await Homepage.findOne().lean();
+
+        if (!homepage) {
+            res.status(404).json({
+                success: false,
+                error: {
+                    code: "NOT_FOUND",
+                    message: "Homepage not found",
+                },
+            });
+            return;
+        }
+
+        res.status(200).json({
+            success: true,
+            data: homepage,
+        });
+    } catch (error: any) {
+        console.error("Error fetching homepage:", error);
+        res.status(500).json({
+            success: false,
+            error: {
+                code: "SERVER_ERROR",
+                message: "Failed to fetch homepage",
+                details: error.message,
+            },
+        });
+    }
+};
 
 /**
  * @route   PUT /api/admin/homepage
@@ -23,9 +62,6 @@ export const updateHomepage = async (
                 setDefaultsOnInsert: true,
             },
         ).lean();
-
-        // Invalidate Cache
-        await CacheService.invalidateHomepage();
 
         res.status(200).json({
             success: true,

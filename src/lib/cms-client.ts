@@ -58,72 +58,6 @@ async function fetchCMS<T>(endpoint: string, options: FetchOptions = {}): Promis
     }
 }
 
-/**
- * Fetch all pages of paginated data until the end.
- * Used for endpoints that return paginated results.
- */
-async function fetchAllPages<T>(endpoint: string, options: FetchOptions = {}): Promise<T[] | null> {
-    const { revalidate = DEFAULT_REVALIDATE, tags } = options;
-    const allData: T[] = [];
-    let page = 1;
-    let hasMore = true;
-
-    try {
-        while (hasMore) {
-            // Build URL with proper query parameter handling
-            const separator = endpoint.includes("?") ? "&" : "?";
-            const paginatedEndpoint = `${endpoint}${separator}page=${page}`;
-            const url = `${CMS_API_URL}/api/public${paginatedEndpoint}`;
-
-            const fetchOptions: RequestInit & { next?: { revalidate?: number | false; tags?: string[] } } = {
-                headers: { "Content-Type": "application/json" },
-            };
-
-            if (typeof revalidate === "number" || revalidate === false) {
-                fetchOptions.next = { revalidate };
-            }
-            if (tags && tags.length > 0) {
-                fetchOptions.next = { ...fetchOptions.next, tags };
-            }
-            if (revalidate === 0) {
-                fetchOptions.cache = "no-store";
-            }
-
-            console.log(`[CMS] Fetching page ${page}: ${paginatedEndpoint}`);
-
-            const response = await fetch(url, fetchOptions);
-            if (!response.ok) {
-                console.error(`[CMS] Fetch failed for page ${page}: ${response.status}`);
-                break;
-            }
-
-            const result: CMSResponse<T[]> = await response.json();
-            if (!result.success || !result.data) {
-                console.error(`[CMS] Invalid response for page ${page}`);
-                break;
-            }
-
-            console.log(`[CMS] Got ${result.data.length} items on page ${page}`);
-            allData.push(...result.data);
-
-            // Check if there are more pages
-            // If we got fewer items than the limit (default 20), we've reached the end
-            if (result.data.length < 20) {
-                hasMore = false;
-                console.log(`[CMS] Reached end of pagination (got ${result.data.length} items)`);
-            }
-
-            page++;
-        }
-
-        console.log(`[CMS] Total items fetched: ${allData.length}`);
-        return allData.length > 0 ? allData : null;
-    } catch (error) {
-        console.error(`[CMS] Fetch all pages error: ${endpoint}`, error);
-        return null;
-    }
-}
-
 // Homepage
 export async function getHomepage(options?: FetchOptions): Promise<Homepage | null> {
     return fetchCMS<Homepage>("/homepage", { ...options, tags: ["homepage", ...(options?.tags || [])] });
@@ -131,8 +65,7 @@ export async function getHomepage(options?: FetchOptions): Promise<Homepage | nu
 
 // Projects
 export async function getProjects(options?: FetchOptions): Promise<Project[] | null> {
-    // Fetch with a large limit to get all projects in one request
-    return fetchCMS<Project[]>("/projects?limit=1000", { ...options, tags: ["projects", ...(options?.tags || [])] });
+    return fetchCMS<Project[]>("/projects", { ...options, tags: ["projects", ...(options?.tags || [])] });
 }
 
 export async function getProject(slug: string, options?: FetchOptions): Promise<Project | null> {
@@ -141,7 +74,7 @@ export async function getProject(slug: string, options?: FetchOptions): Promise<
 }
 
 export async function getFeaturedProjects(options?: FetchOptions): Promise<Project[] | null> {
-    return fetchCMS<Project[]>("/projects?featured=true&limit=1000", { ...options, tags: ["projects", "featured-projects", ...(options?.tags || [])] });
+    return fetchCMS<Project[]>("/projects?featured=true", { ...options, tags: ["projects", "featured-projects", ...(options?.tags || [])] });
 }
 
 export async function getProjectSlugs(): Promise<string[]> {
@@ -151,8 +84,7 @@ export async function getProjectSlugs(): Promise<string[]> {
 
 // Services
 export async function getServices(options?: FetchOptions): Promise<Service[] | null> {
-    // Fetch with a large limit to get all services in one request
-    return fetchCMS<Service[]>("/services?limit=1000", { ...options, tags: ["services", ...(options?.tags || [])] });
+    return fetchCMS<Service[]>("/services", { ...options, tags: ["services", ...(options?.tags || [])] });
 }
 
 export async function getService(slug: string, options?: FetchOptions): Promise<Service | null> {

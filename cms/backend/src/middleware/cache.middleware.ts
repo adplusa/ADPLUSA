@@ -4,6 +4,21 @@ import redisClient from "../config/redis";
 const TTL = 3600; // 1 hour
 const PREFIX = "cache:";
 
+// Map of resource names to their corresponding Next.js cache tags
+const FRONTEND_TAGS_MAP: Record<string, string[]> = {
+    projects: ["projects", "featured-projects"],
+    services: ["services", "main-service-page"],
+    homepage: ["homepage"],
+    about: ["about"],
+    contact: ["contact"],
+    faq: ["faq"],
+    "general-settings": ["general-settings"],
+    "main-service-page": ["main-service-page", "services"],
+    "projects-page": ["projects-page", "projects"],
+    tags: ["projects", "services"],
+    media: ["projects", "services"],
+};
+
 /**
  * Map of resource paths to their related cache key patterns.
  * When a write hits /api/admin/projects, we clear all project-related cache.
@@ -46,6 +61,38 @@ async function invalidatePatterns(patterns: string[]): Promise<void> {
             }
         } catch (err) {
             console.error(`[Cache] Error invalidating pattern ${pattern}:`, err);
+        }
+    }
+}
+
+/**
+ * Trigger frontend revalidation for the given tags.
+ * This calls the Next.js revalidation endpoint on the main frontend.
+ */
+async function triggerFrontendRevalidation(tags: string[]): Promise<void> {
+    const frontendUrl = process.env.FRONTEND_URL || "https://adpl.vercel.app";
+    const revalidationSecret = process.env.REVALIDATION_SECRET;
+
+    if (!revalidationSecret) {
+        console.warn("[Frontend Revalidation] REVALIDATION_SECRET not set, skipping frontend revalidation");
+        return;
+    }
+
+    for (const tag of tags) {
+        try {
+            const response = await fetch(`${frontendUrl}/api/revalidate`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ tag }),
+            });
+
+            if (response.ok) {
+                console.log(`[Frontend Revalidation] ✅ Revalidated tag: ${tag}`);
+            } else {
+                console.error(`[Frontend Revalidation] ❌ Failed to revalidate tag ${tag}: ${response.status}`);
+            }
+        } catch (err) {
+            console.error(`[Frontend Revalidation] Error revalidating tag ${tag}:`, err);
         }
     }
 }
@@ -140,9 +187,18 @@ function handleWrite(req: Request, res: Response, next: NextFunction): void {
             if (resource && INVALIDATION_MAP[resource]) {
                 console.log(`[Cache] Invalidating cache for resource: ${resource}`);
                 console.log(`[Cache] Patterns to invalidate:`, INVALIDATION_MAP[resource]);
+                // Fire invalidation in background (don't await)
                 invalidatePatterns(INVALIDATION_MAP[resource]).catch((err) => {
                     console.error(`[Cache] Invalidation error:`, err);
                 });
+
+                // Trigger frontend revalidation
+                const frontendTags = FRONTEND_TAGS_MAP[resource] || [];
+                if (frontendTags.length > 0) {
+                    triggerFrontendRevalidation(frontendTags).catch((err) => {
+                        console.error(`[Frontend Revalidation] Error:`, err);
+                    });
+                }
             } else if (resource) {
                 // Fallback: if resource not in map, invalidate all cache for that resource
                 const fallbackPatterns = [`cache:/api/public/${resource}*`, `cache:/api/${resource}*`];
@@ -155,7 +211,7 @@ function handleWrite(req: Request, res: Response, next: NextFunction): void {
             }
         }
         return originalJson(body);
-    };
+    } as any;
 
     next();
 }

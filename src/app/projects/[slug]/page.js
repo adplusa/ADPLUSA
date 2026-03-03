@@ -1,44 +1,70 @@
-import { getProject, getProjects } from "@/lib/cms-client";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { getCMSApiUrl } from "@/lib/cms-client";
 import ProjectClient from "./ProjectClient";
 import Header from "@/app/Components/Header/page";
 import Footer from "@/app/Components/Footer/page";
 import Link from "next/link";
+import Loading from "@/app/Components/Loading/page";
 
-export async function generateMetadata({ params }) {
-    const { slug } = await params;
-    const project = await getProject(slug, { revalidate: 60 });
+export default function ProjectPage() {
+    const params = useParams();
+    const slug = params?.slug;
+    const [project, setProject] = useState(null);
+    const [otherProjects, setOtherProjects] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [notFound, setNotFound] = useState(false);
 
-    if (!project) {
-        return {
-            title: "Project Not Found | ADPL Consulting",
-            description: "The requested project could not be found.",
+    useEffect(() => {
+        if (!slug) return;
+
+        const fetchData = async () => {
+            try {
+                const cmsUrl = getCMSApiUrl();
+                const [projectRes, projectsRes] = await Promise.all([
+                    fetch(`${cmsUrl}/api/public/projects/${slug}`, {
+                        cache: "no-store",
+                    }),
+                    fetch(`${cmsUrl}/api/public/projects`, {
+                        cache: "no-store",
+                    }),
+                ]);
+
+                if (!projectRes.ok) {
+                    setNotFound(true);
+                    return;
+                }
+
+                const projectResult = await projectRes.json();
+                const projectsResult = await projectsRes.json();
+
+                if (projectResult.success) {
+                    setProject(projectResult.data);
+                }
+                if (projectsResult.success) {
+                    const others = projectsResult.data.filter(
+                        (p) => p.slug !== slug
+                    );
+                    setOtherProjects(others);
+                }
+            } catch (error) {
+                console.error("Error fetching project:", error);
+                setNotFound(true);
+            } finally {
+                setLoading(false);
+            }
         };
+
+        fetchData();
+    }, [slug]);
+
+    if (loading) {
+        return <Loading text="Loading" fullScreen={true} />;
     }
 
-    return {
-        title: project.seoTitle || `${project.title} | ADPL Consulting`,
-        description:
-            project.seoDescription ||
-            project.description ||
-            `View ${project.title} project at ADPL Consulting`,
-        openGraph: {
-            title: project.seoTitle || `${project.title} | ADPL Consulting`,
-            description: project.seoDescription || project.description,
-            images: project.mainImage?.url
-                ? [{ url: project.mainImage.url }]
-                : [],
-        },
-    };
-}
-
-export default async function ProjectPage({ params }) {
-    const { slug } = await params;
-    const [project, allProjects] = await Promise.all([
-        getProject(slug, { revalidate: 0 }),
-        getProjects({ revalidate: 0 }),
-    ]);
-
-    if (!project) {
+    if (notFound || !project) {
         return (
             <div className="internal-container">
                 <Header />
@@ -58,8 +84,6 @@ export default async function ProjectPage({ params }) {
             </div>
         );
     }
-
-    const otherProjects = allProjects?.filter((p) => p.slug !== slug) || [];
 
     return (
         <ProjectClient

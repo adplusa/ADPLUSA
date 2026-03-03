@@ -12,11 +12,11 @@
 
 # testing
 /coverage
-
+.aws-sam/*
 # next.js
 /.next/
 /out/
-
+cms/backend/samconfig.toml
 # production
 /build
 

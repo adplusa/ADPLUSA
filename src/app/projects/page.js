@@ -1,63 +1,53 @@
-import { getProjects, getProjectsPage } from "@/lib/cms-client";
+"use client";
+
+import { useEffect, useState } from "react";
+import { getCMSApiUrl } from "@/lib/cms-client";
 import ProjectsClient from "./ProjectsClient";
 import Loading from "../Components/Loading/page";
 
-/**
- * Default fallback values for SEO
- */
-const DEFAULT_TITLE = "Our Projects | ADPL Consulting";
-const DEFAULT_DESCRIPTION =
-    "Explore our portfolio of completed projects at ADPL Consulting";
+export default function ProjectsPage() {
+    const [projects, setProjects] = useState(null);
+    const [pageData, setPageData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-/**
- * Server-side metadata generation for SEO
- * Uses CMS-provided SEO values when available, falls back to defaults
- * Requirements: 2.1, 2.2, 2.3, 2.4, 8.2, 8.3
- */
-export async function generateMetadata() {
-    const pageData = await getProjectsPage({ revalidate: 60 });
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const cmsUrl = getCMSApiUrl();
+                const [projectsRes, pageRes] = await Promise.all([
+                    fetch(`${cmsUrl}/api/public/projects`, {
+                        cache: "no-store",
+                    }),
+                    fetch(`${cmsUrl}/api/public/projects-page`, {
+                        cache: "no-store",
+                    }),
+                ]);
 
-    // Use CMS values if available, otherwise use defaults
-    const title = pageData?.seoTitle || DEFAULT_TITLE;
-    const description = pageData?.seoDescription || DEFAULT_DESCRIPTION;
+                if (!projectsRes.ok || !pageRes.ok)
+                    throw new Error("Failed to fetch projects");
 
-    // Build metadata object
-    const metadata = {
-        title,
-        description,
-        openGraph: {
-            title,
-            description,
-        },
-        robots: {
-            index: true,
-            follow: true,
-        },
-    };
+                const projectsResult = await projectsRes.json();
+                const pageResult = await pageRes.json();
 
-    // Generate meta tags from structured metaTags array
-    if (pageData?.metaTags && pageData.metaTags.length > 0) {
-        metadata.other = pageData.metaTags.reduce((acc, tag) => {
-            if (tag.name && tag.content) {
-                acc[tag.name] = tag.content;
+                if (projectsResult.success) {
+                    setProjects(projectsResult.data);
+                }
+                if (pageResult.success) {
+                    setPageData(pageResult.data);
+                }
+            } catch (error) {
+                console.error("Error fetching projects:", error);
+            } finally {
+                setLoading(false);
             }
-            return acc;
-        }, {});
+        };
+
+        fetchData();
+    }, []);
+
+    if (loading) {
+        return <Loading text="Loading Projects" fullScreen={true} />;
     }
-
-    return metadata;
-}
-
-/**
- * Server Component - fetches data and passes to client
- * Requirements: 2.1, 8.2
- */
-export default async function ProjectsPage() {
-    // Fetch both projects and page configuration in parallel
-    const [projects, pageData] = await Promise.all([
-        getProjects({ revalidate: 0 }),
-        getProjectsPage({ revalidate: 0 }),
-    ]);
 
     if (!projects) {
         return <Loading text="Loading Projects" fullScreen={true} />;

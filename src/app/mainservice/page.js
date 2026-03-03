@@ -1,70 +1,83 @@
-import {
-    getServices,
-    getHomepage,
-    getMainServicePage,
-    getContact,
-} from "@/lib/cms-client";
+"use client";
+
+import { useEffect, useState } from "react";
+import { getCMSApiUrl } from "@/lib/cms-client";
 import MainServiceClient from "./MainServiceClient";
 import Loading from "../Components/Loading/page";
 
-/**
- * Server-side metadata generation for SEO
- * Fetches CMS data and uses SEO values with fallbacks
- * Requirements: 1.3, 1.4, 1.5
- */
-export async function generateMetadata() {
-    const mainServicePageData = await getMainServicePage({ revalidate: 0 });
+export default function MainServicePage() {
+    const [services, setServices] = useState(null);
+    const [homepageData, setHomepageData] = useState(null);
+    const [mainServicePageData, setMainServicePageData] = useState(null);
+    const [contactData, setContactData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    const title = mainServicePageData?.seoTitle || "Services | ADPL Consulting";
-    const description =
-        mainServicePageData?.seoDescription ||
-        "Explore our comprehensive range of services at ADPL Consulting";
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const cmsUrl = getCMSApiUrl();
+                const [servicesRes, homepageRes, mainServiceRes, contactRes] =
+                    await Promise.all([
+                        fetch(`${cmsUrl}/api/public/services`, {
+                            cache: "no-store",
+                        }),
+                        fetch(`${cmsUrl}/api/public/homepage`, {
+                            cache: "no-store",
+                        }),
+                        fetch(`${cmsUrl}/api/public/main-service-page`, {
+                            cache: "no-store",
+                        }),
+                        fetch(`${cmsUrl}/api/public/contact`, {
+                            cache: "no-store",
+                        }),
+                    ]);
 
-    // Generate meta tags from structured metaTags array
-    const otherMeta = {};
-    if (mainServicePageData?.metaTags?.length) {
-        mainServicePageData.metaTags.forEach((tag) => {
-            if (tag.name && tag.content) {
-                otherMeta[tag.name] = tag.content;
+                if (
+                    !servicesRes.ok ||
+                    !homepageRes.ok ||
+                    !mainServiceRes.ok ||
+                    !contactRes.ok
+                )
+                    throw new Error("Failed to fetch data");
+
+                const servicesResult = await servicesRes.json();
+                const homepageResult = await homepageRes.json();
+                const mainServiceResult = await mainServiceRes.json();
+                const contactResult = await contactRes.json();
+
+                if (servicesResult.success) {
+                    setServices(servicesResult.data);
+                }
+                if (homepageResult.success) {
+                    setHomepageData(homepageResult.data);
+                }
+                if (mainServiceResult.success) {
+                    setMainServicePageData(mainServiceResult.data);
+                }
+                if (contactResult.success) {
+                    setContactData(contactResult.data);
+                }
+            } catch (error) {
+                console.error("Error fetching services:", error);
+            } finally {
+                setLoading(false);
             }
-        });
+        };
+
+        fetchData();
+    }, []);
+
+    if (loading) {
+        return <Loading text="Loading Services" fullScreen={true} />;
     }
 
-    return {
-        title,
-        description,
-        openGraph: {
-            title,
-            description,
-        },
-        robots: {
-            index: true,
-            follow: true,
-        },
-        other: Object.keys(otherMeta).length > 0 ? otherMeta : undefined,
-    };
-}
-
-/**
- * Server Component - fetches data and passes to client
- * Requirements: 1.3, 1.4, 1.5, 3.1, 4.1, 6.1
- */
-export default async function MainServicePage() {
-    const [servicesData, homepageData, mainServicePageData, contactData] =
-        await Promise.all([
-            getServices({ revalidate: 0 }),
-            getHomepage({ revalidate: 0 }),
-            getMainServicePage({ revalidate: 0 }),
-            getContact({ revalidate: 0 }),
-        ]);
-
-    if (!servicesData) {
+    if (!services) {
         return <Loading text="Loading Services" fullScreen={true} />;
     }
 
     return (
         <MainServiceClient
-            services={servicesData}
+            services={services}
             homepageData={homepageData}
             mainServicePageData={mainServicePageData}
             contactData={contactData}

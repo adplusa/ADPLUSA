@@ -1,5 +1,5 @@
 export class PaginationHelper {
-  static parse(page: any = "1", limit: any = "10", maxLimit = 1000) {
+  static parse(page: any = "1", limit: any = "10", maxLimit = 100) {
     const pageNum = Math.max(1, parseInt(page, 10));
     const limitNum = Math.min(maxLimit, Math.max(1, parseInt(limit, 10)));
     const skip = (pageNum - 1) * limitNum;

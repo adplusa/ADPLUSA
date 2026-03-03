@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { Service } from "../database/schemas/service.schema";
 import { deleteMultipleImagesFromS3 } from "../utils/s3";
-import { CacheService } from "../services/cache.service";
 import { ResponseHandler } from "../utils/response";
 import { S3Utils } from "../utils/s3-helpers";
 
@@ -50,7 +49,6 @@ export const createService = async (req: Request, res: Response): Promise<void> 
 
       const service = new Service({ title, slug, description, content, bannerImage, servicesList: servicesList || [], keyActivities: keyActivities || [], features: features || [], image, order, seoTitle, seoDescription, customHeadTags });
       await service.save();
-      await CacheService.invalidateService(slug);
       ResponseHandler.success(res, service, "Service created successfully", 201);
   } catch (error: any) {
       if (error.name === "ValidationError") {
@@ -77,9 +75,6 @@ export const updateService = async (req: Request, res: Response): Promise<void> 
       const originalSlug = service.slug;
       Object.assign(service, { title, slug, description, content, bannerImage, servicesList, keyActivities, features, image, order, seoTitle, seoDescription, customHeadTags });
       await service.save();
-
-      await CacheService.invalidateService(service.slug);
-      if (originalSlug && originalSlug !== service.slug) await CacheService.invalidateService(originalSlug);
 
       ResponseHandler.success(res, service, "Service updated successfully");
   } catch (error: any) {
@@ -108,7 +103,6 @@ export const deleteService = async (req: Request, res: Response): Promise<void> 
         try { await deleteMultipleImagesFromS3(imageKeys as string[]); } catch (err) { console.error("S3 deletion error:", err); }
     }
 
-      await CacheService.invalidateService(service.slug);
       ResponseHandler.success(res, { deletedService: service._id, deletedImages: imageKeys.length }, "Service deleted successfully");
   } catch (error) {
       console.error("Error deleting service:", error);

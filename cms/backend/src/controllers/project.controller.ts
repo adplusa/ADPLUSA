@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { Project } from "../database/schemas/project.schema";
 import { deleteMultipleImagesFromS3 } from "../utils/s3";
-import { CacheService } from "../services/cache.service";
 import { ResponseHandler } from "../utils/response";
 import { PaginationHelper } from "../utils/pagination";
 import { S3Utils } from "../utils/s3-helpers";
@@ -61,7 +60,6 @@ export const createProject = async (req: Request, res: Response): Promise<void> 
 
       const project = new Project({ title, slug, description, introText, images: images || [], moreContent, projectDetails: projectDetails || [], category, featured: featured || false, link, seoTitle, seoDescription });
       await project.save();
-      await CacheService.invalidateProject(slug);
       ResponseHandler.success(res, project, "Project created successfully", 201);
   } catch (error: any) {
       if (error.name === "ValidationError") {
@@ -89,9 +87,6 @@ export const updateProject = async (req: Request, res: Response): Promise<void> 
       Object.assign(project, { title, slug, description, introText, images, moreContent, projectDetails, category, featured, link, seoTitle, seoDescription });
       await project.save();
 
-      await CacheService.invalidateProject(project.slug);
-      if (originalSlug && originalSlug !== project.slug) await CacheService.invalidateProject(originalSlug);
-
       ResponseHandler.success(res, project, "Project updated successfully");
   } catch (error: any) {
       if (error.name === "ValidationError") {
@@ -115,7 +110,6 @@ export const deleteProject = async (req: Request, res: Response): Promise<void> 
         try { await deleteMultipleImagesFromS3(imageKeys as string[]); } catch (err) { console.error("S3 deletion error:", err); }
     }
 
-      await CacheService.invalidateProject(project.slug);
       ResponseHandler.success(res, { deletedProject: project._id, deletedImages: imageKeys.length }, "Project deleted successfully");
   } catch (error) {
       console.error("Error deleting project:", error);

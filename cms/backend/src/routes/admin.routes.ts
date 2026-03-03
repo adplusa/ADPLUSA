@@ -32,7 +32,7 @@ import {
 import { getTags, createTag, updateTag, deleteTag } from "../controllers/tag.controller";
 import { getMedia, getMediaById, registerMedia, updateMedia, deleteMedia } from "../controllers/media.controller";
 import { updateGeneralSettings, getGeneralSettings } from "../controllers/generalSettings.controller";
-import { updateHomepage } from "../controllers/homepage.controller";
+import { updateHomepage, getHomepage } from "../controllers/homepage.controller";
 import { updateMainServicePage } from "../controllers/mainServicePage.controller";
 import { updateProjectsPage } from "../controllers/projectsPage.controller";
 
@@ -164,6 +164,13 @@ router.get("/contact", getContact);
  * @access  Protected (Admin)
  */
 router.put("/contact", updateContact);
+
+/**
+ * @route   GET /api/admin/homepage
+ * @desc    Get Homepage data
+ * @access  Protected (Admin)
+ */
+router.get("/homepage", getHomepage);
 
 /**
  * @route   PUT /api/admin/homepage
