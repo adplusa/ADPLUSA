@@ -38,7 +38,7 @@ function getTimeAgo(dateString: string) {
   const date = new Date(dateString);
   const now = new Date();
   const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-  
+
   let interval = seconds / 31536000;
   if (interval > 1) return Math.floor(interval) + " years ago";
   interval = seconds / 2592000;
@@ -122,7 +122,7 @@ export default function Dashboard() {
 
         // Sort by newest first and take top 5
         const sortedActivities = activities.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 5);
-        setRecentActivity(sortedActivities.map(a => ({...a, timestamp: getTimeAgo(a.timestamp)})));
+        setRecentActivity(sortedActivities.map(a => ({ ...a, timestamp: getTimeAgo(a.timestamp) })));
 
       } catch (error) {
         console.error('Failed to fetch dashboard stats:', error);
@@ -256,7 +256,7 @@ export default function Dashboard() {
                         {project.title}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        {project.description 
+                        {project.description
                           ? (project.description.length > 60 ? `${project.description.substring(0, 60)}...` : project.description)
                           : 'No description'}
                       </p>

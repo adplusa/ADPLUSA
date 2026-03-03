@@ -64,13 +64,13 @@ export default function GeneralSettingsForm() {
             setLoading(true);
             setError(null);
             const response = await getGeneralSettings();
-            if (response.data) {
-                setHeaderLogo(response.data.headerLogo || null);
-                setFooterLogo(response.data.footerLogo || null);
-                setFavicon(response.data.favicon || null);
-                setSiteName(response.data.siteName || "");
-                setSiteDescription(response.data.siteDescription || "");
-                setCustomHeadTags(response.data.customHeadTags || "");
+            if (response) {
+                setHeaderLogo(response.headerLogo || null);
+                setFooterLogo(response.footerLogo || null);
+                setFavicon(response.favicon || null);
+                setSiteName(response.siteName || "");
+                setSiteDescription(response.siteDescription || "");
+                setCustomHeadTags(response.customHeadTags || "");
             }
         } catch (err: unknown) {
             const apiError = err as ApiError;
@@ -118,38 +118,41 @@ export default function GeneralSettingsForm() {
         }
     };
 
-    const handleHeaderLogoUpload = useCallback((images: UploadedImage[]) => {
+    const handleHeaderLogoChange = useCallback((images: UploadedImage[]) => {
         if (images.length > 0) {
             const img = images[0];
             setHeaderLogo({
                 url: img.cdnUrl || img.cloudFrontUrl || img.url,
-                alt: "Header Logo",
+                alt: headerLogo?.alt || "Header Logo",
             });
-            setShowHeaderUploader(false);
+        } else {
+            setHeaderLogo(null);
         }
-    }, []);
+    }, [headerLogo]);
 
-    const handleFooterLogoUpload = useCallback((images: UploadedImage[]) => {
+    const handleFooterLogoChange = useCallback((images: UploadedImage[]) => {
         if (images.length > 0) {
             const img = images[0];
             setFooterLogo({
                 url: img.cdnUrl || img.cloudFrontUrl || img.url,
-                alt: "Footer Logo",
+                alt: footerLogo?.alt || "Footer Logo",
             });
-            setShowFooterUploader(false);
+        } else {
+            setFooterLogo(null);
         }
-    }, []);
+    }, [footerLogo]);
 
-    const handleFaviconUpload = useCallback((images: UploadedImage[]) => {
+    const handleFaviconChange = useCallback((images: UploadedImage[]) => {
         if (images.length > 0) {
             const img = images[0];
             setFavicon({
                 url: img.cdnUrl || img.cloudFrontUrl || img.url,
-                alt: "Favicon",
+                alt: favicon?.alt || "Favicon",
             });
-            setShowFaviconUploader(false);
+        } else {
+            setFavicon(null);
         }
-    }, []);
+    }, [favicon]);
 
     if (loading) {
         return (
@@ -222,7 +225,7 @@ export default function GeneralSettingsForm() {
                                 <CardTitle>Header Logo</CardTitle>
                             </div>
                             <CardDescription>
-                                The logo displayed in the site header/navigation
+                                The logo displayed in the site header/navigation (recommended: PNG, SVG, or WEBP; 200-500px width)
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
@@ -248,7 +251,7 @@ export default function GeneralSettingsForm() {
                                                 }
                                             >
                                                 <Upload className="mr-2 h-4 w-4" />
-                                                Change Logo
+                                                Change Header Logo
                                             </Button>
                                             <Button
                                                 type="button"
@@ -302,9 +305,18 @@ export default function GeneralSettingsForm() {
                                         maxFiles={1}
                                         maxSizeInMB={5}
                                         folder="logos"
-                                        onUploadComplete={
-                                            handleHeaderLogoUpload
-                                        }
+                                        acceptedTypes={[
+                                            "image/jpeg",
+                                            "image/png",
+                                            "image/gif",
+                                            "image/webp",
+                                            "image/svg+xml",
+                                        ]}
+                                        initialImages={headerLogo ? [{
+                                            url: headerLogo.url,
+                                            status: "success"
+                                        }] : []}
+                                        onImagesChange={handleHeaderLogoChange}
                                     />
                                 </div>
                             )}
@@ -319,7 +331,7 @@ export default function GeneralSettingsForm() {
                                 <CardTitle>Footer Logo</CardTitle>
                             </div>
                             <CardDescription>
-                                The logo displayed in the site footer
+                                The logo displayed in the site footer (recommended: PNG, SVG, or WEBP)
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
@@ -345,7 +357,7 @@ export default function GeneralSettingsForm() {
                                                 }
                                             >
                                                 <Upload className="mr-2 h-4 w-4" />
-                                                Change Logo
+                                                Change Footer Logo
                                             </Button>
                                             <Button
                                                 type="button"
@@ -399,9 +411,18 @@ export default function GeneralSettingsForm() {
                                         maxFiles={1}
                                         maxSizeInMB={5}
                                         folder="logos"
-                                        onUploadComplete={
-                                            handleFooterLogoUpload
-                                        }
+                                        acceptedTypes={[
+                                            "image/jpeg",
+                                            "image/png",
+                                            "image/gif",
+                                            "image/webp",
+                                            "image/svg+xml",
+                                        ]}
+                                        initialImages={footerLogo ? [{
+                                            url: footerLogo.url,
+                                            status: "success"
+                                        }] : []}
+                                        onImagesChange={handleFooterLogoChange}
                                     />
                                 </div>
                             )}
@@ -502,7 +523,11 @@ export default function GeneralSettingsForm() {
                                             "image/ico",
                                             "image/jpeg",
                                         ]}
-                                        onUploadComplete={handleFaviconUpload}
+                                        initialImages={favicon ? [{
+                                            url: favicon.url,
+                                            status: "success"
+                                        }] : []}
+                                        onImagesChange={handleFaviconChange}
                                     />
                                 </div>
                             )}

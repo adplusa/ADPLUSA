@@ -252,35 +252,16 @@ export default function ServiceClient({
                 </div>
             </section>
 
-            {service.keyActivities?.length > 0 && (
+            {(service.keyActivities?.length > 0 || service.features?.length > 0) && (
                 <div className="key-container">
-                    <h1 className="key-heading">Key Activities and Outcomes</h1>
+                    <h1 className="key-heading">Key Features & Activities</h1>
                     <div className="key-cards-container">
-                        {service.keyActivities.map((item, i) => (
+                        {(service.keyActivities?.length > 0 ? service.keyActivities : service.features).map((item, i) => (
                             <div className="key-card" key={i}>
                                 <div className="key-asterisk">*</div>
                                 <h3 className="key-card-title">{item.title}</h3>
                                 <p className="key-card-description">
                                     {item.description}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {service.features?.length > 0 && !service.keyActivities?.length && (
-                <div className="key-container">
-                    <h1 className="key-heading">Features</h1>
-                    <div className="key-cards-container">
-                        {service.features.map((feature, i) => (
-                            <div className="key-card" key={i}>
-                                <div className="key-asterisk">*</div>
-                                <h3 className="key-card-title">
-                                    {feature.title}
-                                </h3>
-                                <p className="key-card-description">
-                                    {feature.description}
                                 </p>
                             </div>
                         ))}

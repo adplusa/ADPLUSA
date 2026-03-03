@@ -151,10 +151,15 @@ export default function ProjectForm() {
         try {
             setLoading(true);
             setError(null);
-            const response = await getProjectBySlug(slug);
-            const rawData = response.data as any;
-            // Handle potential nested data structure or direct object
-            const projectData = rawData.data || rawData;
+
+            // getProjectBySlug uses ApiHelper which already unwraps response.data
+            // So `response` is the project object directly (or null)
+            const projectData = await getProjectBySlug(slug) as any;
+
+            if (!projectData) {
+                throw new Error("Project not found");
+            }
+
             reset({
                 ...projectData,
                 description: projectData.description || "",
@@ -200,7 +205,7 @@ export default function ProjectForm() {
                 // Sanitize Link
                 link:
                     data.link && data.link.trim() !== ""
-                        ? data.link.match(/^https?:\/\//)
+                        ? data.link.match(/^https?:\/\//) || data.link.startsWith("/")
                             ? data.link
                             : `https://${data.link}`
                         : "",
@@ -345,11 +350,10 @@ export default function ProjectForm() {
                                     id="title"
                                     type="text"
                                     {...register("title")}
-                                    className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${
-                                        errors.title
-                                            ? "border-red-300 bg-red-50"
-                                            : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors.title
+                                        ? "border-red-300 bg-red-50"
+                                        : "border-gray-300"
+                                        }`}
                                     placeholder="e.g., Modern Villa Design"
                                     aria-invalid={
                                         errors.title ? "true" : "false"
@@ -372,11 +376,10 @@ export default function ProjectForm() {
                                     id="slug"
                                     type="text"
                                     {...register("slug")}
-                                    className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors font-mono text-sm ${
-                                        errors.slug
-                                            ? "border-red-300 bg-red-50"
-                                            : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors font-mono text-sm ${errors.slug
+                                        ? "border-red-300 bg-red-50"
+                                        : "border-gray-300"
+                                        }`}
                                     placeholder="modern-villa-design"
                                     aria-invalid={
                                         errors.slug ? "true" : "false"
@@ -410,11 +413,10 @@ export default function ProjectForm() {
                                     id="link"
                                     type="text"
                                     {...register("link")}
-                                    className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${
-                                        errors.link
-                                            ? "border-red-300 bg-red-50"
-                                            : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors.link
+                                        ? "border-red-300 bg-red-50"
+                                        : "border-gray-300"
+                                        }`}
                                     placeholder="https://..."
                                     aria-invalid={
                                         errors.link ? "true" : "false"
@@ -437,7 +439,7 @@ export default function ProjectForm() {
                             >
                                 Featured Project
                                 <span className="block text-xs text-gray-500 font-normal">
-                                    Featured projects appear on the homepage
+                                    Featured projects appear in the 'Explore More Projects' carousel at the bottom of a project's detail page.
                                 </span>
                             </label>
                         </div>
@@ -625,22 +627,22 @@ export default function ProjectForm() {
                                                     width:
                                                         typeof img.width ===
                                                             "number" &&
-                                                        !isNaN(img.width)
+                                                            !isNaN(img.width)
                                                             ? img.width
                                                             : undefined,
                                                     height:
                                                         typeof img.height ===
                                                             "number" &&
-                                                        !isNaN(img.height)
+                                                            !isNaN(img.height)
                                                             ? img.height
                                                             : undefined,
                                                     type:
                                                         img.contentType?.startsWith(
                                                             "video/",
                                                         ) ||
-                                                        img.url.match(
-                                                            /\.(mp4|webm|mov)$/i,
-                                                        )
+                                                            img.url.match(
+                                                                /\.(mp4|webm|mov)$/i,
+                                                            )
                                                             ? ("video" as const)
                                                             : ("image" as const),
                                                 }),
@@ -698,11 +700,10 @@ export default function ProjectForm() {
                                         type="text"
                                         {...register("seoTitle")}
                                         maxLength={60}
-                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-                                            errors.seoTitle
-                                                ? "border-red-300 bg-red-50"
-                                                : "border-gray-300"
-                                        }`}
+                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.seoTitle
+                                            ? "border-red-300 bg-red-50"
+                                            : "border-gray-300"
+                                            }`}
                                         placeholder="SEO optimized title (50-60 characters)"
                                         aria-invalid={
                                             errors.seoTitle ? "true" : "false"
@@ -710,15 +711,14 @@ export default function ProjectForm() {
                                     />
                                     <div className="mt-1 h-1 bg-gray-200 rounded-full overflow-hidden">
                                         <div
-                                            className={`h-full transition-all ${
-                                                (watchSeoTitle?.length || 0) >
+                                            className={`h-full transition-all ${(watchSeoTitle?.length || 0) >
                                                 60
-                                                    ? "bg-red-500"
-                                                    : (watchSeoTitle?.length ||
-                                                            0) > 50
-                                                      ? "bg-green-500"
-                                                      : "bg-yellow-500"
-                                            }`}
+                                                ? "bg-red-500"
+                                                : (watchSeoTitle?.length ||
+                                                    0) > 50
+                                                    ? "bg-green-500"
+                                                    : "bg-yellow-500"
+                                                }`}
                                             style={{
                                                 width: `${Math.min(((watchSeoTitle?.length || 0) / 60) * 100, 100)}%`,
                                             }}
@@ -740,11 +740,10 @@ export default function ProjectForm() {
                                         {...register("seoDescription")}
                                         maxLength={160}
                                         rows={3}
-                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-                                            errors.seoDescription
-                                                ? "border-red-300 bg-red-50"
-                                                : "border-gray-300"
-                                        }`}
+                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.seoDescription
+                                            ? "border-red-300 bg-red-50"
+                                            : "border-gray-300"
+                                            }`}
                                         placeholder="SEO optimized description (150-160 characters)"
                                         aria-invalid={
                                             errors.seoDescription
@@ -754,15 +753,14 @@ export default function ProjectForm() {
                                     />
                                     <div className="mt-1 h-1 bg-gray-200 rounded-full overflow-hidden">
                                         <div
-                                            className={`h-full transition-all ${
-                                                (watchSeoDescription?.length ||
-                                                    0) > 160
-                                                    ? "bg-red-500"
-                                                    : (watchSeoDescription?.length ||
-                                                            0) > 150
-                                                      ? "bg-green-500"
-                                                      : "bg-yellow-500"
-                                            }`}
+                                            className={`h-full transition-all ${(watchSeoDescription?.length ||
+                                                0) > 160
+                                                ? "bg-red-500"
+                                                : (watchSeoDescription?.length ||
+                                                    0) > 150
+                                                    ? "bg-green-500"
+                                                    : "bg-yellow-500"
+                                                }`}
                                             style={{
                                                 width: `${Math.min(((watchSeoDescription?.length || 0) / 160) * 100, 100)}%`,
                                             }}

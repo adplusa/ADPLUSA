@@ -1,6 +1,9 @@
 import { ApiHelper } from "./api-helper";
 
+export const getProjectsPage = () => ApiHelper.get<any>("/admin/projects-page");
+export const updateProjectsPage = (data: any) => ApiHelper.put<any>("/admin/projects-page", data);
+
 export const projectsPageService = {
-    get: () => ApiHelper.get("/api/admin/projects-page"),
-    update: (data: any) => ApiHelper.put("/api/admin/projects-page", data),
+    get: getProjectsPage,
+    update: updateProjectsPage,
 };

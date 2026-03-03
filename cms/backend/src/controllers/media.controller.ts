@@ -53,14 +53,16 @@ export const getMedia = async (req: Request, res: Response) => {
             return docObj;
         });
 
-        const response: ApiResponse<typeof media> = {
+        const response = {
             success: true,
-            data: media,
-            pagination: {
-                page: pageNum,
-                limit: limitNum,
-                total,
-                pages: Math.ceil(total / limitNum),
+            data: {
+                data: media,
+                pagination: {
+                    page: pageNum,
+                    limit: limitNum,
+                    total,
+                    pages: Math.ceil(total / limitNum),
+                },
             },
         };
 
@@ -138,11 +140,15 @@ export const registerMedia = async (req: Request, res: Response) => {
             });
         }
 
+        const filename = s3Path.split("/").pop();
+
         // Create media record
         const media = new Media({
             title,
-            filename: s3Path.split("/").pop(),
+            filename,
+            originalName: filename, // Required by schema
             s3Path,
+            s3Url: getCdnUrl(s3Path), // Required by schema
             mimeType,
             size: size || 0,
             width,

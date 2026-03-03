@@ -1,11 +1,9 @@
-import axios from "axios";
-
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
+import { axiosApi } from "./axios";
 
 export class ApiHelper {
-  static async get<T>(endpoint: string): Promise<T | null> {
+  static async get<T>(endpoint: string, config?: any): Promise<T | null> {
     try {
-      const { data } = await axios.get(`${API_URL}${endpoint}`);
+      const { data } = await axiosApi.get<any>(endpoint, config);
       return data.success ? data.data : null;
     } catch (error) {
       console.error(`GET ${endpoint}:`, error);
@@ -15,7 +13,7 @@ export class ApiHelper {
 
   static async post<T>(endpoint: string, payload: any): Promise<T | null> {
     try {
-      const { data } = await axios.post(`${API_URL}${endpoint}`, payload);
+      const { data } = await axiosApi.post<any>(endpoint, payload);
       return data.success ? data.data : null;
     } catch (error) {
       console.error(`POST ${endpoint}:`, error);
@@ -25,7 +23,7 @@ export class ApiHelper {
 
   static async put<T>(endpoint: string, payload: any): Promise<T | null> {
     try {
-      const { data } = await axios.put(`${API_URL}${endpoint}`, payload);
+      const { data } = await axiosApi.put<any>(endpoint, payload);
       return data.success ? data.data : null;
     } catch (error) {
       console.error(`PUT ${endpoint}:`, error);
@@ -35,7 +33,7 @@ export class ApiHelper {
 
   static async delete<T>(endpoint: string): Promise<T | null> {
     try {
-      const { data } = await axios.delete(`${API_URL}${endpoint}`);
+      const { data } = await axiosApi.delete<any>(endpoint);
       return data.success ? data.data : null;
     } catch (error) {
       console.error(`DELETE ${endpoint}:`, error);

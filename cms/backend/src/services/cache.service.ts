@@ -80,11 +80,10 @@ export const CacheService = {
     async invalidateProjects(): Promise<void> {
         console.log("🔥 Invalidating Projects Cache (List + Page)");
         // Invalidate the main projects list
-        await this.del("cms:/projects");
-        await this.del("cms:/projects?featured=true");
+        await this.clearPattern("cache:/api/public/projects*");
 
         // Invalidate the projects page singleton
-        await this.del("cms:/projects-page");
+        await this.del("cache:/api/public/projects-page");
     },
 
     /**
@@ -95,7 +94,7 @@ export const CacheService = {
         console.log(`🔥 Invalidating Project Cache: ${slug}`);
         await this.invalidateProjects();
         if (slug) {
-            await this.del(`cms:/projects/${slug}`);
+            await this.del(`cache:/api/public/projects/${slug}`);
         }
     },
 
@@ -105,10 +104,10 @@ export const CacheService = {
     async invalidateServices(): Promise<void> {
         console.log("🔥 Invalidating Services Cache (List + Page)");
         // Invalidate the main services list
-        await this.del("cms:/services");
+        await this.clearPattern("cache:/api/public/services*");
 
         // Invalidate the main service page singleton
-        await this.del("cms:/main-service-page");
+        await this.del("cache:/api/public/main-service-page");
     },
 
     /**
@@ -119,7 +118,7 @@ export const CacheService = {
         console.log(`🔥 Invalidating Service Cache: ${slug}`);
         await this.invalidateServices();
         if (slug) {
-            await this.del(`cms:/services/${slug}`);
+            await this.del(`cache:/api/public/services/${slug}`);
         }
     },
 
@@ -128,7 +127,7 @@ export const CacheService = {
      */
     async invalidateHomepage(): Promise<void> {
         console.log("🔥 Invalidating Homepage Cache");
-        await this.del("cms:/homepage");
+        await this.clearPattern("cache:/api/public/homepage*");
     },
 
     /**
@@ -136,7 +135,7 @@ export const CacheService = {
      */
     async invalidateAbout(): Promise<void> {
         console.log("🔥 Invalidating About Page Cache");
-        await this.del("cms:/about");
+        await this.del("cache:/api/public/about");
     },
 
     /**
@@ -144,7 +143,7 @@ export const CacheService = {
      */
     async invalidateContact(): Promise<void> {
         console.log("🔥 Invalidating Contact Page Cache");
-        await this.del("cms:/contact");
+        await this.del("cache:/api/public/contact");
     },
 
     /**
@@ -152,7 +151,7 @@ export const CacheService = {
      */
     async invalidateFAQ(): Promise<void> {
         console.log("🔥 Invalidating FAQ Cache");
-        await this.del("cms:/faq");
+        await this.del("cache:/api/public/faq");
     },
 
     /**
@@ -160,6 +159,6 @@ export const CacheService = {
      */
     async invalidateGeneralSettings(): Promise<void> {
         console.log("🔥 Invalidating General Settings Cache");
-        await this.del("cms:/general-settings");
+        await this.clearPattern("cache:/api/public/general-settings*");
     },
 };

@@ -32,12 +32,7 @@ export const handleContactSync = async (req: Request, res: Response) => {
         const contactDoc = await Contact.findOne().sort({ updatedAt: -1 });
         // 3. Trigger Action B: Send the email
         // Optimization: Send in background (Fire-and-Forget) to avoid 5-7s delay
-        console.log(`[Contact] Sending inquiry... payload data: ${userEmail}, content length: ${htmlContent?.length || 0}`);
-        sendInquiryEmail(userEmail, htmlContent).then((info) => {
-            console.log("[Contact] Email successfully relayed to SMTP. Message ID:", info.messageId);
-        }).catch((err) => {
-            console.error("[Contact] CRITICAL FAILURE sending email via SMTP.", err);
-        });
+        sendInquiryEmail(userEmail, htmlContent).catch(() => { });
 
         res.status(200).json({
             success: true,

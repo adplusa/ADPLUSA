@@ -57,10 +57,10 @@ export default function ProjectsPageForm() {
             setLoading(true);
             setError(null);
             const response = await getProjectsPage();
-            if (response.data) {
+            if (response) {
                 reset({
-                    ...response.data,
-                    metaTags: response.data.metaTags || [],
+                    ...response,
+                    metaTags: response.metaTags || [],
                 });
             }
         } catch (err: any) {

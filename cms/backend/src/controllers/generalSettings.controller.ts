@@ -45,7 +45,8 @@ export const updateGeneralSettings = async (req: Request, res: Response) => {
 
         const settings = await GeneralSettingsModel.findOneAndUpdate(
             {},
-            { upsert: true, new: true },
+            { $set: updateData },
+            { upsert: true, new: true, runValidators: true },
         );
 
         // Invalidate Cache

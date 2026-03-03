@@ -3,6 +3,28 @@ import { Homepage } from "../database/schemas/homepage.schema";
 import { CacheService } from "../services/cache.service";
 
 /**
+ * @route   GET /api/admin/homepage
+ * @desc    Get homepage data
+ * @access  Protected (Admin)
+ */
+export const getHomepage = async (
+    _req: Request,
+    res: Response,
+): Promise<void> => {
+    try {
+        const homepage = await Homepage.findOne().lean();
+        if (!homepage) {
+            res.status(404).json({ success: false, error: { code: "NOT_FOUND", message: "Homepage not found" } });
+            return;
+        }
+        res.status(200).json({ success: true, data: homepage });
+    } catch (error: any) {
+        console.error("Error fetching homepage:", error);
+        res.status(500).json({ success: false, error: { code: "SERVER_ERROR", message: "Failed to fetch homepage" } });
+    }
+};
+
+/**
  * @route   PUT /api/admin/homepage
  * @desc    Update homepage (singleton document)
  * @access  Protected (Admin)
@@ -12,9 +34,8 @@ export const updateHomepage = async (
     res: Response,
 ): Promise<void> => {
     try {
-        // Use findOneAndUpdate with upsert to ensure we always have one document
         const homepage = await Homepage.findOneAndUpdate(
-            {}, // Empty filter because it's a singleton
+            {},
             { $set: req.body },
             {
                 new: true,
@@ -24,7 +45,6 @@ export const updateHomepage = async (
             },
         ).lean();
 
-        // Invalidate Cache
         await CacheService.invalidateHomepage();
 
         res.status(200).json({
@@ -35,7 +55,6 @@ export const updateHomepage = async (
     } catch (error: any) {
         console.error("Error updating homepage:", error);
 
-        // Handle validation errors
         if (error.name === "ValidationError") {
             const validationErrors: any = {};
             Object.keys(error.errors).forEach((key) => {

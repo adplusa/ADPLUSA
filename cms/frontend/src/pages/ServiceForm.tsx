@@ -33,6 +33,7 @@ const serviceImageSchema = z.object({
 });
 
 const serviceItemSchema = z.object({
+    _id: z.string().optional(),
     title: z.string().optional(),
     description: z.string().optional(),
     image: serviceImageSchema.optional(),
@@ -42,14 +43,16 @@ const serviceItemSchema = z.object({
 });
 
 const keyActivitySchema = z.object({
+    _id: z.string().optional(),
     title: z.string().optional(),
     description: z.string().optional(),
     order: z.number().optional(),
 });
 
 const serviceFeatureSchema = z.object({
+    _id: z.string().optional(),
     title: z.string().min(1, "Feature title is required"),
-    description: z.string().min(1, "Feature description is required"),
+    description: z.string().min(1, "Feature description is required").optional().or(z.literal("")),
 });
 
 const serviceSchema = z
@@ -130,14 +133,7 @@ export default function ServiceForm() {
         name: "keyActivities",
     });
 
-    const {
-        fields: featuresFields,
-        append: appendFeature,
-        remove: removeFeature,
-    } = useFieldArray({
-        control,
-        name: "features",
-    });
+
 
     // Watch title for auto-slug generation
     const watchTitle = watch("title");
@@ -155,9 +151,26 @@ export default function ServiceForm() {
             setLoading(true);
             setError(null);
             const response = await getServiceBySlug(id!);
-            const service = response.data;
+            const service = response;
+            if (!service) throw new Error("Service not found");
+
+            const mappedFeatures = (service.features || []).map((f: any) =>
+                typeof f === "string" ? { title: f, description: "" } : { ...f, description: f.description || "" }
+            );
+
+            const mappedActivities = (service.keyActivities || []).map((a: any) =>
+                typeof a === "string" ? { title: a, description: "" } : a
+            );
+
+            const mappedServicesList = (service.servicesList || []).map((s: any) =>
+                typeof s === "string" ? { title: s, description: "" } : s
+            );
+
             reset({
                 ...service,
+                features: mappedFeatures,
+                keyActivities: mappedActivities,
+                servicesList: mappedServicesList,
                 metaTags: (service as any).metaTags || [],
             } as any);
         } catch (err: any) {
@@ -192,7 +205,7 @@ export default function ServiceForm() {
             } catch (err: any) {
                 setError(
                     err.response?.data?.error?.message ||
-                        "Failed to save service",
+                    "Failed to save service",
                 );
                 throw err;
             } finally {
@@ -220,15 +233,9 @@ export default function ServiceForm() {
         },
         {
             id: "activities",
-            label: "Key Activities",
+            label: "Key Features & Activities",
             icon: "⚡",
             count: keyActivitiesFields.length,
-        },
-        {
-            id: "features",
-            label: "Features",
-            icon: "✨",
-            count: featuresFields.length,
         },
         { id: "seo", label: "SEO", icon: "🔍" },
     ];
@@ -296,11 +303,10 @@ export default function ServiceForm() {
                                     id="title"
                                     type="text"
                                     {...register("title")}
-                                    className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${
-                                        errors.title
-                                            ? "border-red-300 bg-red-50"
-                                            : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors.title
+                                        ? "border-red-300 bg-red-50"
+                                        : "border-gray-300"
+                                        }`}
                                     placeholder="e.g., Drafting to CAD Services"
                                     aria-invalid={
                                         errors.title ? "true" : "false"
@@ -314,19 +320,17 @@ export default function ServiceForm() {
                                 label="Slug"
                                 required
                                 error={errors.slug?.message}
-                                helpText={`URL: /services/${
-                                    watch("slug") || "your-slug"
-                                }`}
+                                helpText={`URL: /services/${watch("slug") || "your-slug"
+                                    }`}
                             >
                                 <input
                                     id="slug"
                                     type="text"
                                     {...register("slug")}
-                                    className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors font-mono text-sm ${
-                                        errors.slug
-                                            ? "border-red-300 bg-red-50"
-                                            : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors font-mono text-sm ${errors.slug
+                                        ? "border-red-300 bg-red-50"
+                                        : "border-gray-300"
+                                        }`}
                                     placeholder="drafting-to-cad"
                                     aria-invalid={
                                         errors.slug ? "true" : "false"
@@ -360,11 +364,11 @@ export default function ServiceForm() {
                                         initialImages={
                                             value?.url
                                                 ? [
-                                                      {
-                                                          url: value.url,
-                                                          status: "success" as const,
-                                                      },
-                                                  ]
+                                                    {
+                                                        url: value.url,
+                                                        status: "success" as const,
+                                                    },
+                                                ]
                                                 : []
                                         }
                                         onUploadComplete={(images) => {
@@ -399,11 +403,11 @@ export default function ServiceForm() {
                                         initialImages={
                                             value?.url
                                                 ? [
-                                                      {
-                                                          url: value.url,
-                                                          status: "success" as const,
-                                                      },
-                                                  ]
+                                                    {
+                                                        url: value.url,
+                                                        status: "success" as const,
+                                                    },
+                                                ]
                                                 : []
                                         }
                                         onUploadComplete={(images) => {
@@ -507,9 +511,8 @@ export default function ServiceForm() {
                                                     removeService(index)
                                                 }
                                                 className="text-red-500 hover:text-red-700 text-sm font-medium"
-                                                aria-label={`Remove service item ${
-                                                    index + 1
-                                                }`}
+                                                aria-label={`Remove service item ${index + 1
+                                                    }`}
                                             >
                                                 Remove
                                             </button>
@@ -575,11 +578,11 @@ export default function ServiceForm() {
                                                         initialImages={
                                                             value?.url
                                                                 ? [
-                                                                      {
-                                                                          url: value.url,
-                                                                          status: "success" as const,
-                                                                      },
-                                                                  ]
+                                                                    {
+                                                                        url: value.url,
+                                                                        status: "success" as const,
+                                                                    },
+                                                                ]
                                                                 : []
                                                         }
                                                         onUploadComplete={(
@@ -663,9 +666,8 @@ export default function ServiceForm() {
                                                     removeActivity(index)
                                                 }
                                                 className="text-red-500 hover:text-red-700 text-sm"
-                                                aria-label={`Remove activity ${
-                                                    index + 1
-                                                }`}
+                                                aria-label={`Remove activity ${index + 1
+                                                    }`}
                                             >
                                                 ✕
                                             </button>
@@ -677,9 +679,8 @@ export default function ServiceForm() {
                                             )}
                                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-2"
                                             placeholder="Activity title"
-                                            aria-label={`Activity ${
-                                                index + 1
-                                            } title`}
+                                            aria-label={`Activity ${index + 1
+                                                } title`}
                                         />
                                         <textarea
                                             {...register(
@@ -688,9 +689,8 @@ export default function ServiceForm() {
                                             rows={2}
                                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                             placeholder="Activity description..."
-                                            aria-label={`Activity ${
-                                                index + 1
-                                            } description`}
+                                            aria-label={`Activity ${index + 1
+                                                } description`}
                                         />
                                     </div>
                                 ))}
@@ -699,119 +699,6 @@ export default function ServiceForm() {
                     </div>
                 )}
 
-                {/* Features Tab */}
-                {activeTab === "features" && (
-                    <div className="space-y-6">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <h3 className="text-lg font-medium text-gray-900">
-                                    Features / Why Work With Us
-                                </h3>
-                                <p className="text-sm text-gray-500">
-                                    Add features or reasons to work with you
-                                </p>
-                            </div>
-                            <button
-                                type="button"
-                                onClick={() =>
-                                    appendFeature({
-                                        title: "",
-                                        description: "",
-                                    })
-                                }
-                                className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
-                            >
-                                <span className="mr-2">+</span> Add Feature
-                            </button>
-                        </div>
-
-                        {featuresFields.length === 0 ? (
-                            <div className="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-                                <p className="text-gray-500">
-                                    No features yet. Click "Add Feature" to get
-                                    started.
-                                </p>
-                            </div>
-                        ) : (
-                            <div className="space-y-4">
-                                {featuresFields.map((field, index) => (
-                                    <div
-                                        key={field.id}
-                                        className="bg-gray-50 rounded-lg p-4 border border-gray-200"
-                                    >
-                                        <div className="flex items-center justify-between mb-3">
-                                            <span className="text-sm font-medium text-gray-700">
-                                                Feature #{index + 1}
-                                            </span>
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    removeFeature(index)
-                                                }
-                                                className="text-red-500 hover:text-red-700 text-sm"
-                                                aria-label={`Remove feature ${
-                                                    index + 1
-                                                }`}
-                                            >
-                                                ✕
-                                            </button>
-                                        </div>
-                                        <FormField
-                                            id={`features.${index}.title`}
-                                            label="Title"
-                                            required
-                                            error={
-                                                errors.features?.[index]?.title
-                                                    ?.message
-                                            }
-                                        >
-                                            <input
-                                                id={`features.${index}.title`}
-                                                type="text"
-                                                {...register(
-                                                    `features.${index}.title`,
-                                                )}
-                                                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-                                                    errors.features?.[index]
-                                                        ?.title
-                                                        ? "border-red-300 bg-red-50"
-                                                        : "border-gray-300"
-                                                }`}
-                                                placeholder="Feature title"
-                                            />
-                                        </FormField>
-                                        <div className="mt-2">
-                                            <FormField
-                                                id={`features.${index}.description`}
-                                                label="Description"
-                                                required
-                                                error={
-                                                    errors.features?.[index]
-                                                        ?.description?.message
-                                                }
-                                            >
-                                                <textarea
-                                                    id={`features.${index}.description`}
-                                                    {...register(
-                                                        `features.${index}.description`,
-                                                    )}
-                                                    rows={2}
-                                                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-                                                        errors.features?.[index]
-                                                            ?.description
-                                                            ? "border-red-300 bg-red-50"
-                                                            : "border-gray-300"
-                                                    }`}
-                                                    placeholder="Feature description..."
-                                                />
-                                            </FormField>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                )}
 
                 {/* SEO Tab */}
                 {activeTab === "seo" && (
@@ -857,30 +744,28 @@ export default function ServiceForm() {
                                         type="text"
                                         {...register("seoTitle")}
                                         maxLength={60}
-                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-                                            errors.seoTitle
-                                                ? "border-red-300 bg-red-50"
-                                                : "border-gray-300"
-                                        }`}
+                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.seoTitle
+                                            ? "border-red-300 bg-red-50"
+                                            : "border-gray-300"
+                                            }`}
                                         placeholder="SEO optimized title (50-60 characters)"
                                     />
                                     <div className="mt-1 h-1 bg-gray-200 rounded-full overflow-hidden">
                                         <div
-                                            className={`h-full transition-all ${
-                                                (watchSeoTitle?.length || 0) >
+                                            className={`h-full transition-all ${(watchSeoTitle?.length || 0) >
                                                 60
-                                                    ? "bg-red-500"
-                                                    : (watchSeoTitle?.length ||
-                                                            0) > 50
-                                                      ? "bg-green-500"
-                                                      : "bg-yellow-500"
-                                            }`}
+                                                ? "bg-red-500"
+                                                : (watchSeoTitle?.length ||
+                                                    0) > 50
+                                                    ? "bg-green-500"
+                                                    : "bg-yellow-500"
+                                                }`}
                                             style={{
                                                 width: `${Math.min(
                                                     ((watchSeoTitle?.length ||
                                                         0) /
                                                         60) *
-                                                        100,
+                                                    100,
                                                     100,
                                                 )}%`,
                                             }}
@@ -902,30 +787,28 @@ export default function ServiceForm() {
                                         {...register("seoDescription")}
                                         maxLength={160}
                                         rows={3}
-                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-                                            errors.seoDescription
-                                                ? "border-red-300 bg-red-50"
-                                                : "border-gray-300"
-                                        }`}
+                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.seoDescription
+                                            ? "border-red-300 bg-red-50"
+                                            : "border-gray-300"
+                                            }`}
                                         placeholder="SEO optimized description (150-160 characters)"
                                     />
                                     <div className="mt-1 h-1 bg-gray-200 rounded-full overflow-hidden">
                                         <div
-                                            className={`h-full transition-all ${
-                                                (watchSeoDescription?.length ||
-                                                    0) > 160
-                                                    ? "bg-red-500"
-                                                    : (watchSeoDescription?.length ||
-                                                            0) > 150
-                                                      ? "bg-green-500"
-                                                      : "bg-yellow-500"
-                                            }`}
+                                            className={`h-full transition-all ${(watchSeoDescription?.length ||
+                                                0) > 160
+                                                ? "bg-red-500"
+                                                : (watchSeoDescription?.length ||
+                                                    0) > 150
+                                                    ? "bg-green-500"
+                                                    : "bg-yellow-500"
+                                                }`}
                                             style={{
                                                 width: `${Math.min(
                                                     ((watchSeoDescription?.length ||
                                                         0) /
                                                         160) *
-                                                        100,
+                                                    100,
                                                     100,
                                                 )}%`,
                                             }}

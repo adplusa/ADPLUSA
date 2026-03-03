@@ -71,8 +71,14 @@ export function cacheMiddleware(req: Request, res: Response, next: NextFunction)
     }
 
     if (req.method === "GET") {
+        // Skip admin GET routes — admin data must always be fresh, never serve stale cache
+        if (req.path.startsWith("/api/admin")) {
+            next();
+            return;
+        }
         handleGet(req, res, next);
     } else if (["POST", "PUT", "DELETE"].includes(req.method)) {
+        // All writes (including admin writes) must trigger cache invalidation
         handleWrite(req, res, next);
     } else {
         next();

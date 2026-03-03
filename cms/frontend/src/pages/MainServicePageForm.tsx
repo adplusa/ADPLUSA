@@ -193,19 +193,19 @@ export default function MainServicePageForm() {
             setLoading(true);
             setError(null);
             const response = await getMainServicePage();
-            if (response.data) {
+            if (response) {
                 reset({
-                    ...response.data,
-                    bannerImage: response.data.bannerImage || {
+                    ...response,
+                    bannerImage: response.bannerImage || {
                         url: "",
                         alt: "",
                     },
-                    whyWorkWithUsImage: response.data.whyWorkWithUsImage || {
+                    whyWorkWithUsImage: response.whyWorkWithUsImage || {
                         url: "",
                         alt: "",
                     },
-                    whyWorkWithUsItems: response.data.whyWorkWithUsItems || [],
-                    metaTags: response.data.metaTags || [],
+                    whyWorkWithUsItems: response.whyWorkWithUsItems || [],
+                    metaTags: response.metaTags || [],
                 });
             }
         } catch (err: any) {
