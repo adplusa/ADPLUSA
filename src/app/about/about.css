@@ -334,7 +334,9 @@ div#practice-box {
     color: var(--foreground);
     position: relative;
     overflow: hidden;
-    transition: color 0.3s ease, border-color 0.3s ease;
+    transition:
+        color 0.3s ease,
+        border-color 0.3s ease;
 }
 
 .who-we-are-btn button:before {
@@ -784,32 +786,6 @@ button.next-button:active {
         margin-top: 4rem; /* Reduced from 63% */
         position: relative;
         z-index: 1;
-    }
-
-    div#people-box,
-    div#process-box,
-    div#place-box,
-    div#practice-box {
-        position: absolute;
-        max-width: 80%;
-        top: -20%; /* Adjust this based on desired overlap */
-        z-index: 2;
-    }
-
-    #place-box {
-        right: 0;
-    }
-
-    #process-box {
-        left: 0;
-    }
-
-    #practice-box {
-        right: 0;
-    }
-
-    #people-box {
-        left: 0;
     }
 
     /* Optional: make position relative on parent for context */

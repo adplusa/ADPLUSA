@@ -2837,3 +2837,160 @@ select#service {
         gap: unset !important;
     }
 }
+
+/* TABLET & MOBILE RESPONSIVE FIXES */
+@media screen and (max-width: 1024px) {
+    .feature-section-df {
+        flex-direction: column;
+        align-items: center;
+    }
+    .feature-box {
+        width: 95%;
+        margin-bottom: 20px;
+    }
+    .features-name p {
+        font-size: 22px;
+    }
+
+    .content-two {
+        flex-direction: column;
+        gap: 30px;
+        text-align: center;
+    }
+    .image-wrapper-home img {
+        margin-top: 0;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .contact-us-df {
+        flex-direction: column;
+    }
+    .contact-left,
+    .contact-right {
+        width: 100%;
+        flex: 1 1 100%;
+    }
+
+    .process-steps-df {
+        flex-direction: column;
+        gap: 40px;
+    }
+    .process-steps-box::before {
+        display: none;
+    }
+    .process-steps-box {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .content {
+        flex-direction: column;
+    }
+    .right img {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+        margin-top: 30px;
+    }
+    .card {
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .testimonial-slider {
+        flex-direction: column;
+        gap: 40px;
+    }
+    .testimonial-card {
+        transform: none !important;
+        width: 90%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    .testimonial-card::before {
+        transform: none !important;
+    }
+
+    .about-us-top {
+        flex-direction: column;
+    }
+    .about-us-top-left,
+    .about-us-top-right {
+        max-width: 100%;
+        flex: 0 0 100%;
+        text-align: center;
+    }
+    .about-us-top-left h1::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .about-us-img {
+        flex-direction: column;
+        align-items: center;
+    }
+    #pawel,
+    #vladimir {
+        position: static;
+        height: auto;
+        max-width: 300px;
+        margin-bottom: 20px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .hero-banner {
+        height: 350px;
+    }
+    .overlay {
+        height: 350px;
+    }
+
+    .features-name {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .service-related-item {
+        margin-bottom: 20px;
+    }
+
+    .card-title {
+        font-size: 18px;
+    }
+    .card-text-home {
+        font-size: 14px;
+    }
+
+    .activities-outcomes .heading h2 {
+        font-size: 2rem;
+    }
+    .activities-outcomes .heading p {
+        font-size: 1rem;
+    }
+
+    .contact-form {
+        grid-template-columns: 1fr;
+    }
+    .contact-btn {
+        justify-content: center;
+    }
+
+    .testimonial-container-two h2 {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .marquee-item h1 {
+        font-size: 1.5rem;
+    }
+
+    .about-us h2 {
+        font-size: 3rem !important;
+        position: static;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .about-us-video-text h1 {
+        font-size: 3rem !important;
+    }
+}
