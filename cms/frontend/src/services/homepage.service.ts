@@ -69,7 +69,7 @@ export interface Homepage {
     workingProcessSubHeading?: string;
     processSteps: ProcessStep[];
     // Text Slider/Marquee
-    sliderImage?: HomepageImage;
+
     sliderTexts: string[];
     // About Section
     aboutLightHeading?: string;
@@ -111,7 +111,7 @@ export interface UpdateHomepageData {
     workingProcessHeading?: string;
     workingProcessSubHeading?: string;
     processSteps?: ProcessStep[];
-    sliderImage?: HomepageImage;
+
     sliderTexts?: string[];
     aboutLightHeading?: string;
     aboutUsHeading?: string;

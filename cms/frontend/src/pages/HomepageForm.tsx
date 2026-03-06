@@ -92,7 +92,7 @@ const homepageSchema = z
         workingProcessSubHeading: z.string().optional(),
         processSteps: z.array(processStepSchema).default([]),
         // Marquee
-        sliderImage: imageSchema.optional(),
+
         sliderTextsObjects: z.array(sliderTextObjectSchema).default([]), // Helper for sliderTexts
         // About
         aboutLightHeading: z.string().optional(),
@@ -1039,26 +1039,6 @@ export default function HomepageForm() {
                 {/* Marquee Tab */}
                 {activeTab === "marquee" && (
                     <div className="space-y-6">
-                        <div>
-                            <Label className="block text-sm font-medium text-gray-700 mb-2">
-                                Marquee Image (Optional)
-                            </Label>
-                            <FormImagePreview
-                                url={watch("sliderImage.url")}
-                                onUpload={(url) =>
-                                    setValue("sliderImage.url", url, {
-                                        shouldDirty: true,
-                                    })
-                                }
-                                onRemove={() =>
-                                    setValue("sliderImage.url", "", {
-                                        shouldDirty: true,
-                                    })
-                                }
-                                folder="marquee"
-                            />
-                        </div>
-
                         <div className="flex justify-between items-center mt-6">
                             <h3 className="text-lg font-medium text-gray-900">
                                 Slider Texts
@@ -1480,11 +1460,10 @@ export default function HomepageForm() {
                                         id="seoTitle"
                                         type="text"
                                         {...register("seoTitle")}
-                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-                                            errors.seoTitle
+                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.seoTitle
                                                 ? "border-red-300 bg-red-50"
                                                 : "border-gray-300"
-                                        }`}
+                                            }`}
                                     />
                                 </FormField>
                                 <FormField
@@ -1496,11 +1475,10 @@ export default function HomepageForm() {
                                         id="seoDescription"
                                         {...register("seoDescription")}
                                         rows={3}
-                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-                                            errors.seoDescription
+                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.seoDescription
                                                 ? "border-red-300 bg-red-50"
                                                 : "border-gray-300"
-                                        }`}
+                                            }`}
                                         placeholder="SEO optimized description"
                                     />
                                 </FormField>

@@ -98,7 +98,7 @@ export interface IHomepage extends Document, BaseSchemaFields {
   processSteps: IProcessStep[];
 
   // Text Slider/Marquee
-  sliderImage?: IHomepageImage;
+
   sliderTexts: string[];
 
   // About Section
@@ -255,7 +255,7 @@ const homepageSchema = new Schema<IHomepage>(
     ],
 
     // Text Slider/Marquee
-    sliderImage: imageSubSchema,
+
     sliderTexts: [
       {
         type: String,

@@ -688,20 +688,6 @@ export default function HomeClient({ homepageData: initialData }) {
                                                 (text, idx) => (
                                                     <span key={idx}>
                                                         <h1>{text}</h1>
-                                                        {homepageData
-                                                            .sliderImage
-                                                            ?.url && (
-                                                                <Image
-                                                                    src={
-                                                                        homepageData
-                                                                            .sliderImage
-                                                                            .url
-                                                                    }
-                                                                    alt="Slider Icon"
-                                                                    width="30"
-                                                                    height="30"
-                                                                />
-                                                            )}
                                                     </span>
                                                 ),
                                             )}
@@ -713,20 +699,6 @@ export default function HomeClient({ homepageData: initialData }) {
                                                 (text, idx) => (
                                                     <span key={`dup-${idx}`}>
                                                         <h1>{text}</h1>
-                                                        {homepageData
-                                                            .sliderImage
-                                                            ?.url && (
-                                                                <Image
-                                                                    src={
-                                                                        homepageData
-                                                                            .sliderImage
-                                                                            .url
-                                                                    }
-                                                                    alt="Slider Icon"
-                                                                    width="30"
-                                                                    height="30"
-                                                                />
-                                                            )}
                                                     </span>
                                                 ),
                                             )}
