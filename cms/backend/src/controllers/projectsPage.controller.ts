@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { ProjectsPage } from "../database/schemas/projectsPage.schema";
-import { CacheService } from "../services/cache.service";
 
 /**
  * @route   GET /api/public/projects-page
@@ -66,10 +65,6 @@ export const updateProjectsPage = async (
                 setDefaultsOnInsert: true,
             },
         ).lean();
-
-        // Invalidate Cache
-        // This clears both the projects list AND the projects page singleton info
-        await CacheService.invalidateProjects();
 
         console.log("Projects page updated successfully");
 

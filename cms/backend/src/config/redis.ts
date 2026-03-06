@@ -6,6 +6,14 @@ let redisClient: Redis;
 if (process.env.REDIS_URL) {
     redisClient = new Redis(process.env.REDIS_URL, {
         maxRetriesPerRequest: null,
+        connectTimeout: 10000, // 10 second timeout
+        commandTimeout: 5000,  // 5 second command timeout
+        retryStrategy: (times) => {
+            const delay = Math.min(times * 50, 2000);
+            return delay;   
+        },
+        enableReadyCheck: false,
+        enableOfflineQueue: false,
     });
 } else {
     redisClient = new Redis({
@@ -14,6 +22,12 @@ if (process.env.REDIS_URL) {
         username: process.env.REDIS_USERNAME || undefined,
         password: process.env.REDIS_PASSWORD || undefined,
         maxRetriesPerRequest: null,
+        connectTimeout: 10000,
+        commandTimeout: 5000,
+        retryStrategy: (times) => {
+            const delay = Math.min(times * 50, 2000);
+            return delay;
+        },
         ...(process.env.REDIS_TLS === "true" && { tls: {} }),
     });
 }

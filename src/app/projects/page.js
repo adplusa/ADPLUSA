@@ -1,67 +1,147 @@
-import { getProjects, getProjectsPage } from "@/lib/cms-client";
+"use client";
+
+import { useEffect, useState, useCallback, useRef } from "react";
+import { getCMSApiUrl } from "@/lib/cms-client";
 import ProjectsClient from "./ProjectsClient";
 import Loading from "../Components/Loading/page";
 
-/**
- * Default fallback values for SEO
- */
-const DEFAULT_TITLE = "Our Projects | ADPL Consulting";
-const DEFAULT_DESCRIPTION =
-    "Explore our portfolio of completed projects at ADPL Consulting";
+export default function ProjectsPage() {
+    const [projects, setProjects] = useState([]);
+    const [pageData, setPageData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [hasNextPage, setHasNextPage] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const observerTarget = useRef(null);
 
-/**
- * Server-side metadata generation for SEO
- * Uses CMS-provided SEO values when available, falls back to defaults
- * Requirements: 2.1, 2.2, 2.3, 2.4, 8.2, 8.3
- */
-export async function generateMetadata() {
-    const pageData = await getProjectsPage({ revalidate: 60 });
+    const LIMIT = 20;
 
-    // Use CMS values if available, otherwise use defaults
-    const title = pageData?.seoTitle || DEFAULT_TITLE;
-    const description = pageData?.seoDescription || DEFAULT_DESCRIPTION;
+    const fetchProjects = useCallback(
+        async (page) => {
+            try {
+                const cmsUrl = getCMSApiUrl();
+                const response = await fetch(
+                    `${cmsUrl}/api/public/projects?page=${page}&limit=${LIMIT}&t=${Date.now()}`,
+                    {
+                        cache: "no-store",
+                        headers: {
+                            'Cache-Control': 'no-cache, no-store, must-revalidate',
+                            'Pragma': 'no-cache',
+                            'Expires': '0'
+                        }
+                    }
+                );
 
-    // Build metadata object
-    const metadata = {
-        title,
-        description,
-        openGraph: {
-            title,
-            description,
-        },
-        robots: {
-            index: true,
-            follow: true,
-        },
-    };
+                if (!response.ok) throw new Error("Failed to fetch projects");
 
-    // Generate meta tags from structured metaTags array
-    if (pageData?.metaTags && pageData.metaTags.length > 0) {
-        metadata.other = pageData.metaTags.reduce((acc, tag) => {
-            if (tag.name && tag.content) {
-                acc[tag.name] = tag.content;
+                const result = await response.json();
+                if (result.success) {
+                    if (page === 1) {
+                        setProjects(result.data);
+                    } else {
+                        setProjects((prev) => [...prev, ...result.data]);
+                    }
+                    setHasNextPage(result.pagination?.hasNextPage || false);
+                }
+            } catch (error) {
+                console.error("Error fetching projects:", error);
             }
-            return acc;
-        }, {});
-    }
+        },
+        []
+    );
 
-    return metadata;
-}
+    useEffect(() => {
+        const fetchInitialData = async () => {
+            try {
+                const cmsUrl = getCMSApiUrl();
+                const [projectsRes, pageRes] = await Promise.all([
+                    fetch(
+                        `${cmsUrl}/api/public/projects?page=1&limit=${LIMIT}&t=${Date.now()}`,
+                        {
+                            cache: "no-store",
+                            headers: {
+                                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                                'Pragma': 'no-cache',
+                                'Expires': '0'
+                            }
+                        }
+                    ),
+                    fetch(`${cmsUrl}/api/public/projects-page?t=${Date.now()}`, {
+                        cache: "no-store",
+                        headers: {
+                            'Cache-Control': 'no-cache, no-store, must-revalidate',
+                            'Pragma': 'no-cache',
+                            'Expires': '0'
+                        }
+                    }),
+                ]);
 
-/**
- * Server Component - fetches data and passes to client
- * Requirements: 2.1, 8.2
- */
-export default async function ProjectsPage() {
-    // Fetch both projects and page configuration in parallel
-    const [projects, pageData] = await Promise.all([
-        getProjects({ revalidate: 0 }),
-        getProjectsPage({ revalidate: 0 }),
-    ]);
+                if (!projectsRes.ok || !pageRes.ok)
+                    throw new Error("Failed to fetch projects");
 
-    if (!projects) {
+                const projectsResult = await projectsRes.json();
+                const pageResult = await pageRes.json();
+
+                if (projectsResult.success) {
+                    setProjects(projectsResult.data);
+                    setHasNextPage(projectsResult.pagination?.hasNextPage || false);
+                }
+                if (pageResult.success) {
+                    setPageData(pageResult.data);
+                }
+            } catch (error) {
+                console.error("Error fetching projects:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchInitialData();
+    }, []);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (
+                    entries[0].isIntersecting &&
+                    hasNextPage &&
+                    !loadingMore &&
+                    !loading
+                ) {
+                    setLoadingMore(true);
+                    const nextPage = currentPage + 1;
+                    setCurrentPage(nextPage);
+                    fetchProjects(nextPage).finally(() => setLoadingMore(false));
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        if (observerTarget.current) {
+            observer.observe(observerTarget.current);
+        }
+
+        return () => {
+            if (observerTarget.current) {
+                observer.unobserve(observerTarget.current);
+            }
+        };
+    }, [hasNextPage, loadingMore, loading, currentPage, fetchProjects]);
+
+    if (loading) {
         return <Loading text="Loading Projects" fullScreen={true} />;
     }
 
-    return <ProjectsClient projects={projects} pageData={pageData} />;
+    if (projects.length === 0) {
+        return <Loading text="Loading Projects" fullScreen={true} />;
+    }
+
+    return (
+        <>
+            <ProjectsClient projects={projects} pageData={pageData} />
+            <div ref={observerTarget} style={{ height: "20px", margin: "20px 0" }}>
+                {loadingMore && <Loading text="Loading more projects" fullScreen={false} />}
+            </div>
+        </>
+    );
 }

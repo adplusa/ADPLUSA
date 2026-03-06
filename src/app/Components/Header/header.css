@@ -206,9 +206,19 @@
         padding: 0 10px;
     }
 
+    .flip-container {
+        width: auto;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     .flip-logo img {
-        width: 70px;
-        height: auto;
+        width: auto !important;
+        height: 40px !important;
+        position: static !important; /* override absolute */
+        object-fit: contain !important;
     }
 
     #ham,

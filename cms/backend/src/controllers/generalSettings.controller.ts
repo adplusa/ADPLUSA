@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import { GeneralSettingsSchema } from "../database/schemas/generalSettings.schema";
-import { CacheService } from "../services/cache.service";
 
 const GeneralSettingsModel = (mongoose.models.GeneralSettings ||
     mongoose.model(
@@ -48,9 +47,6 @@ export const updateGeneralSettings = async (req: Request, res: Response) => {
             { $set: updateData },
             { upsert: true, new: true, runValidators: true },
         );
-
-        // Invalidate Cache
-        await CacheService.invalidateGeneralSettings();
 
         // Map response to match frontend expected format
         const response = {

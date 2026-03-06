@@ -1,20 +1,23 @@
 import { ApiHelper } from "./api-helper";
 
 export interface Project {
-  _id?: string;
-  id?: string;
+  _id: string;
   title: string;
   slug: string;
+  description: string;
+  content?: string;
+  image?: string;
+  tags?: string[];
+  featured: boolean;
   category?: string;
-  featured?: boolean;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
   [key: string]: any;
 }
 
 export interface ProjectsResponse {
   data: Project[];
-  pagination: {
+  pagination?: {
     page: number;
     limit: number;
     total: number;
@@ -22,19 +25,19 @@ export interface ProjectsResponse {
   };
 }
 
-export const getProjects = (params?: any) => 
+export const getProjects = (params?: any) =>
   ApiHelper.get<ProjectsResponse>("/admin/projects", { params });
 
-export const getProjectBySlug = (slug: string) => 
+export const getProjectBySlug = (slug: string) =>
   ApiHelper.get<Project>(`/admin/projects/${slug}`);
 
-export const createProject = (data: any) => 
+export const createProject = (data: any) =>
   ApiHelper.post<Project>("/admin/projects", data);
 
-export const updateProject = (id: string, data: any) => 
+export const updateProject = (id: string, data: any) =>
   ApiHelper.put<Project>(`/admin/projects/${id}`, data);
 
-export const deleteProject = (id: string) => 
+export const deleteProject = (id: string) =>
   ApiHelper.delete(`/admin/projects/${id}`);
 
 export const projectService = {

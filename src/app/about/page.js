@@ -1,37 +1,39 @@
-import { getAbout } from "../../lib/cms-client";
+"use client";
+
+import { useEffect, useState } from "react";
+import { getCMSApiUrl } from "@/lib/cms-client";
 import AboutClient from "./AboutClient";
 import Loading from "../Components/Loading/page";
 
-/**
- * Server-side metadata generation for SEO
- * This runs on the server and provides proper SEO tags
- */
-export async function generateMetadata() {
-    const data = await getAbout({ revalidate: 0 });
+export default function AboutPage() {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    return {
-        title: data?.seoTitle || "About Us | ADPL Consulting",
-        description:
-            data?.seoDescription ||
-            "Learn about our mission and team at ADPL Consulting",
-        openGraph: {
-            title: data?.seoTitle || "About Us | ADPL Consulting",
-            description:
-                data?.seoDescription ||
-                "Learn about our mission and team at ADPL Consulting",
-        },
-        robots: {
-            index: true,
-            follow: true,
-        },
-    };
-}
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const cmsUrl = getCMSApiUrl();
+                const response = await fetch(`${cmsUrl}/api/public/about`, {
+                    cache: "no-store",
+                });
+                if (!response.ok) throw new Error("Failed to fetch about");
+                const result = await response.json();
+                if (result.success) {
+                    setData(result.data);
+                }
+            } catch (error) {
+                console.error("Error fetching about:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-/**
- * Server Component - fetches data and passes to client
- */
-export default async function AboutPage() {
-    const data = await getAbout({ revalidate: 0 });
+        fetchData();
+    }, []);
+
+    if (loading) {
+        return <Loading text="Loading" fullScreen={true} />;
+    }
 
     if (!data) {
         return <Loading text="Loading" fullScreen={true} />;

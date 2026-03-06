@@ -6,7 +6,6 @@ import {
     validateService,
     validateFAQ,
     validateAbout,
-    validateContact,
 } from "../middleware/validation.middleware";
 import {
     getProjects,
@@ -24,14 +23,16 @@ import {
 } from "../controllers/service.controller";
 import {
     getFAQ,
-    getAbout,
-    getContact,
     updateFAQ,
+    getAbout,
     updateAbout,
+    getContact,
     updateContact,
 } from "../controllers/content.controller";
-import { getGeneralSettings, updateGeneralSettings } from "../controllers/generalSettings.controller";
-import { getHomepage, updateHomepage } from "../controllers/homepage.controller";
+import { getTags, createTag, updateTag, deleteTag } from "../controllers/tag.controller";
+import { getMedia, getMediaById, registerMedia, updateMedia, deleteMedia } from "../controllers/media.controller";
+import { updateGeneralSettings, getGeneralSettings } from "../controllers/generalSettings.controller";
+import { updateHomepage, getHomepage } from "../controllers/homepage.controller";
 import { getMainServicePage, updateMainServicePage } from "../controllers/mainServicePage.controller";
 import { getProjectsPage, updateProjectsPage } from "../controllers/projectsPage.controller";
 
@@ -43,43 +44,252 @@ router.use(authenticateToken);
 /**
  * Project admin routes
  */
+
+/**
+ * @route   GET /api/admin/projects
+ * @desc    Get all projects with pagination
+ * @access  Protected (Admin)
+ */
 router.get("/projects", getProjects);
+
+/**
+ * @route   GET /api/admin/projects/:slug
+ * @desc    Get project by slug
+ * @access  Protected (Admin)
+ */
 router.get("/projects/:slug", getProjectBySlug);
+
+/**
+ * @route   POST /api/admin/projects
+ * @desc    Create new project
+ * @access  Protected (Admin)
+ */
 router.post("/projects", validateProject, createProject);
+
+/**
+ * @route   PUT /api/admin/projects/:id
+ * @desc    Update project
+ * @access  Protected (Admin)
+ */
 router.put("/projects/:id", validateProjectUpdate, updateProject);
+
+/**
+ * @route   DELETE /api/admin/projects/:id
+ * @desc    Delete project
+ * @access  Protected (Admin)
+ */
 router.delete("/projects/:id", deleteProject);
 
 /**
  * Service admin routes
  */
+
+/**
+ * @route   GET /api/admin/services
+ * @desc    Get all services
+ * @access  Protected (Admin)
+ */
 router.get("/services", getServices);
+
+/**
+ * @route   GET /api/admin/services/:slug
+ * @desc    Get service by slug
+ * @access  Protected (Admin)
+ */
 router.get("/services/:slug", getServiceBySlug);
+
+/**
+ * @route   POST /api/admin/services
+ * @desc    Create new service
+ * @access  Protected (Admin)
+ */
 router.post("/services", validateService, createService);
+
+/**
+ * @route   PUT /api/admin/services/:id
+ * @desc    Update service
+ * @access  Protected (Admin)
+ */
 router.put("/services/:id", validateService, updateService);
+
+/**
+ * @route   DELETE /api/admin/services/:id
+ * @desc    Delete service
+ * @access  Protected (Admin)
+ */
 router.delete("/services/:id", deleteService);
 
 /**
  * Content admin routes (singleton documents)
  */
+
+/**
+ * @route   GET /api/admin/faq
+ * @desc    Get FAQ data
+ * @access  Protected (Admin)
+ */
 router.get("/faq", getFAQ);
+
+/**
+ * @route   PUT /api/admin/faq
+ * @desc    Update FAQ data
+ * @access  Protected (Admin)
+ */
 router.put("/faq", validateFAQ, updateFAQ);
 
+/**
+ * @route   GET /api/admin/about
+ * @desc    Get About page data
+ * @access  Protected (Admin)
+ */
 router.get("/about", getAbout);
+
+/**
+ * @route   PUT /api/admin/about
+ * @desc    Update About page data
+ * @access  Protected (Admin)
+ */
 router.put("/about", validateAbout, updateAbout);
 
+/**
+ * @route   GET /api/admin/contact
+ * @desc    Get Contact page data
+ * @access  Protected (Admin)
+ */
 router.get("/contact", getContact);
+
+/**
+ * @route   PUT /api/admin/contact
+ * @desc    Update Contact page data
+ * @access  Protected (Admin)
+ */
 router.put("/contact", updateContact);
 
+/**
+ * @route   GET /api/admin/homepage
+ * @desc    Get Homepage data
+ * @access  Protected (Admin)
+ */
 router.get("/homepage", getHomepage);
+
+/**
+ * @route   PUT /api/admin/homepage
+ * @desc    Update Homepage data
+ * @access  Protected (Admin)
+ */
 router.put("/homepage", updateHomepage);
 
+/**
+ * @route   GET /api/admin/general-settings
+ * @desc    Get General Settings
+ * @access  Protected (Admin)
+ */
 router.get("/general-settings", getGeneralSettings);
+
+/**
+ * @route   PUT /api/admin/general-settings
+ * @desc    Update General Settings (singleton document)
+ * @access  Protected (Admin)
+ */
 router.put("/general-settings", updateGeneralSettings);
 
+/**
+ * @route   GET /api/admin/main-service-page
+ * @desc    Get Main Service Page data
+ * @access  Protected (Admin)
+ */
 router.get("/main-service-page", getMainServicePage);
+
+/**
+ * @route   PUT /api/admin/main-service-page
+ * @desc    Update Main Service Page data
+ * @access  Protected (Admin)
+ */
 router.put("/main-service-page", updateMainServicePage);
 
+/**
+ * @route   GET /api/admin/projects-page
+ * @desc    Get Projects Page data
+ * @access  Protected (Admin)
+ */
 router.get("/projects-page", getProjectsPage);
+
+/**
+ * @route   PUT /api/admin/projects-page
+ * @desc    Update Projects Page data
+ * @access  Protected (Admin)
+ */
 router.put("/projects-page", updateProjectsPage);
+
+/**
+ * Tags admin routes
+ */
+
+/**
+ * @route   GET /api/admin/tags
+ * @desc    Get all tags with pagination
+ * @access  Protected (Admin)
+ */
+router.get("/tags", getTags);
+
+/**
+ * @route   POST /api/admin/tags
+ * @desc    Create new tag
+ * @access  Protected (Admin)
+ */
+router.post("/tags", createTag);
+
+/**
+ * @route   PUT /api/admin/tags/:id
+ * @desc    Update tag
+ * @access  Protected (Admin)
+ */
+router.put("/tags/:id", updateTag);
+
+/**
+ * @route   DELETE /api/admin/tags/:id
+ * @desc    Delete tag
+ * @access  Protected (Admin)
+ */
+router.delete("/tags/:id", deleteTag);
+
+/**
+ * Media admin routes
+ */
+
+/**
+ * @route   GET /api/admin/media
+ * @desc    Get all media with pagination
+ * @access  Protected (Admin)
+ */
+router.get("/media", getMedia);
+
+/**
+ * @route   GET /api/admin/media/:id
+ * @desc    Get media by ID
+ * @access  Protected (Admin)
+ */
+router.get("/media/:id", getMediaById);
+
+/**
+ * @route   POST /api/admin/media
+ * @desc    Register media after presigned upload
+ * @access  Protected (Admin)
+ */
+router.post("/media", registerMedia);
+
+/**
+ * @route   PUT /api/admin/media/:id
+ * @desc    Update media
+ * @access  Protected (Admin)
+ */
+router.put("/media/:id", updateMedia);
+
+/**
+ * @route   DELETE /api/admin/media/:id
+ * @desc    Delete media
+ * @access  Protected (Admin)
+ */
+router.delete("/media/:id", deleteMedia);
 
 export default router;

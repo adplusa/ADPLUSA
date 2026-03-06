@@ -140,15 +140,14 @@ export const registerMedia = async (req: Request, res: Response) => {
             });
         }
 
-        const filename = s3Path.split("/").pop();
-
+        const filename = s3Path.split("/").pop() || s3Path;
         // Create media record
         const media = new Media({
             title,
             filename,
-            originalName: filename, // Required by schema
+            originalName: filename,
             s3Path,
-            s3Url: getCdnUrl(s3Path), // Required by schema
+            s3Url: getCdnUrl(s3Path),
             mimeType,
             size: size || 0,
             width,

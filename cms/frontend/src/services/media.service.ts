@@ -22,20 +22,41 @@ export interface MediaRegistration {
 export interface MediaFile {
   _id: string;
   title: string;
-  alt?: string;
+  filename: string;
+  s3Path: string;
   s3Url: string;
   mimeType: string;
   size: number;
-  tags: any[];
+  width?: number;
+  height?: number;
+  alt?: string;
+  description?: string;
+  tags: Array<{ _id: string; name: string; color: string }> | any[];
+  uploadedBy?: { _id: string; username: string };
   createdAt: string;
+  updatedAt: string;
 }
 
-export const getMedia = (params?: any) => ApiHelper.get<any>("/admin/media", { params });
+export interface MediaListResponse {
+  data: MediaFile[];
+  pagination?: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
+}
 
+export interface UpdateMediaData {
+  title: string;
+  alt?: string;
+  description?: string;
+  tags?: string[];
+}
+
+export const getMedia = (params?: any) => ApiHelper.get<MediaListResponse>("/admin/media", { params });
 export const getMediaById = (id: string) => ApiHelper.get<MediaFile>(`/admin/media/${id}`);
-
 export const updateMedia = (id: string, data: any) => ApiHelper.put<MediaFile>(`/admin/media/${id}`, data);
-
 export const deleteMedia = (id: string) => ApiHelper.delete(`/admin/media/${id}`);
 
 export const getPresignedUploadUrl = (fileName: string, contentType: string, folder: string = "uploads") =>
@@ -61,9 +82,10 @@ export const formatFileSize = (bytes: number): string => {
 
 export const getFileTypeIcon = (mimeType: string): string => {
   if (mimeType.startsWith("image/")) return "🖼️";
-  if (mimeType.startsWith("video/")) return "🎥";
-  if (mimeType === "application/pdf") return "📄";
-  return "📁";
+  if (mimeType.startsWith("video/")) return "🎬";
+  if (mimeType.includes("pdf")) return "📄";
+  if (mimeType.includes("word") || mimeType.includes("document")) return "📝";
+  return "📎";
 };
 
 export const mediaService = {

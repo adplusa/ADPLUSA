@@ -16,10 +16,10 @@ console.log(`[MailService] Configured with User: ${process.env.GMAIL_USER ? 'SET
  * @param userEmail - The email of the person filling out the form
  * @param htmlContent - The formatted message body
  */
-export const sendInquiryEmail = async (userEmail: string, htmlContent: string) => {
+export const sendInquiryEmail = async (userEmail: string, htmlContent: string, targetEmail: string) => {
     return await transporter.sendMail({
         from: process.env.GMAIL_USER,
-        to: process.env.GMAIL_USER, // Send directly to the main GMAIL_USER account
+        to: targetEmail,
         subject: `ADPL Site Inquiry from ${userEmail}`,
         html: htmlContent
     });

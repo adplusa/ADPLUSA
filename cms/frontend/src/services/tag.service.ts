@@ -1,20 +1,28 @@
 import { ApiHelper } from "./api-helper";
 
 export interface Tag {
-  _id?: string;
-  id?: string;
+  _id: string;
   name: string;
-  slug: string;
+  color: string;
+  createdAt: string;
+  updatedAt: string;
+  slug?: string;
 }
 
-export const getTags = () => ApiHelper.get<Tag[]>("/admin/tags");
+export interface TagsResponse {
+  data: Tag[];
+  pagination?: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
+}
 
+export const getTags = (params?: any) => ApiHelper.get<TagsResponse>("/admin/tags", { params });
 export const getTagById = (id: string) => ApiHelper.get<Tag>(`/admin/tags/${id}`);
-
 export const createTag = (data: any) => ApiHelper.post<Tag>("/admin/tags", data);
-
 export const updateTag = (id: string, data: any) => ApiHelper.put<Tag>(`/admin/tags/${id}`, data);
-
 export const deleteTag = (id: string) => ApiHelper.delete(`/admin/tags/${id}`);
 
 export const tagService = {

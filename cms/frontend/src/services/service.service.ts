@@ -1,17 +1,24 @@
 import { ApiHelper } from "./api-helper";
 
 export interface Service {
-  _id?: string;
-  id?: string;
+  _id: string;
   title: string;
   slug: string;
-  description?: string;
-  [key: string]: any;
+  description: string;
+  content: string;
+  image?: string | { url: string; alt?: string };
+  icon?: string;
+  order: number;
+  bannerImage?: { url: string; alt?: string };
+  metaTags?: Array<{ name: string; content: string }>;
+  customHeadTags?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ServicesResponse {
   data: Service[];
-  pagination: {
+  pagination?: {
     page: number;
     limit: number;
     total: number;

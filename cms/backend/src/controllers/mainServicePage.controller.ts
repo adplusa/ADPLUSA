@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { MainServicePage } from "../database/schemas/mainServicePage.schema";
-import { CacheService } from "../services/cache.service";
 
 /**
  * @route   GET /api/public/main-service-page
@@ -66,13 +65,6 @@ export const updateMainServicePage = async (
                 setDefaultsOnInsert: true,
             },
         ).lean();
-
-        // Invalidate Cache
-        // We use the direct key or a helper. CacheService.invalidateServices() clears this too.
-        // Let's use the explicit key for clarity if possible or just the service helper.
-        // Actually, let's use the helper we used in CacheService that targets this key.
-        // CacheService.invalidateServices() does clear 'cms:/main-service-page'.
-        await CacheService.invalidateServices();
 
         console.log("Main service page updated successfully");
 

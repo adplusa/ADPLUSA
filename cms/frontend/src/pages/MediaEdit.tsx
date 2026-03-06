@@ -46,7 +46,7 @@ export default function MediaEdit() {
       const response = await getMediaById(id!);
       const mediaFile = response.data;
       setMedia(mediaFile);
-      setSelectedTags(mediaFile.tags.map(tag => tag._id));
+      setSelectedTags(mediaFile.tags.map((tag: any) => tag._id));
       reset({
         title: mediaFile.title,
         alt: mediaFile.alt || '',

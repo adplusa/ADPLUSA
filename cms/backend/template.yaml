@@ -48,6 +48,15 @@ Parameters:
     Type: String
     NoEcho: true
     Default: ''
+  FrontendUrl:
+    Type: String
+    Default: 'https://adplusa.com'
+    Description: Main frontend URL for revalidation
+  RevalidationSecret:
+    Type: String
+    NoEcho: true
+    Default: ''
+    Description: Secret token for frontend revalidation
 
 Resources:
   ServerlessHttpApi:
@@ -88,6 +97,8 @@ Resources:
           CORS_ORIGIN: !Ref CorsOrigin
           GMAIL_USER: !Ref GmailUser
           GMAIL_APP_PASSWORD: !Ref GmailAppPassword
+          FRONTEND_URL: !Ref FrontendUrl
+          REVALIDATION_SECRET: !Ref RevalidationSecret
       Events:
         Api:
           Type: HttpApi

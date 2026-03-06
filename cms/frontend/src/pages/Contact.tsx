@@ -220,7 +220,7 @@ export default function Contact() {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-3">
-                  {contact.contactInfo.socialMedia.facebook && (
+                  {contact.contactInfo.socialMedia?.facebook && (
                     <a
                       href={contact.contactInfo.socialMedia.facebook}
                       target="_blank"
@@ -231,7 +231,7 @@ export default function Contact() {
                       <ExternalLink className="h-3 w-3" />
                     </a>
                   )}
-                  {contact.contactInfo.socialMedia.instagram && (
+                  {contact.contactInfo.socialMedia?.instagram && (
                     <a
                       href={contact.contactInfo.socialMedia.instagram}
                       target="_blank"
@@ -242,7 +242,7 @@ export default function Contact() {
                       <ExternalLink className="h-3 w-3" />
                     </a>
                   )}
-                  {contact.contactInfo.socialMedia.linkedin && (
+                  {contact.contactInfo.socialMedia?.linkedin && (
                     <a
                       href={contact.contactInfo.socialMedia.linkedin}
                       target="_blank"
@@ -253,7 +253,7 @@ export default function Contact() {
                       <ExternalLink className="h-3 w-3" />
                     </a>
                   )}
-                  {contact.contactInfo.socialMedia.twitter && (
+                  {contact.contactInfo.socialMedia?.twitter && (
                     <a
                       href={contact.contactInfo.socialMedia.twitter}
                       target="_blank"
@@ -264,7 +264,7 @@ export default function Contact() {
                       <ExternalLink className="h-3 w-3" />
                     </a>
                   )}
-                  {contact.contactInfo.socialMedia.youtube && (
+                  {contact.contactInfo.socialMedia?.youtube && (
                     <a
                       href={contact.contactInfo.socialMedia.youtube}
                       target="_blank"
@@ -339,7 +339,7 @@ export default function Contact() {
       )}
 
       <div className="mt-6 text-sm text-muted-foreground">
-        Last updated: {new Date(contact.updatedAt).toLocaleDateString()}
+        Last updated: {new Date(contact.updatedAt || "").toLocaleDateString()}
       </div>
     </div>
   );

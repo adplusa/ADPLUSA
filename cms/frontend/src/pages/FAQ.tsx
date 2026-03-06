@@ -138,7 +138,7 @@ export default function FAQ() {
             </div>
 
             <div className="space-y-3">
-              {category.faqs.map((faqItem, faqIndex) => {
+              {category.faqs.map((faqItem: any, faqIndex: number) => {
                 const key = `${categoryIndex}-${faqIndex}`;
                 const isExpanded = expandedItems.has(key);
                 return (
@@ -198,7 +198,7 @@ export default function FAQ() {
       )}
 
       <div className="mt-6 text-sm text-muted-foreground">
-        Last updated: {new Date(faq.updatedAt).toLocaleDateString()}
+        Last updated: {new Date(faq.updatedAt || "").toLocaleDateString()}
       </div>
     </div>
   );

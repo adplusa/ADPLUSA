@@ -6,12 +6,13 @@ node_modules/
 
 # Build output
 dist/
-
+.aws-sam/*
 # Logs
+.aws-sam/*
 logs/
 *.log
 npm-debug.log*
-
+samconfig.toml
 # Testing
 coverage/
 

@@ -46,7 +46,6 @@ export const updateHomepage = async (
         ).lean();
 
         await CacheService.invalidateHomepage();
-
         res.status(200).json({
             success: true,
             data: homepage,

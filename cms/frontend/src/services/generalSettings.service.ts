@@ -6,12 +6,17 @@ export interface SettingsImage {
 }
 
 export interface GeneralSettings {
-    siteName?: string;
-    siteDescription?: string;
+    _id?: string;
+    siteName: string;
+    siteDescription: string;
+    logo?: SettingsImage;
+    favicon?: SettingsImage;
     headerLogo?: SettingsImage | null;
     footerLogo?: SettingsImage | null;
-    favicon?: SettingsImage | null;
     customHeadTags?: string;
+    metaTags?: Array<{ name: string; content: string }>;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export const getGeneralSettings = () => ApiHelper.get<GeneralSettings>("/admin/general-settings");

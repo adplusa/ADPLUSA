@@ -63,24 +63,36 @@ export default function Page() {
         <p><strong>Query:</strong> ${message}</p>
       `;
 
-      await fetch('/api/contact', {
+      const apiUrl = process.env.NEXT_PUBLIC_CMS_API_URL || "https://szlvt92np8.execute-api.us-east-1.amazonaws.com";
+      const response = await fetch(`${apiUrl}/api/contact/sync`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          name,
+          email: emailId,
           emailId,
+          phone,
+          service,
+          message,
+          countryCode: "N/A",
           htmlContent,
-          countryCode: "N/A"
         }),
       });
+
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result?.error || result?.message || "Failed to send message.");
+      }
 
       formRef.current?.reset();
       setStatus({
         type: "ok",
-        msg: "Message sent! We'll get back to you shortly.",
+        msg: result.message || "Message sent! We'll get back to you shortly.",
       });
       setOpen(false);
     } catch (err) {
-      setStatus({ type: "err", msg: "Could not send. Please try again." });
+      console.error("Enquiry form error:", err);
+      setStatus({ type: "err", msg: err?.message || "Could not send. Please try again." });
     } finally {
       setSending(false);
     }

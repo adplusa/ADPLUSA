@@ -1,42 +1,47 @@
 import { axiosApi } from "./axios";
 
 export class ApiHelper {
-  static async get<T>(endpoint: string, config?: any): Promise<T | null> {
+  static async get<T = any>(endpoint: string, config?: any): Promise<T | null> {
     try {
       const { data } = await axiosApi.get<any>(endpoint, config);
-      return data.success ? data.data : null;
+      if (data.success) {
+        // If the inner data has pagination, return the whole data object
+        // so the frontend can access .data and .pagination
+        return data.data?.pagination ? data.data : data.data;
+      }
+      return null;
     } catch (error) {
-      console.error(`GET ${endpoint}:`, error);
+      console.error(`GET ${endpoint}: `, error);
       throw error;
     }
   }
 
-  static async post<T>(endpoint: string, payload: any): Promise<T | null> {
+  static async post<T = any>(endpoint: string, payload: any): Promise<T | null> {
     try {
       const { data } = await axiosApi.post<any>(endpoint, payload);
       return data.success ? data.data : null;
     } catch (error) {
-      console.error(`POST ${endpoint}:`, error);
+      console.error(`POST ${endpoint}: `, error);
       throw error;
     }
   }
 
-  static async put<T>(endpoint: string, payload: any): Promise<T | null> {
+  static async put<T = any>(endpoint: string, payload: any): Promise<T | null> {
     try {
       const { data } = await axiosApi.put<any>(endpoint, payload);
       return data.success ? data.data : null;
     } catch (error) {
-      console.error(`PUT ${endpoint}:`, error);
+      console.error(`PUT ${endpoint}: `, error);
       throw error;
     }
   }
 
-  static async delete<T>(endpoint: string): Promise<T | null> {
+  static async delete<T = any>(endpoint: string): Promise<T | null> {
     try {
       const { data } = await axiosApi.delete<any>(endpoint);
       return data.success ? data.data : null;
     } catch (error) {
-      console.error(`DELETE ${endpoint}:`, error);
+      console.error(`DELETE ${endpoint}: `, error);
       throw error;
     }
   }

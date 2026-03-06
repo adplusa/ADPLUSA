@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { Service } from "../database/schemas/service.schema";
 import { deleteMultipleImagesFromS3 } from "../utils/s3";
-import { CacheService } from "../services/cache.service";
 import { ResponseHandler } from "../utils/response";
 import { S3Utils } from "../utils/s3-helpers";
+import { CacheService } from "../services/cache.service";
 
 export const getServices = async (req: Request, res: Response): Promise<void> => {
   try {

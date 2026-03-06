@@ -76,19 +76,19 @@ export default function Dashboard() {
         ]);
 
         setStats({
-          projects: projectsRes.pagination?.total || projectsRes.data.length,
-          services: servicesRes.pagination?.total || servicesRes.data.length,
-          tags: tagsRes.pagination?.total || tagsRes.data.length,
-          media: mediaRes.pagination?.total || mediaRes.data.length,
+          projects: projectsRes?.pagination?.total || projectsRes?.data?.length || 0,
+          services: servicesRes?.pagination?.total || servicesRes?.data?.length || 0,
+          tags: tagsRes?.pagination?.total || tagsRes?.data?.length || 0,
+          media: mediaRes?.pagination?.total || mediaRes?.data?.length || 0,
           loading: false,
         });
 
-        setRecentProjects(projectsRes.data);
+        setRecentProjects(projectsRes?.data || []);
 
         // Build dynamic activity feed
         const activities: RecentActivity[] = [];
 
-        projectsRes.data.forEach((item: any) => activities.push({
+        projectsRes?.data?.forEach((item: any) => activities.push({
           id: item._id,
           type: 'project',
           title: item.title,
@@ -96,7 +96,7 @@ export default function Dashboard() {
           timestamp: item.createdAt
         }));
 
-        servicesRes.data.forEach((item: any) => activities.push({
+        servicesRes?.data?.forEach((item: any) => activities.push({
           id: item._id,
           type: 'service',
           title: item.title,
@@ -104,7 +104,7 @@ export default function Dashboard() {
           timestamp: item.createdAt
         }));
 
-        tagsRes.data.forEach((item: any) => activities.push({
+        tagsRes?.data?.forEach((item: any) => activities.push({
           id: item._id,
           type: 'tag',
           title: item.name,
@@ -112,7 +112,7 @@ export default function Dashboard() {
           timestamp: item.createdAt
         }));
 
-        mediaRes.data.forEach((item: any) => activities.push({
+        mediaRes?.data?.forEach((item: any) => activities.push({
           id: item._id,
           type: 'media',
           title: item.title || item.filename,
