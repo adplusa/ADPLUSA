@@ -56,7 +56,7 @@ export const getServiceBySlug = async (req: Request, res: Response): Promise<voi
 
 export const createService = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { title, slug, description, content, bannerImage, features, image, seoTitle, seoDescription, servicesList, keyActivities, order, customHeadTags } = req.body;
+    const { title, slug, description, content, bannerImage, displayImage, features, image, seoTitle, seoDescription, servicesList, keyActivities, order, customHeadTags } = req.body;
 
     if (!title || !slug) {
       ResponseHandler.validationError(res, { title: !title ? "Required" : "", slug: !slug ? "Required" : "" });
@@ -68,7 +68,22 @@ export const createService = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-    const service = new Service({ title, slug, description, content, bannerImage, servicesList: servicesList || [], keyActivities: keyActivities || [], features: features || [], image, order, seoTitle, seoDescription, customHeadTags });
+    const service = new Service({
+      title,
+      slug,
+      description,
+      content,
+      bannerImage,
+      displayImage,
+      servicesList: servicesList || [],
+      keyActivities: keyActivities || [],
+      features: features || [],
+      image,
+      order,
+      seoTitle,
+      seoDescription,
+      customHeadTags
+    });
     await service.save();
 
     ResponseHandler.success(res, service, "Service created successfully", 201);
@@ -87,15 +102,29 @@ export const updateService = async (req: Request, res: Response): Promise<void> 
     const service = await Service.findById(req.params.id);
     if (!service) { ResponseHandler.notFound(res, "Service not found"); return; }
 
-    const { title, slug, description, content, bannerImage, features, image, seoTitle, seoDescription, servicesList, keyActivities, order, customHeadTags } = req.body;
+    const { title, slug, description, content, bannerImage, displayImage, features, image, seoTitle, seoDescription, servicesList, keyActivities, order, customHeadTags } = req.body;
 
     if (slug && slug !== service.slug && await Service.findOne({ slug, _id: { $ne: req.params.id } })) {
       ResponseHandler.error(res, "DUPLICATE_SLUG", `Service with slug "${slug}" already exists`, 400);
       return;
     }
 
-    const originalSlug = service.slug;
-    Object.assign(service, { title, slug, description, content, bannerImage, servicesList, keyActivities, features, image, order, seoTitle, seoDescription, customHeadTags });
+    // Explicitly update fields to ensure Mongoose detects changes in nested objects
+    if (title !== undefined) service.title = title;
+    if (slug !== undefined) service.slug = slug;
+    if (description !== undefined) service.description = description;
+    if (content !== undefined) service.content = content;
+    if (bannerImage !== undefined) service.bannerImage = bannerImage;
+    if (displayImage !== undefined) service.displayImage = displayImage;
+    if (servicesList !== undefined) service.servicesList = servicesList;
+    if (keyActivities !== undefined) service.keyActivities = keyActivities;
+    if (features !== undefined) service.features = features;
+    if (image !== undefined) service.image = image;
+    if (order !== undefined) service.order = order;
+    if (seoTitle !== undefined) service.seoTitle = seoTitle;
+    if (seoDescription !== undefined) service.seoDescription = seoDescription;
+    if (customHeadTags !== undefined) service.customHeadTags = customHeadTags;
+
     await service.save();
 
 

@@ -60,7 +60,7 @@ export default function MainServicePage() {
                     await Promise.all([
                         fetch(
                             `${cmsUrl}/api/public/services?page=1&limit=${LIMIT}&t=${Date.now()}`,
-                            { 
+                            {
                                 cache: "no-store",
                                 headers: {
                                     'Cache-Control': 'no-cache, no-store, must-revalidate',

@@ -103,24 +103,7 @@ export function createServiceImageMap(serviceBoxes) {
 export function getServiceGridImage(service, imageMap) {
     if (!service) return null;
 
-    // Try to find a matching homepage image
-    if (imageMap && Object.keys(imageMap).length > 0) {
-        // Try matching by slug first
-        if (service.slug && imageMap[service.slug.toLowerCase()]) {
-            return imageMap[service.slug.toLowerCase()];
-        }
-
-        // Try matching by normalized title
-        if (service.title) {
-            const normalizedTitle = normalizeTitle(service.title);
-            if (imageMap[normalizedTitle]) {
-                return imageMap[normalizedTitle];
-            }
-        }
-    }
-
-    // Fallback to service's own images (displayImage > bannerImage > image)
-    // These are the original images still needed for /services/[slug] pages
+    // Priority 1: Service's own display image (Source of Truth if set in CMS)
     if (service.displayImage?.url) {
         return {
             url: service.displayImage.url,
@@ -128,6 +111,26 @@ export function getServiceGridImage(service, imageMap) {
         };
     }
 
+    // Priority 2: Try to find a matching homepage image
+    if (imageMap && Object.keys(imageMap).length > 0) {
+        // Find by ID match (most robust)
+        if (service._id && imageMap[service._id]) {
+            return imageMap[service._id];
+        }
+
+        // Find by slug match
+        if (service.slug && imageMap[service.slug]) {
+            return imageMap[service.slug];
+        }
+
+        // Find by normalized title match
+        const normalizedTitle = service.title?.toLowerCase().trim();
+        if (normalizedTitle && imageMap[normalizedTitle]) {
+            return imageMap[normalizedTitle];
+        }
+    }
+
+    // Fallback 1: Service's banner image
     if (service.bannerImage?.url) {
         return {
             url: service.bannerImage.url,
@@ -135,6 +138,7 @@ export function getServiceGridImage(service, imageMap) {
         };
     }
 
+    // Fallback 2: Service's legacy image
     if (service.image?.url) {
         return {
             url: service.image.url,

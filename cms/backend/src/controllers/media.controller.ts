@@ -158,22 +158,50 @@ export const registerMedia = async (req: Request, res: Response) => {
             uploadedBy: userId,
         });
 
+        console.log("Saving media with userId:", userId);
         await media.save();
-        await media.populate("tags", "name color");
-        await media.populate("uploadedBy", "username");
+        console.log("Media saved successfully, id:", media._id);
 
-        const mediaObj = media.toObject();
-        mediaObj.s3Url = getCdnUrl(mediaObj.s3Path);
+        // Fetch populated version to return
+        // We use findById instead of populate on the instance for maximum reliability
+        const populatedMedia = await Media.findById(media._id)
+            .populate("tags", "name color")
+            .populate("uploadedBy", "username")
+            .lean();
+
+        if (!populatedMedia) {
+            console.error("Failed to refetch media after save:", media._id);
+            throw new Error("Media saved but could not be retrieved from database for verification");
+        }
+
+        // Ensure CDN URL is correct in the object
+        populatedMedia.s3Url = getCdnUrl(populatedMedia.s3Path);
 
         res.status(201).json({
             success: true,
-            data: mediaObj,
+            data: populatedMedia,
         });
-    } catch (error) {
-        console.error("Error registering media:", error);
+    } catch (error: any) {
+        console.error("Critical error in registerMedia:", error);
+
+        // Return descriptive error message so we can debug from user screenshot
+        let errorMessage = "Failed to register media in database";
+        if (error.name === "ValidationError") {
+            errorMessage = `Validation Error: ${Object.values(error.errors).map((e: any) => e.message).join(", ")}`;
+        } else if (error.name === "CastError") {
+            errorMessage = `Format Error: Invalid ID format for ${error.path}`;
+        } else if (error.code === 11000) {
+            errorMessage = "Duplicate Error: This file has already been registered";
+        } else if (error.message) {
+            errorMessage = error.message;
+        }
+
         res.status(500).json({
             success: false,
-            error: { message: "Failed to register media" },
+            error: {
+                message: errorMessage,
+                details: error.stack
+            },
         });
     }
 };

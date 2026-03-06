@@ -95,8 +95,20 @@ export const updateProject = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-    const originalSlug = project.slug;
-    Object.assign(project, { title, slug, description, introText, images, moreContent, projectDetails, category, featured, link, seoTitle, seoDescription });
+    // Explicitly update fields to ensure Mongoose detects changes in nested objects
+    if (title !== undefined) project.title = title;
+    if (slug !== undefined) project.slug = slug;
+    if (description !== undefined) project.description = description;
+    if (introText !== undefined) project.introText = introText;
+    if (images !== undefined) project.images = images;
+    if (moreContent !== undefined) project.moreContent = moreContent;
+    if (projectDetails !== undefined) project.projectDetails = projectDetails;
+    if (category !== undefined) project.category = category;
+    if (featured !== undefined) project.featured = featured;
+    if (link !== undefined) project.link = link;
+    if (seoTitle !== undefined) project.seoTitle = seoTitle;
+    if (seoDescription !== undefined) project.seoDescription = seoDescription;
+
     await project.save();
 
 

@@ -13,8 +13,13 @@ export default function HomePage() {
         const fetchData = async () => {
             try {
                 const cmsUrl = getCMSApiUrl();
-                const response = await fetch(`${cmsUrl}/api/public/homepage`, {
+                const response = await fetch(`${cmsUrl}/api/public/homepage?t=${Date.now()}`, {
                     cache: "no-store",
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
                 });
                 if (!response.ok) throw new Error("Failed to fetch homepage");
                 const result = await response.json();
