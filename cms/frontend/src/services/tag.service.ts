@@ -6,6 +6,7 @@ export interface Tag {
   color: string;
   createdAt: string;
   updatedAt: string;
+  description?: string;
   slug?: string;
 }
 

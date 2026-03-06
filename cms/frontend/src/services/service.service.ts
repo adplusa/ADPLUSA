@@ -9,7 +9,11 @@ export interface Service {
   image?: string | { url: string; alt?: string };
   icon?: string;
   order: number;
+  displayImage?: { url: string; alt?: string };
   bannerImage?: { url: string; alt?: string };
+  servicesList?: any[];
+  keyActivities?: any[];
+  features?: any[];
   metaTags?: Array<{ name: string; content: string }>;
   customHeadTags?: string;
   createdAt: string;

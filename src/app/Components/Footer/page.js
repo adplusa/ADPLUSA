@@ -128,7 +128,7 @@ const Footer = () => {
                 </span>
 
                 <span className="copy-designed">
-                    <p id="copyright">©️ 2025 and then Copyright Adplusa</p>
+                    <p id="copyright">©️ {new Date().getFullYear()} and then Copyright Adplusa</p>
                     <p>
                         Designed By
                         <Link id="quitegood" href="https://quitegood.co/">

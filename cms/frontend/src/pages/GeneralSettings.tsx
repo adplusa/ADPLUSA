@@ -100,7 +100,7 @@ export default function GeneralSettingsForm() {
             await updateGeneralSettings({
                 headerLogo: headerLogo, // Pass null explicitly if it is null
                 footerLogo: footerLogo,
-                favicon: favicon,
+                favicon: favicon || undefined,
                 siteName,
                 siteDescription,
                 customHeadTags,

@@ -126,10 +126,10 @@ export default function AboutForm() {
             setLoading(true);
             setError(null);
             const response = await getAbout();
-            if (response.data) {
+            if (response) {
                 reset({
-                    ...response.data,
-                    metaTags: (response.data as any).metaTags || [],
+                    ...response,
+                    metaTags: (response as any).metaTags || [],
                 } as any);
             }
         } catch (err: any) {
@@ -374,9 +374,8 @@ export default function AboutForm() {
                                                 )}
                                                 placeholder="Link label"
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                                                aria-label={`Anchor link ${
-                                                    index + 1
-                                                } label`}
+                                                aria-label={`Anchor link ${index + 1
+                                                    } label`}
                                             />
                                         </div>
                                         <div className="flex-1">
@@ -387,18 +386,16 @@ export default function AboutForm() {
                                                 )}
                                                 placeholder="Target ID (e.g., section-1)"
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                                                aria-label={`Anchor link ${
-                                                    index + 1
-                                                } target ID`}
+                                                aria-label={`Anchor link ${index + 1
+                                                    } target ID`}
                                             />
                                         </div>
                                         <button
                                             type="button"
                                             onClick={() => removeAnchor(index)}
                                             className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
-                                            aria-label={`Remove anchor link ${
-                                                index + 1
-                                            }`}
+                                            aria-label={`Remove anchor link ${index + 1
+                                                }`}
                                         >
                                             ✕
                                         </button>
@@ -464,9 +461,8 @@ export default function AboutForm() {
                                                     removeSection(index)
                                                 }
                                                 className="text-red-600 hover:text-red-800 text-sm font-medium"
-                                                aria-label={`Remove section ${
-                                                    index + 1
-                                                }`}
+                                                aria-label={`Remove section ${index + 1
+                                                    }`}
                                             >
                                                 Remove
                                             </button>
@@ -566,30 +562,28 @@ export default function AboutForm() {
                                         type="text"
                                         {...register("seoTitle")}
                                         maxLength={60}
-                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-                                            errors.seoTitle
+                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.seoTitle
                                                 ? "border-red-300 bg-red-50"
                                                 : "border-gray-300"
-                                        }`}
+                                            }`}
                                         placeholder="SEO optimized title (50-60 characters)"
                                     />
                                     <div className="mt-1 h-1 bg-gray-200 rounded-full overflow-hidden">
                                         <div
-                                            className={`h-full transition-all ${
-                                                (watchSeoTitle?.length || 0) >
-                                                60
+                                            className={`h-full transition-all ${(watchSeoTitle?.length || 0) >
+                                                    60
                                                     ? "bg-red-500"
                                                     : (watchSeoTitle?.length ||
-                                                            0) > 50
-                                                      ? "bg-green-500"
-                                                      : "bg-yellow-500"
-                                            }`}
+                                                        0) > 50
+                                                        ? "bg-green-500"
+                                                        : "bg-yellow-500"
+                                                }`}
                                             style={{
                                                 width: `${Math.min(
                                                     ((watchSeoTitle?.length ||
                                                         0) /
                                                         60) *
-                                                        100,
+                                                    100,
                                                     100,
                                                 )}%`,
                                             }}
@@ -611,30 +605,28 @@ export default function AboutForm() {
                                         {...register("seoDescription")}
                                         maxLength={160}
                                         rows={3}
-                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-                                            errors.seoDescription
+                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.seoDescription
                                                 ? "border-red-300 bg-red-50"
                                                 : "border-gray-300"
-                                        }`}
+                                            }`}
                                         placeholder="SEO optimized description (150-160 characters)"
                                     />
                                     <div className="mt-1 h-1 bg-gray-200 rounded-full overflow-hidden">
                                         <div
-                                            className={`h-full transition-all ${
-                                                (watchSeoDescription?.length ||
+                                            className={`h-full transition-all ${(watchSeoDescription?.length ||
                                                     0) > 160
                                                     ? "bg-red-500"
                                                     : (watchSeoDescription?.length ||
-                                                            0) > 150
-                                                      ? "bg-green-500"
-                                                      : "bg-yellow-500"
-                                            }`}
+                                                        0) > 150
+                                                        ? "bg-green-500"
+                                                        : "bg-yellow-500"
+                                                }`}
                                             style={{
                                                 width: `${Math.min(
                                                     ((watchSeoDescription?.length ||
                                                         0) /
                                                         160) *
-                                                        100,
+                                                    100,
                                                     100,
                                                 )}%`,
                                             }}

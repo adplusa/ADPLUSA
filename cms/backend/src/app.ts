@@ -23,7 +23,7 @@ app.use(cors({
   origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'Pragma', 'Expires'],
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -35,7 +35,7 @@ app.use(cacheMiddleware);
 // Health check endpoint
 app.get('/health', (_req: Request, res: Response) => {
   const dbStatus = dbConnection.getConnectionStatus();
-  
+
   res.status(dbStatus ? 200 : 503).json({
     success: dbStatus,
     message: dbStatus ? 'API is running' : 'API is running but database is disconnected',
