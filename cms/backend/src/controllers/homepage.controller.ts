@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Homepage } from "../database/schemas/homepage.schema";
-import { CacheService } from "../services/cache.service";
+
 
 /**
  * @route   GET /api/admin/homepage
@@ -45,7 +45,7 @@ export const updateHomepage = async (
             },
         ).lean();
 
-        await CacheService.invalidateHomepage();
+
         res.status(200).json({
             success: true,
             data: homepage,
