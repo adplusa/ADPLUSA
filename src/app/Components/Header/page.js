@@ -14,14 +14,9 @@ const Header = () => {
     const [isFixed, setIsFixed] = useState(false);
     const [navbarTop, setNavbarTop] = useState(0);
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(true);
 
-    const cancelHandler = () => {
-        setMenuOpen(false);
-    };
-
-    const hamHandler = () => {
-        setMenuOpen(true);
+    const toggleMobileMenu = () => {
+        setMobileMenuOpen(!isMobileMenuOpen);
     };
 
     // Fetch logo from CMS
@@ -116,13 +111,30 @@ const Header = () => {
 
             {/* Mobile Header */}
             <div className="header-df mobile">
+                <Link href="/">
+                    <div className="flip-logo">
+                        <span className="flip-container" suppressHydrationWarning>
+                            <Image
+                                id="flip-one"
+                                className="flip-front"
+                                src={logo}
+                                alt={logoAlt}
+                                width={0}
+
+                                height={0}
+                                unoptimized
+                                priority
+                            />
+                        </span>
+                    </div>
+                </Link>
+
                 <button
                     id="ham"
-                    onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
+                    onClick={toggleMobileMenu}
                 >
-                    {menuOpen ? (
+                    {!isMobileMenuOpen ? (
                         <svg
-                            onClick={cancelHandler}
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
                             height="24"
@@ -137,7 +149,6 @@ const Header = () => {
                         </svg>
                     ) : (
                         <svg
-                            onClick={hamHandler}
                             id="cancel"
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
@@ -177,24 +188,6 @@ const Header = () => {
                         </li>
                     </ul>
                 </div>
-
-                <Link href="/">
-                    <div className="flip-logo">
-                        <span className="flip-container" suppressHydrationWarning>
-                            <Image
-                                id="flip-one"
-                                className="flip-front"
-                                src={logo}
-                                alt={logoAlt}
-                                width={0}
-
-                                height={0}
-                                unoptimized
-                                priority
-                            />
-                        </span>
-                    </div>
-                </Link>
             </div>
         </div>
     );

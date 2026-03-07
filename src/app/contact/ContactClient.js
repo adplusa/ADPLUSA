@@ -44,11 +44,10 @@ export default function ContactClient({ data }) {
 
             <div className="contact-container">
                 <div className="contact-form-section">
-                    <ContactForm
+                <ContactForm
                         title={data?.mainHeading || "Get in touch"}
                         description={data?.contactDescription}
                         buttonText={data?.contactButtonText || "Send Message"}
-                        serviceOptions={serviceOptions}
                     />
                 </div>
 

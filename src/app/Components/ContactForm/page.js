@@ -9,6 +9,7 @@ export default function ContactForm({
     description,
     buttonText,
     serviceOptions = [],
+    showServices = false,
     onSuccess,
 }) {
     const formRef = useRef(null);
@@ -244,15 +245,17 @@ export default function ContactForm({
                     )}
                 </div>
 
-                <div className="form-fields">
-                    <label htmlFor="service">Services</label>
-                    <select name="service" id="service" defaultValue="">
-                        <option value="" disabled>Select Service</option>
-                        {services.map((opt, i) => (
-                            <option key={i} value={opt}>{opt}</option>
-                        ))}
-                    </select>
-                </div>
+                {showServices && (
+                    <div className="form-fields">
+                        <label htmlFor="service">Services</label>
+                        <select name="service" id="service" defaultValue="">
+                            <option value="" disabled>Select Service</option>
+                            {services.map((opt, i) => (
+                                <option key={i} value={opt}>{opt}</option>
+                            ))}
+                        </select>
+                    </div>
+                )}
 
                 <div className="form-fields message">
                     <label htmlFor="message">Message</label>

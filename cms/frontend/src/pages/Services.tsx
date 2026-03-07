@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { ColumnDef } from '@tanstack/react-table';
 import { createActionsColumn } from '../components/ui/data-table';
-import { Badge } from '../components/ui/badge';
 import { ServerPaginatedTable, type FetchParams, type PaginatedResponse } from '../components/ui/ServerPaginatedTable';
 import { getServices, deleteService } from '../services/service.service';
 import type { Service } from '../services/service.service';
@@ -139,18 +138,6 @@ export default function Services() {
         return description.length > 60
           ? `${description.substring(0, 60)}...`
           : description;
-      },
-    },
-    {
-      accessorKey: 'featured',
-      header: 'Featured',
-      cell: ({ row }) => {
-        const featured = row.getValue('featured') as boolean;
-        return (
-          <Badge variant={featured ? 'default' : 'outline'}>
-            {featured ? 'Yes' : 'No'}
-          </Badge>
-        );
       },
     },
     {

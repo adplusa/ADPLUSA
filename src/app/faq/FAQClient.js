@@ -60,7 +60,7 @@ export default function FAQClient({ faqData }) {
                                     return (
                                         <div
                                             key={faqIndex}
-                                            className="faq-item"
+                                            className={`faq-item${isOpen ? " open" : ""}`}
                                         >
                                             <div
                                                 className="faq-question-container"
@@ -100,14 +100,9 @@ export default function FAQClient({ faqData }) {
                                                             display: "flex",
                                                             alignItems: "start",
                                                             gap: "8px",
+                                                            padding: "16px 20px",
                                                         }}
                                                     >
-                                                        <span
-                                                            style={{
-                                                                padding:
-                                                                    "0 10px",
-                                                            }}
-                                                        ></span>
                                                         {faq.answer}
                                                     </p>
                                                 </div>

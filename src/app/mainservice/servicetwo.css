@@ -724,7 +724,7 @@
   .home_services_box_unique {
     display: grid !important;
     grid-template-columns: auto auto !important;
-    padding: 2% 0 !important;
+    padding: 2% 4% !important;
   }
 
   .service-box-home-unique h2 {
@@ -735,6 +735,7 @@
 
   .home_services_unique {
     margin-top: 18% !important;
+    padding: 0 3%;
   }
 
   .service-box-home-unique {

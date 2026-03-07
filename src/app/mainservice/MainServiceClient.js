@@ -287,21 +287,11 @@ export default function MainServiceClient({
                 <section className="main-service-contact-section">
                     <div className="main-service-contact-container">
                         <div className="main-service-contact-form-wrapper">
-                            <h2 className="main-service-contact-title">
-                                {mainServicePageData?.contactFormHeading ||
-                                    "Get in Touch"}
-                            </h2>
-                            {mainServicePageData?.contactFormSubheading && (
-                                <p className="main-service-contact-subtitle">
-                                    {mainServicePageData.contactFormSubheading}
-                                </p>
-                            )}
-                            <div className="main-service-contact-underline"></div>
-
                             <ContactForm
                                 title={mainServicePageData?.contactFormHeading || "Get in Touch"}
                                 description={mainServicePageData?.contactFormSubheading || ""}
                                 serviceOptions={services.filter(s => s.slug !== "main-services").map(s => s.title)}
+                                showServices={true}
                             />
                         </div>
 

@@ -262,7 +262,7 @@ export default function Dashboard() {
                       </p>
                     </div>
                     <Button variant="ghost" size="sm" asChild>
-                      <Link to={`/dashboard/projects/${project._id}/edit`}>
+                      <Link to={`/dashboard/projects/${project.slug}`}>
                         Edit
                       </Link>
                     </Button>

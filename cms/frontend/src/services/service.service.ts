@@ -9,6 +9,7 @@ export interface Service {
   image?: string | { url: string; alt?: string };
   icon?: string;
   order: number;
+  featured?: boolean;
   displayImage?: { url: string; alt?: string };
   bannerImage?: { url: string; alt?: string };
   servicesList?: any[];

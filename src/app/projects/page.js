@@ -21,7 +21,7 @@ export default function ProjectsPage() {
             try {
                 const cmsUrl = getCMSApiUrl();
                 const response = await fetch(
-                    `${cmsUrl}/api/public/projects?page=${page}&limit=${LIMIT}&t=${Date.now()}`,
+                    `${cmsUrl}/api/public/projects?page=${page}&limit=${LIMIT}&featured=true&t=${Date.now()}`,
                     {
                         cache: "no-store",
                         headers: {
@@ -56,7 +56,7 @@ export default function ProjectsPage() {
                 const cmsUrl = getCMSApiUrl();
                 const [projectsRes, pageRes] = await Promise.all([
                     fetch(
-                        `${cmsUrl}/api/public/projects?page=1&limit=${LIMIT}&t=${Date.now()}`,
+                        `${cmsUrl}/api/public/projects?page=1&limit=${LIMIT}&featured=true&t=${Date.now()}`,
                         {
                             cache: "no-store",
                             headers: {
