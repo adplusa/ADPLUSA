@@ -11,7 +11,7 @@ const DEFAULT_FOOTER_LOGO = "/footer-logo.png";
 const Footer = () => {
     const [footerLogo, setFooterLogo] = useState(DEFAULT_FOOTER_LOGO);
     const [logoAlt, setLogoAlt] = useState("ADPL Consulting Logo");
-
+    const [copyrightYear, setCopyrightYear] = useState(new Date().getFullYear());
     const [socialLinks, setSocialLinks] = useState([]);
 
     // Fetch logo and social links from CMS
@@ -28,6 +28,9 @@ const Footer = () => {
                     if (settings.footerLogo.alt) {
                         setLogoAlt(settings.footerLogo.alt);
                     }
+                }
+                if (settings?.copyrightYear) {
+                    setCopyrightYear(settings.copyrightYear);
                 }
 
                 if (contact?.socialLinks && contact.socialLinks.length > 0) {
@@ -128,7 +131,7 @@ const Footer = () => {
                 </span>
 
                 <span className="copy-designed">
-                    <p id="copyright">©️ {new Date().getFullYear()} and then Copyright Adplusa</p>
+                    <p id="copyright">{copyrightYear} ©️ ADPL Consulting LLC</p>
                     <p>
                         Designed By
                         <Link id="quitegood" href="https://quitegood.co/">

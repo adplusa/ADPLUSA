@@ -8,8 +8,7 @@
     --enquireNowButtonColor: #fbfbfb;
     --redWhiteColor: #8a0b10;
     --blueColor: blue;
-    /* --imageColor: brightness(0) saturate(100%) invert(16%) sepia(88%)
-    saturate(1642%) hue-rotate(343deg) brightness(90%) contrast(90%); */
+    --backgroundColor: #ffffff;
 }
 
 .dark-mode {
@@ -23,6 +22,7 @@
     --redWhiteColor: #ffffff;
     --imageColor: brightness(0) invert(1);
     --blueColor: rgb(235, 235, 235);
+    --backgroundColor: #000000;
 }
 
 @font-face {
@@ -131,6 +131,7 @@ a {
     0% {
         box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
     }
+
     80% {
         box-shadow: 0 0 0 14px rgba(37, 211, 102, 0);
     }
@@ -232,14 +233,19 @@ textarea.form-input {
     color: var(--enquireNowButtonColor);
     border: none;
     outline: none;
-    font-size: 16px; /* slightly smaller for better fit */
-    padding: 7px 15px; /* more padding to look premium */
-    transform: rotate(-90deg); /* clean vertical look */
-    transform-origin: right center; /* rotate around the right edge */
+    font-size: 16px;
+    /* slightly smaller for better fit */
+    padding: 7px 15px;
+    /* more padding to look premium */
+    transform: rotate(-90deg);
+    /* clean vertical look */
+    transform-origin: right center;
+    /* rotate around the right edge */
     position: fixed;
     right: 16.5px;
     top: 30%;
-    transform: translateY(-50%) rotate(-90deg); /* perfect centering */
+    transform: translateY(-50%) rotate(-90deg);
+    /* perfect centering */
     cursor: pointer;
     font-weight: bold;
     letter-spacing: 1px;
@@ -333,6 +339,7 @@ button.enquiry-tab {
     from {
         transform: translateX(100%);
     }
+
     to {
         transform: translateX(0);
     }
@@ -378,6 +385,7 @@ h1 {
 }
 
 @media (max-width: 768px) {
+
     h2,
     h1 {
         font-size: 1.2rem !important;
@@ -406,7 +414,8 @@ h1 {
 
 .feature:nth-child(2) svg,
 .feature:nth-child(4) svg {
-    width: 32px; /* inconsistent override */
+    width: 32px;
+    /* inconsistent override */
 }
 
 .feature:nth-child(2) svg {
@@ -512,7 +521,8 @@ h1 {
 .carousel-container-internals {
     overflow: hidden;
     position: relative;
-    touch-action: pan-y; /* Allow vertical scrolling but handle horizontal drag */
+    touch-action: pan-y;
+    /* Allow vertical scrolling but handle horizontal drag */
 }
 
 /* Professional card hover effects */
@@ -620,7 +630,8 @@ h1 {
     display: flex;
     align-items: flex-start;
     /* or center, depending on design */
-    gap: 12px; /* or whatever spacing you prefer */
+    gap: 12px;
+    /* or whatever spacing you prefer */
 }
 
 .feature-main-service-page svg {
@@ -628,14 +639,16 @@ h1 {
     width: 20px;
     height: 20px;
     stroke: var(--foreground);
-    margin-top: 4px; /* small tweak to align visually with text */
+    margin-top: 4px;
+    /* small tweak to align visually with text */
 }
 
 .feature {
     display: flex;
     align-items: flex-start;
     /* or center, depending on design */
-    gap: 12px; /* or whatever spacing you prefer */
+    gap: 12px;
+    /* or whatever spacing you prefer */
 }
 
 .info-main-service-page h3 {
@@ -675,8 +688,18 @@ h1 {
     }
 
     .feature-main-service-page {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
         gap: 10px;
-        padding: 9px 11px;
+        padding: 20px 11px 40px 11px;
+        margin-bottom: 30px;
+    }
+
+    .feature-main-service-page i,
+    .feature-main-service-page span,
+    .feature-main-service-page svg {
+        display: none !important;
     }
 
     .info-main-service-page h3 {
@@ -943,7 +966,8 @@ h1 {
 .person-img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* important! */
+    object-fit: cover;
+    /* important! */
     border-radius: 20px;
     position: relative;
     z-index: 2;
@@ -990,11 +1014,6 @@ h1 {
             letter-spacing: normal;
         }
 
-        .copy-designed {
-            align-items: baseline;
-            justify-content: unset;
-        }
-
         .technology-we-use {
             margin-top: 22%;
         }
@@ -1006,6 +1025,7 @@ h1 {
 }
 
 @media (min-width: 769px) and (max-width: 1100px) {
+
     .key-heading,
     .professionals-heading-internals {
         font-size: 2rem !important;
@@ -1070,10 +1090,12 @@ h1 {
         flex-direction: column;
         gap: 30px;
     }
+
     .text-main-service-page {
         width: 100%;
         text-align: center;
     }
+
     .image-wrapper-main-service-page {
         margin-left: 0;
         width: 100%;
@@ -1084,12 +1106,14 @@ h1 {
     .professionals-section-internals {
         padding: 20px;
     }
+
     .carousel-container-internals {
         height: auto;
         display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
     }
+
     .professional-card-internals {
         flex: 0 0 300px;
         scroll-snap-align: start;
@@ -1108,6 +1132,7 @@ h1 {
         display: flex;
         flex-direction: column;
     }
+
     .professional-card-internals {
         flex: 0 0 100%;
         margin: 10px 0;

@@ -208,7 +208,8 @@
 
 /* When open, apply styles via a class or inline styles in JSX */
 .faq-answer-container.open {
-    max-height: 500px; /* or enough to fit your longest answer */
+    max-height: 500px;
+    /* or enough to fit your longest answer */
     opacity: 1;
     margin-top: 12px;
 }
@@ -219,21 +220,25 @@
 
 @media screen and (max-width: 768px) {
     .faq-head {
-        margin-top: 30%;
+        margin-top: 100px;
+    }
+
+    .faq-head h1 {
+        font-size: 2.4rem;
     }
 
     .faq-container {
-        padding-top: 20px;
-        padding-bottom: 0;
+        padding: 40px 15px;
+        padding-top: 40px;
     }
 
     .faq-section {
-        margin-top: 0;
-        margin-top: -15%;
+        margin-top: 50px;
+        margin-bottom: 50px;
     }
 
     .faq-section:first-of-type {
-        margin-top: 5%;
+        margin-top: 40px;
     }
 }
 
@@ -259,12 +264,7 @@
     }
 
     .faq-image-container {
-        margin-top: 30px;
-    }
-
-    .faq-image {
-        height: auto;
-        max-height: 300px;
+        display: none !important;
     }
 
     .faq-question-two {
@@ -284,14 +284,23 @@
     }
 
     .faq-items {
-        gap: 16px;
+        gap: 12px;
+    }
+
+    .faq-question-container {
+        padding: 12px 15px;
+    }
+
+    .faq-answer-two {
+        padding: 12px 15px !important;
     }
 
     .faq-answer-container.open {
-        max-height: 1000px; /* allow full expansion */
+        max-height: 1000px;
+        /* allow full expansion */
     }
 
     .faq-section {
-        margin-bottom: 0;
+        margin-bottom: 50px;
     }
 }

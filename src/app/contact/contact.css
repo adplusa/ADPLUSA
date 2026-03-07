@@ -194,10 +194,13 @@ body {
     margin: 40px 20px;
   }
 
-  .contact-form-section,
-  .contact-info-section {
+  .contact-form-section {
     width: 100%;
     padding: 20px 10px;
+  }
+
+  .contact-info-section {
+    display: none !important;
   }
 
   .contact-title {
@@ -298,8 +301,8 @@ body {
 
   .contact-container {
     flex-direction: column;
-    margin: 40px 20px;
-    margin-top: 25%;
+    margin: 10px 20px;
+    margin-top: 15%;
   }
 
   .submit-button {

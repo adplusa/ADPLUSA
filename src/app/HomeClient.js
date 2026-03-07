@@ -263,6 +263,15 @@ export default function HomeClient({ homepageData: initialData }) {
         setCurrentSlideHeroBanner((prev) => (prev + 1) % slides.length);
     };
 
+    // Auto-advance hero carousel every 4s; resets if user manually swipes
+    useEffect(() => {
+        if (!slides.length) return;
+        const timer = setInterval(() => {
+            setCurrentSlideHeroBanner((prev) => (prev + 1) % slides.length);
+        }, 4000);
+        return () => clearInterval(timer);
+    }, [slides.length, currentSlideHeroBanner]);
+
     const handleMouseMove = (e) => {
         const bounds = e.currentTarget.getBoundingClientRect();
         const x = e.clientX - bounds.left;
@@ -383,9 +392,8 @@ export default function HomeClient({ homepageData: initialData }) {
                                     <div
                                         className="animation-slider-df"
                                         style={{
-                                            transform: `translateX(-${
-                                                currentSlideHeroBanner * 100
-                                            }%)`,
+                                            transform: `translateX(-${currentSlideHeroBanner * 100
+                                                }%)`,
                                         }}
                                     >
                                         {slides.map(
@@ -411,11 +419,10 @@ export default function HomeClient({ homepageData: initialData }) {
                                     {/* Custom Cursor Only on Desktop */}
                                     {isDesktop && showCustomCursor && (
                                         <div
-                                            className={`custom-cursor ${
-                                                isLeftHalf
-                                                    ? "left-btn"
-                                                    : "right-btn"
-                                            }`}
+                                            className={`custom-cursor ${isLeftHalf
+                                                ? "left-btn"
+                                                : "right-btn"
+                                                }`}
                                             style={{
                                                 left: `${renderCursorPos.x}px`,
                                                 top: `${renderCursorPos.y}px`,
@@ -464,12 +471,11 @@ export default function HomeClient({ homepageData: initialData }) {
                                         {slides.map((_, index) => (
                                             <button
                                                 key={index}
-                                                className={`dot ${
-                                                    index ===
+                                                className={`dot ${index ===
                                                     currentSlideHeroBanner
-                                                        ? "active"
-                                                        : ""
-                                                }`}
+                                                    ? "active"
+                                                    : ""
+                                                    }`}
                                                 onClick={() =>
                                                     setCurrentSlideHeroBanner(
                                                         index,
@@ -540,6 +546,7 @@ export default function HomeClient({ homepageData: initialData }) {
                                                             "/mainservice"
                                                         }
                                                         key={index}
+                                                        className="home-service-link"
                                                     >
                                                         <div className="service-box-home">
                                                             <div className="service-image">
@@ -575,7 +582,7 @@ export default function HomeClient({ homepageData: initialData }) {
                                     </h1>
                                     <div className="technology-grid">
                                         {homepageData.technologyImages?.length >
-                                        0 ? (
+                                            0 ? (
                                             homepageData.technologyImages.map(
                                                 (tech, index) =>
                                                     tech?.image?.url ? (
@@ -623,11 +630,10 @@ export default function HomeClient({ homepageData: initialData }) {
                                                 .map((step, idx) => (
                                                     <div
                                                         key={idx}
-                                                        className={`card ${
-                                                            idx === activeIndex
-                                                                ? "active"
-                                                                : ""
-                                                        }`}
+                                                        className={`card ${idx === activeIndex
+                                                            ? "active"
+                                                            : ""
+                                                            }`}
                                                         onClick={() =>
                                                             handleImageChange(
                                                                 idx,
@@ -655,24 +661,24 @@ export default function HomeClient({ homepageData: initialData }) {
                                             {homepageData.processSteps?.[
                                                 activeIndex
                                             ]?.image?.url && (
-                                                <Image
-                                                    src={
-                                                        homepageData
-                                                            .processSteps[
-                                                            activeIndex
-                                                        ].image.url
-                                                    }
-                                                    alt={
-                                                        homepageData
-                                                            .processSteps[
-                                                            activeIndex
-                                                        ]?.title || "Step Image"
-                                                    }
-                                                    width={500}
-                                                    height={500}
-                                                    unoptimized
-                                                />
-                                            )}
+                                                    <Image
+                                                        src={
+                                                            homepageData
+                                                                .processSteps[
+                                                                activeIndex
+                                                            ].image.url
+                                                        }
+                                                        alt={
+                                                            homepageData
+                                                                .processSteps[
+                                                                activeIndex
+                                                            ]?.title || "Step Image"
+                                                        }
+                                                        width={500}
+                                                        height={500}
+                                                        unoptimized
+                                                    />
+                                                )}
                                         </div>
                                     </div>
                                 </section>
@@ -749,22 +755,22 @@ export default function HomeClient({ homepageData: initialData }) {
                                         <div className="about-us-img">
                                             {homepageData.aboutImages?.[0]
                                                 ?.url && (
-                                                <Image
-                                                    src={
-                                                        homepageData
-                                                            .aboutImages[0].url
-                                                    }
-                                                    width={500}
-                                                    height={500}
-                                                    alt={
-                                                        homepageData
-                                                            .aboutImages[0]
-                                                            .alt ||
-                                                        "People image one"
-                                                    }
-                                                    unoptimized
-                                                />
-                                            )}
+                                                    <Image
+                                                        src={
+                                                            homepageData
+                                                                .aboutImages[0].url
+                                                        }
+                                                        width={500}
+                                                        height={500}
+                                                        alt={
+                                                            homepageData
+                                                                .aboutImages[0]
+                                                                .alt ||
+                                                            "People image one"
+                                                        }
+                                                        unoptimized
+                                                    />
+                                                )}
 
                                             {videos.peopleVideo && (
                                                 <video
@@ -783,22 +789,22 @@ export default function HomeClient({ homepageData: initialData }) {
 
                                             {homepageData.aboutImages?.[1]
                                                 ?.url && (
-                                                <Image
-                                                    src={
-                                                        homepageData
-                                                            .aboutImages[1].url
-                                                    }
-                                                    width={500}
-                                                    height={500}
-                                                    alt={
-                                                        homepageData
-                                                            .aboutImages[1]
-                                                            .alt ||
-                                                        "People image two"
-                                                    }
-                                                    unoptimized
-                                                />
-                                            )}
+                                                    <Image
+                                                        src={
+                                                            homepageData
+                                                                .aboutImages[1].url
+                                                        }
+                                                        width={500}
+                                                        height={500}
+                                                        alt={
+                                                            homepageData
+                                                                .aboutImages[1]
+                                                                .alt ||
+                                                            "People image two"
+                                                        }
+                                                        unoptimized
+                                                    />
+                                                )}
                                         </div>
                                         <div className="about-us-video-text">
                                             <h1>{homepageData.peopleText}</h1>
@@ -837,9 +843,8 @@ export default function HomeClient({ homepageData: initialData }) {
                                                 (slide, idx) => (
                                                     <div
                                                         key={idx}
-                                                        className={`keen-slider__slide number-slide${
-                                                            idx + 1
-                                                        }`}
+                                                        className={`keen-slider__slide number-slide${idx + 1
+                                                            }`}
                                                     >
                                                         <section className="why-work-home">
                                                             <div className="content-two">
@@ -851,7 +856,7 @@ export default function HomeClient({ homepageData: initialData }) {
                                                                             }
                                                                         </b>
                                                                     </h3>
-                                                                    <h5 className="author-p" style={{marginBottom: "5px"}}>
+                                                                    <h5 className="author-p" style={{ marginBottom: "5px" }}>
                                                                         {
                                                                             slide.achievements
                                                                         }
@@ -885,7 +890,7 @@ export default function HomeClient({ homepageData: initialData }) {
                                                                                 slide.partnerLabel
                                                                             }
                                                                         </b>
-                                                                    </h3>                                                                   
+                                                                    </h3>
                                                                 </div>
 
                                                                 <div className="image-wrapper-home">
@@ -893,28 +898,28 @@ export default function HomeClient({ homepageData: initialData }) {
                                                                         {slide
                                                                             ?.image
                                                                             ?.url && (
-                                                                            <Image
-                                                                                src={
-                                                                                    slide
-                                                                                        .image
-                                                                                        .url
-                                                                                }
-                                                                                alt={
-                                                                                    slide.title ||
-                                                                                    "Slide Image"
-                                                                                }
-                                                                                width={
-                                                                                    400
-                                                                                }
-                                                                                height={
-                                                                                    300
-                                                                                }
-                                                                                priority={
-                                                                                    idx ===
-                                                                                    0
-                                                                                }
-                                                                            />
-                                                                        )}
+                                                                                <Image
+                                                                                    src={
+                                                                                        slide
+                                                                                            .image
+                                                                                            .url
+                                                                                    }
+                                                                                    alt={
+                                                                                        slide.title ||
+                                                                                        "Slide Image"
+                                                                                    }
+                                                                                    width={
+                                                                                        400
+                                                                                    }
+                                                                                    height={
+                                                                                        300
+                                                                                    }
+                                                                                    priority={
+                                                                                        idx ===
+                                                                                        0
+                                                                                    }
+                                                                                />
+                                                                            )}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -951,7 +956,6 @@ export default function HomeClient({ homepageData: initialData }) {
                                     <div
                                         style={{
                                             maxWidth: "1200px",
-                                            margin: "100px auto",
                                             padding: "0 20px",
                                         }}
                                     >
@@ -969,23 +973,23 @@ export default function HomeClient({ homepageData: initialData }) {
                                             <div className="contact-info-section">
                                                 {homepageData.contactImage
                                                     ?.url && (
-                                                    <div className="map-container">
-                                                        <img
-                                                            src={
-                                                                homepageData
-                                                                    .contactImage
-                                                                    .url
-                                                            }
-                                                            alt={
-                                                                homepageData
-                                                                    .contactImage
-                                                                    .alt ||
-                                                                "contact"
-                                                            }
-                                                            className="map-image"
-                                                        />
-                                                    </div>
-                                                )}
+                                                        <div className="map-container">
+                                                            <img
+                                                                src={
+                                                                    homepageData
+                                                                        .contactImage
+                                                                        .url
+                                                                }
+                                                                alt={
+                                                                    homepageData
+                                                                        .contactImage
+                                                                        .alt ||
+                                                                    "contact"
+                                                                }
+                                                                className="map-image"
+                                                            />
+                                                        </div>
+                                                    )}
                                             </div>
                                         </div>
                                     </div>

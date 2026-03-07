@@ -11,6 +11,7 @@ export interface IGeneralSettings extends Document, BaseSchemaFields {
     siteDescription: string;
     contactEmail: string;
     footerText: string;
+    copyrightYear?: number;
     headerLogo?: ISettingsImage;
     footerLogo?: ISettingsImage;
     favicon?: ISettingsImage;
@@ -39,6 +40,10 @@ export const GeneralSettingsSchema = new Schema<IGeneralSettings>(
         footerText: {
             type: String,
             default: "",
+        },
+        copyrightYear: {
+            type: Number,
+            default: new Date().getFullYear(),
         },
         headerLogo: imageSubSchema,
         footerLogo: imageSubSchema,

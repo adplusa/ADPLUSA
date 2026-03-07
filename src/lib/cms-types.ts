@@ -376,6 +376,7 @@ export interface GeneralSettings {
     favicon?: CMSImage;
     siteName?: string;
     siteDescription?: string;
+    copyrightYear?: number;
     customHeadTags?: string;
     createdAt: string;
     updatedAt: string;

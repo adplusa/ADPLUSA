@@ -9,6 +9,7 @@ export interface GeneralSettings {
     _id?: string;
     siteName: string;
     siteDescription: string;
+    copyrightYear?: number;
     logo?: SettingsImage;
     favicon?: SettingsImage;
     headerLogo?: SettingsImage | null;

@@ -49,6 +49,7 @@ export default function GeneralSettingsForm() {
     const [siteName, setSiteName] = useState("");
     const [siteDescription, setSiteDescription] = useState("");
     const [customHeadTags, setCustomHeadTags] = useState("");
+    const [copyrightYear, setCopyrightYear] = useState(new Date().getFullYear());
 
     // Image uploader visibility states
     const [showHeaderUploader, setShowHeaderUploader] = useState(false);
@@ -71,6 +72,7 @@ export default function GeneralSettingsForm() {
                 setSiteName(response.siteName || "");
                 setSiteDescription(response.siteDescription || "");
                 setCustomHeadTags(response.customHeadTags || "");
+                setCopyrightYear(response.copyrightYear || new Date().getFullYear());
             }
         } catch (err: unknown) {
             const apiError = err as ApiError;
@@ -98,11 +100,12 @@ export default function GeneralSettingsForm() {
                 siteDescription,
             });
             await updateGeneralSettings({
-                headerLogo: headerLogo, // Pass null explicitly if it is null
+                headerLogo: headerLogo,
                 footerLogo: footerLogo,
                 favicon: favicon || undefined,
                 siteName,
                 siteDescription,
+                copyrightYear,
                 customHeadTags,
             });
             setSuccess(true);
@@ -571,6 +574,28 @@ export default function GeneralSettingsForm() {
                                     placeholder="Brief description of your site"
                                     maxLength={500}
                                 />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="copyrightYear">
+                                    Copyright Year
+                                </Label>
+                                <div className="flex items-center gap-2">
+                                    <Input
+                                        id="copyrightYear"
+                                        type="number"
+                                        value={copyrightYear}
+                                        onChange={(e) =>
+                                            setCopyrightYear(Number(e.target.value))
+                                        }
+                                        min={2000}
+                                        max={2100}
+                                        className="w-28"
+                                    />
+                                    <span className="text-sm text-muted-foreground">©️ ADPL Consulting LLC</span>
+                                </div>
+                                <p className="text-sm text-muted-foreground">
+                                    Footer will show: <strong>{copyrightYear} ©️ ADPL Consulting LLC</strong>
+                                </p>
                             </div>
                         </CardContent>
                     </Card>

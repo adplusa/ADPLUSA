@@ -12,11 +12,12 @@ export const updateGeneralSettings = async (req: Request, res: Response) => {
     try {
         // Map frontend field names to backend schema field names
         const {
-            siteName, // Frontend uses siteName
-            siteTitle, // Backend uses siteTitle (for backward compatibility)
+            siteName,
+            siteTitle,
             siteDescription,
             contactEmail,
             footerText,
+            copyrightYear,
             headerLogo,
             footerLogo,
             favicon,
@@ -34,6 +35,7 @@ export const updateGeneralSettings = async (req: Request, res: Response) => {
             updateData.siteDescription = siteDescription;
         if (contactEmail !== undefined) updateData.contactEmail = contactEmail;
         if (footerText !== undefined) updateData.footerText = footerText;
+        if (copyrightYear !== undefined) updateData.copyrightYear = copyrightYear;
         if (customHeadTags !== undefined)
             updateData.customHeadTags = customHeadTags;
 
@@ -57,6 +59,7 @@ export const updateGeneralSettings = async (req: Request, res: Response) => {
                 siteDescription: settings.siteDescription,
                 contactEmail: settings.contactEmail,
                 footerText: settings.footerText,
+                copyrightYear: settings.copyrightYear,
                 headerLogo: settings.headerLogo,
                 footerLogo: settings.footerLogo,
                 favicon: settings.favicon,
@@ -98,6 +101,7 @@ export const getGeneralSettings = async (req: Request, res: Response) => {
                 siteDescription: settings.siteDescription,
                 contactEmail: settings.contactEmail,
                 footerText: settings.footerText,
+                copyrightYear: settings.copyrightYear,
                 headerLogo: settings.headerLogo,
                 footerLogo: settings.footerLogo,
                 favicon: settings.favicon,

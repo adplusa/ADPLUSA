@@ -55,7 +55,7 @@ export default function FAQClient({ faqData }) {
                                 {category.faqs?.map((faq, faqIndex) => {
                                     const isOpen =
                                         openFaqs[
-                                            `${categoryIndex}-${faqIndex}`
+                                        `${categoryIndex}-${faqIndex}`
                                         ];
                                     return (
                                         <div
@@ -100,7 +100,6 @@ export default function FAQClient({ faqData }) {
                                                             display: "flex",
                                                             alignItems: "start",
                                                             gap: "8px",
-                                                            padding: "16px 20px",
                                                         }}
                                                     >
                                                         {faq.answer}

@@ -821,8 +821,18 @@
   }
 
   .feature-main-service-page {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: 10px;
-    padding: 9px 11px;
+    padding: 20px 11px 40px 11px;
+    margin-bottom: 30px;
+  }
+
+  .feature-main-service-page i,
+  .feature-main-service-page span,
+  .feature-main-service-page svg {
+    display: none !important;
   }
 
   .info-main-service-page h3 {
@@ -1060,7 +1070,7 @@
   }
 
   .main-service-contact-image {
-    height: 300px;
+    display: none !important;
   }
 }
 
