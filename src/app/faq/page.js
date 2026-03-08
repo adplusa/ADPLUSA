@@ -16,15 +16,15 @@ export default function FAQPage() {
                 const response = await fetch(`${cmsUrl}/api/public/faq?t=${Date.now()}`, {
                     cache: "no-store",
                     headers: {
-                        'Cache-Control': 'no-cache, no-store, must-revalidate',
-                        'Pragma': 'no-cache',
-                        'Expires': '0'
+                        "Cache-Control": "no-cache, no-store, must-revalidate",
+                        "Pragma": "no-cache",
+                        "Expires": "0"
                     }
                 });
                 if (!response.ok) throw new Error("Failed to fetch FAQ");
                 const result = await response.json();
                 if (result.success) {
-                    setData(result.data);
+                    setData(result.data || []);
                 }
             } catch (error) {
                 console.error("Error fetching FAQ:", error);
@@ -41,7 +41,7 @@ export default function FAQPage() {
     }
 
     if (!data) {
-        return <Loading text="Loading FAQs" fullScreen={true} />;
+        return <Loading text="No FAQ data found" />;
     }
 
     return <FAQClient faqData={data} />;

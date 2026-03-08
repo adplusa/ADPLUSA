@@ -63,7 +63,7 @@ p {
     text-decoration: underline;
 }
 
-.internal-section-one-bottom-right > div {
+.internal-section-one-bottom-right>div {
     margin-top: 25px;
 }
 
@@ -227,6 +227,7 @@ p {
     object-fit: cover;
     max-height: 600px;
 }
+
 .internal-section-two-bottom img,
 .internal-three img {
     width: 95%;
@@ -314,11 +315,11 @@ p {
     .internal-section-one h1 {
         font-size: 2.6rem;
         text-align: center;
-        margin-top: 12%;
+        margin-top: 20px;
     }
 
     .internal-section-one {
-        margin-top: 22%;
+        margin-top: 100px;
     }
 
     .internal-section-one-bottom {

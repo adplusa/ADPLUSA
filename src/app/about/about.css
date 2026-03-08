@@ -574,7 +574,7 @@ button.next-button:active {
     }
 
     .home-about {
-        margin-top: 28%;
+        margin-top: 80px;
     }
 
     .about-content-first-row-left h1 {
@@ -783,7 +783,7 @@ button.next-button:active {
     .people-img {
         display: flex;
         justify-content: center;
-        margin-top: 4rem; /* Reduced from 63% */
+        margin-top: 2rem;
         position: relative;
         z-index: 1;
     }
@@ -792,12 +792,12 @@ button.next-button:active {
     .about-content-4-row,
     .about-content-5-row {
         position: relative;
-        margin-top: 50%; /* or whatever fits your spacing better */
+        margin-top: 60px;
     }
 
     .about-content-3-row,
     .about-content-2-row {
-        margin-top: 30%;
+        margin-top: 60px;
     }
 
     /* Ensure people images are consistent */

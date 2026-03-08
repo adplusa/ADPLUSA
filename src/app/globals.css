@@ -894,7 +894,7 @@ h1 {
 }
 
 .why-work {
-    padding: 80px 5%;
+    padding: 40px 15px;
     background: var(--backgroundColor);
     font-family: "Geist", sans-serif;
     margin-top: 5%;
@@ -960,7 +960,7 @@ h1 {
     width: 100%;
     height: auto;
     object-fit: cover;
-    margin-top: -32%;
+    /* margin-top: -32%; */
 }
 
 .person-img {
