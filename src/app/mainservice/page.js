@@ -23,15 +23,7 @@ export default function MainServicePage() {
             try {
                 const cmsUrl = getCMSApiUrl();
                 const response = await fetch(
-                    `${cmsUrl}/api/public/services?page=${page}&limit=${LIMIT}&t=${Date.now()}`,
-                    {
-                        cache: "no-store",
-                        headers: {
-                            'Cache-Control': 'no-cache, no-store, must-revalidate',
-                            'Pragma': 'no-cache',
-                            'Expires': '0'
-                        }
-                    }
+                    `${cmsUrl}/api/public/services?page=${page}&limit=${LIMIT}`
                 );
 
                 if (!response.ok) throw new Error("Failed to fetch services");
@@ -58,41 +50,10 @@ export default function MainServicePage() {
                 const cmsUrl = getCMSApiUrl();
                 const [servicesRes, homepageRes, mainServiceRes, contactRes] =
                     await Promise.all([
-                        fetch(
-                            `${cmsUrl}/api/public/services?page=1&limit=${LIMIT}&t=${Date.now()}`,
-                            {
-                                cache: "no-store",
-                                headers: {
-                                    'Cache-Control': 'no-cache, no-store, must-revalidate',
-                                    'Pragma': 'no-cache',
-                                    'Expires': '0'
-                                }
-                            }
-                        ),
-                        fetch(`${cmsUrl}/api/public/homepage?t=${Date.now()}`, {
-                            cache: "no-store",
-                            headers: {
-                                'Cache-Control': 'no-cache, no-store, must-revalidate',
-                                'Pragma': 'no-cache',
-                                'Expires': '0'
-                            }
-                        }),
-                        fetch(`${cmsUrl}/api/public/main-service-page?t=${Date.now()}`, {
-                            cache: "no-store",
-                            headers: {
-                                'Cache-Control': 'no-cache, no-store, must-revalidate',
-                                'Pragma': 'no-cache',
-                                'Expires': '0'
-                            }
-                        }),
-                        fetch(`${cmsUrl}/api/public/contact?t=${Date.now()}`, {
-                            cache: "no-store",
-                            headers: {
-                                'Cache-Control': 'no-cache, no-store, must-revalidate',
-                                'Pragma': 'no-cache',
-                                'Expires': '0'
-                            }
-                        }),
+                        fetch(`${cmsUrl}/api/public/services?page=1&limit=${LIMIT}`),
+                        fetch(`${cmsUrl}/api/public/homepage`),
+                        fetch(`${cmsUrl}/api/public/main-service-page`),
+                        fetch(`${cmsUrl}/api/public/contact`),
                     ]);
 
                 if (

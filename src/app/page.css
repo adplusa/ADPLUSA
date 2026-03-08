@@ -901,9 +901,9 @@ span.service-two-bottom-box-logo {
 .marquee-item {
     display: flex;
     align-items: center;
-    gap: 80px;
+    gap: 150px;
     flex-shrink: 0;
-    padding: 0 40px;
+    padding: 0 75px;
 }
 
 .marquee-item h1 {
@@ -2117,10 +2117,19 @@ select#service {
     font-weight: normal;
 }
 
+.partner-label {
+    margin-top: 12px;
+}
+
+.read-more-btn {
+    display: none;
+}
+
 @media screen and (max-width: 768px) {
     .animate-back-img {
         height: 250px;
-        background-size: contain;
+        aspect-ratio: unset;
+        background-size: cover;
         background-repeat: no-repeat;
         background-position: center;
     }
@@ -2143,10 +2152,7 @@ select#service {
     }
 
     .image-wrapper-home {
-        margin-top: 0;
-        width: 100%;
-        display: flex;
-        justify-content: center;
+        display: none;
     }
 
     .image-wrapper-home img {
@@ -2159,6 +2165,9 @@ select#service {
 
     .animation-slider {
         margin-top: 13%;
+        width: 100%;
+        overflow: hidden;
+        touch-action: pan-y;
     }
 
     .custom-cursor {
@@ -2170,12 +2179,12 @@ select#service {
     }
 
     .features-name {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        justify-items: center;
-        gap: 15px 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         margin-top: 0;
-        padding: 15px;
+        padding: 12px 0 0 0;
+        gap: 16px;
     }
 
     .feature-section {
@@ -2188,22 +2197,23 @@ select#service {
 
     .feature-box {
         width: 90%;
+        padding: 6% 5%;
     }
 
     .features-name img {
-        width: 45px;
-        height: auto;
-        margin-top: 4%;
+        display: none !important;
     }
 
     .features-name p {
-        font-size: 16px;
-        margin-top: 1%;
+        font-size: 22px;
+        margin-top: 0;
+        margin-bottom: 0;
     }
 
     .features-name h3 {
         font-size: 14px !important;
-        margin-top: 1%;
+        margin-top: 2px;
+        margin-bottom: 0;
     }
 
     .home_services h1 {
@@ -2346,7 +2356,8 @@ select#service {
     }
 
     .marquee-item {
-        gap: 10px;
+        gap: 40px;
+        padding: 0 20px;
     }
 
     .about-us-top {
@@ -2407,6 +2418,45 @@ select#service {
     .founder-description p,
     .founder-description-two p {
         font-size: 14px !important;
+        text-align: justify;
+    }
+
+    .founder-bio-container {
+        position: relative;
+        max-height: 160px;
+        overflow: hidden;
+        transition: max-height 0.4s ease-in-out;
+    }
+
+    .founder-bio-container::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 30px;
+        background: linear-gradient(to bottom, transparent, var(--backgroundColor));
+        pointer-events: none;
+    }
+
+    .founder-bio-container.expanded {
+        max-height: 2500px;
+    }
+
+    .founder-bio-container.expanded::after {
+        display: none;
+    }
+
+    .read-more-btn {
+        display: block;
+        background: none;
+        border: none;
+        color: var(--redWhiteColor);
+        font-weight: bold;
+        cursor: pointer;
+        padding: 5px 0;
+        font-size: 14px;
+        margin: 5px auto 0;
     }
 
     .text {
@@ -2415,13 +2465,22 @@ select#service {
 
     .contact-us {
         padding-top: 0;
-        margin-top: 10%;
+        margin-top: 4%;
     }
 
     .navigation-wrapper {
         height: auto;
-        min-height: 400px;
-        margin-bottom: 40px;
+        margin-bottom: 20px;
+    }
+
+    .keen-slider {
+        height: auto !important;
+    }
+
+    .keen-slider:not([data-keen-slider-disabled]) .keen-slider__slide {
+        min-height: unset !important;
+        height: auto !important;
+        overflow: visible !important;
     }
 
     .text h3 {
@@ -2491,8 +2550,12 @@ select#service {
     }
 
     .feature {
-        gap: 10px;
-        padding: 9px 11px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 25px 15px;
     }
 
     .image-wrapper img {

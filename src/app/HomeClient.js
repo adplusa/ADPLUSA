@@ -8,6 +8,15 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
+
+function AdaptiveHeight(slider) {
+    function updateHeight() {
+        slider.container.style.height =
+            slider.slides[slider.track.details.rel].offsetHeight + "px";
+    }
+    slider.on("created", updateHeight);
+    slider.on("slideChanged", updateHeight);
+}
 import { gsap, CSSPlugin, Expo } from "gsap";
 import SplitType from "split-type";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -24,7 +33,9 @@ export default function HomeClient({ homepageData: initialData }) {
     const [isLeftHalf, setIsLeftHalf] = useState(true);
     const [showCustomCursor, setShowCustomCursor] = useState(false);
     const [renderCursorPos, setRenderCursorPos] = useState({ x: 0, y: 0 });
-    const [slides, setSlides] = useState(initialData?.slides || []);
+    const [slides, setSlides] = useState(
+        (initialData?.slides || []).filter((s) => s?.image?.url)
+    );
 
     const [currentSlideHeroBanner, setCurrentSlideHeroBanner] = useState(0);
     const [isDesktop, setIsDesktop] = useState(false);
@@ -47,20 +58,34 @@ export default function HomeClient({ homepageData: initialData }) {
     const [showIntro, setShowIntro] = useState(false);
     const [showForm, setShowForm] = useState(false);
     const [showScrollUp, setShowScrollUp] = useState(false);
+    const [expandedBio, setExpandedBio] = useState({});
+
+    const toggleBio = (idx) => {
+        setExpandedBio((prev) => ({ ...prev, [idx]: !prev[idx] }));
+    };
 
     // Contact Form Logic removed (using shared component)
 
 
     const [shouldAnimate, setShouldAnimate] = useState(false);
 
-    const [sliderRef, instanceRef] = useKeenSlider({
-        loop: true,
-        slides: {
-            perView: 1,
-            spacing: 0,
+    const [sliderRef, instanceRef] = useKeenSlider(
+        {
+            loop: true,
+            slides: {
+                perView: 1,
+                spacing: 0,
+            },
+            drag: true,
+            breakpoints: {
+                "(max-width: 768px)": {
+                    slides: { perView: 1, spacing: 0 },
+                    renderMode: "performance",
+                },
+            },
         },
-        drag: true,
-    });
+        [AdaptiveHeight],
+    );
 
     // Fixed localStorage check and intro logic
     useEffect(() => {
@@ -286,6 +311,7 @@ export default function HomeClient({ homepageData: initialData }) {
 
     // Touch support for mobile hero carousel
     const touchStartXRef = useRef(null);
+    const sliderContainerRef = useRef(null);
 
     const handleTouchStart = (e) => {
         touchStartXRef.current = e.touches[0].clientX;
@@ -299,6 +325,21 @@ export default function HomeClient({ homepageData: initialData }) {
         }
         touchStartXRef.current = null;
     };
+
+    // Attach touchmove with {passive: false} so preventDefault() works
+    useEffect(() => {
+        const el = sliderContainerRef.current;
+        if (!el) return;
+        const onTouchMove = (e) => {
+            if (touchStartXRef.current === null) return;
+            const delta = Math.abs(touchStartXRef.current - e.touches[0].clientX);
+            if (delta > 10) {
+                e.preventDefault();
+            }
+        };
+        el.addEventListener("touchmove", onTouchMove, { passive: false });
+        return () => el.removeEventListener("touchmove", onTouchMove);
+    }, []);
 
     useEffect(() => {
         let animationFrame;
@@ -375,6 +416,7 @@ export default function HomeClient({ homepageData: initialData }) {
                                     <div className="overlay"></div>
                                 </div>
                                 <div
+                                    ref={sliderContainerRef}
                                     className={"animation-slider light-banner"}
                                     onTouchStart={handleTouchStart}
                                     onTouchEnd={handleTouchEnd}
@@ -404,8 +446,6 @@ export default function HomeClient({ homepageData: initialData }) {
                                                         className="animate-back-img"
                                                         style={{
                                                             backgroundImage: `url(${slide.image.url})`,
-                                                            backgroundSize:
-                                                                "contain",
                                                         }}
                                                         aria-label={
                                                             slide.image?.alt ||
@@ -863,28 +903,34 @@ export default function HomeClient({ homepageData: initialData }) {
                                                                     </h5>
 
                                                                     {/* Render rich text content - now HTML string */}
-                                                                    {slide.description && (
-                                                                        <div
-                                                                            className="founder-description"
-                                                                            dangerouslySetInnerHTML={{
-                                                                                __html: slide.description,
-                                                                            }}
-                                                                        />
-                                                                    )}
+                                                                    <div className={`founder-bio-container ${expandedBio[idx] ? 'expanded' : ''}`}>
+                                                                        {slide.description && (
+                                                                            <div
+                                                                                className="founder-description"
+                                                                                dangerouslySetInnerHTML={{
+                                                                                    __html: slide.description,
+                                                                                }}
+                                                                            />
+                                                                        )}
 
-                                                                    {slide.descriptionTwo && (
-                                                                        <div
-                                                                            className="founder-description-two"
-                                                                            dangerouslySetInnerHTML={{
-                                                                                __html: slide.descriptionTwo,
-                                                                            }}
-                                                                        />
-                                                                    )}
+                                                                        {slide.descriptionTwo && (
+                                                                            <div
+                                                                                className="founder-description-two"
+                                                                                dangerouslySetInnerHTML={{
+                                                                                    __html: slide.descriptionTwo,
+                                                                                }}
+                                                                            />
+                                                                        )}
+                                                                    </div>
 
-                                                                    <br />
+                                                                    <button
+                                                                        className="read-more-btn"
+                                                                        onClick={() => toggleBio(idx)}
+                                                                    >
+                                                                        {expandedBio[idx] ? 'Read Less' : 'Read More...'}
+                                                                    </button>
 
-                                                                    <br />
-                                                                    <h3>
+                                                                    <h3 className="partner-label">
                                                                         <b>
                                                                             {
                                                                                 slide.partnerLabel

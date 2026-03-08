@@ -21,15 +21,7 @@ export default function ProjectsPage() {
             try {
                 const cmsUrl = getCMSApiUrl();
                 const response = await fetch(
-                    `${cmsUrl}/api/public/projects?page=${page}&limit=${LIMIT}&featured=true&t=${Date.now()}`,
-                    {
-                        cache: "no-store",
-                        headers: {
-                            'Cache-Control': 'no-cache, no-store, must-revalidate',
-                            'Pragma': 'no-cache',
-                            'Expires': '0'
-                        }
-                    }
+                    `${cmsUrl}/api/public/projects?page=${page}&limit=${LIMIT}&featured=true`
                 );
 
                 if (!response.ok) throw new Error("Failed to fetch projects");
@@ -55,25 +47,8 @@ export default function ProjectsPage() {
             try {
                 const cmsUrl = getCMSApiUrl();
                 const [projectsRes, pageRes] = await Promise.all([
-                    fetch(
-                        `${cmsUrl}/api/public/projects?page=1&limit=${LIMIT}&featured=true&t=${Date.now()}`,
-                        {
-                            cache: "no-store",
-                            headers: {
-                                'Cache-Control': 'no-cache, no-store, must-revalidate',
-                                'Pragma': 'no-cache',
-                                'Expires': '0'
-                            }
-                        }
-                    ),
-                    fetch(`${cmsUrl}/api/public/projects-page?t=${Date.now()}`, {
-                        cache: "no-store",
-                        headers: {
-                            'Cache-Control': 'no-cache, no-store, must-revalidate',
-                            'Pragma': 'no-cache',
-                            'Expires': '0'
-                        }
-                    }),
+                    fetch(`${cmsUrl}/api/public/projects?page=1&limit=${LIMIT}&featured=true`),
+                    fetch(`${cmsUrl}/api/public/projects-page`),
                 ]);
 
                 if (!projectsRes.ok || !pageRes.ok)
