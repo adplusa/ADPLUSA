@@ -9,7 +9,12 @@ export interface Service {
   image?: string | { url: string; alt?: string };
   icon?: string;
   order: number;
+  featured?: boolean;
+  displayImage?: { url: string; alt?: string };
   bannerImage?: { url: string; alt?: string };
+  servicesList?: any[];
+  keyActivities?: any[];
+  features?: any[];
   metaTags?: Array<{ name: string; content: string }>;
   customHeadTags?: string;
   createdAt: string;
@@ -26,42 +31,25 @@ export interface ServicesResponse {
   };
 }
 
+export const getServices = (params?: any) =>
+  ApiHelper.get<ServicesResponse>("/admin/services", { params });
+
+export const getServiceBySlug = (slug: string) =>
+  ApiHelper.get<Service>(`/admin/services/${slug}`);
+
+export const createService = (params: any) =>
+  ApiHelper.post<Service>("/admin/services", params);
+
+export const updateService = (id: string, params: any) =>
+  ApiHelper.put<Service>(`/admin/services/${id}`, params);
+
+export const deleteService = (id: string) =>
+  ApiHelper.delete(`/admin/services/${id}`);
+
 export const serviceService = {
-  getAll: () => ApiHelper.get("/api/admin/services"),
-  getById: (id: string) => ApiHelper.get(`/api/admin/services/${id}`),
-  create: (data: any) => ApiHelper.post("/api/admin/services", data),
-  update: (id: string, data: any) => ApiHelper.put(`/api/admin/services/${id}`, data),
-  delete: (id: string) => ApiHelper.delete(`/api/admin/services/${id}`),
+  getAll: getServices,
+  getById: getServiceBySlug,
+  create: createService,
+  update: updateService,
+  delete: deleteService,
 };
-
-export async function createService(data: any): Promise<any> {
-  return ApiHelper.post("/api/admin/services", data);
-}
-
-export async function updateService(id: string, data: any): Promise<any> {
-  return ApiHelper.put(`/api/admin/services/${id}`, data);
-}
-
-export async function deleteService(id: string): Promise<any> {
-  return ApiHelper.delete(`/api/admin/services/${id}`);
-}
-
-export async function getServices(params: {
-  page?: number;
-  limit?: number;
-  search?: string;
-}): Promise<ServicesResponse> {
-  const queryParams = new URLSearchParams();
-  if (params.page) queryParams.append("page", String(params.page));
-  if (params.limit) queryParams.append("limit", String(params.limit));
-  if (params.search) queryParams.append("search", params.search);
-
-  const response = await ApiHelper.get<ServicesResponse>(
-    `/api/admin/services?${queryParams.toString()}`
-  );
-  return response || { data: [] };
-}
-
-export async function getServiceBySlug(slug: string): Promise<any> {
-  return ApiHelper.get(`/api/admin/services/${slug}`);
-}

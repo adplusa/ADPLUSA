@@ -58,7 +58,7 @@ describe('validateProjectUpdate Middleware', () => {
     expect(nextFunction).toHaveBeenCalledWith(expect.any(AppError));
     const error = (nextFunction as jest.Mock).mock.calls[0][0];
     expect(error.statusCode).toBe(400);
-    expect(error.errorCode).toBe('VALIDATION_ERROR');
-    expect(error.errors).toHaveProperty('link');
+    expect(error.code).toBe('VALIDATION_ERROR');
+    expect(error.details).toHaveProperty('link');
   });
 });

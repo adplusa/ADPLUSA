@@ -12,12 +12,12 @@ import { getTags } from '../services/tag.service';
 import type { MediaFile, UpdateMediaData } from '../services/media.service';
 import type { Tag } from '../services/tag.service';
 
-interface MediaEditData extends UpdateMediaData {}
+interface MediaEditData extends UpdateMediaData { }
 
 export default function MediaEdit() {
   const navigate = useNavigate();
   const { id } = useParams();
-  
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -44,7 +44,7 @@ export default function MediaEdit() {
       setInitialLoading(true);
       setError(null);
       const response = await getMediaById(id!);
-      const mediaFile = response.data;
+      const mediaFile = response;
       setMedia(mediaFile);
       setSelectedTags(mediaFile.tags.map((tag: any) => tag._id));
       reset({
@@ -168,7 +168,7 @@ export default function MediaEdit() {
                     <p><strong>Dimensions:</strong> {media.width} × {media.height}px</p>
                   )}
                   <p><strong>Uploaded:</strong> {new Date(media.createdAt).toLocaleDateString()}</p>
-                  <p><strong>By:</strong> {media.uploadedBy.username}</p>
+                  <p><strong>By:</strong> {media.uploadedBy?.username}</p>
                 </div>
               </div>
             </div>

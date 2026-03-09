@@ -106,6 +106,7 @@ body {
   overflow: hidden;
   box-shadow: 0 20px 60px #bebebe2a;
   border: 0.5px solid #c4c4c4;
+  border-radius: 8px;
   margin-top: 12%;
 }
 
@@ -193,10 +194,13 @@ body {
     margin: 40px 20px;
   }
 
-  .contact-form-section,
-  .contact-info-section {
+  .contact-form-section {
     width: 100%;
     padding: 20px 10px;
+  }
+
+  .contact-info-section {
+    display: none !important;
   }
 
   .contact-title {
@@ -206,9 +210,14 @@ body {
 
 .for-map-wrapper {
   background-color: var(--backgroundColor);
-  /* background-color: #f0f4f8; */
   padding: 60px 20px;
   padding-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .for-map-wrapper {
+    padding: 30px 15px;
+  }
 }
 
 .for-map-container {
@@ -283,6 +292,10 @@ body {
 }
 
 @media (max-width: 768px) {
+  .for-map-right {
+    height: 250px;
+  }
+
   .content-two {
     flex-direction: column-reverse;
   }
@@ -297,8 +310,8 @@ body {
 
   .contact-container {
     flex-direction: column;
-    margin: 40px 20px;
-    margin-top: 25%;
+    margin: 10px 20px;
+    margin-top: 100px;
   }
 
   .submit-button {
@@ -317,8 +330,19 @@ body {
   }
 
   .feature {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     gap: 10px;
-    padding: 9px 11px;
+    padding: 25px 15px;
+  }
+
+  .feature i,
+  .feature span,
+  .feature svg {
+    display: none !important;
   }
 
   .icon {

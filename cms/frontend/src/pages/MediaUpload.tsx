@@ -47,7 +47,7 @@ export default function MediaUpload() {
     if (watchedFile && watchedFile.length > 0) {
       const file = watchedFile[0];
       setSelectedFile(file);
-      
+
       if (file.type.startsWith('image/')) {
         const url = URL.createObjectURL(file);
         setPreviewUrl(url);
@@ -149,12 +149,8 @@ export default function MediaUpload() {
 
       console.log('Registering media with data:', registrationData);
 
-      const response = await mediaService.registerMedia(registrationData);
-      console.log('Media registration response:', response);
-
-      if (!response || !response.success) {
-        throw new Error(response?.error?.message || 'Failed to register media in database');
-      }
+      await mediaService.registerMedia(registrationData);
+      console.log('Media registration successful');
 
       navigate('/dashboard/media');
     } catch (err: any) {
@@ -204,11 +200,10 @@ export default function MediaUpload() {
             <div className="space-y-2">
               <Label>File *</Label>
               <div
-                className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-                  dragActive
+                className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${dragActive
                     ? 'border-primary bg-primary/5'
                     : 'border-muted-foreground/25 hover:border-muted-foreground/50'
-                }`}
+                  }`}
                 onDragEnter={handleDrag}
                 onDragLeave={handleDrag}
                 onDragOver={handleDrag}

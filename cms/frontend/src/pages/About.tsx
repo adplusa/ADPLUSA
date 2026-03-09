@@ -38,14 +38,14 @@ export default function About() {
                 setLoading(true);
                 setError(null);
                 const response = await getAbout();
-                setAbout(response.data);
+                setAbout(response);
             } catch (err: unknown) {
                 const apiError = err as {
                     response?: { data?: { error?: { message?: string } } };
                 };
                 setError(
                     apiError.response?.data?.error?.message ||
-                        "Failed to load about page"
+                    "Failed to load about page"
                 );
             } finally {
                 setLoading(false);
@@ -406,23 +406,23 @@ export default function About() {
                                                     </div>
                                                     {section.image
                                                         ?.darkModeUrl && (
-                                                        <div className="space-y-1">
-                                                            <label className="text-xs font-medium text-muted-foreground">
-                                                                Dark Mode Image
-                                                            </label>
-                                                            <div className="relative aspect-video rounded-lg overflow-hidden border bg-zinc-800">
-                                                                <img
-                                                                    src={
-                                                                        section
-                                                                            .image
-                                                                            ?.darkModeUrl
-                                                                    }
-                                                                    alt={`${section.title} - Dark mode`}
-                                                                    className="w-full h-full object-cover"
-                                                                />
+                                                            <div className="space-y-1">
+                                                                <label className="text-xs font-medium text-muted-foreground">
+                                                                    Dark Mode Image
+                                                                </label>
+                                                                <div className="relative aspect-video rounded-lg overflow-hidden border bg-zinc-800">
+                                                                    <img
+                                                                        src={
+                                                                            section
+                                                                                .image
+                                                                                ?.darkModeUrl
+                                                                        }
+                                                                        alt={`${section.title} - Dark mode`}
+                                                                        className="w-full h-full object-cover"
+                                                                    />
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    )}
+                                                        )}
                                                 </div>
                                             )}
                                         </div>

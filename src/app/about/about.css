@@ -574,7 +574,7 @@ button.next-button:active {
     }
 
     .home-about {
-        margin-top: 28%;
+        margin-top: 80px;
     }
 
     .about-content-first-row-left h1 {
@@ -783,7 +783,7 @@ button.next-button:active {
     .people-img {
         display: flex;
         justify-content: center;
-        margin-top: 4rem; /* Reduced from 63% */
+        margin-top: 2rem;
         position: relative;
         z-index: 1;
     }
@@ -792,12 +792,12 @@ button.next-button:active {
     .about-content-4-row,
     .about-content-5-row {
         position: relative;
-        margin-top: 50%; /* or whatever fits your spacing better */
+        margin-top: 60px;
     }
 
     .about-content-3-row,
     .about-content-2-row {
-        margin-top: 30%;
+        margin-top: 60px;
     }
 
     /* Ensure people images are consistent */
@@ -861,36 +861,45 @@ button.next-button:active {
 
 @media (min-width: 992px) {
     .about-section-row {
-        grid-template-columns: 1fr 1fr;
-        min-height: 500px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 3rem;
+        min-height: 450px;
     }
 
-    /* Alternate layout: content on left for even, right for odd */
+    /* section-left: text on left, image on right */
+    .about-section-row.section-left {
+        flex-direction: row;
+    }
+
     .about-section-row.section-left .section-content-box {
-        order: 2;
-        position: absolute;
-        left: 40%;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 2;
+        order: 1;
+        position: static;
+        transform: none;
+        flex: 1;
     }
 
     .about-section-row.section-left .section-image {
-        order: 1;
+        order: 2;
+        flex: 1;
+    }
+
+    /* section-right: image on left, text on right */
+    .about-section-row.section-right {
+        flex-direction: row;
     }
 
     .about-section-row.section-right .section-content-box {
-        order: 1;
-        position: absolute;
-        right: 40%;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 2;
+        order: 2;
+        position: static;
+        transform: none;
+        flex: 1;
     }
 
     .about-section-row.section-right .section-image {
-        order: 2;
-        justify-self: end;
+        order: 1;
+        flex: 1;
     }
 }
 

@@ -21,7 +21,7 @@ export default function FAQ() {
         setLoading(true);
         setError(null);
         const response = await getFAQ();
-        setFaq(response.data);
+        setFaq(response);
       } catch (err: any) {
         setError(err.response?.data?.error?.message || 'Failed to load FAQ');
       } finally {
@@ -129,7 +129,7 @@ export default function FAQ() {
                   {category.title}
                 </Badge>
                 <span className="text-sm text-muted-foreground">
-                  {category.faqs.length} question{category.faqs.length !== 1 ? 's' : ''}
+                  {category.faqs?.length || 0} question{category.faqs?.length !== 1 ? 's' : ''}
                 </span>
               </div>
               {category.description && (
@@ -138,7 +138,7 @@ export default function FAQ() {
             </div>
 
             <div className="space-y-3">
-              {category.faqs.map((faqItem: any, faqIndex: number) => {
+              {category.faqs?.map((faqItem: any, faqIndex: number) => {
                 const key = `${categoryIndex}-${faqIndex}`;
                 const isExpanded = expandedItems.has(key);
                 return (

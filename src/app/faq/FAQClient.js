@@ -5,7 +5,7 @@ import { useState } from "react";
 import "./faq.css";
 import Header from "../Components/Header/page";
 import Footer from "../Components/Footer/page";
-import { Plus, Minus } from "lucide-react";
+import { Plus, Minus, X } from "lucide-react";
 import PageScripts from "../Components/PageScripts";
 
 export default function FAQClient({ faqData }) {
@@ -55,12 +55,12 @@ export default function FAQClient({ faqData }) {
                                 {category.faqs?.map((faq, faqIndex) => {
                                     const isOpen =
                                         openFaqs[
-                                            `${categoryIndex}-${faqIndex}`
+                                        `${categoryIndex}-${faqIndex}`
                                         ];
                                     return (
                                         <div
                                             key={faqIndex}
-                                            className="faq-item"
+                                            className={`faq-item${isOpen ? " open" : ""}`}
                                         >
                                             <div
                                                 className="faq-question-container"
@@ -102,12 +102,6 @@ export default function FAQClient({ faqData }) {
                                                             gap: "8px",
                                                         }}
                                                     >
-                                                        <span
-                                                            style={{
-                                                                padding:
-                                                                    "0 10px",
-                                                            }}
-                                                        ></span>
                                                         {faq.answer}
                                                     </p>
                                                 </div>
@@ -168,7 +162,7 @@ export default function FAQClient({ faqData }) {
                                 className="close-icon"
                                 onClick={() => setShowForm(false)}
                             >
-                                ✕
+                                <X size={24} />
                             </div>
                             <h2 className="title">Quick Query</h2>
                             <p className="subtitle">

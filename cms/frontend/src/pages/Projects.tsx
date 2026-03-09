@@ -2,9 +2,9 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { ColumnDef } from '@tanstack/react-table';
 import { createActionsColumn } from '../components/ui/data-table';
-import { Badge } from '../components/ui/badge';
+import { Button } from '../components/ui/button';
 import { ServerPaginatedTable, type FetchParams, type PaginatedResponse } from '../components/ui/ServerPaginatedTable';
-import { getProjects, deleteProject } from '../services/project.service';
+import { getProjects, deleteProject, updateProject } from '../services/project.service';
 import type { Project } from '../services/project.service';
 
 export default function Projects() {
@@ -84,6 +84,21 @@ export default function Projects() {
     navigate('/dashboard/projects/new');
   };
 
+  const [togglingId, setTogglingId] = useState<string | null>(null);
+
+  const handleFeatureToggle = async (project: Project) => {
+    if (!project._id || togglingId === project._id) return;
+    try {
+      setTogglingId(project._id);
+      await updateProject(project._id, { featured: !project.featured });
+      setRefreshKey(prev => prev + 1);
+    } catch {
+      setError('Failed to update featured status');
+    } finally {
+      setTogglingId(null);
+    }
+  };
+
   const columns: ColumnDef<Project>[] = [
     {
       accessorKey: 'title',
@@ -99,26 +114,21 @@ export default function Projects() {
       ),
     },
     {
-      accessorKey: 'category',
-      header: 'Category',
-      cell: ({ row }) => {
-        const category = row.getValue('category') as string;
-        return category ? (
-          <Badge variant="secondary">{category}</Badge>
-        ) : (
-          <span className="text-muted-foreground">-</span>
-        );
-      },
-    },
-    {
       accessorKey: 'featured',
       header: 'Featured',
       cell: ({ row }) => {
-        const featured = row.getValue('featured') as boolean;
+        const project = row.original;
+        const isFeatured = row.getValue('featured') as boolean;
+        const isToggling = togglingId === project._id;
         return (
-          <Badge variant={featured ? 'default' : 'outline'}>
-            {featured ? 'Yes' : 'No'}
-          </Badge>
+          <Button
+            variant={isFeatured ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => handleFeatureToggle(project)}
+            disabled={isToggling}
+          >
+            {isToggling ? '...' : isFeatured ? 'Featured' : 'Not Featured'}
+          </Button>
         );
       },
     },

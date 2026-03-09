@@ -84,16 +84,16 @@ export default function ContactForm() {
             setLoading(true);
             setError(null);
             const response = await getContact();
-            if (response.data) {
+            if (response) {
                 reset({
-                    ...response.data,
+                    ...response,
                     contactInfo: {
-                        ...(response.data as any).contactInfo,
+                        ...(response as any).contactInfo,
                     },
                     serviceOptions:
-                        (response.data as any).serviceOptions &&
-                            (response.data as any).serviceOptions.length > 0
-                            ? (response.data as any).serviceOptions
+                        (response as any).serviceOptions &&
+                            (response as any).serviceOptions.length > 0
+                            ? (response as any).serviceOptions
                             : [
                                 "Drafting to CAD (PDF to CAD)",
                                 "Permit Drawing and Documentation",
@@ -104,7 +104,7 @@ export default function ContactForm() {
                                 "Bill of Quantities (BOQ)",
                                 "MEP Drafting",
                             ],
-                    metaTags: (response.data as any).metaTags || [],
+                    metaTags: (response as any).metaTags || [],
                 } as any);
             }
         } catch (err: any) {

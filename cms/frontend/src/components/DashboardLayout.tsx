@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import Sidebar from './Sidebar';
-import { Menu, LogOut, User, Settings, ChevronRight } from 'lucide-react';
+import { Menu, LogOut, User, ChevronRight } from 'lucide-react';
 
 // Breadcrumb component
 function Breadcrumb() {
@@ -120,12 +120,6 @@ export default function DashboardLayout() {
                     <Link to="/dashboard/profile">
                       <User className="mr-2 h-4 w-4" />
                       <span>Profile</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/dashboard/settings">
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>Settings</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />

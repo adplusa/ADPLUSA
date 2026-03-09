@@ -147,20 +147,26 @@
     }
 
     .footer {
+        margin-top: 0;
         padding-bottom: 3%;
     }
 
-    .copy-designed p {
-        font-size: 11px;
-        margin-left: 10px;
+    .copy-designed {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        padding: 20px 5% 0 5%;
     }
 
-    .copy-designed {
-        align-items: baseline;
-        justify-content: unset;
-        flex-direction: column;
-        gap: 10px;
-        padding: 0 5%;
+    #copyright {
+        margin-top: 0;
+        padding-bottom: 0;
+    }
+
+    .copy-designed p {
+        font-size: 10px;
+        margin-left: 0;
     }
 
     .second-navbar ul {

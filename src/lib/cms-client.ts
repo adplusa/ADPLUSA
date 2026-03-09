@@ -24,7 +24,9 @@ async function fetchCMS<T>(endpoint: string, options: FetchOptions = {}): Promis
     const { revalidate = DEFAULT_REVALIDATE, tags } = options;
 
     try {
-        const url = `${CMS_API_URL}/api/public${endpoint}`;
+        const separator = endpoint.includes("?") ? "&" : "?";
+        const url = `${CMS_API_URL}/api/public${endpoint}${revalidate !== false ? `${separator}t=${Date.now()}` : ""}`;
+
         const fetchOptions: RequestInit & { next?: { revalidate?: number | false; tags?: string[] } } = {
             headers: { "Content-Type": "application/json" },
         };

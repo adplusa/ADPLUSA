@@ -57,7 +57,7 @@ export default function ProjectsPageForm() {
             setLoading(true);
             setError(null);
             const response = await getProjectsPage();
-            if (response && response) {
+            if (response) {
                 reset({
                     ...response,
                     metaTags: response.metaTags || [],

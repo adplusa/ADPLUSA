@@ -13,8 +13,13 @@ export default function AboutPage() {
         const fetchData = async () => {
             try {
                 const cmsUrl = getCMSApiUrl();
-                const response = await fetch(`${cmsUrl}/api/public/about`, {
+                const response = await fetch(`${cmsUrl}/api/public/about?t=${Date.now()}`, {
                     cache: "no-store",
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
                 });
                 if (!response.ok) throw new Error("Failed to fetch about");
                 const result = await response.json();

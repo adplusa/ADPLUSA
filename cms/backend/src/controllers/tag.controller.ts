@@ -28,14 +28,16 @@ export const getTags = async (req: Request, res: Response) => {
       Tag.countDocuments(query)
     ]);
 
-    const response: ApiResponse<typeof tags> = {
+    const response = {
       success: true,
-      data: tags,
-      pagination: {
-        page: pageNum,
-        limit: limitNum,
-        total,
-        pages: Math.ceil(total / limitNum)
+      data: {
+        data: tags,
+        pagination: {
+          page: pageNum,
+          limit: limitNum,
+          total,
+          pages: Math.ceil(total / limitNum)
+        }
       }
     };
 
@@ -53,7 +55,7 @@ export const getTags = async (req: Request, res: Response) => {
 export const getTagById = async (req: Request, res: Response) => {
   try {
     const tag = await Tag.findById(req.params.id);
-    
+
     if (!tag) {
       return res.status(404).json({
         success: false,
@@ -104,7 +106,7 @@ export const createTag = async (req: Request, res: Response) => {
 export const updateTag = async (req: Request, res: Response) => {
   try {
     const { name, description, color } = req.body;
-    
+
     const updateData: {
       name?: string;
       description?: string;

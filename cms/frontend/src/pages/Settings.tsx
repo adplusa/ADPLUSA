@@ -4,10 +4,10 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Badge } from '../components/ui/badge';
-import { 
-  Settings as SettingsIcon, 
-  User, 
-  Shield, 
+import {
+  Settings as SettingsIcon,
+  User,
+  Shield,
   Database,
   Globe,
   Bell,
@@ -82,9 +82,9 @@ export default function Settings() {
       // Attempt to fetch the API URL to check connectivity
       // Any response (even 404/401) indicates the server is reachable
       // mode: 'no-cors' ensures we don't fail just because of CORS policies on the root endpoint
-      await fetch(apiUrl, { 
+      await fetch(apiUrl, {
         signal: controller.signal,
-        mode: 'no-cors' 
+        mode: 'no-cors'
       });
       setConnectionStatus('online');
     } catch (error) {
@@ -236,27 +236,27 @@ export default function Settings() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="site-name">Site Name</Label>
-                <Input 
-                  id="site-name" 
-                  value={siteName} 
-                  onChange={(e) => setSiteName(e.target.value)} 
+                <Input
+                  id="site-name"
+                  value={siteName}
+                  onChange={(e) => setSiteName(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="site-url">Site URL</Label>
-                <Input 
-                  id="site-url" 
-                  value={siteUrl} 
-                  onChange={(e) => setSiteUrl(e.target.value)} 
+                <Input
+                  id="site-url"
+                  value={siteUrl}
+                  onChange={(e) => setSiteUrl(e.target.value)}
                 />
               </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="site-description">Site Description</Label>
-              <Input 
-                id="site-description" 
-                value={siteDescription} 
-                onChange={(e) => setSiteDescription(e.target.value)} 
+              <Input
+                id="site-description"
+                value={siteDescription}
+                onChange={(e) => setSiteDescription(e.target.value)}
               />
             </div>
             <Button onClick={handleSaveGeneral} disabled={isSavingGeneral}>
@@ -365,9 +365,9 @@ export default function Settings() {
                 <span className="text-sm text-muted-foreground">{lastBackup}</span>
               </div>
               <div className="flex gap-2">
-                <Button 
-                  variant={backupStatus === 'error' ? "destructive" : "outline"} 
-                  size="sm" 
+                <Button
+                  variant={backupStatus === 'error' ? "destructive" : "outline"}
+                  size="sm"
                   className="flex-1"
                   onClick={handleCreateBackup}
                   disabled={isBackingUp || backupStatus === 'success'}
@@ -388,9 +388,9 @@ export default function Settings() {
                     'Create Backup'
                   )}
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <Button
+                  variant="outline"
+                  size="sm"
                   className="flex-1"
                   onClick={handleRestoreClick}
                   disabled={isRestoring}
@@ -407,12 +407,12 @@ export default function Settings() {
                     </>
                   )}
                 </Button>
-                <input 
-                  type="file" 
-                  ref={fileInputRef} 
-                  className="hidden" 
-                  accept=".json" 
-                  onChange={handleFileChange} 
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  className="hidden"
+                  accept=".json"
+                  onChange={handleFileChange}
                 />
               </div>
             </CardContent>
@@ -432,8 +432,8 @@ export default function Settings() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="api-url">API Base URL</Label>
-                <Input 
-                  id="api-url" 
+                <Input
+                  id="api-url"
                   value={apiUrl}
                   onChange={(e) => setApiUrl(e.target.value)}
                 />
@@ -481,15 +481,15 @@ export default function Settings() {
                 <p className="text-xs text-muted-foreground">Choose your preferred theme</p>
               </div>
               <div className="flex items-center space-x-2">
-                <Button 
-                  variant={theme === 'light' ? 'default' : 'outline'} 
+                <Button
+                  variant={theme === 'light' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setTheme('light')}
                 >
                   Light
                 </Button>
-                <Button 
-                  variant={theme === 'dark' ? 'default' : 'outline'} 
+                <Button
+                  variant={theme === 'dark' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setTheme('dark')}
                 >
@@ -502,9 +502,9 @@ export default function Settings() {
                 <p className="text-sm font-medium">Compact Mode</p>
                 <p className="text-xs text-muted-foreground">Reduce spacing for more content</p>
               </div>
-              <Button 
-                variant={compact ? "default" : "outline"} 
-                size="sm" 
+              <Button
+                variant={compact ? "default" : "outline"}
+                size="sm"
                 onClick={() => setCompact(!compact)}
               >
                 {compact ? "Enabled" : "Disabled"}
@@ -537,8 +537,8 @@ export default function Settings() {
                 <p className="text-sm font-medium">Browser Notifications</p>
                 <p className="text-xs text-muted-foreground">Show desktop notifications</p>
               </div>
-              <Button 
-                variant={browserNotifications ? "default" : "outline"} 
+              <Button
+                variant={browserNotifications ? "default" : "outline"}
                 size="sm"
                 onClick={handleToggleNotifications}
               >

@@ -1,4 +1,5 @@
 import SocialMediaClient from "./SocialMediaClient";
+import { getContact } from "@/lib/cms-client";
 
 /**
  * Server-side metadata generation for SEO
@@ -22,6 +23,9 @@ export async function generateMetadata() {
 /**
  * Server Component - renders the social media page
  */
-export default function SocialMediaPage() {
-  return <SocialMediaClient />;
+export default async function SocialMediaPage() {
+  const data = await getContact({ revalidate: 0 });
+  const socialLinks = data?.socialLinks?.filter(link => link.isActive) || [];
+
+  return <SocialMediaClient socialLinks={socialLinks} />;
 }

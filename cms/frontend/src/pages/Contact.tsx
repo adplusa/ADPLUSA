@@ -38,7 +38,7 @@ export default function Contact() {
         setLoading(true);
         setError(null);
         const response = await getContact();
-        setContact(response.data);
+        setContact(response);
       } catch (err: any) {
         setError(err.response?.data?.error?.message || 'Failed to load contact page');
       } finally {
