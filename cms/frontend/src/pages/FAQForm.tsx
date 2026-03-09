@@ -75,10 +75,10 @@ export default function FAQForm() {
             setLoading(true);
             setError(null);
             const response = await getFAQ();
-            if (response.data) {
+            if (response) {
                 reset({
-                    ...response.data,
-                    metaTags: (response.data as any).metaTags || [],
+                    ...response,
+                    metaTags: (response as any).metaTags || [],
                 } as any);
             }
         } catch (err: any) {
@@ -280,30 +280,28 @@ export default function FAQForm() {
                                         type="text"
                                         {...register("seoTitle")}
                                         maxLength={60}
-                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-                                            errors.seoTitle
+                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.seoTitle
                                                 ? "border-red-300 bg-red-50"
                                                 : "border-gray-300"
-                                        }`}
+                                            }`}
                                         placeholder="SEO optimized title (50-60 characters)"
                                     />
                                     <div className="mt-1 h-1 bg-gray-200 rounded-full overflow-hidden">
                                         <div
-                                            className={`h-full transition-all ${
-                                                (watchSeoTitle?.length || 0) >
-                                                60
+                                            className={`h-full transition-all ${(watchSeoTitle?.length || 0) >
+                                                    60
                                                     ? "bg-red-500"
                                                     : (watchSeoTitle?.length ||
-                                                            0) > 50
-                                                      ? "bg-green-500"
-                                                      : "bg-yellow-500"
-                                            }`}
+                                                        0) > 50
+                                                        ? "bg-green-500"
+                                                        : "bg-yellow-500"
+                                                }`}
                                             style={{
                                                 width: `${Math.min(
                                                     ((watchSeoTitle?.length ||
                                                         0) /
                                                         60) *
-                                                        100,
+                                                    100,
                                                     100,
                                                 )}%`,
                                             }}
@@ -325,30 +323,28 @@ export default function FAQForm() {
                                         {...register("seoDescription")}
                                         maxLength={160}
                                         rows={3}
-                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-                                            errors.seoDescription
+                                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.seoDescription
                                                 ? "border-red-300 bg-red-50"
                                                 : "border-gray-300"
-                                        }`}
+                                            }`}
                                         placeholder="SEO optimized description (150-160 characters)"
                                     />
                                     <div className="mt-1 h-1 bg-gray-200 rounded-full overflow-hidden">
                                         <div
-                                            className={`h-full transition-all ${
-                                                (watchSeoDescription?.length ||
+                                            className={`h-full transition-all ${(watchSeoDescription?.length ||
                                                     0) > 160
                                                     ? "bg-red-500"
                                                     : (watchSeoDescription?.length ||
-                                                            0) > 150
-                                                      ? "bg-green-500"
-                                                      : "bg-yellow-500"
-                                            }`}
+                                                        0) > 150
+                                                        ? "bg-green-500"
+                                                        : "bg-yellow-500"
+                                                }`}
                                             style={{
                                                 width: `${Math.min(
                                                     ((watchSeoDescription?.length ||
                                                         0) /
                                                         160) *
-                                                        100,
+                                                    100,
                                                     100,
                                                 )}%`,
                                             }}

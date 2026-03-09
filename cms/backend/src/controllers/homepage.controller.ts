@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import { Homepage } from "../database/schemas/homepage.schema";
 
+
 /**
  * @route   GET /api/admin/homepage
- * @desc    Get homepage (singleton document)
+ * @desc    Get homepage data
  * @access  Protected (Admin)
  */
 export const getHomepage = async (
@@ -12,32 +13,14 @@ export const getHomepage = async (
 ): Promise<void> => {
     try {
         const homepage = await Homepage.findOne().lean();
-
         if (!homepage) {
-            res.status(404).json({
-                success: false,
-                error: {
-                    code: "NOT_FOUND",
-                    message: "Homepage not found",
-                },
-            });
+            res.status(404).json({ success: false, error: { code: "NOT_FOUND", message: "Homepage not found" } });
             return;
         }
-
-        res.status(200).json({
-            success: true,
-            data: homepage,
-        });
+        res.status(200).json({ success: true, data: homepage });
     } catch (error: any) {
         console.error("Error fetching homepage:", error);
-        res.status(500).json({
-            success: false,
-            error: {
-                code: "SERVER_ERROR",
-                message: "Failed to fetch homepage",
-                details: error.message,
-            },
-        });
+        res.status(500).json({ success: false, error: { code: "SERVER_ERROR", message: "Failed to fetch homepage" } });
     }
 };
 
@@ -51,9 +34,8 @@ export const updateHomepage = async (
     res: Response,
 ): Promise<void> => {
     try {
-        // Use findOneAndUpdate with upsert to ensure we always have one document
         const homepage = await Homepage.findOneAndUpdate(
-            {}, // Empty filter because it's a singleton
+            {},
             { $set: req.body },
             {
                 new: true,
@@ -63,6 +45,7 @@ export const updateHomepage = async (
             },
         ).lean();
 
+
         res.status(200).json({
             success: true,
             data: homepage,
@@ -71,7 +54,6 @@ export const updateHomepage = async (
     } catch (error: any) {
         console.error("Error updating homepage:", error);
 
-        // Handle validation errors
         if (error.name === "ValidationError") {
             const validationErrors: any = {};
             Object.keys(error.errors).forEach((key) => {

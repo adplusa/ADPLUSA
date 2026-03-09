@@ -114,6 +114,7 @@
     line-height: 1.2;
     margin-bottom: 16px;
     color: var(--foreground);
+    text-align: left;
 }
 
 .card-description {
@@ -127,6 +128,7 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-align: left;
 }
 
 /* Details List */

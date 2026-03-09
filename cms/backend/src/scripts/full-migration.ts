@@ -343,7 +343,7 @@ async function migrateHomepage() {
     seoDescription,
     slides[]{image{asset->{_id, url}, alt}},
     slidesDarkMode[]{image{asset->{_id, url}}},
-    sliderImage{asset->{_id, url}},
+
     sliderTextOne, sliderTextTwo, sliderTextThree, sliderTextFour, sliderTextFive,
     trustIconsHeading,
     serviceRelatedIcon[]{
@@ -532,19 +532,7 @@ async function migrateHomepage() {
         processSteps.push(...stepResults);
     }
 
-    // Migrate slider image
-    let sliderImageUrl = "";
-    let sliderRef = data.sliderImage?.asset?._ref;
-    if (!sliderRef && data.sliderImage?.asset?._id) {
-        sliderRef = data.sliderImage.asset._id;
-    }
-    if (sliderRef) {
-        sliderImageUrl = await migrateImage(
-            sliderRef,
-            "homepage",
-            "slider-image.png",
-        );
-    }
+
 
     // Migrate about images
     const aboutImages: any[] = [];
@@ -633,9 +621,7 @@ async function migrateHomepage() {
         workingProcessHeading: data.workingProcessHeading || "",
         workingProcessSubHeading: data.workingProcessSubHeading || "",
         processSteps,
-        sliderImage: sliderImageUrl
-            ? { url: sliderImageUrl, alt: "Slider" }
-            : undefined,
+
         sliderTexts,
         aboutLightHeading: data.allowLightHeading || "",
         aboutUsHeading: data.allowUsHeading || "",
@@ -1449,38 +1435,38 @@ async function migrateContact() {
     const formFields =
         data.formFields?.length > 0
             ? data.formFields.map((field: any) => ({
-                  label: field.label || "",
-                  name: field.name || "",
-                  type: field.type || "text",
-                  required: field.required !== false,
-              }))
+                label: field.label || "",
+                name: field.name || "",
+                type: field.type || "text",
+                required: field.required !== false,
+            }))
             : [
-                  { label: "Name", name: "name", type: "text", required: true },
-                  {
-                      label: "Email",
-                      name: "email",
-                      type: "email",
-                      required: true,
-                  },
-                  {
-                      label: "Phone",
-                      name: "phone",
-                      type: "phone",
-                      required: true,
-                  },
-                  {
-                      label: "Service",
-                      name: "service",
-                      type: "text",
-                      required: false,
-                  },
-                  {
-                      label: "Message",
-                      name: "message",
-                      type: "textarea",
-                      required: true,
-                  },
-              ];
+                { label: "Name", name: "name", type: "text", required: true },
+                {
+                    label: "Email",
+                    name: "email",
+                    type: "email",
+                    required: true,
+                },
+                {
+                    label: "Phone",
+                    name: "phone",
+                    type: "phone",
+                    required: true,
+                },
+                {
+                    label: "Service",
+                    name: "service",
+                    type: "text",
+                    required: false,
+                },
+                {
+                    label: "Message",
+                    name: "message",
+                    type: "textarea",
+                    required: true,
+                },
+            ];
 
     // Build why work with us items
     const whyWorkWithUsItems = (data.whyWorkWithUsItems || []).map(

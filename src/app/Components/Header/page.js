@@ -8,40 +8,49 @@ import { getGeneralSettings } from "@/lib/cms-client";
 
 const DEFAULT_LOGO = "/n.png";
 
-const Header = () => {
-    const [logo, setLogo] = useState(DEFAULT_LOGO);
-    const [logoAlt, setLogoAlt] = useState("ADPL Consulting Logo");
+const Header = ({ initialLogo = null, initialLogoAlt = "ADPL Consulting Logo" } = {}) => {
+    // Read from sessionStorage first for instant display (no flash/delay on navigation)
+    const [logo, setLogo] = useState(() => {
+        if (initialLogo) return initialLogo;
+        try { return sessionStorage.getItem("cms_header_logo") || null; } catch { return null; }
+    });
+    const [logoAlt, setLogoAlt] = useState(() => {
+        if (initialLogoAlt !== "ADPL Consulting Logo") return initialLogoAlt;
+        try { return sessionStorage.getItem("cms_header_logo_alt") || "ADPL Consulting Logo"; } catch { return "ADPL Consulting Logo"; }
+    });
     const [isFixed, setIsFixed] = useState(false);
     const [navbarTop, setNavbarTop] = useState(0);
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(true);
 
-    const cancelHandler = () => {
-        setMenuOpen(false);
+    const toggleMobileMenu = () => {
+        setMobileMenuOpen(!isMobileMenuOpen);
     };
 
-    const hamHandler = () => {
-        setMenuOpen(true);
-    };
-
-    // Fetch logo from CMS
+    // Fetch from CMS only when sessionStorage has no cached logo
     useEffect(() => {
+        if (logo) return; // Already have logo from sessionStorage or server prop, skip fetch
         const fetchSettings = async () => {
             try {
                 const settings = await getGeneralSettings();
                 if (settings?.headerLogo?.url) {
                     setLogo(settings.headerLogo.url);
-                    if (settings.headerLogo.alt) {
-                        setLogoAlt(settings.headerLogo.alt);
-                    }
+                    const alt = settings.headerLogo.alt || "ADPL Consulting Logo";
+                    setLogoAlt(alt);
+                    // Cache in sessionStorage for instant load on next page navigation
+                    try {
+                        sessionStorage.setItem("cms_header_logo", settings.headerLogo.url);
+                        sessionStorage.setItem("cms_header_logo_alt", alt);
+                    } catch { /* ignore storage errors */ }
+                } else {
+                    setLogo(DEFAULT_LOGO);
                 }
             } catch (error) {
                 console.error("Failed to fetch header settings:", error);
-                // Fallback to default logo
+                setLogo(DEFAULT_LOGO);
             }
         };
         fetchSettings();
-    }, []);
+    }, [logo]);
 
     useEffect(() => {
         const navbar = document.getElementById("second-navbar");
@@ -70,17 +79,18 @@ const Header = () => {
                 <Link href="/">
                     <div className="flip-logo">
                         <span className="flip-container" suppressHydrationWarning>
-                            <Image
-                                id="flip-one"
-                                className="flip-front"
-                                src={logo}
-                                alt={logoAlt}
-                                width={0}
-
-                                height={0}
-                                unoptimized
-                                priority
-                            />
+                            {logo && (
+                                <Image
+                                    id="flip-one"
+                                    className="flip-front"
+                                    src={logo}
+                                    alt={logoAlt}
+                                    width={0}
+                                    height={0}
+                                    unoptimized
+                                    priority
+                                />
+                            )}
                         </span>
                     </div>
                 </Link>
@@ -116,13 +126,31 @@ const Header = () => {
 
             {/* Mobile Header */}
             <div className="header-df mobile">
+                <Link href="/">
+                    <div className="flip-logo">
+                        <span className="flip-container" suppressHydrationWarning>
+                            {logo && (
+                                <Image
+                                    id="flip-one"
+                                    className="flip-front"
+                                    src={logo}
+                                    alt={logoAlt}
+                                    width={0}
+                                    height={0}
+                                    unoptimized
+                                    priority
+                                />
+                            )}
+                        </span>
+                    </div>
+                </Link>
+
                 <button
                     id="ham"
-                    onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
+                    onClick={toggleMobileMenu}
                 >
-                    {menuOpen ? (
+                    {!isMobileMenuOpen ? (
                         <svg
-                            onClick={cancelHandler}
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
                             height="24"
@@ -137,7 +165,6 @@ const Header = () => {
                         </svg>
                     ) : (
                         <svg
-                            onClick={hamHandler}
                             id="cancel"
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
@@ -177,24 +204,6 @@ const Header = () => {
                         </li>
                     </ul>
                 </div>
-
-                <Link href="/">
-                    <div className="flip-logo">
-                        <span className="flip-container" suppressHydrationWarning>
-                            <Image
-                                id="flip-one"
-                                className="flip-front"
-                                src={logo}
-                                alt={logoAlt}
-                                width={0}
-
-                                height={0}
-                                unoptimized
-                                priority
-                            />
-                        </span>
-                    </div>
-                </Link>
             </div>
         </div>
     );

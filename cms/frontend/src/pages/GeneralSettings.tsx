@@ -49,6 +49,7 @@ export default function GeneralSettingsForm() {
     const [siteName, setSiteName] = useState("");
     const [siteDescription, setSiteDescription] = useState("");
     const [customHeadTags, setCustomHeadTags] = useState("");
+    const [copyrightYear, setCopyrightYear] = useState(new Date().getFullYear());
 
     // Image uploader visibility states
     const [showHeaderUploader, setShowHeaderUploader] = useState(false);
@@ -71,6 +72,7 @@ export default function GeneralSettingsForm() {
                 setSiteName(response.siteName || "");
                 setSiteDescription(response.siteDescription || "");
                 setCustomHeadTags(response.customHeadTags || "");
+                setCopyrightYear(response.copyrightYear || new Date().getFullYear());
             }
         } catch (err: unknown) {
             const apiError = err as ApiError;
@@ -98,11 +100,12 @@ export default function GeneralSettingsForm() {
                 siteDescription,
             });
             await updateGeneralSettings({
-                headerLogo: headerLogo, // Pass null explicitly if it is null
+                headerLogo: headerLogo,
                 footerLogo: footerLogo,
-                favicon: favicon,
+                favicon: favicon || undefined,
                 siteName,
                 siteDescription,
+                copyrightYear,
                 customHeadTags,
             });
             setSuccess(true);
@@ -118,38 +121,41 @@ export default function GeneralSettingsForm() {
         }
     };
 
-    const handleHeaderLogoUpload = useCallback((images: UploadedImage[]) => {
+    const handleHeaderLogoChange = useCallback((images: UploadedImage[]) => {
         if (images.length > 0) {
             const img = images[0];
             setHeaderLogo({
                 url: img.cdnUrl || img.cloudFrontUrl || img.url,
-                alt: "Header Logo",
+                alt: headerLogo?.alt || "Header Logo",
             });
-            setShowHeaderUploader(false);
+        } else {
+            setHeaderLogo(null);
         }
-    }, []);
+    }, [headerLogo]);
 
-    const handleFooterLogoUpload = useCallback((images: UploadedImage[]) => {
+    const handleFooterLogoChange = useCallback((images: UploadedImage[]) => {
         if (images.length > 0) {
             const img = images[0];
             setFooterLogo({
                 url: img.cdnUrl || img.cloudFrontUrl || img.url,
-                alt: "Footer Logo",
+                alt: footerLogo?.alt || "Footer Logo",
             });
-            setShowFooterUploader(false);
+        } else {
+            setFooterLogo(null);
         }
-    }, []);
+    }, [footerLogo]);
 
-    const handleFaviconUpload = useCallback((images: UploadedImage[]) => {
+    const handleFaviconChange = useCallback((images: UploadedImage[]) => {
         if (images.length > 0) {
             const img = images[0];
             setFavicon({
                 url: img.cdnUrl || img.cloudFrontUrl || img.url,
-                alt: "Favicon",
+                alt: favicon?.alt || "Favicon",
             });
-            setShowFaviconUploader(false);
+        } else {
+            setFavicon(null);
         }
-    }, []);
+    }, [favicon]);
 
     if (loading) {
         return (
@@ -222,7 +228,7 @@ export default function GeneralSettingsForm() {
                                 <CardTitle>Header Logo</CardTitle>
                             </div>
                             <CardDescription>
-                                The logo displayed in the site header/navigation
+                                The logo displayed in the site header/navigation (recommended: PNG, SVG, or WEBP; 200-500px width)
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
@@ -248,7 +254,7 @@ export default function GeneralSettingsForm() {
                                                 }
                                             >
                                                 <Upload className="mr-2 h-4 w-4" />
-                                                Change Logo
+                                                Change Header Logo
                                             </Button>
                                             <Button
                                                 type="button"
@@ -302,9 +308,18 @@ export default function GeneralSettingsForm() {
                                         maxFiles={1}
                                         maxSizeInMB={5}
                                         folder="logos"
-                                        onUploadComplete={
-                                            handleHeaderLogoUpload
-                                        }
+                                        acceptedTypes={[
+                                            "image/jpeg",
+                                            "image/png",
+                                            "image/gif",
+                                            "image/webp",
+                                            "image/svg+xml",
+                                        ]}
+                                        initialImages={headerLogo ? [{
+                                            url: headerLogo.url,
+                                            status: "success"
+                                        }] : []}
+                                        onImagesChange={handleHeaderLogoChange}
                                     />
                                 </div>
                             )}
@@ -319,7 +334,7 @@ export default function GeneralSettingsForm() {
                                 <CardTitle>Footer Logo</CardTitle>
                             </div>
                             <CardDescription>
-                                The logo displayed in the site footer
+                                The logo displayed in the site footer (recommended: PNG, SVG, or WEBP)
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
@@ -345,7 +360,7 @@ export default function GeneralSettingsForm() {
                                                 }
                                             >
                                                 <Upload className="mr-2 h-4 w-4" />
-                                                Change Logo
+                                                Change Footer Logo
                                             </Button>
                                             <Button
                                                 type="button"
@@ -399,9 +414,18 @@ export default function GeneralSettingsForm() {
                                         maxFiles={1}
                                         maxSizeInMB={5}
                                         folder="logos"
-                                        onUploadComplete={
-                                            handleFooterLogoUpload
-                                        }
+                                        acceptedTypes={[
+                                            "image/jpeg",
+                                            "image/png",
+                                            "image/gif",
+                                            "image/webp",
+                                            "image/svg+xml",
+                                        ]}
+                                        initialImages={footerLogo ? [{
+                                            url: footerLogo.url,
+                                            status: "success"
+                                        }] : []}
+                                        onImagesChange={handleFooterLogoChange}
                                     />
                                 </div>
                             )}
@@ -502,7 +526,11 @@ export default function GeneralSettingsForm() {
                                             "image/ico",
                                             "image/jpeg",
                                         ]}
-                                        onUploadComplete={handleFaviconUpload}
+                                        initialImages={favicon ? [{
+                                            url: favicon.url,
+                                            status: "success"
+                                        }] : []}
+                                        onImagesChange={handleFaviconChange}
                                     />
                                 </div>
                             )}
@@ -546,6 +574,28 @@ export default function GeneralSettingsForm() {
                                     placeholder="Brief description of your site"
                                     maxLength={500}
                                 />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="copyrightYear">
+                                    Copyright Year
+                                </Label>
+                                <div className="flex items-center gap-2">
+                                    <Input
+                                        id="copyrightYear"
+                                        type="number"
+                                        value={copyrightYear}
+                                        onChange={(e) =>
+                                            setCopyrightYear(Number(e.target.value))
+                                        }
+                                        min={2000}
+                                        max={2100}
+                                        className="w-28"
+                                    />
+                                    <span className="text-sm text-muted-foreground">©️ ADPL Consulting LLC</span>
+                                </div>
+                                <p className="text-sm text-muted-foreground">
+                                    Footer will show: <strong>{copyrightYear} ©️ ADPL Consulting LLC</strong>
+                                </p>
                             </div>
                         </CardContent>
                     </Card>

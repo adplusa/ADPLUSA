@@ -28,8 +28,7 @@ export default function ProjectsClient({ projects, pageData }) {
         .map((item) => ({
             ...item,
             mainImage: item.images?.[0] || null,
-        }))
-        .filter((item) => item.mainImage?.url);
+        }));
 
     // Infinite scroll - load more when loader element is visible
     const loadMore = useCallback(() => {

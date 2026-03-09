@@ -282,26 +282,9 @@ export default function ProjectClient({ project, otherProjects, slug }) {
                             >
                                 <p>{detail?.label}</p>
                                 <ul>
-                                    {detail?.items?.map((item, itemIdx) => (
-                                        <li key={itemIdx}>
-                                            {item?.startsWith?.("http") ? (
-                                                <a
-                                                    href={item}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    {item}
-                                                </a>
-                                            ) : (
-                                                item
-                                            )}
-                                        </li>
-                                    ))}
-                                    {detail?.value && !detail?.items && (
+                                    {detail?.value ? (
                                         <li>
-                                            {detail.value.startsWith?.(
-                                                "http",
-                                            ) ? (
+                                            {detail.value.startsWith?.("http") ? (
                                                 <a
                                                     href={detail.value}
                                                     target="_blank"
@@ -313,6 +296,22 @@ export default function ProjectClient({ project, otherProjects, slug }) {
                                                 detail.value
                                             )}
                                         </li>
+                                    ) : (
+                                        detail?.items?.map((item, itemIdx) => (
+                                            <li key={itemIdx}>
+                                                {item?.startsWith?.("http") ? (
+                                                    <a
+                                                        href={item}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        {item}
+                                                    </a>
+                                                ) : (
+                                                    item
+                                                )}
+                                            </li>
+                                        ))
                                     )}
                                 </ul>
                             </div>
@@ -322,31 +321,31 @@ export default function ProjectClient({ project, otherProjects, slug }) {
 
                 {(project.moreContent ||
                     project.projectDetails?.length > 4) && (
-                    <div
-                        className="internal-section-one-btn"
-                        onClick={() => setIsExpanded(!isExpanded)}
-                    >
-                        <button>
-                            {isExpanded
-                                ? "Less Information"
-                                : "More Information"}
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                className={`bi ${isExpanded ? "bi-x-lg" : "bi-plus"}`}
-                                viewBox="0 0 16 16"
-                            >
-                                {isExpanded ? (
-                                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
-                                ) : (
-                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-                                )}
-                            </svg>
-                        </button>
-                    </div>
-                )}
+                        <div
+                            className="internal-section-one-btn"
+                            onClick={() => setIsExpanded(!isExpanded)}
+                        >
+                            <button>
+                                {isExpanded
+                                    ? "Less Information"
+                                    : "More Information"}
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    fill="currentColor"
+                                    className={`bi ${isExpanded ? "bi-x-lg" : "bi-plus"}`}
+                                    viewBox="0 0 16 16"
+                                >
+                                    {isExpanded ? (
+                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                                    ) : (
+                                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                                    )}
+                                </svg>
+                            </button>
+                        </div>
+                    )}
                 <hr id="internal-line" />
             </div>
 
@@ -403,7 +402,7 @@ export default function ProjectClient({ project, otherProjects, slug }) {
                                         >
                                             <div className="image-container-internals">
                                                 {proj.mainImage?.url ||
-                                                proj.images?.[0]?.url ? (
+                                                    proj.images?.[0]?.url ? (
                                                     <Image
                                                         src={
                                                             proj.mainImage

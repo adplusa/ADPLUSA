@@ -61,6 +61,8 @@ export const projectValidationSchema: ValidationSchema = {
     link: {
         required: false,
         type: "string",
+        pattern: /^(https?:\/\/([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?|\/.*)$/,
+        message: "Link must be a valid URL",
     },
     seoTitle: {
         required: false,
@@ -123,6 +125,8 @@ export const projectUpdateValidationSchema: ValidationSchema = {
     link: {
         required: false,
         type: "string",
+        pattern: /^(https?:\/\/([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?|\/.*)$/,
+        message: "Link must be a valid URL",
     },
     seoTitle: {
         required: false,

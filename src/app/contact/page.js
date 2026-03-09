@@ -13,8 +13,13 @@ export default function ContactPage() {
         const fetchData = async () => {
             try {
                 const cmsUrl = getCMSApiUrl();
-                const response = await fetch(`${cmsUrl}/api/public/contact`, {
+                const response = await fetch(`${cmsUrl}/api/public/contact?t=${Date.now()}`, {
                     cache: "no-store",
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
                 });
                 if (!response.ok) throw new Error("Failed to fetch contact");
                 const result = await response.json();

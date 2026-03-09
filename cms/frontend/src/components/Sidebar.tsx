@@ -2,7 +2,6 @@ import { NavLink } from "react-router-dom";
 import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
-import { Separator } from "./ui/separator";
 import {
     Home,
     FolderOpen,
@@ -10,10 +9,7 @@ import {
     HelpCircle,
     Info,
     Phone,
-    Tags,
-    Image,
     X,
-    Settings,
     Globe,
     Layers,
     FileText,
@@ -29,8 +25,6 @@ const mainNavigation = [{ name: "Dashboard", href: "/dashboard", icon: Home }];
 const contentNavigation = [
     { name: "Projects", href: "/dashboard/projects", icon: FolderOpen },
     { name: "Services", href: "/dashboard/services", icon: Briefcase },
-    { name: "Media Library", href: "/dashboard/media", icon: Image },
-    { name: "Tags", href: "/dashboard/tags", icon: Tags },
 ];
 
 const pagesNavigation = [
@@ -51,9 +45,7 @@ const pagesNavigation = [
     { name: "FAQ", href: "/dashboard/faq", icon: HelpCircle },
 ];
 
-const settingsNavigation = [
-    { name: "Settings", href: "/dashboard/settings", icon: Settings },
-];
+
 
 interface NavSectionProps {
     title: string;
@@ -131,12 +123,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                         items={pagesNavigation}
                         onItemClick={onClose}
                     />
-                    <Separator />
-                    <NavSection
-                        title="System"
-                        items={settingsNavigation}
-                        onItemClick={onClose}
-                    />
                 </div>
             </ScrollArea>
 
@@ -209,12 +195,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                             <NavSection
                                 title="Pages"
                                 items={pagesNavigation}
-                                onItemClick={onClose}
-                            />
-                            <Separator />
-                            <NavSection
-                                title="System"
-                                items={settingsNavigation}
                                 onItemClick={onClose}
                             />
                         </div>

@@ -33,8 +33,8 @@ import { getTags, createTag, updateTag, deleteTag } from "../controllers/tag.con
 import { getMedia, getMediaById, registerMedia, updateMedia, deleteMedia } from "../controllers/media.controller";
 import { updateGeneralSettings, getGeneralSettings } from "../controllers/generalSettings.controller";
 import { updateHomepage, getHomepage } from "../controllers/homepage.controller";
-import { updateMainServicePage } from "../controllers/mainServicePage.controller";
-import { updateProjectsPage } from "../controllers/projectsPage.controller";
+import { getMainServicePage, updateMainServicePage } from "../controllers/mainServicePage.controller";
+import { getProjectsPage, updateProjectsPage } from "../controllers/projectsPage.controller";
 
 const router = Router();
 
@@ -194,15 +194,29 @@ router.get("/general-settings", getGeneralSettings);
 router.put("/general-settings", updateGeneralSettings);
 
 /**
+ * @route   GET /api/admin/main-service-page
+ * @desc    Get Main Service Page data
+ * @access  Protected (Admin)
+ */
+router.get("/main-service-page", getMainServicePage);
+
+/**
  * @route   PUT /api/admin/main-service-page
- * @desc    Update Main Service Page (singleton document)
+ * @desc    Update Main Service Page data
  * @access  Protected (Admin)
  */
 router.put("/main-service-page", updateMainServicePage);
 
 /**
+ * @route   GET /api/admin/projects-page
+ * @desc    Get Projects Page data
+ * @access  Protected (Admin)
+ */
+router.get("/projects-page", getProjectsPage);
+
+/**
  * @route   PUT /api/admin/projects-page
- * @desc    Update Projects Page (singleton document)
+ * @desc    Update Projects Page data
  * @access  Protected (Admin)
  */
 router.put("/projects-page", updateProjectsPage);

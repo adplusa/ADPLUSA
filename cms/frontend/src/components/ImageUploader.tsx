@@ -109,7 +109,14 @@ export default function ImageUploader({
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        setUploadedImages(initialImages);
+        setUploadedImages((prev) => {
+            // Prevent infinite loops caused by new array references on every render
+            if (prev === initialImages) return prev;
+            if (prev.length !== initialImages.length) return initialImages;
+
+            const isSame = prev.every((img, i) => img.url === initialImages[i]?.url);
+            return isSame ? prev : initialImages;
+        });
     }, [initialImages]);
 
     const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
@@ -709,13 +716,12 @@ export default function ImageUploader({
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                className={`relative border-2 border-dashed rounded-lg p-6 transition-colors ${
-                    isDragging
+                className={`relative border-2 border-dashed rounded-lg p-6 transition-colors ${isDragging
                         ? isValidDrop
                             ? "border-indigo-500 bg-indigo-50"
                             : "border-red-500 bg-red-50"
                         : "border-gray-300 hover:border-gray-400"
-                } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                    } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                 onClick={!disabled ? handleBrowseClick : undefined}
                 role="button"
                 tabIndex={disabled ? -1 : 0}
@@ -844,8 +850,8 @@ export default function ImageUploader({
                                         {fileState.file.type.startsWith(
                                             "video/",
                                         ) ||
-                                        fileState.preview.endsWith(".mp4") ||
-                                        fileState.preview.endsWith(".webm") ? (
+                                            fileState.preview.endsWith(".mp4") ||
+                                            fileState.preview.endsWith(".webm") ? (
                                             <video
                                                 src={fileState.preview}
                                                 className="w-full h-full object-cover"
@@ -870,30 +876,30 @@ export default function ImageUploader({
                                     {/* Progress bar */}
                                     {(fileState.status === "uploading" ||
                                         fileState.status === "pending") && (
-                                        <div
-                                            className="absolute bottom-0 left-0 right-0 bg-gray-900 bg-opacity-75 p-2"
-                                            role="progressbar"
-                                            aria-valuenow={fileState.progress}
-                                            aria-valuemin={0}
-                                            aria-valuemax={100}
-                                            aria-label={`Upload progress for ${fileState.file.name}`}
-                                        >
-                                            <div className="w-full bg-gray-700 rounded-full h-2">
-                                                <div
-                                                    className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
-                                                    style={{
-                                                        width: `${fileState.progress}%`,
-                                                    }}
-                                                />
-                                            </div>
-                                            <p
-                                                className="text-xs text-white mt-1 text-center"
-                                                aria-hidden="true"
+                                            <div
+                                                className="absolute bottom-0 left-0 right-0 bg-gray-900 bg-opacity-75 p-2"
+                                                role="progressbar"
+                                                aria-valuenow={fileState.progress}
+                                                aria-valuemin={0}
+                                                aria-valuemax={100}
+                                                aria-label={`Upload progress for ${fileState.file.name}`}
                                             >
-                                                {fileState.progress}%
-                                            </p>
-                                        </div>
-                                    )}
+                                                <div className="w-full bg-gray-700 rounded-full h-2">
+                                                    <div
+                                                        className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
+                                                        style={{
+                                                            width: `${fileState.progress}%`,
+                                                        }}
+                                                    />
+                                                </div>
+                                                <p
+                                                    className="text-xs text-white mt-1 text-center"
+                                                    aria-hidden="true"
+                                                >
+                                                    {fileState.progress}%
+                                                </p>
+                                            </div>
+                                        )}
 
                                     {/* Success indicator */}
                                     {fileState.status === "success" && (
@@ -979,9 +985,8 @@ export default function ImageUploader({
                         {uploadedImages.map((image, index) => (
                             <div
                                 key={image.id || index}
-                                className={`relative group ${
-                                    draggedIndex === index ? "opacity-50" : ""
-                                } ${dragOverIndex === index ? "ring-2 ring-indigo-500" : ""}`}
+                                className={`relative group ${draggedIndex === index ? "opacity-50" : ""
+                                    } ${dragOverIndex === index ? "ring-2 ring-indigo-500" : ""}`}
                                 draggable={multiple}
                                 onDragStart={(e) =>
                                     handleImageDragStart(e, index)
@@ -1009,7 +1014,7 @@ export default function ImageUploader({
                                     aria-label={`View larger preview of ${image.contentType?.startsWith("video/") ? "video" : "image"} ${index + 1}`}
                                 >
                                     {image.contentType?.startsWith("video/") ||
-                                    image.url.match(/\.(mp4|webm|mov)$/i) ? (
+                                        image.url.match(/\.(mp4|webm|mov)$/i) ? (
                                         <div className="relative w-full h-full">
                                             <video
                                                 src={getDisplayUrl(image)}

@@ -31,8 +31,8 @@ export interface MediaFile {
   height?: number;
   alt?: string;
   description?: string;
-  tags: Array<{ _id: string; name: string; color: string }>;
-  uploadedBy: { _id: string; username: string };
+  tags: Array<{ _id: string; name: string; color: string }> | any[];
+  uploadedBy?: { _id: string; username: string };
   createdAt: string;
   updatedAt: string;
 }
@@ -54,73 +54,49 @@ export interface UpdateMediaData {
   tags?: string[];
 }
 
-export const mediaService = {
-  getAll: () => ApiHelper.get("/api/admin/media"),
-  getById: (id: string) => ApiHelper.get(`/api/admin/media/${id}`),
-  update: (id: string, data: any) => ApiHelper.put(`/api/admin/media/${id}`, data),
-  delete: (id: string) => ApiHelper.delete(`/api/admin/media/${id}`),
+export const getMedia = (params?: any) => ApiHelper.get<MediaListResponse>("/admin/media", { params });
+export const getMediaById = (id: string) => ApiHelper.get<MediaFile>(`/admin/media/${id}`);
+export const updateMedia = (id: string, data: any) => ApiHelper.put<MediaFile>(`/admin/media/${id}`, data);
+export const deleteMedia = (id: string) => ApiHelper.delete(`/admin/media/${id}`);
 
-  getPresignedUploadUrl: (fileName: string, contentType: string, folder: string = "uploads") =>
-    ApiHelper.post("/api/admin/presigned-upload", { fileName, contentType, folder }),
+export const getPresignedUploadUrl = (fileName: string, contentType: string, folder: string = "uploads") =>
+  ApiHelper.post<PresignedUploadUrl>("/admin/presigned-upload", { fileName, contentType, folder });
 
-  getPresignedUploadUrls: (files: Array<{ fileName: string; contentType: string }>, folder: string = "uploads") =>
-    ApiHelper.post("/api/admin/presigned-upload/batch", { files, folder }),
+export const getPresignedUploadUrls = (files: Array<{ fileName: string; contentType: string }>, folder: string = "uploads") =>
+  ApiHelper.post<PresignedUploadUrl[]>("/admin/presigned-upload/batch", { files, folder });
 
-  registerMedia: (data: MediaRegistration) =>
-    ApiHelper.post("/api/admin/media", data),
+export const registerMedia = (data: MediaRegistration) =>
+  ApiHelper.post("/admin/media", data);
+
+export const isImage = (mimeType: string): boolean => {
+  return mimeType.startsWith("image/");
 };
 
-// Helper functions for MediaLibrary
-export async function getMedia(params: {
-  page?: number;
-  limit?: number;
-  search?: string;
-  mimeType?: string;
-  tags?: string[];
-}): Promise<MediaListResponse> {
-  const queryParams = new URLSearchParams();
-  if (params.page) queryParams.append("page", String(params.page));
-  if (params.limit) queryParams.append("limit", String(params.limit));
-  if (params.search) queryParams.append("search", params.search);
-  if (params.mimeType) queryParams.append("mimeType", params.mimeType);
-  if (params.tags && params.tags.length > 0) {
-    params.tags.forEach(tag => queryParams.append("tags", tag));
-  }
-
-  const response = await ApiHelper.get<MediaListResponse>(
-    `/api/admin/media?${queryParams.toString()}`
-  );
-  return response || { data: [] };
-}
-
-export async function deleteMedia(id: string): Promise<any> {
-  return ApiHelper.delete(`/api/admin/media/${id}`);
-}
-
-export async function getMediaById(id: string): Promise<any> {
-  return ApiHelper.get(`/api/admin/media/${id}`);
-}
-
-export async function updateMedia(id: string, data: UpdateMediaData): Promise<any> {
-  return ApiHelper.put(`/api/admin/media/${id}`, data);
-}
-
-export function formatFileSize(bytes: number): string {
+export const formatFileSize = (bytes: number): string => {
   if (bytes === 0) return "0 Bytes";
   const k = 1024;
-  const sizes = ["Bytes", "KB", "MB", "GB"];
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-}
+};
 
-export function isImage(mimeType: string): boolean {
-  return mimeType.startsWith("image/");
-}
-
-export function getFileTypeIcon(mimeType: string): string {
+export const getFileTypeIcon = (mimeType: string): string => {
   if (mimeType.startsWith("image/")) return "🖼️";
   if (mimeType.startsWith("video/")) return "🎬";
   if (mimeType.includes("pdf")) return "📄";
   if (mimeType.includes("word") || mimeType.includes("document")) return "📝";
   return "📎";
-}
+};
+
+export const mediaService = {
+  getAll: getMedia,
+  getById: getMediaById,
+  update: updateMedia,
+  delete: deleteMedia,
+  getPresignedUploadUrl,
+  getPresignedUploadUrls,
+  registerMedia,
+  isImage,
+  formatFileSize,
+  getFileTypeIcon,
+};

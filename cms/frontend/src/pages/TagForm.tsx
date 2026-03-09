@@ -49,8 +49,7 @@ export default function TagForm() {
         try {
             setInitialLoading(true);
             setError(null);
-            const response = await getTagById(id!);
-            const tag = response.data;
+            const tag = await getTagById(id!);
             reset({
                 name: tag.name,
                 description: tag.description || "",

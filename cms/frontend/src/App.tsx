@@ -22,12 +22,7 @@ import AboutForm from "./pages/AboutForm";
 import HomepageForm from "./pages/HomepageForm";
 import Contact from "./pages/Contact";
 import ContactForm from "./pages/ContactForm";
-import Tags from "./pages/Tags";
-import TagForm from "./pages/TagForm";
-import MediaLibrary from "./pages/MediaLibrary";
-import MediaUpload from "./pages/MediaUpload";
-import MediaEdit from "./pages/MediaEdit";
-import Settings from "./pages/Settings";
+
 import GeneralSettings from "./pages/GeneralSettings";
 import Homepage from "./pages/Homepage";
 import MainServicePageForm from "./pages/MainServicePageForm";
@@ -67,12 +62,6 @@ function App() {
                         <Route path="homepage" element={<Homepage />} />
                         <Route path="contact" element={<Contact />} />
                         <Route path="contact/edit" element={<ContactForm />} />
-                        <Route path="tags" element={<Tags />} />
-                        <Route path="tags/new" element={<TagForm />} />
-                        <Route path="tags/:id" element={<TagForm />} />
-                        <Route path="media" element={<MediaLibrary />} />
-                        <Route path="media/upload" element={<MediaUpload />} />
-                        <Route path="media/:id" element={<MediaEdit />} />
                         <Route
                             path="general-settings"
                             element={<GeneralSettings />}
@@ -85,7 +74,6 @@ function App() {
                             path="projects-page"
                             element={<ProjectsPageForm />}
                         />
-                        <Route path="settings" element={<Settings />} />
                     </Route>
                     <Route
                         path="/"

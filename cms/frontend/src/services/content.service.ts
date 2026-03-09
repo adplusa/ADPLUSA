@@ -1,5 +1,6 @@
 import { ApiHelper } from "./api-helper";
 
+// Types
 export interface AnchorLink {
     id: string;
     label: string;
@@ -46,14 +47,14 @@ export interface Contact {
         email: string;
         phone: string;
         address: string;
-      socialMedia?: {
-          facebook?: string;
-          instagram?: string;
-          linkedin?: string;
-          twitter?: string;
-          youtube?: string;
-      };
-  };
+        socialMedia?: {
+            facebook?: string;
+            instagram?: string;
+            linkedin?: string;
+            twitter?: string;
+            youtube?: string;
+        };
+    };
     googleMapEmbedUrl?: string;
     seoTitle?: string;
     seoDescription?: string;
@@ -63,6 +64,13 @@ export interface Contact {
     updatedAt?: string;
 }
 
+export interface FAQQuestion {
+    question: string;
+    answer: string;
+    order?: number;
+    [key: string]: any;
+}
+
 export interface FAQItem {
     id: string;
     question: string;
@@ -70,11 +78,15 @@ export interface FAQItem {
 }
 
 export interface FAQCategory {
-    id: string;
-    title: string;
+    id?: string;
+    name?: string;
+    title?: string;
     description?: string;
-    faqs: FAQItem[];
+    questions?: FAQQuestion[];
+    faqs?: FAQItem[];
     chatLink?: string;
+    order?: number;
+    [key: string]: any;
 }
 
 export interface FAQ {
@@ -84,43 +96,26 @@ export interface FAQ {
     categories: FAQCategory[];
     seoTitle?: string;
     seoDescription?: string;
-    metaTags?: Array<{ name: string; content: string }>;
+    metaTags?: Array<{ name: string; content: string }> | any[];
     customHeadTags?: string;
     createdAt?: string;
     updatedAt?: string;
 }
 
+export const getFAQ = () => ApiHelper.get<FAQ>("/admin/faq");
+export const updateFAQ = (data: any) => ApiHelper.put<FAQ>("/admin/faq", data);
+
+export const getAbout = () => ApiHelper.get<About>("/admin/about");
+export const updateAbout = (data: any) => ApiHelper.put<About>("/admin/about", data);
+
+export const getContact = () => ApiHelper.get<Contact>("/admin/contact");
+export const updateContact = (data: any) => ApiHelper.put<Contact>("/admin/contact", data);
+
 export const contentService = {
-    getFAQ: () => ApiHelper.get("/api/admin/faq"),
-    updateFAQ: (data: any) => ApiHelper.put("/api/admin/faq", data),
-
-    getAbout: () => ApiHelper.get("/api/admin/about"),
-    updateAbout: (data: any) => ApiHelper.put("/api/admin/about", data),
-
-    getContact: () => ApiHelper.get("/api/admin/contact"),
-    updateContact: (data: any) => ApiHelper.put("/api/admin/contact", data),
+    getFAQ,
+    updateFAQ,
+    getAbout,
+    updateAbout,
+    getContact,
+    updateContact,
 };
-
-export async function getFAQ(): Promise<any> {
-    return ApiHelper.get("/api/admin/faq");
-}
-
-export async function updateFAQ(data: any): Promise<any> {
-    return ApiHelper.put("/api/admin/faq", data);
-}
-
-export async function getAbout(): Promise<any> {
-    return ApiHelper.get("/api/admin/about");
-}
-
-export async function updateAbout(data: any): Promise<any> {
-    return ApiHelper.put("/api/admin/about", data);
-}
-
-export async function getContact(): Promise<any> {
-    return ApiHelper.get("/api/admin/contact");
-}
-
-export async function updateContact(data: any): Promise<any> {
-    return ApiHelper.put("/api/admin/contact", data);
-}

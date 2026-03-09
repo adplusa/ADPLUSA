@@ -12,15 +12,10 @@ export interface ProjectsPage {
     updatedAt?: string;
 }
 
+export const getProjectsPage = () => ApiHelper.get<ProjectsPage>("/admin/projects-page");
+export const updateProjectsPage = (data: any) => ApiHelper.put<ProjectsPage>("/admin/projects-page", data);
+
 export const projectsPageService = {
-    get: () => ApiHelper.get("/api/admin/projects-page"),
-    update: (data: any) => ApiHelper.put("/api/admin/projects-page", data),
+    get: getProjectsPage,
+    update: updateProjectsPage,
 };
-
-export async function getProjectsPage(): Promise<ProjectsPage | null> {
-    return ApiHelper.get("/api/admin/projects-page");
-}
-
-export async function updateProjectsPage(data: any): Promise<ProjectsPage | null> {
-    return ApiHelper.put("/api/admin/projects-page", data);
-}

@@ -9,25 +9,21 @@ export interface GeneralSettings {
     _id?: string;
     siteName: string;
     siteDescription: string;
+    copyrightYear?: number;
     logo?: SettingsImage;
     favicon?: SettingsImage;
-    headerLogo?: SettingsImage;
-    footerLogo?: SettingsImage;
+    headerLogo?: SettingsImage | null;
+    footerLogo?: SettingsImage | null;
     customHeadTags?: string;
     metaTags?: Array<{ name: string; content: string }>;
     createdAt?: string;
     updatedAt?: string;
 }
 
+export const getGeneralSettings = () => ApiHelper.get<GeneralSettings>("/admin/general-settings");
+export const updateGeneralSettings = (data: Partial<GeneralSettings>) => ApiHelper.put<any>("/admin/general-settings", data);
+
 export const generalSettingsService = {
-    get: () => ApiHelper.get("/api/admin/general-settings"),
-    update: (data: any) => ApiHelper.put("/api/admin/general-settings", data),
+    get: getGeneralSettings,
+    update: updateGeneralSettings,
 };
-
-export async function getGeneralSettings(): Promise<GeneralSettings | null> {
-    return ApiHelper.get("/api/admin/general-settings");
-}
-
-export async function updateGeneralSettings(data: any): Promise<GeneralSettings | null> {
-    return ApiHelper.put("/api/admin/general-settings", data);
-}

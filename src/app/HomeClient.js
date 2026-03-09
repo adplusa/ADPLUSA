@@ -8,11 +8,21 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
+
+function AdaptiveHeight(slider) {
+    function updateHeight() {
+        slider.container.style.height =
+            slider.slides[slider.track.details.rel].offsetHeight + "px";
+    }
+    slider.on("created", updateHeight);
+    slider.on("slideChanged", updateHeight);
+}
 import { gsap, CSSPlugin, Expo } from "gsap";
 import SplitType from "split-type";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Footer from "./Components/Footer/page";
 import PageScripts from "./Components/PageScripts";
+import "./contact/contact.css";
 
 gsap.registerPlugin(CSSPlugin, ScrollTrigger);
 
@@ -23,7 +33,9 @@ export default function HomeClient({ homepageData: initialData }) {
     const [isLeftHalf, setIsLeftHalf] = useState(true);
     const [showCustomCursor, setShowCustomCursor] = useState(false);
     const [renderCursorPos, setRenderCursorPos] = useState({ x: 0, y: 0 });
-    const [slides, setSlides] = useState(initialData?.slides || []);
+    const [slides, setSlides] = useState(
+        (initialData?.slides || []).filter((s) => s?.image?.url)
+    );
 
     const [currentSlideHeroBanner, setCurrentSlideHeroBanner] = useState(0);
     const [isDesktop, setIsDesktop] = useState(false);
@@ -46,6 +58,11 @@ export default function HomeClient({ homepageData: initialData }) {
     const [showIntro, setShowIntro] = useState(false);
     const [showForm, setShowForm] = useState(false);
     const [showScrollUp, setShowScrollUp] = useState(false);
+    const [expandedBio, setExpandedBio] = useState({});
+
+    const toggleBio = (idx) => {
+        setExpandedBio((prev) => ({ ...prev, [idx]: !prev[idx] }));
+    };
 
     // Contact Form Logic removed (using shared component)
 
@@ -55,36 +72,19 @@ export default function HomeClient({ homepageData: initialData }) {
     const [sliderRef, instanceRef] = useKeenSlider(
         {
             loop: true,
-        },
-        [
-            (slider) => {
-                instanceRef.current = slider;
-                let timeout;
-                let mouseOver = false;
-
-                const nextTimeout = () => {
-                    clearTimeout(timeout);
-                    if (mouseOver) return;
-                    timeout = setTimeout(() => slider.next(), 4000);
-                };
-
-                slider.on("created", () => {
-                    slider.container.addEventListener("mouseover", () => {
-                        mouseOver = true;
-                        clearTimeout(timeout);
-                    });
-                    slider.container.addEventListener("mouseout", () => {
-                        mouseOver = false;
-                        nextTimeout();
-                    });
-                    nextTimeout();
-                });
-
-                slider.on("dragStarted", () => clearTimeout(timeout));
-                slider.on("animationEnded", nextTimeout);
-                slider.on("updated", nextTimeout);
+            slides: {
+                perView: 1,
+                spacing: 0,
             },
-        ],
+            drag: true,
+            breakpoints: {
+                "(max-width: 768px)": {
+                    slides: { perView: 1, spacing: 0 },
+                    renderMode: "performance",
+                },
+            },
+        },
+        [AdaptiveHeight],
     );
 
     // Fixed localStorage check and intro logic
@@ -288,6 +288,15 @@ export default function HomeClient({ homepageData: initialData }) {
         setCurrentSlideHeroBanner((prev) => (prev + 1) % slides.length);
     };
 
+    // Auto-advance hero carousel every 4s; resets if user manually swipes
+    useEffect(() => {
+        if (!slides.length) return;
+        const timer = setInterval(() => {
+            setCurrentSlideHeroBanner((prev) => (prev + 1) % slides.length);
+        }, 4000);
+        return () => clearInterval(timer);
+    }, [slides.length, currentSlideHeroBanner]);
+
     const handleMouseMove = (e) => {
         const bounds = e.currentTarget.getBoundingClientRect();
         const x = e.clientX - bounds.left;
@@ -299,6 +308,38 @@ export default function HomeClient({ homepageData: initialData }) {
 
     const handleMouseEnter = () => setShowCustomCursor(true);
     const handleMouseLeave = () => setShowCustomCursor(false);
+
+    // Touch support for mobile hero carousel
+    const touchStartXRef = useRef(null);
+    const sliderContainerRef = useRef(null);
+
+    const handleTouchStart = (e) => {
+        touchStartXRef.current = e.touches[0].clientX;
+    };
+
+    const handleTouchEnd = (e) => {
+        if (touchStartXRef.current === null) return;
+        const delta = touchStartXRef.current - e.changedTouches[0].clientX;
+        if (Math.abs(delta) > 40) {
+            delta > 0 ? nextSlide() : prevSlide();
+        }
+        touchStartXRef.current = null;
+    };
+
+    // Attach touchmove with {passive: false} so preventDefault() works
+    useEffect(() => {
+        const el = sliderContainerRef.current;
+        if (!el) return;
+        const onTouchMove = (e) => {
+            if (touchStartXRef.current === null) return;
+            const delta = Math.abs(touchStartXRef.current - e.touches[0].clientX);
+            if (delta > 10) {
+                e.preventDefault();
+            }
+        };
+        el.addEventListener("touchmove", onTouchMove, { passive: false });
+        return () => el.removeEventListener("touchmove", onTouchMove);
+    }, []);
 
     useEffect(() => {
         let animationFrame;
@@ -375,7 +416,10 @@ export default function HomeClient({ homepageData: initialData }) {
                                     <div className="overlay"></div>
                                 </div>
                                 <div
+                                    ref={sliderContainerRef}
                                     className={"animation-slider light-banner"}
+                                    onTouchStart={handleTouchStart}
+                                    onTouchEnd={handleTouchEnd}
                                     {...(isDesktop && {
                                         onMouseMove: handleMouseMove,
                                         onMouseEnter: handleMouseEnter,
@@ -402,8 +446,6 @@ export default function HomeClient({ homepageData: initialData }) {
                                                         className="animate-back-img"
                                                         style={{
                                                             backgroundImage: `url(${slide.image.url})`,
-                                                            backgroundSize:
-                                                                "contain",
                                                         }}
                                                         aria-label={
                                                             slide.image?.alt ||
@@ -544,6 +586,7 @@ export default function HomeClient({ homepageData: initialData }) {
                                                             "/mainservice"
                                                         }
                                                         key={index}
+                                                        className="home-service-link"
                                                     >
                                                         <div className="service-box-home">
                                                             <div className="service-image">
@@ -688,20 +731,6 @@ export default function HomeClient({ homepageData: initialData }) {
                                                 (text, idx) => (
                                                     <span key={idx}>
                                                         <h1>{text}</h1>
-                                                        {homepageData
-                                                            .sliderImage
-                                                            ?.url && (
-                                                                <Image
-                                                                    src={
-                                                                        homepageData
-                                                                            .sliderImage
-                                                                            .url
-                                                                    }
-                                                                    alt="Slider Icon"
-                                                                    width="30"
-                                                                    height="30"
-                                                                />
-                                                            )}
                                                     </span>
                                                 ),
                                             )}
@@ -713,20 +742,6 @@ export default function HomeClient({ homepageData: initialData }) {
                                                 (text, idx) => (
                                                     <span key={`dup-${idx}`}>
                                                         <h1>{text}</h1>
-                                                        {homepageData
-                                                            .sliderImage
-                                                            ?.url && (
-                                                                <Image
-                                                                    src={
-                                                                        homepageData
-                                                                            .sliderImage
-                                                                            .url
-                                                                    }
-                                                                    alt="Slider Icon"
-                                                                    width="30"
-                                                                    height="30"
-                                                                />
-                                                            )}
                                                     </span>
                                                 ),
                                             )}
@@ -875,57 +890,53 @@ export default function HomeClient({ homepageData: initialData }) {
                                                             <div className="content-two">
                                                                 <div className="text">
                                                                     <h3>
-                                                                        {
-                                                                            slide.title
-                                                                        }
-                                                                    </h3>
-
-                                                                    {/* Render rich text content - now HTML string */}
-                                                                    {slide.description && (
-                                                                        <div
-                                                                            className="founder-description"
-                                                                            dangerouslySetInnerHTML={{
-                                                                                __html: slide.description,
-                                                                            }}
-                                                                        />
-                                                                    )}
-
-                                                                    {slide.descriptionTwo && (
-                                                                        <div
-                                                                            className="founder-description-two"
-                                                                            dangerouslySetInnerHTML={{
-                                                                                __html: slide.descriptionTwo,
-                                                                            }}
-                                                                        />
-                                                                    )}
-
-                                                                    <br />
-
-                                                                    <h5>
                                                                         <b>
                                                                             {
                                                                                 slide.name
                                                                             }
                                                                         </b>
-                                                                    </h5>
-                                                                    <p className="author-p">
+                                                                    </h3>
+                                                                    <h5 className="author-p" style={{ marginBottom: "5px" }}>
                                                                         {
                                                                             slide.achievements
                                                                         }
-                                                                    </p>
-                                                                    <br />
-                                                                    <h5>
+                                                                    </h5>
+
+                                                                    {/* Render rich text content - now HTML string */}
+                                                                    <div className={`founder-bio-container ${expandedBio[idx] ? 'expanded' : ''}`}>
+                                                                        {slide.description && (
+                                                                            <div
+                                                                                className="founder-description"
+                                                                                dangerouslySetInnerHTML={{
+                                                                                    __html: slide.description,
+                                                                                }}
+                                                                            />
+                                                                        )}
+
+                                                                        {slide.descriptionTwo && (
+                                                                            <div
+                                                                                className="founder-description-two"
+                                                                                dangerouslySetInnerHTML={{
+                                                                                    __html: slide.descriptionTwo,
+                                                                                }}
+                                                                            />
+                                                                        )}
+                                                                    </div>
+
+                                                                    <button
+                                                                        className="read-more-btn"
+                                                                        onClick={() => toggleBio(idx)}
+                                                                    >
+                                                                        {expandedBio[idx] ? 'Read Less' : 'Read More...'}
+                                                                    </button>
+
+                                                                    <h3 className="partner-label">
                                                                         <b>
                                                                             {
                                                                                 slide.partnerLabel
                                                                             }
                                                                         </b>
-                                                                    </h5>
-                                                                    <p className="author-p">
-                                                                        {
-                                                                            slide.partner
-                                                                        }
-                                                                    </p>
+                                                                    </h3>
                                                                 </div>
 
                                                                 <div className="image-wrapper-home">
@@ -988,36 +999,44 @@ export default function HomeClient({ homepageData: initialData }) {
                                 </div>
 
                                 <section className="contact-us">
-                                    <div className="contact-container-two">
-                                        <div className="contact-us-df">
-                                            <div className="contact-left">
-                                                {homepageData.contactImage
-                                                    ?.url && (
-                                                        <Image
-                                                            src={
-                                                                homepageData
-                                                                    .contactImage
-                                                                    .url
-                                                            }
-                                                            width={500}
-                                                            height={500}
-                                                            alt={
-                                                                homepageData
-                                                                    .contactImage
-                                                                    .alt ||
-                                                                "footer-img"
-                                                            }
-                                                            unoptimized
-                                                        />
-                                                    )}
-                                            </div>
-                                            <div className="contact-right">
+                                    <div
+                                        style={{
+                                            maxWidth: "1200px",
+                                            padding: "0 20px",
+                                        }}
+                                    >
+                                        <div className="contact-container">
+                                            <div className="contact-form-section">
                                                 <ContactForm
-                                                    title={homepageData.contactTitle}
-                                                    buttonText={homepageData.contactButton}
+                                                    title={
+                                                        homepageData.contactTitle
+                                                    }
+                                                    buttonText={
+                                                        homepageData.contactButton
+                                                    }
                                                 />
                                             </div>
-
+                                            <div className="contact-info-section">
+                                                {homepageData.contactImage
+                                                    ?.url && (
+                                                        <div className="map-container">
+                                                            <img
+                                                                src={
+                                                                    homepageData
+                                                                        .contactImage
+                                                                        .url
+                                                                }
+                                                                alt={
+                                                                    homepageData
+                                                                        .contactImage
+                                                                        .alt ||
+                                                                    "contact"
+                                                                }
+                                                                className="map-image"
+                                                            />
+                                                        </div>
+                                                    )}
+                                            </div>
                                         </div>
                                     </div>
                                 </section>
@@ -1057,10 +1076,9 @@ export default function HomeClient({ homepageData: initialData }) {
                                     </svg>
                                 </div>
                             )}
-                        </div >
-                    )
-                    }
-                </div >
+                        </div>
+                    )}
+                </div>
             )}
 
             {/* Page-specific scripts from CMS - rendered safely via Next.js Script */}
