@@ -304,3 +304,11 @@
         margin-bottom: 50px;
     }
 }
+
+@media (min-width: 993px) {
+    .faq-answer-two {
+        padding-left: 30px;
+        padding-bottom: 20px;
+        padding-right: 20px;
+    }
+}

@@ -115,7 +115,7 @@ export default function Projects() {
     },
     {
       accessorKey: 'featured',
-      header: 'Featured',
+      header: 'Status',
       cell: ({ row }) => {
         const project = row.original;
         const isFeatured = row.getValue('featured') as boolean;
@@ -127,7 +127,7 @@ export default function Projects() {
             onClick={() => handleFeatureToggle(project)}
             disabled={isToggling}
           >
-            {isToggling ? '...' : isFeatured ? 'Featured' : 'Not Featured'}
+            {isToggling ? '...' : isFeatured ? 'Turn On (Visible)' : 'Turn Off (Not Visible)'}
           </Button>
         );
       },

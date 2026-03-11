@@ -315,7 +315,7 @@ export default function GeneralSettingsForm() {
                                             "image/webp",
                                             "image/svg+xml",
                                         ]}
-                                        initialImages={headerLogo ? [{
+                                        initialImages={headerLogo?.url ? [{
                                             url: headerLogo.url,
                                             status: "success"
                                         }] : []}
@@ -421,7 +421,7 @@ export default function GeneralSettingsForm() {
                                             "image/webp",
                                             "image/svg+xml",
                                         ]}
-                                        initialImages={footerLogo ? [{
+                                        initialImages={footerLogo?.url ? [{
                                             url: footerLogo.url,
                                             status: "success"
                                         }] : []}
@@ -526,7 +526,7 @@ export default function GeneralSettingsForm() {
                                             "image/ico",
                                             "image/jpeg",
                                         ]}
-                                        initialImages={favicon ? [{
+                                        initialImages={favicon?.url ? [{
                                             url: favicon.url,
                                             status: "success"
                                         }] : []}

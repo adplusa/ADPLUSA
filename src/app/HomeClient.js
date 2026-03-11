@@ -889,13 +889,13 @@ export default function HomeClient({ homepageData: initialData }) {
                                                         <section className="why-work-home">
                                                             <div className="content-two">
                                                                 <div className="text">
-                                                                    <h3>
+                                                                    <h2>
                                                                         <b>
                                                                             {
                                                                                 slide.name
                                                                             }
                                                                         </b>
-                                                                    </h3>
+                                                                    </h2>
                                                                     <h5 className="author-p" style={{ marginBottom: "5px" }}>
                                                                         {
                                                                             slide.achievements

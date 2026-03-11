@@ -34,7 +34,17 @@ export const getPresignedUploadUrl = async (req: Request, res: Response) => {
     }
 
     // Validate content type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    const allowedTypes = [
+      'image/jpeg', 
+      'image/jpg', 
+      'image/png', 
+      'image/gif', 
+      'image/webp',
+      'image/svg+xml',
+      'image/x-icon',
+      'image/vnd.microsoft.icon',
+      'image/ico'
+    ];
     if (!allowedTypes.includes(contentType)) {
       return res.status(400).json({
         success: false,
@@ -92,7 +102,17 @@ export const getPresignedUploadUrls = async (req: Request, res: Response) => {
     }
 
     // Validate all files
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    const allowedTypes = [
+      'image/jpeg', 
+      'image/jpg', 
+      'image/png', 
+      'image/gif', 
+      'image/webp',
+      'image/svg+xml',
+      'image/x-icon',
+      'image/vnd.microsoft.icon',
+      'image/ico'
+    ];
     for (const file of files) {
       if (!file.fileName || !file.contentType) {
         return res.status(400).json({
