@@ -2064,19 +2064,23 @@ select#service {
     margin-top: 5%;
 }
 
-.content-two {
+.why-work-home .content-two {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: nowrap; /* Prevent image from dropping down regardless of data */
     gap: 5%;
+    width: 100%;
 }
 
-.text {
+.why-work-home .text {
     flex: 1 1 500px;
     max-width: 650px;
+    min-width: 0;      /* Ensure text doesn't overflow container */
+    word-break: break-word; /* Handle unusually long words safely */
 }
 
-.text h3 {
+.why-work-home .text h3 {
     color: var(--foreground);
 }
 
@@ -2418,7 +2422,7 @@ select#service {
     .founder-description p,
     .founder-description-two p {
         font-size: 14px !important;
-        text-align: justify;
+        text-align: center;
     }
 
     .founder-bio-container {
