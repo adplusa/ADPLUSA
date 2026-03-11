@@ -344,7 +344,7 @@ export default function Dashboard() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
             <Button asChild variant="outline" className="h-20 flex-col">
               <Link to="/dashboard/projects/new">
                 <Plus className="h-6 w-6 mb-2" />
@@ -357,7 +357,7 @@ export default function Dashboard() {
                 New Service
               </Link>
             </Button>
-            <Button asChild variant="outline" className="h-20 flex-col">
+            {/* <Button asChild variant="outline" className="h-20 flex-col">
               <Link to="/dashboard/media">
                 <Image className="h-6 w-6 mb-2" />
                 Upload Media
@@ -368,7 +368,7 @@ export default function Dashboard() {
                 <Tags className="h-6 w-6 mb-2" />
                 Create Tag
               </Link>
-            </Button>
+            </Button> */}
           </div>
         </CardContent>
       </Card>

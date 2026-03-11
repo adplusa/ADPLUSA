@@ -8,15 +8,29 @@ import { getGeneralSettings } from "@/lib/cms-client";
 
 const DEFAULT_LOGO = "/n.png";
 
-const Header = ({ initialLogo = null, initialLogoAlt = "ADPL Consulting Logo" } = {}) => {
+const Header = ({
+    initialLogo = null,
+    initialLogoAlt = "ADPL Consulting Logo",
+} = {}) => {
     // Read from sessionStorage first for instant display (no flash/delay on navigation)
     const [logo, setLogo] = useState(() => {
         if (initialLogo) return initialLogo;
-        try { return sessionStorage.getItem("cms_header_logo") || null; } catch { return null; }
+        try {
+            return sessionStorage.getItem("cms_header_logo") || null;
+        } catch {
+            return null;
+        }
     });
     const [logoAlt, setLogoAlt] = useState(() => {
         if (initialLogoAlt !== "ADPL Consulting Logo") return initialLogoAlt;
-        try { return sessionStorage.getItem("cms_header_logo_alt") || "ADPL Consulting Logo"; } catch { return "ADPL Consulting Logo"; }
+        try {
+            return (
+                sessionStorage.getItem("cms_header_logo_alt") ||
+                "ADPL Consulting Logo"
+            );
+        } catch {
+            return "ADPL Consulting Logo";
+        }
     });
     const [isFixed, setIsFixed] = useState(false);
     const [navbarTop, setNavbarTop] = useState(0);
@@ -34,13 +48,19 @@ const Header = ({ initialLogo = null, initialLogoAlt = "ADPL Consulting Logo" } 
                 const settings = await getGeneralSettings();
                 if (settings?.headerLogo?.url) {
                     setLogo(settings.headerLogo.url);
-                    const alt = settings.headerLogo.alt || "ADPL Consulting Logo";
+                    const alt =
+                        settings.headerLogo.alt || "ADPL Consulting Logo";
                     setLogoAlt(alt);
                     // Cache in sessionStorage for instant load on next page navigation
                     try {
-                        sessionStorage.setItem("cms_header_logo", settings.headerLogo.url);
+                        sessionStorage.setItem(
+                            "cms_header_logo",
+                            settings.headerLogo.url,
+                        );
                         sessionStorage.setItem("cms_header_logo_alt", alt);
-                    } catch { /* ignore storage errors */ }
+                    } catch {
+                        /* ignore storage errors */
+                    }
                 } else {
                     setLogo(DEFAULT_LOGO);
                 }
@@ -78,7 +98,10 @@ const Header = ({ initialLogo = null, initialLogoAlt = "ADPL Consulting Logo" } 
             <div className="header-df desktop">
                 <Link href="/">
                     <div className="flip-logo">
-                        <span className="flip-container" suppressHydrationWarning>
+                        <span
+                            className="flip-container"
+                            suppressHydrationWarning
+                        >
                             {logo && (
                                 <Image
                                     id="flip-one"
@@ -100,24 +123,26 @@ const Header = ({ initialLogo = null, initialLogoAlt = "ADPL Consulting Logo" } 
                         id="second-navbar"
                         className={`second-navbar ${isFixed ? "fixed" : ""}`}
                     >
-                        <ul>
+                        <ul style={{ display: "flex", gap: "40px" }}>
                             <li>
-                                <Link href="/">Home</Link>
+                                <Link style={{ margin: 0 }} href="/">
+                                    Home
+                                </Link>
                             </li>
                             <li>
-                                <Link href="/about">About Us</Link>
+                                <Link style={{ margin: 0 }} href="/about">About Us</Link>
                             </li>
                             <li>
-                                <Link href="/mainservice">Services</Link>
+                                <Link style={{ margin: 0 }} href="/mainservice">Services</Link>
                             </li>
                             <li>
-                                <Link href="/projects">Projects</Link>
+                                <Link style={{ margin: 0 }} href="/projects">Projects</Link>
                             </li>
                             <li>
-                                <Link href="/faq">FAQs</Link>
+                                <Link style={{ margin: 0 }} href="/faq">FAQs</Link>
                             </li>
                             <li>
-                                <Link href="/contact">Contact Us</Link>
+                                <Link style={{ margin: 0 }} href="/contact">Contact Us</Link>
                             </li>
                         </ul>
                     </div>
@@ -128,7 +153,10 @@ const Header = ({ initialLogo = null, initialLogoAlt = "ADPL Consulting Logo" } 
             <div className="header-df mobile">
                 <Link href="/">
                     <div className="flip-logo">
-                        <span className="flip-container" suppressHydrationWarning>
+                        <span
+                            className="flip-container"
+                            suppressHydrationWarning
+                        >
                             {logo && (
                                 <Image
                                     id="flip-one"
@@ -145,10 +173,7 @@ const Header = ({ initialLogo = null, initialLogoAlt = "ADPL Consulting Logo" } 
                     </div>
                 </Link>
 
-                <button
-                    id="ham"
-                    onClick={toggleMobileMenu}
-                >
+                <button id="ham" onClick={toggleMobileMenu}>
                     {!isMobileMenuOpen ? (
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -180,8 +205,9 @@ const Header = ({ initialLogo = null, initialLogoAlt = "ADPL Consulting Logo" } 
 
                 <div
                     id="second-navbar"
-                    className={`second-navbar ${isMobileMenuOpen ? "mobile-open" : ""
-                        }`}
+                    className={`second-navbar ${
+                        isMobileMenuOpen ? "mobile-open" : ""
+                    }`}
                 >
                     <ul>
                         <li>
