@@ -387,10 +387,10 @@ export default function About() {
                                             />
 
                                             {typeof section.image === 'object' && section.image?.url && (
-                                                <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                                                <div className="mt-4 grid gap-2 sm:grid-cols-1">
                                                     <div className="space-y-1">
                                                         <label className="text-xs font-medium text-muted-foreground">
-                                                            Light Mode Image
+                                                            Image
                                                         </label>
                                                         <div className="relative aspect-video rounded-lg overflow-hidden border bg-muted">
                                                             <img
@@ -399,30 +399,11 @@ export default function About() {
                                                                         .image
                                                                         ?.url
                                                                 }
-                                                                alt={`${section.title} - Light mode`}
+                                                                alt={`${section.title} image`}
                                                                 className="w-full h-full object-cover"
                                                             />
                                                         </div>
                                                     </div>
-                                                    {section.image
-                                                        ?.darkModeUrl && (
-                                                            <div className="space-y-1">
-                                                                <label className="text-xs font-medium text-muted-foreground">
-                                                                    Dark Mode Image
-                                                                </label>
-                                                                <div className="relative aspect-video rounded-lg overflow-hidden border bg-zinc-800">
-                                                                    <img
-                                                                        src={
-                                                                            section
-                                                                                .image
-                                                                                ?.darkModeUrl
-                                                                        }
-                                                                        alt={`${section.title} - Dark mode`}
-                                                                        className="w-full h-full object-cover"
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        )}
                                                 </div>
                                             )}
                                         </div>
