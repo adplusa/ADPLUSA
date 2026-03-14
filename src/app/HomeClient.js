@@ -772,7 +772,9 @@ export default function HomeClient({ homepageData: initialData }) {
                                                 {homepageData.aboutParagraph && (
                                                     <div
                                                         dangerouslySetInnerHTML={{
-                                                            __html: homepageData.aboutParagraph,
+                                                          __html: homepageData.aboutParagraph
+                                                            .replace(/&nbsp;/g, " ")
+                                                            .replace(/-\s*\n/g, "-"),
                                                         }}
                                                     />
                                                 )}
@@ -908,7 +910,9 @@ export default function HomeClient({ homepageData: initialData }) {
                                                                             <div
                                                                                 className="founder-description"
                                                                                 dangerouslySetInnerHTML={{
-                                                                                    __html: slide.description,
+                                                                                    __html: slide.description
+                                                                                        .replace(/&nbsp;/g, " ")
+                                                                                        .replace(/-\s*\n/g, "-"),
                                                                                 }}
                                                                             />
                                                                         )}
@@ -917,7 +921,9 @@ export default function HomeClient({ homepageData: initialData }) {
                                                                             <div
                                                                                 className="founder-description-two"
                                                                                 dangerouslySetInnerHTML={{
-                                                                                    __html: slide.descriptionTwo,
+                                                                                  __html: slide.descriptionTwo
+                                                                                    .replace(/&nbsp;/g, " ")
+                                                                                    .replace(/-\s*\n/g, "-"),
                                                                                 }}
                                                                             />
                                                                         )}
