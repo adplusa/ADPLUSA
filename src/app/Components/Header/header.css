@@ -161,6 +161,10 @@
     align-items: center;
 }
 
+.second-navbar ul li a.active-link {
+    color: var(--redWhiteColor) !important;
+}
+
 .header-right {
     display: flex;
     align-items: center;
