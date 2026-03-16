@@ -904,6 +904,14 @@ export default function HomeClient({ homepageData: initialData }) {
                                                                         }
                                                                     </h5>
 
+                                                                    <h3 className="partner-label">
+                                                                        <b>
+                                                                            {
+                                                                                slide.partnerLabel
+                                                                            }
+                                                                        </b>
+                                                                    </h3>
+
                                                                     {/* Render rich text content - now HTML string */}
                                                                     <div className={`founder-bio-container ${expandedBio[idx] ? 'expanded' : ''}`}>
                                                                         {slide.description && (
@@ -935,14 +943,6 @@ export default function HomeClient({ homepageData: initialData }) {
                                                                     >
                                                                         {expandedBio[idx] ? 'Read Less' : 'Read More...'}
                                                                     </button>
-
-                                                                    <h3 className="partner-label">
-                                                                        <b>
-                                                                            {
-                                                                                slide.partnerLabel
-                                                                            }
-                                                                        </b>
-                                                                    </h3>
                                                                 </div>
 
                                                                 <div className="image-wrapper-home">
