@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import "./header.css";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { getGeneralSettings } from "@/lib/cms-client";
 
 const DEFAULT_LOGO = "/n.png";
@@ -12,6 +13,12 @@ const Header = ({
     initialLogo = null,
     initialLogoAlt = "ADPL Consulting Logo",
 } = {}) => {
+    const pathname = usePathname();
+
+    const isActive = (path) => {
+        if (path === '/') return pathname === '/';
+        return pathname.startsWith(path);
+    };
     // Read from sessionStorage first for instant display (no flash/delay on navigation)
     const [logo, setLogo] = useState(() => {
         if (initialLogo) return initialLogo;
@@ -125,24 +132,24 @@ const Header = ({
                     >
                         <ul style={{ display: "flex", gap: "40px" }}>
                             <li>
-                                <Link style={{ margin: 0 }} href="/">
+                                <Link style={{ margin: 0 }} className={isActive('/') ? 'active-link' : ''} href="/">
                                     Home
                                 </Link>
                             </li>
                             <li>
-                                <Link style={{ margin: 0 }} href="/about">About Us</Link>
+                                <Link style={{ margin: 0 }} className={isActive('/about') ? 'active-link' : ''} href="/about">About Us</Link>
                             </li>
                             <li>
-                                <Link style={{ margin: 0 }} href="/mainservice">Services</Link>
+                                <Link style={{ margin: 0 }} className={isActive('/mainservice') ? 'active-link' : ''} href="/mainservice">Services</Link>
                             </li>
                             <li>
-                                <Link style={{ margin: 0 }} href="/projects">Projects</Link>
+                                <Link style={{ margin: 0 }} className={isActive('/projects') ? 'active-link' : ''} href="/projects">Projects</Link>
                             </li>
                             <li>
-                                <Link style={{ margin: 0 }} href="/faq">FAQs</Link>
+                                <Link style={{ margin: 0 }} className={isActive('/faq') ? 'active-link' : ''} href="/faq">FAQs</Link>
                             </li>
                             <li>
-                                <Link style={{ margin: 0 }} href="/contact">Contact Us</Link>
+                                <Link style={{ margin: 0 }} className={isActive('/contact') ? 'active-link' : ''} href="/contact">Contact Us</Link>
                             </li>
                         </ul>
                     </div>
@@ -211,22 +218,22 @@ const Header = ({
                 >
                     <ul>
                         <li>
-                            <Link href="/">Home</Link>
+                            <Link className={isActive('/') ? 'active-link' : ''} href="/">Home</Link>
                         </li>
                         <li>
-                            <Link href="/about">About Us</Link>
+                            <Link className={isActive('/about') ? 'active-link' : ''} href="/about">About Us</Link>
                         </li>
                         <li>
-                            <Link href="/mainservice">Services</Link>
+                            <Link className={isActive('/mainservice') ? 'active-link' : ''} href="/mainservice">Services</Link>
                         </li>
                         <li>
-                            <Link href="/projects">Projects</Link>
+                            <Link className={isActive('/projects') ? 'active-link' : ''} href="/projects">Projects</Link>
                         </li>
                         <li>
-                            <Link href="/faq">FAQs</Link>
+                            <Link className={isActive('/faq') ? 'active-link' : ''} href="/faq">FAQs</Link>
                         </li>
                         <li>
-                            <Link href="/contact">Contact Us</Link>
+                            <Link className={isActive('/contact') ? 'active-link' : ''} href="/contact">Contact Us</Link>
                         </li>
                     </ul>
                 </div>

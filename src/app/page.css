@@ -1205,15 +1205,16 @@ span.service-two-bottom-box-logo {
 }
 
 .background-process-img {
-    width: 1200px;
-    height: 1200px;
+    width: 800px;
+    height: 800px;
     background-image: url("/flip-two.png");
     background-size: contain;
     background-position: center;
     position: absolute;
-    top: -40%;
-    left: 84%;
-    transform: translateX(-50%);
+    top: 0;
+    right: -100px;
+    left: auto;
+    transform: none;
     opacity: 0.1;
     filter: var(--imageColor);
 
@@ -1222,15 +1223,15 @@ span.service-two-bottom-box-logo {
 
 @keyframes moveBackground {
     0% {
-        transform: translate(-50%, 0) scale(1);
+        transform: scale(1);
     }
 
     50% {
-        transform: translate(-50%, 10px) scale(1.05);
+        transform: scale(1.05);
     }
 
     100% {
-        transform: translate(-50%, 0) scale(1);
+        transform: scale(1);
     }
 }
 
@@ -1244,19 +1245,9 @@ span.service-two-bottom-box-logo {
     z-index: -1;
 }
 
-@media (max-width: 1024px) {
-    .background-process-img {
-        width: 1000px;
-        height: 1000px;
-        top: -30%;
-    }
-}
-
 @media (max-width: 768px) {
     .background-process-img {
-        width: 800px;
-        height: 800px;
-        top: -10%;
+        display: none;
     }
 
     .about-us-img img:first-child {
@@ -2156,7 +2147,7 @@ select#service {
     }
 
     .image-wrapper-home {
-        display: none;
+        display: block;
     }
 
     .image-wrapper-home img {
@@ -2205,7 +2196,7 @@ select#service {
     }
 
     .features-name img {
-        display: none !important;
+        display: block !important;
     }
 
     .features-name p {
@@ -2274,36 +2265,25 @@ select#service {
     }
 
     .technology-grid {
-        overflow: hidden;
-        width: 100%;
-        position: relative;
-        flex-wrap: unset;
-        gap: 25px 34px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
         margin-top: 3%;
+        overflow: visible;
     }
 
     .technology-grid img {
-        width: 130px;
+        width: 100%;
         height: auto;
+    }
+
+    .technology-grid span {
+        width: 100% !important;
+        flex-shrink: unset;
     }
 
     .rto-section {
         padding: 30px 9%;
-    }
-
-    .technology-grid span {
-        flex-shrink: 0;
-        width: unset !important;
-    }
-
-    @keyframes slide-horizontal {
-        0% {
-            transform: translateX(0%);
-        }
-
-        100% {
-            transform: translateX(-550%);
-        }
     }
 
     .technology-we-use {
@@ -2464,7 +2444,7 @@ select#service {
     }
 
     .text {
-        padding: 10px 15px;
+        padding: 5px 8px;
     }
 
     .contact-us {
@@ -2575,13 +2555,13 @@ select#service {
 
     button.prev-button {
         left: 27%;
-        bottom: -30px;
+        bottom: 10px;
         display: none;
     }
 
     button.next-button {
         right: 27%;
-        bottom: -30px;
+        bottom: 10px;
         display: none;
     }
 

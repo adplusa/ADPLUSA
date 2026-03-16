@@ -57,7 +57,7 @@ export default function AboutClient({ data }) {
                                         <div
                                             className="about-paragraph"
                                             dangerouslySetInnerHTML={{
-                                                __html: data.paragraph,
+                                              __html: data.paragraph.replace(/&nbsp;/g, " ").replace(/-\s*\n/g, "-"),
                                             }}
                                         />
                                     )}

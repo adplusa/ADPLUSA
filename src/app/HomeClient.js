@@ -772,7 +772,9 @@ export default function HomeClient({ homepageData: initialData }) {
                                                 {homepageData.aboutParagraph && (
                                                     <div
                                                         dangerouslySetInnerHTML={{
-                                                            __html: homepageData.aboutParagraph,
+                                                          __html: homepageData.aboutParagraph
+                                                            .replace(/&nbsp;/g, " ")
+                                                            .replace(/-\s*\n/g, "-"),
                                                         }}
                                                     />
                                                 )}
@@ -902,13 +904,23 @@ export default function HomeClient({ homepageData: initialData }) {
                                                                         }
                                                                     </h5>
 
+                                                                    <h3 className="partner-label">
+                                                                        <b>
+                                                                            {
+                                                                                slide.partnerLabel
+                                                                            }
+                                                                        </b>
+                                                                    </h3>
+
                                                                     {/* Render rich text content - now HTML string */}
                                                                     <div className={`founder-bio-container ${expandedBio[idx] ? 'expanded' : ''}`}>
                                                                         {slide.description && (
                                                                             <div
                                                                                 className="founder-description"
                                                                                 dangerouslySetInnerHTML={{
-                                                                                    __html: slide.description,
+                                                                                    __html: slide.description
+                                                                                        .replace(/&nbsp;/g, " ")
+                                                                                        .replace(/-\s*\n/g, "-"),
                                                                                 }}
                                                                             />
                                                                         )}
@@ -917,7 +929,9 @@ export default function HomeClient({ homepageData: initialData }) {
                                                                             <div
                                                                                 className="founder-description-two"
                                                                                 dangerouslySetInnerHTML={{
-                                                                                    __html: slide.descriptionTwo,
+                                                                                  __html: slide.descriptionTwo
+                                                                                    .replace(/&nbsp;/g, " ")
+                                                                                    .replace(/-\s*\n/g, "-"),
                                                                                 }}
                                                                             />
                                                                         )}
@@ -929,14 +943,6 @@ export default function HomeClient({ homepageData: initialData }) {
                                                                     >
                                                                         {expandedBio[idx] ? 'Read Less' : 'Read More...'}
                                                                     </button>
-
-                                                                    <h3 className="partner-label">
-                                                                        <b>
-                                                                            {
-                                                                                slide.partnerLabel
-                                                                            }
-                                                                        </b>
-                                                                    </h3>
                                                                 </div>
 
                                                                 <div className="image-wrapper-home">
